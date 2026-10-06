@@ -83,50 +83,7 @@ code changes that make the page feel hand-crafted — not template-generated.
 > Inter / Roboto as the only face, monospace or "01 / 02 / 03" section labels, a cream / off-white
 > canvas, an italic accent word in every headline. If the page has them, they are part of the work.
 
-> **Screenshots are necessary but not sufficient.** Many of the worst pains
-> are *silent* — wrapper-collapsed tiles, dead conditional slots, the same
-> datum repeated 3× in one fold, monochromatic surfaces on a tier-A
-> consumer product. None of these are reported by users and most of them
-> survive a cursory screenshot review. **Add the DOM Forensics pass
-> (Step 2.5) and the Silent-Pain Catalogue (Step 3b) on every enhancement.**
-
-> **Patch the primitive, not the consumer.** When a layout, colour, or
-> wrap bug repeats across multiple call sites, the wrapper / helper /
-> token is broken — fix it once at the definition. A `Tooltip` defaulting
-> to `inline-flex`, an `EditorialHero` with an unconditional 160px media
-> floor, a `Badge` without `whitespace-nowrap` — every band-aid you apply
-> at the consumer leaves the bug live for the next page.
-
-> **Audit the library-vs-CSS specificity war.** Headless data-grid
-> libraries (TanStack Table, AG-Grid, MUI DataGrid, Chakra DataTable,
-> react-table) emit inline `style={{ width: header.getSize() + 'px' }}`
-> on every cell. Inline styles beat your CSS unless you use `!important`,
-> `table-layout: fixed`, or drive widths through CSS variables that the
-> rule then overwrites. A "wasted space + truncated content" report on a
-> table page is almost always this gotcha — the fix is **not** another
-> wrapper, it's auditing the column-meta CSS rules at every viewport with
-> DevTools `Computed → width` open. Same audit applies to Chart.js / D3
-> defaults, Mantine SegmentedControl, MUI Tabs (`MuiTab-root` width), etc.
-
-> **Chrome is wayfinding, not content.** Header rows, breadcrumb chains,
-> tab strips, dock cells, sidebars, toolbars all *support* the content —
-> they should *recede*. If chrome competes for visual weight with the
-> page body (full-cell brand-color washes, bordered card-on-card chips,
-> heavy Home-as-button chrome, redundant breadcrumbs on root routes), the
-> user reports "atrocious" / "clunky" / "heavy". Calm protocol: strip
-> backgrounds → borders → tints → fills, in that order, until the chrome
-> reads as a tonal recess that frames the content. For active-state
-> signaling, prefer micro-indicators (underline, M3 32×16 pill on icon,
-> count-badge tint, font-weight bump) over full-cell fills — see Hidden
-> Failure Modes H1, H2, H3 in `enhance-web-ui`.
-
-> **One brand-color element per visual zone.** A page should have ONE
-> brand/accent-tinted element per zone (header, breadcrumb, tab row, dock,
-> body). If breadcrumb chips, tab badges, AND the actual primary CTA all
-> wear the brand color, the actual CTA loses scent. Demote the chrome
-> ones to neutral typography; reserve brand color for the action the user
-> is here to take + status chips that *carry* meaning + the active
-> micro-indicator.
+> **Extended rules** — screenshots are necessary but not sufficient; patch the primitive, not the consumer; audit the library-vs-CSS specificity war; chrome is wayfinding, not content; one brand-color element per visual zone: [references/forensics.md](references/forensics.md) §Extended rules.
 
 ---
 
@@ -159,306 +116,55 @@ ENHANCE /<route>
 
 ## Step 1 — RECON: Understand the Page Before Touching It  [HIGH freedom]
 
-### 1a. Read the route entry
-
-```
-Glob: **/pages/**/<route>*.tsx OR **/app/<route>/page.tsx
-Read: the route file in full (not snippets)
-```
-
-Extract:
-
-- **Workflow position**: where does this page sit in the user journey? (entry, processing,
- outcome, hub)
-- **Primary task**: what is the ONE thing a user comes here to do?
-- **Data domain**: what entities are displayed? (files / invoices / messages / tax forms / …)
-- **Adjacent screens**: what page do users come from / go to next?
-
-### 1b. Map the component tree
-
-```
-Grep: imports inside the route file
-Read: each top-level child component
-```
-
-Build a small ASCII tree of components and what each owns:
-
-```
-<RoutePage>
-├── <PageHeader> — title + breadcrumbs + summary KPIs
-├── <Toolbar> — filters + actions
-├── <FolderTree> — hierarchical list (the meat)
-│ └── <TreeNode> — single row renderer
-└── <DetailPanel> — selection-driven inspector
-```
-
-### 1c. Inventory the data shape
-
-For every entity rendered, list ALL fields available — including the ones the page does NOT
-currently show. Many enhancement opportunities are "we already have this data, we just don't
-display it" (AI metadata, link status, aggregates, last-modified, owner, …).
-
-```
-Read: src/types/<entity>.ts
-Read: src/features/<feature>/types.ts
-Read: API loaders/actions/routes that fetch or mutate the entity
-Read: schema/migrations/models when UI state depends on persisted status
-```
-
-Also identify whether each visual cue is backed by real product state. Badges,
-progress, alerts, disabled states, empty states, and "recent" indicators should
-map to data contracts or domain helpers, not hardcoded component guesses.
-
-### 1d. Inventory primitives + tokens
-
-```
-Glob: src/components/ui/*.tsx — Badge, Button, Card, Tooltip, …
-Read: tailwind.config.* OR globals.css — semantic colour tokens (signal-*, ai, brand, muted)
-Glob: src/features/<feature>/helpers/* — domain helpers already available
-```
-
-Write the list down. You will refer to it in step 5 — every fix must use one of these.
-
-### 1e. Look for usage docs / forbidden patterns
-
-```
-Grep: "NEVER|FORBIDDEN|DO NOT|avoid" in **/*.md AND component file headers
-Grep: "@deprecated" in src
-```
-
-A common find: a primitive that documents "do NOT use bg-X with text-X" — respect it.
+Read the route file in full and each top-level child component. Record the workflow position, primary task, data domain, and adjacent screens; draw a small ASCII component tree.
+Inventory the data shape for every entity, including fields the page does NOT show, and check that every visual cue (badge, progress, alert, disabled, empty, "recent") is backed by real product state.
+Inventory primitives and tokens (`src/components/ui/*`, Tailwind config or `globals.css`, feature helpers) — every fix in Step 5 must use one of these — and grep for `NEVER|FORBIDDEN|DO NOT|avoid` and `@deprecated`.
+Glob/Grep/Read recipes and the component-tree example (1a–1e): [references/forensics.md](references/forensics.md) §Step 1.
 
 ---
 
 ## Step 2 — LIVE: Observe the Real Page, Not the Code  [LOW freedom — run exactly]
 
-### 2a. Three-viewport screenshot pass
-
-Use playwright-cli. Always `resize` **before** navigating to the route you are judging, so
-the page lays out at the target width from first paint:
-
-| Viewport | What it exposes |
-|---|---|
-| 1440 × 900 | desktop, full data density |
-| 1024 × 700 | tablet / split-screen — first place buttons & badges break |
-| 800 × 700 | narrow — first place column truncation & wrap appear |
-
-```bash
-PW="npx --yes @playwright/cli@latest"; S="-s=ux-<route>"
-$PW $S open --headed "<app-url>"
-for wh in "1440 900" "1024 700" "800 700"; do
-  $PW $S resize $wh
-  $PW $S goto "<route>"                     # navigate AFTER resize
-  sleep 2 && $PW $S snapshot
-  $PW $S screenshot --filename ".playwright-mcp/ux-<route>-${wh// /x}.png"
-  $PW $S console
-done
-```
-
-### 2b. Click into representative items
-
-A list page hides most of its bugs in the **expanded / selected / empty** states.
-Programmatically click into:
-
-- An empty container / folder / thread
-- A populated container with diverse children
-- A row with the maximum number of badges / metadata
-- A search-with-no-results state
-
-### 2c. Record what you see, not what you expect
-
-For each screenshot capture, write 2-3 lines:
-
-```
-1440 — toolbar fits, but `通知書ZIP` button label competes with primary CTA
-1024 — `アップロード` button is OK, `通知書ZIP` collapses to icon (no label)
- 800 — folder badges (経費 / 通知書) wrap to 2 lines under the name; status
- chip wraps 未処→理 onto a new line because column is 64px
-```
+Use playwright-cli; always `resize` **before** navigating. Capture 1440 × 900, 1024 × 700, and 800 × 700 with `snapshot`, `screenshot`, and `console` at each.
+Click into representative states: an empty container, a populated one with diverse children, the row with the most badges, and search-with-no-results.
+Record 2-3 lines per capture of what you see, not what you expect.
+Viewport table, playwright-cli loop, and the recording example (2a–2c): [references/forensics.md](references/forensics.md) §Step 2.
 
 ---
 
 ## Step 2.5 — DOM FORENSICS (catch the silent bugs)  [LOW freedom — run exactly]
 
-Screenshots show *what looks weird*. DOM forensics shows *why*. Run this
-pass before declaring the page understood, especially when a user
-reports "looks weird", "feels off", "stacked", or "monochromatic" — those
-are usually symptoms of one of the four silent bugs below.
-
-### 2.5a — Repeated-element uniformity gate
-
-For every group that *should* render with uniform widths/heights — grid
-tiles, segmented-control segments, table columns, sidebar nav rows, form
-fields, stat cards — measure them. Run this in playwright-cli / console
-/ Playwright `evaluate`:
-
-```js
-// Generic, framework-free — works on any web stack
-const tiles = [...document.querySelectorAll('<your-tile-selector>')]
- .map(el => {
- const r = el.getBoundingClientRect();
- return { w: Math.round(r.width), h: Math.round(r.height), x: Math.round(r.x) };
- });
-const widths = tiles.map(t => t.w);
-const widthSpan = Math.max(...widths) - Math.min(...widths);
-console.table(tiles);
-console.log({ widthSpan, uniform: widthSpan <= 1 });
-// widthSpan > 1 on tiles that share `grid-cols-N` parent === wrapper-collapse bug
-```
-
-If `widthSpan > 1`, walk *up* the DOM tree from one of the leaf tiles
-and `getComputedStyle()` each ancestor until you find one with `display:
-inline-flex` / `inline-block`, or a flex parent without `min-width: 0`,
-or a `grid-template-columns` that uses bare `1fr` with intrinsic-content
-children. That ancestor is the bug — see Step 5b for the fix.
-
-### 2.5b — Conditional-slot zero-state probe
-
-For every slot/region defined as optional in the component (`media`,
-`aside`, `cover`, `eyebrow`, `secondaryCTA`, `illustration`,
-`footerSlot`, `extra`, `actions[1]`), inspect its **sparse** state. Open
-the page as a brand-new user / empty account / fresh route and screenshot
-at 800px. Look for slots that are *reserving floor space they don't fill*.
-
-Symptoms (any one of these → confirmed dead slot):
-
-- A region card that is >120px tall but contains <40 chars of content.
-- A two-column grid where one column has just an icon and a number
- taking <20% of its track height.
-- A `min-h-[Npx]` / `aspect-ratio` floor whose visible content occupies
- <40% of it.
-
-Generic rule: if the slot was sized for *illustrations* / *charts* /
-*device mockups*, it must be tested with *no illustration*. Many heroes
-look great in marketing screenshots and become dead conditional slots
-on a real first-run page.
-
-### 2.5c — Information-duplication scan per fold
-
-For every viewport-height fold of the rendered page, list every datum
-(numbers, status words, dates, percentages, counts) and how many times
-it appears:
-
-```
-Fold 1 of /home @ 390×844:
-- "0/10 words today" ×3 (eyebrow metric, action pill, footer strip)
-- "0%" ×2 (action pill, Today metric tile)
-- streak count "1d" ×2 (eyebrow metric, Streak tile)
-```
-
-Anything that appears ≥2 times in a single fold is a duplicate. The
-duplication is the diagnosis: pick the *most actionable* placement, keep
-that one, replace the others with complementary data (or delete and
-absorb the space into the chosen instance).
-
-Cite NN/g #8 (Aesthetic & Minimalist) when documenting these.
-
-### 2.5d — Category-squint colour pass
-
-After the layout passes, take the desktop screenshot and apply a 10–15px
-Gaussian blur (any image tool). For tier-A / tier-B products (consumer,
-gamified, learning, lifestyle — see *Domain Colour Tier* in
-`enhance-web-ui`), check that:
-
-- A 3-up or 4-up of category tiles renders as 3–4 *distinct* colour
- blobs after blur. If they all blur to the same neutral, the tile
- tints are too faint for the product domain → bump from `/5–/10` to
- `/15–/25` per the tier-A scale.
-- The primary CTA blurs to its own colour blob distinct from
- surrounding chrome. If it disappears into the surface tint, contrast
- is too low for a saturated-colour product.
-
-For tier-D products (data dashboards, finance, admin) the *opposite*
-result is correct — tiles *should* blur to near-uniform achromatic
-neutrals with colour reserved for status pills. Tier mismatch is a
-diagnosis, not just an aesthetic preference.
+Screenshots show *what looks weird*; DOM forensics shows *why*. Run all four gates before declaring the page understood, especially on "looks weird", "feels off", "stacked", or "monochromatic" feedback:
+- **2.5a Repeated-element uniformity gate** — measure rects of tiles, segments, columns, nav rows; `widthSpan > 1` under a shared `grid-cols-N` parent is a wrapper-collapse bug.
+- **2.5b Conditional-slot zero-state probe** — render every optional slot sparse at 800px; a floor its content fills < 40% of is a dead slot.
+- **2.5c Information-duplication scan per fold** — any datum appearing ≥ 2 times in one fold is a duplicate (NN/g #8).
+- **2.5d Category-squint colour pass** — 10–15px blur; tier-A/B tiles must blur to distinct hues, tier-D to near-uniform neutrals.
+Rect script, symptoms, and tier rules: [references/forensics.md](references/forensics.md) §Step 2.5.
 
 ---
 
 ## Step 3 — PAIN INVENTORY  [HIGH freedom]
 
-Maintain a single table. Include user-reported pains AND silent ones you discovered.
-
-| # | Source | Pain | Viewport | Notes |
-|---|--------|------|----------|-------|
-| 1 | user | Can't tell linked-document folders from regular | all | "many doc types" |
-| 2 | user | Can't see which folders had AI analysis | all | inline chip needed |
-| 3 | user | Toolbar button text wraps to 2 lines | 1024 | `通知書ZIP` |
-| 4 | live | `金額` and `サイズ` columns are EMPTY for folder rows | desktop | wasted real estate |
-| 5 | live | `未処理` status badge wraps 未処/理 inside 64px column | desktop | column too narrow |
-| 6 | live | Hint row "☐チェックで選択 …" repeats forever above every list | all | violates #8 minimal |
-| 7 | live | All folder icons are the same blue folder glyph | all | violates #6 recognition |
-
-**Do not skip silent pains.** The user reports the loudest issue but rarely the worst one.
-
-### 3b — Silent-Pain Catalogue (always check these)
-
-The most damaging UX pains are usually *not* user-reported because users
-don't have the vocabulary to describe them. After the user-reported
-pains are listed, walk this catalogue and add every match as a separate
-row in the inventory table:
-
-| # | Silent pain class | Where to look | NN/g | Symptom example |
-|---|-------------------|---------------|------|-----------------|
-| S1 | **Wrapper-collapsed tiles** | Step 2.5a (rect widths) | #4 Consistency, #8 Minimalist | 3-up of equal tiles renders 80px / 80px / 80px in a 358px row, huge gaps between |
-| S2 | **Dead conditional slot** | Step 2.5b (zero-state probe) | #8 Aesthetic & Minimalist | 160px-tall hero `media` slot containing only "0%" + an icon |
-| S3 | **Information duplication per fold** | Step 2.5c (dup-datum scan) | #8 Aesthetic & Minimalist | "0/10 words today" appears in eyebrow + pill + footer strip |
-| S4 | **Monochromatic surface (tier mismatch)** | Step 2.5d (category squint) | #1 Visibility, #6 Recognition | tier-A product with `/5–/8` tints; tiles blur to one neutral hue |
-| S5 | **Left-anchored stack** | Live screenshot | #4 Consistency | every card full-width, every label left, no right-side anchors → "templated" feel |
-| S6 | **Helper-row recall load** | Live screenshot | #6 Recognition over Recall | always-on hint row above every list ("☐ check to select…") |
-| S7 | **Generic icon stack** | Live screenshot | #2 Match real world, #6 Recognition | every category uses the same `Folder` / `File` / `Item` glyph |
-| S8 | **Async result invisible** | Read state contracts in step 1c | #1 Visibility of System Status | AI summary, link, sync, error happened but no UI signal |
-| S9 | **Wrapping CTA / wrapping label** | Step 2c (3-viewport notes) | #4 Consistency, Fitts's | button text breaks to 2 lines at 1024px |
-| S10 | **Empty column / zero cell stuck on screen** | Live screenshot at desktop | #8 Aesthetic & Minimalist | `Amount` / `Size` columns rendered for folder rows that don't have one |
-| S11 | **Library-vs-CSS specificity war** | DevTools `Computed → width` on `<th>`/`<td>` at every viewport; check whether your responsive rule is crossed-out in favor of `element.style` | #4 Consistency, #8 Minimalist | TanStack Table / AG-Grid / MUI DataGrid emits inline `style="width:150px"` from `header.getSize()`; your `[data-priority="primary"]{width:auto}` rule loses without `!important` or `table-layout:fixed`. Symptom: "wasted space + truncation" at tablet widths only. |
-| S12 | **Active-state mass mismatch** | Compare bounding boxes of active vs inactive sibling tabs / dock cells / nav items at the same viewport; squint test | #4 Consistency, NN/g *Navigation: You Are Here* | Active tab uses full-cell `bg-brand-soft` while siblings have transparent bg → active reads as 1.5× heavier even at identical layout dimensions. Symptom: "clunky", "weirdly big", "heights are incoherent". |
-| S13 | **Chrome tautology on root / index route** | Open `/` (or the app root); count chrome zones that say the same word as the page H1 | #8 Aesthetic & Minimalist, NN/g *Visibility* | `🏠 › Home` breadcrumb under a header that already has a Home dock-active and a "Home" H1 → 3 instances of the same word in one fold. Symptom: "atrocious", "redundant", "useless row". |
-| S14 | **Card-on-card chrome** | Inspect every chip / pill / badge — does it sit on a row whose own background is already a tonal recess? | #8 Aesthetic & Minimalist | Active breadcrumb chip with `bg-card border-brand/25 shadow-sm` sits on a row already painted `bg-muted/40` → two distinct elevations within 6 px. Symptom: chrome "feels heavy", "stuck on", "buttoned-up". |
-| S15 | **Hover-only affordance with no touch fallback** | Grep `group-hover:opacity-100`, `opacity-0 hover:opacity-100`, `md:opacity-0` and check the parent for `focus-within:` / always-visible alternative below the pointer breakpoint | #6 Recognition over Recall, #7 Flexibility & Efficiency | Row action buttons (delete, archive, edit) only appear on `:hover`; on a touch device the user can't tap them. Symptom: silent — user never reports it because they don't know the action exists. |
-| S16 | **Brand-color competition** | In a single viewport screenshot, count surfaces tinted in the brand color (border / fill / ring / text) within one zone; subtract the intended primary CTA + meaningful status chips | NN/g *Visual Hierarchy*, #4 Consistency | Brand-mint border on the breadcrumb home icon + brand-mint border on active page chip + brand-mint primary CTA → user's eye can't find the primary action. Symptom: "noisy even though it's clean", "I can't tell what to click". |
-| S17 | **Hit area baked into visual chrome** | Inspect icon buttons; is the *visible* surface (background, border, padding) sized for the touch target (`w-11 h-11`) instead of the icon's optical weight? | NN/g *Visual Hierarchy*, Fitts's | A 14 px icon sits in a 44 px bordered card; the chrome is sized for the thumb, not the eye. Symptom: "icon button feels chunky" / "buttons everywhere". |
-| S18 | **Inverted responsive visibility** | List every column's `hideBelowMd`/`mobile:hidden`/className per viewport in a table; look for columns that appear at one breakpoint and disappear at the next *up* | #4 Consistency | Column tagged `hideBelowMd: true` but rendered via `sm:hidden` → appears on `sm`, hides on `md+`. Symptom: "missing column at wide viewport" / "duplicate column on mobile". |
-
-A good enhancement plan typically catches **2–4 silent pains per
-user-reported pain.** If your final pain inventory has *only* user-reported
-rows, you skipped Step 2.5.
+Maintain a single table (`# | Source | Pain | Viewport | Notes`) with user-reported pains AND the silent ones you discovered. **Do not skip silent pains** — the user reports the loudest issue but rarely the worst one.
+After the user-reported rows, walk the Silent-Pain Catalogue S1–S18 and add every match as its own row. A good plan catches **2–4 silent pains per user-reported pain**; an inventory with only user-reported rows means Step 2.5 was skipped.
+Example inventory and the full S1–S18 catalogue (class, where to look, NN/g, symptom): [references/pain-catalogue.md](references/pain-catalogue.md) §Step 3.
 
 ---
 
 ## Step 4 — HEURISTIC MAP (every fix needs a WHY)  [HIGH freedom]
 
-For each pain, name the violated heuristic. Use `HEURISTICS.md` for the canonical list.
-A pain that cannot be tied to a heuristic is probably a personal taste call — defer it.
-
-| # | Pain | NN/g # | Law of UX | Why it violates |
-|---|------|--------|-----------|-----------------|
-| 1 | linked-doc folders look like all others | #1 Visibility, #6 Recognition | Hick's | system state hidden, user must read names to discriminate |
-| 2 | no AI marker | #1 Visibility | — | hides the result of an async, expensive operation |
-| 3 | button wraps to 2 lines | #4 Consistency, #8 Minimalist | Fitts's | breaks rhythm; hit target shape unstable across widths |
-| 4 | empty cells in `金額` / `サイズ` | #8 Aesthetic & Minimalist | — | "every extra unit of information competes with the relevant ones" |
-| 5 | status badge wraps onto two lines | #4 Consistency | — | Japanese 2-character labels need `whitespace-nowrap` + sized column |
-| 6 | always-on hint row | #6 Recognition over Recall, #8 Minimalist | — | repeated affordance hint = recall, not recognition; wastes a row forever |
-| 7 | all folders same icon | #2 Match real world, #6 Recognition | Miller's | mental categories collapse; cognitive load to scan |
+For each pain, name the violated heuristic (`# | Pain | NN/g # | Law of UX | Why it violates`). Use `HEURISTICS.md` for the canonical list. A pain that cannot be tied to a heuristic is probably a personal taste call — defer it.
+Worked mapping table: [references/pain-catalogue.md](references/pain-catalogue.md) §Step 4.
 
 ---
 
 ## Step 5 — PRIMITIVE MATCH (no inventions)  [HIGH freedom]
 
-For each fix, match an existing primitive. If none fits, extend the closest one — never
-reach for a raw `<div>` styled inline.
-
-| # | Fix idea | Primitive / token | Where it lives |
-|---|----------|-------------------|----------------|
-| 1 | category-aware folder icon + chip | `Badge` (variant=outline) + `lucide-react` icon | new helper `getFolderCategory` |
-| 2 | "AI" chip on folder + file | `Badge` size=xs + token `bg-ai-soft text-ai` | extend `tree-node.tsx` |
-| 3 | toolbar buttons one-line | `AnimatedButton` + `whitespace-nowrap flex-shrink-0` + progressive `md:inline / lg:inline` | `<route>-page.tsx` |
-| 4 | replace empty `金額` with folder total | aggregate helper `getFolderAggregates` (compute) + tabular-num cell | new helper |
-| 5 | non-wrapping status badge | `Badge` + `whitespace-nowrap px-1.5` | `tree-node.tsx`; consider patching `Badge` base |
-| 6 | drop the always-on hint row | delete + replace with `Tooltip` on column header `?` glyph | `folder-management.tsx` |
-| 7 | category icon stack | switch on category, render `Icon` + bg tint via token | `getFolderCategory.tsx` |
-
-If a fix would add a new primitive, first ask whether it can be a variant of an existing one — it almost always can.
+For each fix, match an existing primitive (`# | Fix idea | Primitive / token | Where it lives`). If none fits, extend the closest one — never reach for a raw `<div>` styled inline. If a fix would add a new primitive, first ask whether it can be a variant of an existing one — it almost always can.
+Worked match table: [references/pain-catalogue.md](references/pain-catalogue.md) §Step 5. Primitive-first patch decision (5b), Steps 6–9, cheat sheets, and sanity checks: [references/details.md](references/details.md).
 
 ## Further reading
 
-- [5b — Primitive-First Patch Decision and more](references/details.md)
+- [Extended rules, recon, live capture, DOM forensics (Steps 1–2.5)](references/forensics.md)
+- [Pain inventory, Silent-Pain Catalogue, heuristic map, primitive match (Steps 3–5)](references/pain-catalogue.md)
+- [5b primitive-first patch decision, Steps 6–9, cheat sheets, sanity checks](references/details.md)

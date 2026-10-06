@@ -5,6 +5,19 @@ the same debt on the other side: tables created for a feature that was
 rewritten, RPCs nobody calls, Edge Functions nobody invokes, forty tiny
 migrations, and a `supabase.ts` that no longer matches the schema.
 
+## Contents
+
+- 0. Precondition — how old are the statistics?
+- 1. What the code actually touches
+- 2. Schema inventory (read-only SQL)
+- 3. Cross-reference → candidates
+- 4. Function-body hygiene
+- 5. Migration sprawl
+- 6. Types drift
+- 7. Drops — the only writes in this arm
+- 8. Advisors, last
+
+
 **Discovery here is read-only and safe against any target, including
 production. Every drop is a migration, requires the approved plan row, and
 stops before `db push` unless the plan says push.**

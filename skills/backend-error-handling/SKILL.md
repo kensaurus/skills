@@ -74,416 +74,110 @@ rg "success: false|error:" src/features/*/server/ --type ts | head -10
 
 ## Error Handling Layers  [HIGH freedom]
 
-```
-┌─────────────────────────────────────────┐
-│ UI Layer │
-│ - Error boundaries │
-│ - Form validation errors │
-│ - Toast notifications │
-├─────────────────────────────────────────┤
-│ Application Layer │
-│ - Server Action errors │
-│ - API route errors │
-│ - Business logic errors │
-├─────────────────────────────────────────┤
-│ Data Layer │
-│ - Database errors │
-│ - Validation errors (Zod) │
-│ - External API errors │
-└─────────────────────────────────────────┘
-```
+- **UI layer** — error boundaries, form validation errors, toast notifications.
+- **Application layer** — Server Action errors, API route errors, business-logic errors.
+- **Data layer** — database errors, Zod validation errors, external API errors.
+- Every error is caught at the lowest layer that can name it and surfaces upward as `ActionResult` or a typed API error, never as a raw throw to the UI.
+
+Layer diagram: [references/server-patterns.md](references/server-patterns.md) §Error handling layers.
 
 ## Standard Error Types  [HIGH freedom]
 
+- One `AppError { code, message, details? }`; `code` is machine-readable, `message` is user-safe.
+- `ActionResult<T>` is a discriminated union on `success`; never return `{ data, error }` both-optional.
+- Error codes: `VALIDATION_ERROR`, `NOT_FOUND`, `UNAUTHORIZED`, `FORBIDDEN`, `CONFLICT`, `RATE_LIMITED`, `INTERNAL_ERROR`.
+
 ```typescript
 // types/errors.ts
-
-// Base error shape
-interface AppError {
- code: string // Machine-readable: VALIDATION_ERROR
- message: string // User-friendly message
- details?: unknown // Additional context
-}
-
-// Action result pattern
+interface AppError { code: string; message: string; details?: unknown }
 type ActionResult<T> =
- | { success: true; data: T }
- | { success: false; error: AppError }
-
-// Common error codes
-const ErrorCode = {
- VALIDATION_ERROR: 'VALIDATION_ERROR',
- NOT_FOUND: 'NOT_FOUND',
- UNAUTHORIZED: 'UNAUTHORIZED',
- FORBIDDEN: 'FORBIDDEN',
- CONFLICT: 'CONFLICT',
- RATE_LIMITED: 'RATE_LIMITED',
- INTERNAL_ERROR: 'INTERNAL_ERROR',
-} as const
+  | { success: true; data: T }
+  | { success: false; error: AppError }
 ```
+
+Full `ErrorCode` constant: [references/server-patterns.md](references/server-patterns.md) §Standard error types.
 
 ## Server Action Error Handling  [HIGH freedom]
 
+1. `safeParse` the `FormData`; return `VALIDATION_ERROR` with `flatten().fieldErrors` as `details`.
+2. Check the session; return `UNAUTHORIZED` with a "please sign in" message.
+3. Run the mutation, `revalidatePath`, return `{ success: true, data }`.
+4. Map known errors (Prisma `P2002` → `CONFLICT` with a specific message).
+5. Log unknown errors server-side; return a generic `INTERNAL_ERROR` message, never the stack.
+
 ```typescript
-// features/users/server/actions.ts
-'use server'
-
-import { z } from 'zod'
-import { revalidatePath } from 'next/cache'
-
-const CreateUserSchema = z.object({
- email: z.string().email('Invalid email address'),
- name: z.string().min(1, 'Name is required'),
-})
-
-export async function createUser(
- prevState: ActionResult<User>,
- formData: FormData
-): Promise<ActionResult<User>> {
- try {
- // 1. Validate input
- const validated = CreateUserSchema.safeParse({
- email: formData.get('email'),
- name: formData.get('name'),
- })
-
- if (!validated.success) {
- return {
- success: false,
- error: {
- code: 'VALIDATION_ERROR',
- message: 'Invalid input',
- details: validated.error.flatten().fieldErrors,
- },
- }
- }
-
- // 2. Check authorization
- const session = await auth()
- if (!session) {
- return {
- success: false,
- error: {
- code: 'UNAUTHORIZED',
- message: 'Please sign in to continue',
- },
- }
- }
-
- // 3. Execute business logic
- const user = await db.user.create({
- data: validated.data,
- })
-
- revalidatePath('/users')
-
- return { success: true, data: user }
-
- } catch (error) {
- // 4. Handle known errors
- if (error instanceof Prisma.PrismaClientKnownRequestError) {
- if (error.code === 'P2002') {
- return {
- success: false,
- error: {
- code: 'CONFLICT',
- message: 'A user with this email already exists',
- },
- }
- }
- }
-
- // 5. Log unknown errors, return generic message
- console.error('createUser error:', error)
-
- return {
- success: false,
- error: {
- code: 'INTERNAL_ERROR',
- message: 'Something went wrong. Please try again.',
- },
- }
- }
+} catch (error) {
+  if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+    return { success: false, error: { code: 'CONFLICT', message: 'A user with this email already exists' } }
+  }
+  console.error('createUser error:', error)
+  return { success: false, error: { code: 'INTERNAL_ERROR', message: 'Something went wrong. Please try again.' } }
 }
 ```
+
+Full `createUser` action: [references/server-patterns.md](references/server-patterns.md) §Server Action error handling.
 
 ## Form Error Display (React 19+)  [HIGH freedom]
 
-```tsx
-// components/UserForm.tsx
-'use client'
+- `useActionState(createUser, null)` for state; `useFormStatus` in a child `SubmitButton` for pending.
+- Field errors come from `state.error.details`; render inline with `aria-invalid` and `aria-describedby`.
+- Non-validation errors render once in a `role="alert"` banner above the fields.
+- `useOptimistic` for optimistic UI updates.
 
-import { useActionState } from 'react'
-import { useFormStatus } from 'react-dom'
-import { createUser } from '@/features/users/server/actions'
-
-// Separate submit button to use useFormStatus
-function SubmitButton() {
- const { pending } = useFormStatus()
- return (
- <button type="submit" disabled={pending}>
- {pending ? 'Creating...' : 'Create User'}
- </button>
- )
-}
-
-export function UserForm() {
- const [state, action, isPending] = useActionState(createUser, null)
-
- // Get field errors from validation
- const fieldErrors = state?.success === false
- ? state.error.details as Record<string, string[]>
- : {}
-
- return (
- <form action={action}>
- {/* Global error */}
- {state?.success === false && state.error.code !== 'VALIDATION_ERROR' && (
- <div role="alert" className="bg-red-50 text-red-700 p-3 rounded-lg mb-4">
- {state.error.message}
- </div>
- )}
-
- {/* Field with error */}
- <div>
- <label htmlFor="email">Email</label>
- <input
- id="email"
- name="email"
- type="email"
- aria-invalid={!!fieldErrors.email}
- aria-describedby={fieldErrors.email ? 'email-error' : undefined}
- className={fieldErrors.email ? 'border-red-500' : ''}
- />
- {fieldErrors.email && (
- <p id="email-error" className="text-red-600 text-sm mt-1">
- {fieldErrors.email[0]}
- </p>
- )}
- </div>
-
- <SubmitButton />
- </form>
- )
-}
-```
-
-**React 19 Form Patterns:**
-- `useActionState` - Form state with Server Actions
-- `useFormStatus` - Pending state in child components
-- `useOptimistic` - Optimistic UI updates
+Full `UserForm` component: [references/ui-patterns.md](references/ui-patterns.md) §Form error display.
 
 ## React Error Boundaries  [HIGH freedom]
 
+- `app/error.tsx` per page segment: `'use client'`, receives `{ error, reset }`, logs in `useEffect`, shows a "Try again" button.
+- `app/global-error.tsx` for the root: must render its own `<html>` and `<body>`.
+- Boundaries catch render errors only; async and event errors go through `ActionResult` or TanStack Query.
+
 ```tsx
-// app/error.tsx (Next.js page error boundary)
+// app/error.tsx
 'use client'
-
-import { useEffect } from 'react'
-
-export default function Error({
- error,
- reset,
-}: {
- error: Error & { digest?: string }
- reset: () => void
-}) {
- useEffect(() => {
- // Log to error reporting service
- console.error('Page error:', error)
- }, [error])
-
- return (
- <div className="flex flex-col items-center justify-center min-h-[400px]">
- <h2 className="text-xl font-semibold mb-4">Something went wrong</h2>
- <p className="text-muted-foreground mb-6">
- We're sorry, but something unexpected happened.
- </p>
- <button
- onClick={reset}
- className="px-4 py-2 bg-primary text-primary-foreground rounded-lg"
- >
- Try again
- </button>
- </div>
- )
-}
-
-// app/global-error.tsx (root error boundary)
-'use client'
-
-export default function GlobalError({
- error,
- reset,
-}: {
- error: Error & { digest?: string }
- reset: () => void
-}) {
- return (
- <html>
- <body>
- <h2>Something went wrong!</h2>
- <button onClick={reset}>Try again</button>
- </body>
- </html>
- )
+export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  useEffect(() => { console.error('Page error:', error) }, [error])
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[400px]">
+      <h2 className="text-xl font-semibold mb-4">Something went wrong</h2>
+      <button onClick={reset} className="px-4 py-2 bg-primary text-primary-foreground rounded-lg">Try again</button>
+    </div>
+  )
 }
 ```
+
+Both boundaries in full: [references/ui-patterns.md](references/ui-patterns.md) §React error boundaries.
 
 ## API Route Error Handling  [HIGH freedom]
 
-```typescript
-// app/api/products/route.ts
-import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
+- Same `{ error: { code, message, details? } }` body shape for every non-2xx response.
+- `400` for `VALIDATION_ERROR` and `INVALID_JSON` (`SyntaxError` from `request.json()`), `201` on create, `500` generic.
+- Log the route name with the error; never return stack traces.
 
-export async function POST(request: NextRequest) {
- try {
- const body = await request.json()
-
- const validated = ProductSchema.safeParse(body)
- if (!validated.success) {
- return NextResponse.json(
- {
- error: {
- code: 'VALIDATION_ERROR',
- message: 'Invalid request body',
- details: validated.error.flatten().fieldErrors,
- },
- },
- { status: 400 }
- )
- }
-
- const product = await db.product.create({ data: validated.data })
-
- return NextResponse.json({ data: product }, { status: 201 })
-
- } catch (error) {
- if (error instanceof SyntaxError) {
- return NextResponse.json(
- { error: { code: 'INVALID_JSON', message: 'Invalid JSON body' } },
- { status: 400 }
- )
- }
-
- console.error('POST /api/products error:', error)
-
- return NextResponse.json(
- { error: { code: 'INTERNAL_ERROR', message: 'Internal server error' } },
- { status: 500 }
- )
- }
-}
-```
+Full `POST /api/products` handler: [references/server-patterns.md](references/server-patterns.md) §API route error handling.
 
 ## TanStack Query Error Handling  [HIGH freedom]
 
-```tsx
-// hooks/useProducts.ts
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
+- In `queryFn`/`mutationFn`, throw `new Error(body.error?.message ?? fallback)` when `!res.ok` so the UI gets the server message.
+- `retry`: no retry on 401/403; up to 3 attempts otherwise.
+- Mutations: `onSuccess` invalidates the query key and `toast.success`; `onError` → `toast.error(error.message)`.
 
-export function useProducts() {
- return useQuery({
- queryKey: ['products'],
- queryFn: async () => {
- const res = await fetch('/api/products')
- if (!res.ok) {
- const error = await res.json()
- throw new Error(error.error?.message || 'Failed to fetch products')
- }
- return res.json()
- },
- retry: (failureCount, error) => {
- // Don't retry on 4xx errors
- if (error.message.includes('401') || error.message.includes('403')) {
- return false
- }
- return failureCount < 3
- },
- })
-}
-
-export function useCreateProduct() {
- const queryClient = useQueryClient()
-
- return useMutation({
- mutationFn: async (data: ProductInput) => {
- const res = await fetch('/api/products', {
- method: 'POST',
- body: JSON.stringify(data),
- })
- if (!res.ok) {
- const error = await res.json()
- throw new Error(error.error?.message || 'Failed to create product')
- }
- return res.json()
- },
- onSuccess: () => {
- queryClient.invalidateQueries({ queryKey: ['products'] })
- toast.success('Product created')
- },
- onError: (error) => {
- toast.error(error.message)
- },
- })
-}
-```
+`useProducts` and `useCreateProduct` hooks: [references/ui-patterns.md](references/ui-patterns.md) §TanStack Query error handling.
 
 ## Error State UI Components  [HIGH freedom]
 
+- One reusable `ErrorState({ title, message, onRetry? })`: icon, heading, message, optional retry button.
+- Use it for query errors (`error` + `refetch`) instead of ad-hoc red text per list.
+
 ```tsx
-// components/ErrorState.tsx
-import { AlertCircle, RefreshCw } from 'lucide-react'
-
-interface ErrorStateProps {
- title?: string
- message: string
- onRetry?: () => void
-}
-
-export function ErrorState({
- title = 'Error',
- message,
- onRetry
-}: ErrorStateProps) {
- return (
- <div className="flex flex-col items-center justify-center py-12 text-center">
- <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
- <h3 className="font-semibold text-lg mb-2">{title}</h3>
- <p className="text-muted-foreground mb-6 max-w-sm">{message}</p>
- {onRetry && (
- <button
- onClick={onRetry}
- className="inline-flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-muted"
- >
- <RefreshCw className="h-4 w-4" />
- Try again
- </button>
- )}
- </div>
- )
-}
-
-// Usage with TanStack Query
-function ProductList() {
- const { data, error, isLoading, refetch } = useProducts()
-
- if (error) {
- return (
- <ErrorState
- title="Failed to load products"
- message={error.message}
- onRetry={() => refetch()}
- />
- )
- }
-
- // ...
-}
+const { data, error, isLoading, refetch } = useProducts()
+if (error) return <ErrorState title="Failed to load products" message={error.message} onRetry={() => refetch()} />
 ```
+
+Full `ErrorState` component: [references/ui-patterns.md](references/ui-patterns.md) §Error state UI components.
 
 ## Further reading
 
-- [Error Logging & Monitoring and more](references/details.md)
+- [Error Logging & Monitoring and the full checklist](references/details.md)
+- [Server-side error patterns](references/server-patterns.md)
+- [Client-side error patterns](references/ui-patterns.md)

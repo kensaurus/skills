@@ -273,4 +273,4 @@ End the turn with a standalone recap in chat: the decision log in one line, the 
 - **`audit-analytics`** — run first when the funnel table is all "unmeasured".
 - **`iterate-gtm-weekly`** — the weekly loop after Phase 4 (`iterate-post-launch` keeps production bugs).
 
-> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model.
+> Plan at high effort. Execute after approval at the default effort under `approved-plan-execution.mdc` (no reward hacking, no feature deletion).

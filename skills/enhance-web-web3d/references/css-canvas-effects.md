@@ -2,6 +2,17 @@
 
 Lightweight alternatives to WebGL — use these when Three.js / R3F is overkill.
 
+## Contents
+
+- Glassmorphism
+- Animated gradient background
+- Noise / grain texture
+- SVG morphing (Framer Motion)
+- Canvas 2D particle system
+- Mouse-following cursor glow
+- Performance notes
+
+
 ---
 
 ## Glassmorphism

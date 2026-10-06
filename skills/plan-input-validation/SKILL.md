@@ -176,4 +176,4 @@ fixtures (real signed events) not mocked payloads.
   `audit-fe-api`.
 - **Verify:** `test-red-team` + Stripe CLI signed webhook fixtures.
 
-> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model. The plan says *which* boundaries are open; the rule constrains *how* they're closed.
+> Plan at high effort. Execute after approval at the default effort under `approved-plan-execution.mdc` (no reward hacking, no feature deletion). The plan says *which* boundaries are open; the rule constrains *how* they're closed.

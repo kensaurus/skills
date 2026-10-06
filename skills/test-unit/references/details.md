@@ -74,6 +74,16 @@ npm test                    # or: pnpm test, yarn test
 python -m pytest            # Python
 go test ./...               # Go
 
+## Contents
+
+- Step 6: Database-Aware Tests (Supabase Integration)
+- Output: Test Plan Report
+- Test Plan — [Project Name]
+- Quick Reference
+- Checklist
+- Testing patterns by category
+
+
 # Run specific file
 npx vitest src/utils/formatDate.test.ts
 npx jest --testPathPattern formatDate

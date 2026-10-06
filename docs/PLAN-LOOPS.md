@@ -288,4 +288,4 @@ Every `plan-*` skill shares the same discipline:
 | `workflow-launch-ready` | SEO + PWA + … | Launch week |
 | Core iterate | `/research` → audits → `/plan-mode` → TDD | General improvement |
 
-See [README — How it works](../README.md#how-it-works) and [CATALOG — Skill composition](CATALOG.md#skill-composition-patterns) for more recipes.
+See [README — How it works](../README.md#how-one-request-lifts-the-repo) and [CATALOG — Skill composition](CATALOG.md#skill-composition-patterns) for more recipes.

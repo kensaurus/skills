@@ -1,3 +1,10 @@
+
+## Contents
+
+- Step 9: Summary Report
+- Sentry Monitor Report — [Project Name]
+- Decision Tree: Is This Noise or a Bug?
+
 ### 8b. Monitoring Coverage Audit
 
 Check what IS and IS NOT being monitored:

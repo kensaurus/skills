@@ -4,6 +4,19 @@ Reusable templates for `workflow-housekeep`: the README skeleton, the summary
 report, and the per-ecosystem command cheatsheet. Adapt each to the project's
 detected stack.
 
+## Contents
+
+- README Template (adapt to project)
+- Tech Stack
+- Getting Started
+- Project Structure
+- Deployment
+- Scripts
+- Housekeep Report Template
+- Housekeep Report — [Project Name]
+- Quick Reference: Common Cleanup Commands
+
+
 ---
 
 ## README Template (adapt to project)

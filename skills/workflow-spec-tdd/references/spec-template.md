@@ -1,5 +1,22 @@
 # Spec Writing Reference
 
+
+## Contents
+
+- Why specs matter
+- Spec template
+- Goal
+- Background & context
+- Requirements
+- Acceptance criteria
+- Technical notes
+- Out of scope
+- Writing principles
+- Example inputs/outputs
+- Edge cases
+- Spec sizes
+- Red flags in specs
+
 ## Why specs matter
 
 Vague prompts produce vague code. A good spec gives the agent:

@@ -1,3 +1,22 @@
+
+## Contents
+
+- Initial Response
+- Core Philosophy
+- Review Format (Required)
+- The Animation Decision Framework
+- Spring Animations
+- Component Building Principles
+- CSS Transform Mastery
+- clip-path for Animation
+- Gesture and Drag Interactions
+- Performance Rules
+- Accessibility
+- The Sonner Principles (Building Loved Components)
+- Stagger Animations
+- Debugging Animations
+- Review Checklist
+
 ## Initial Response
 
 When this skill is first invoked without a specific question, respond only with:

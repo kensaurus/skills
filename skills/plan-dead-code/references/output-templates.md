@@ -4,6 +4,12 @@ Copy this shape. The numbers below are illustrative; every count in a real
 report comes from an executed command, and the only estimated column is
 "After Phase 1".
 
+## Contents
+
+- Why the table has a Children column
+- Severity and effort
+- Baseline table (4a)
+
 **One row per chain head.** A dead file explains its own exports and the
 packages only it imported — those are *children*, listed in the last column,
 never as separate rows. Twenty-seven findings that collapse to three heads is
@@ -131,3 +137,21 @@ change or a database migration.
 
 Severity orders the phases; effort decides whether an item belongs here or in
 `workflow-refactor`.
+
+## Baseline table (4a)
+
+The ratchet's starting line. Numbers only ever go down.
+
+| Metric | Command | Today |
+|---|---|---|
+| Knip issues (production) | `knip --production` | |
+| Knip issues (default) | `knip` | |
+| Unused files / exports / types / deps | `knip --files` etc. | |
+| Unused locals | `tsc --noEmit` | |
+| Duplication % | `jscpd` | |
+| `console.*` / `debugger` | `rg -o … \| wc -l` | |
+| `.only` / `.skip` / `.todo` / `x`-prefixed | `rg -o … \| wc -l` | |
+| Suppressions / `any` | `rg -o … \| wc -l` | |
+| Orphan assets | asset scan | |
+| Env drift (missing / unused) | env diff | |
+| Unused indexes / orphan tables / functions | `supabase inspect` | |

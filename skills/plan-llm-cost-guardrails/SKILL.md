@@ -173,4 +173,4 @@ Simulate a runaway in test env after Phase 1; confirm cap holds before bill move
 - **Execution:** `backend-patterns`, `audit-langfuse-llm`, `backend-observability`.
 - **Verify:** sandbox load/abuse test — caps, breakers, fallback trip before spend escapes.
 
-> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model.
+> Plan at high effort. Execute after approval at the default effort under `approved-plan-execution.mdc` (no reward hacking, no feature deletion).

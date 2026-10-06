@@ -178,4 +178,4 @@ Add a pre-commit secret scanner (`create-hook`) so this can't regress.
 - **Execution:** provider dashboards, Vercel/AWS env, `audit-security`.
 - **Verify:** re-scan working tree + history; confirm rotated keys are dead.
 
-> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model. Rotation is irreversible-ish — the plan says *which* keys; the rule constrains *how* and *in what order*.
+> Plan at high effort. Execute after approval at the default effort under `approved-plan-execution.mdc` (no reward hacking, no feature deletion). Rotation is irreversible-ish — the plan says *which* keys; the rule constrains *how* and *in what order*.

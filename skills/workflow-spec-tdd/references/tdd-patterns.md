@@ -1,5 +1,14 @@
 # TDD Patterns Reference
 
+
+## Contents
+
+- The RED → GREEN → REFACTOR cycle
+- Test patterns by type
+- Writing good tests
+- Runner commands
+- Coverage targets
+
 ## The RED → GREEN → REFACTOR cycle
 
 ### Phase RED — write a failing test first

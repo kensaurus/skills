@@ -12,6 +12,7 @@ node scripts/render-brand-assets.mjs hero og  # a subset
 | View | Output | Size |
 |---|---|---|
 | `hero` (dark, light) | `hero-dark.png`, `hero-light.png` | 1600×900 |
+| `ladder` (dark, light) | `ladder-dark.png`, `ladder-light.png` | 1600×760 |
 | `grill` `build` `audit` `ship` | `<view>-dark.png` | 1200×700 |
 | `og` | `assets/og.png` (copied to `site/`) | 1200×630 |
 | `logo` `logo-light` `logo-dark` | `assets/logo*.png`, `assets/logo.svg` | 1024×1024 |

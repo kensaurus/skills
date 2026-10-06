@@ -4,6 +4,30 @@ Per-pattern detection for `audit-backend-architecture`. For each in-scope patter
 topology tier) mark **Implemented / Partial / Missing / N/A** with `file:line`. Detection commands use
 ripgrep (`rg`); adapt globs to the stack. Cross-skill fix targets are named in backticks (not links).
 
+## Contents
+
+- 1. API Gateway  · Applies: T1+
+- 2. BFF / API composition / GraphQL federation  · Applies: T1+
+- 3. Circuit breaker  · Applies: T1+  · (defers to `audit-resilience`)
+- 4. Bulkhead  · Applies: T2+
+- 5. Backpressure / load shedding / queue-based load leveling  · Applies: T2+
+- 6. Outbox + relay/CDC  · Applies: T1+
+- 7. Saga  · Applies: T2+
+- 8. CQRS + event sourcing  · Applies: T3 (selective)
+- 9. Hexagonal / ports-and-adapters  · Applies: T1+
+- 10. Anti-corruption layer (ACL)  · Applies: T2+
+- 11. Strangler-fig migration  · Applies: any (only if a legacy system is being replaced)
+- 12. Sidecar / service mesh  · Applies: T3
+- 13. Cell-based architecture  · Applies: T3 (scale / residency)
+- 14. Zero-trust / mTLS / service identity  · Applies: T2+
+- 15. Distributed tracing + SLOs  · Applies: T1+
+- 16. Contract testing  · Applies: T2+
+- 17. Communication style — sync request/response vs async event-driven  · Applies: T1+
+- 18. Cache-aside (lazy loading)  · Applies: T1+
+- 19. Database-per-service / data ownership  · Applies: T2+ (owned schemas already matter at T1)
+- Decision framework — fit before presence (used in Phase 3)
+
+
 Legend — **Applies:** lowest topology tier where the pattern is in scope (T1 serverless/monolith ·
 T2 containers/few-services · T3 k8s/microservices/event-driven).
 

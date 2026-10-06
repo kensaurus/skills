@@ -108,34 +108,14 @@ API LAYER DISCOVERY:
 
 ### 1a. Context7 — Library Documentation
 
-```json
-context7:resolve-library-id
-{
- "libraryName": "<DETECTED_LIBRARY>",
- "query": "caching deduplication error handling best practices"
-}
-```
-
-```json
-context7:query-docs
-{
- "libraryId": "<RESOLVED_ID>",
- "query": "staleTime cacheTime retry error handling optimistic updates"
-}
-```
-
-Run for each major dependency (e.g., `@tanstack/react-query`, `axios`, `zod`).
+Resolve each major dependency (`@tanstack/react-query`, `axios`, `zod`), then query docs for
+"staleTime cacheTime retry error handling optimistic updates". Call bodies:
+[references/research-calls.md](references/research-calls.md) §Context7.
 
 ### 1b. Firecrawl — Current API Patterns
 
-```json
-firecrawl:firecrawl_search
-{
- "query": "<FRAMEWORK> API integration best practices [current year]",
- "limit": 5,
- "sources": [{ "type": "web" }]
-}
-```
+Search `<FRAMEWORK> API integration best practices [current year]` (limit 5, web source), then one
+query per topic below. Call body: [references/research-calls.md](references/research-calls.md) §Firecrawl.
 
 | Topic | Query |
 |-------|-------|
@@ -275,179 +255,45 @@ Compare columns/types to FE TypeScript interfaces.
 
 ### 6a. Caching Strategy
 
-```typescript
-// Per-query staleTime based on data freshness needs
-const { data } = useQuery({
- queryKey: ['user', userId],
- queryFn: () => getUser(userId),
- staleTime: 1000 * 60 * 10, // User data: 10 minutes
-});
+- Set `staleTime` per query from the data's real freshness need (user profile ~10 min, settings `Infinity`); default 0 refetches on every mount.
 
-const { data: settings } = useQuery({
- queryKey: ['settings'],
- queryFn: getSettings,
- staleTime: Infinity, // Settings rarely change
+```typescript
+const { data } = useQuery({
+  queryKey: ['user', userId],
+  queryFn: () => getUser(userId),
+  staleTime: 1000 * 60 * 10, // User data: 10 minutes
 });
 ```
 
 ### 6b. Optimistic Updates
 
-```typescript
-const mutation = useMutation({
- mutationFn: updateUser,
- onMutate: async (newData) => {
- await queryClient.cancelQueries({ queryKey: ['user', userId] });
- const previous = queryClient.getQueryData(['user', userId]);
- queryClient.setQueryData(['user', userId], newData);
- return { previous };
- },
- onError: (_err, _newData, context) => {
- queryClient.setQueryData(['user', userId], context?.previous);
- },
- onSettled: () => {
- queryClient.invalidateQueries({ queryKey: ['user', userId] });
- },
-});
-```
+- `onMutate`: cancel in-flight queries, snapshot `getQueryData`, `setQueryData` to the new value, return the snapshot.
+- `onError`: restore the snapshot; `onSettled`: invalidate the key.
 
 ### 6c. Prefetching
 
-```typescript
-const prefetchUser = (userId: string) => {
- queryClient.prefetchQuery({
- queryKey: ['user', userId],
- queryFn: () => getUser(userId),
- });
-};
-
-// On hover or focus
-<Link onMouseEnter={() => prefetchUser(userId)} to={`/users/${userId}`}>
- View User
-</Link>
-```
+- `queryClient.prefetchQuery` with the same key and fn as the detail view, on link `onMouseEnter`/focus.
 
 ### 6d. Error Handling
 
-```typescript
-const { data, error, isError, isLoading } = useQuery({
- queryKey: ['users'],
- queryFn: getUsers,
- retry: 3,
- retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000),
-});
-
-if (isLoading) return <Skeleton />;
-if (isError) return <ErrorDisplay error={error} />;
-if (!data?.length) return <EmptyState message="No users found" />;
-```
+- `retry: 3` with exponential `retryDelay` capped at 30 s; render `isLoading`, `isError`, and empty branches, in that order.
 
 ### 6e. Response Validation (Zod)
 
-```typescript
-import { z } from 'zod';
+- Define the schema once, `type User = z.infer<...>`, and `UserSchema.parse(response.data)` inside the service function.
 
-const UserSchema = z.object({
- id: z.string().uuid(),
- email: z.string().email(),
- name: z.string(),
- createdAt: z.string().datetime(),
-});
-
-type User = z.infer<typeof UserSchema>;
-
-const getUser = async (id: string): Promise<User> => {
- const response = await api.get(`/api/users/${id}`);
- return UserSchema.parse(response.data);
-};
-```
+Full code for 6a–6e: [references/fix-patterns.md](references/fix-patterns.md).
 
 ---
 
 ## Output Template
 
-```markdown
-## Frontend API Audit Report
+Report sections, in order: header (date, framework, client, state library) → Production Error
+Summary (Sentry) → Critical Issues → Warnings → Optimization Opportunities (caching, prefetching,
+batching) → API Inventory (endpoint, method, FE file, BE route, status) → Type Safety Status →
+Research Findings Applied → Next Steps checklist.
 
-**Audited:** [date]
-**Framework:** [detected framework]
-**API client:** [detected client]
-**State management:** [detected library]
-
----
-
-### Production Error Summary (Sentry)
-
-| Endpoint | Error | Frequency | Has Error Handling |
-|----------|-------|-----------|-------------------|
-| [endpoint] | [error type] | [events/week] | [YES/NO] |
-
----
-
-### Critical Issues (Must Fix)
-
-#### 1. [Endpoint/File] — [Issue Type]
-- **Current:** `[current implementation]`
-- **Problem:** [description]
-- **Fix:** `[correct implementation]`
-
----
-
-### Warnings (Should Fix)
-
-#### 1. [Issue description]
-- **File:** `[file path]`
-- **Impact:** [what could go wrong]
-- **Recommendation:** [how to fix]
-
----
-
-### Optimization Opportunities
-
-#### 1. Caching
-- **Missing staleTime:** [list endpoints]
-- **Recommendation:** [suggested values per data type]
-
-#### 2. Prefetching
-- **Candidates:** [navigation links that could prefetch]
-
-#### 3. Batching
-- **N+1 patterns found:** [list]
-- **Backend batch endpoint exists:** [YES/NO]
-
----
-
-### API Inventory
-
-| Endpoint | Method | Frontend File | Backend Route | Status | Notes |
-|----------|--------|---------------|---------------|--------|-------|
-| `/api/users` | GET | `user-service.ts` | `app/api/users/route.ts` | VALID | — |
-| `/api/reports` | GET | `report-hook.ts` | NOT FOUND | MISSING | Remove or implement |
-
----
-
-### Type Safety Status
-
-| Service | Typed Response | Zod Validation | Notes |
-|---------|---------------|----------------|-------|
-| `user-service.ts` | YES | NO | Add runtime validation |
-| `auth-service.ts` | Partial | NO | Missing error response types |
-
----
-
-### Research Findings Applied
-- [Pattern]: [how it applies]
-- [Best practice]: [gap identified]
-
----
-
-### Next Steps
-
-1. [ ] Fix critical: [list]
-2. [ ] Add missing parameters: [list]
-3. [ ] Configure caching: [list with suggested staleTime values]
-4. [ ] Add error handling: [files]
-5. [ ] Add Zod validation: [services]
-```
+Full template: [references/report-template.md](references/report-template.md).
 
 ---
 

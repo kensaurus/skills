@@ -4,6 +4,16 @@ Starting points, not drop-ins. Author the config from the detected stack
 (Phase 0), then let configuration hints correct you. Every pattern below
 exists to replace an `ignore` someone would otherwise reach for.
 
+## Contents
+
+- Vite + React + Supabase
+- Next.js App Router
+- Monorepo (pnpm / turbo / nx)
+- Tags beat config
+- Companion tools
+- The ratchet job
+- Hint symptom → correct fix
+
 Install locally, never globally:
 
 ```bash
@@ -212,3 +222,15 @@ reports every dead file and still exits `0`. Same class of bypass:
 `--no-exit-code`, `--exclude`, a narrowed `--include`, `--workspace`
 scoping, and the `ignore*` family. Review changes to `knip.json` and the
 job's flags as carefully as the count itself.
+
+## Hint symptom → correct fix
+
+| Symptom | Correct fix | Not this |
+|---|---|---|
+| Whole directory unused | Add `entry` pattern for its real entry | `ignore` the directory |
+| `vite.config.ts` reported unused | Enable/disable that plugin explicitly | `ignore` the file |
+| Flood of unused `interface`/`type` | `ignoreExportsUsedInFile: { interface: true, type: true }` | `--exclude types` |
+| Unresolved path-alias imports | Add `paths` (tsconfig semantics) | `ignore` the importer |
+| Node builtins as unused deps | `ignoreDependencies` | blanket `ignore` |
+| Test files reported | `--production` | negated `project` patterns |
+| Generated file's exports unused | `ignore` that one file *(legitimate)* | — |

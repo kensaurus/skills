@@ -88,7 +88,6 @@ Every animation should serve a purpose:
 ```tsx
 import { motion } from 'framer-motion'
 
-// Entrance animation
 <motion.div
  initial={{ opacity: 0, y: 20 }}
  animate={{ opacity: 1, y: 0 }}
@@ -96,15 +95,8 @@ import { motion } from 'framer-motion'
 >
  Content
 </motion.div>
-
-// Exit animation
-<motion.div
- exit={{ opacity: 0, scale: 0.95 }}
- transition={{ duration: 0.2 }}
->
- Content
-</motion.div>
 ```
+Exit: `exit={{ opacity: 0, scale: 0.95 }}` at 0.2s. Both: [references/motion-patterns.md](references/motion-patterns.md) §Basic Animations.
 
 ### Hover & Tap Interactions
 ```tsx
@@ -118,63 +110,13 @@ import { motion } from 'framer-motion'
 ```
 
 ### Staggered Lists
-```tsx
-const container = {
- hidden: { opacity: 0 },
- show: {
- opacity: 1,
- transition: { staggerChildren: 0.05 }
- }
-}
-
-const item = {
- hidden: { opacity: 0, x: -20 },
- show: { opacity: 1, x: 0 }
-}
-
-<motion.ul variants={container} initial="hidden" animate="show">
- {items.map(i => (
- <motion.li key={i.id} variants={item}>{i.name}</motion.li>
- ))}
-</motion.ul>
-```
+Parent variants with `transition: { staggerChildren: 0.05 }`; each `motion.li` uses item variants `hidden → show` (opacity + x). Code: [references/motion-patterns.md](references/motion-patterns.md) §Staggered Lists.
 
 ### Scroll-Triggered Animations
-```tsx
-import { motion, useScroll, useTransform } from 'framer-motion'
-
-function ParallaxSection() {
- const { scrollYProgress } = useScroll()
- const y = useTransform(scrollYProgress, [0, 1], [0, -100])
- const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1, 0])
-
- return (
- <motion.div style={{ y, opacity }}>
- Parallax content
- </motion.div>
- )
-}
-```
+`useScroll()` → `scrollYProgress`; `useTransform` maps it to `y` and `opacity` on a `motion.div style`. Code: [references/motion-patterns.md](references/motion-patterns.md) §Scroll-Triggered Animations.
 
 ### Page Transitions (Next.js)
-```tsx
-// app/template.tsx
-'use client'
-import { motion } from 'framer-motion'
-
-export default function Template({ children }: { children: React.ReactNode }) {
- return (
- <motion.div
- initial={{ opacity: 0, y: 10 }}
- animate={{ opacity: 1, y: 0 }}
- exit={{ opacity: 0, y: -10 }}
- transition={{ duration: 0.3 }}
- >
- {children}
- </motion.div>
- )
-}
-```
+`app/template.tsx` (`'use client'`) wraps `children` in a `motion.div` with `y: 10 → 0 → -10` and 0.3s opacity. Code: [references/motion-patterns.md](references/motion-patterns.md) §Page Transitions.
 
 ### Layout Animations
 ```tsx
@@ -196,32 +138,11 @@ export default function Template({ children }: { children: React.ReactNode }) {
 
 ### Tailwind Animations
 ```tsx
-// Fade in
 <div className="animate-in fade-in duration-300">
-
-// Slide up
 <div className="animate-in slide-in-from-bottom-4 duration-500">
-
-// Combined
 <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-150">
-
-// Custom in tailwind.config.ts
-animation: {
- 'float': 'float 3s ease-in-out infinite',
- 'pulse-slow': 'pulse 3s ease-in-out infinite',
- 'shimmer': 'shimmer 2s linear infinite',
-}
-keyframes: {
- float: {
- '0%, 100%': { transform: 'translateY(0)' },
- '50%': { transform: 'translateY(-10px)' },
- },
- shimmer: {
- '0%': { backgroundPosition: '-200% 0' },
- '100%': { backgroundPosition: '200% 0' },
- },
-}
 ```
+Custom `animation` / `keyframes` (`float`, `pulse-slow`, `shimmer`) in `tailwind.config.ts`: [references/css-and-gsap.md](references/css-and-gsap.md) §Tailwind Animations.
 
 ### Loading Skeleton
 ```tsx
@@ -238,69 +159,14 @@ keyframes: {
 
 ## GSAP for Complex Animations
 
-```tsx
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useGSAP } from '@gsap/react'
-
-gsap.registerPlugin(ScrollTrigger)
-
-function HeroSection() {
- const containerRef = useRef(null)
-
- useGSAP(() => {
- const tl = gsap.timeline({
- scrollTrigger: {
- trigger: containerRef.current,
- start: "top center",
- end: "bottom center",
- scrub: 1,
- }
- })
-
- tl.from(".hero-title", { opacity: 0, y: 100, duration: 1 })
- .from(".hero-subtitle", { opacity: 0, y: 50 }, "-=0.5")
- .from(".hero-cta", { opacity: 0, scale: 0.8 }, "-=0.3")
- }, { scope: containerRef })
-
- return <div ref={containerRef}>...</div>
-}
-```
+`gsap.registerPlugin(ScrollTrigger)`; inside `useGSAP(…, { scope: containerRef })` build a `gsap.timeline({ scrollTrigger: { trigger, start, end, scrub: 1 } })` and chain `.from()` steps with negative offsets (`"-=0.5"`).
+Code: [references/css-and-gsap.md](references/css-and-gsap.md) §GSAP for Complex Animations.
 
 ## Micro-interaction reference
 
 Options, not a checklist. This skill adds one animation, so pick the single item the purpose needs; unrequested hover, zoom, or reveal effects are scope creep.
 
-### Buttons
-- Hover: subtle scale (1.02) + shadow
-- Active/tap: scale down (0.98)
-- Loading: spinner + disabled state
-- Success: checkmark animation
-- Focus: visible ring animation
-
-### Forms
-- Input focus: border color transition
-- Label float animation on focus
-- Error shake animation
-- Success checkmark
-- Submit button loading state
-
-### Navigation
-- Active indicator slides
-- Dropdown fade + slide
-- Mobile menu slide from edge
-- Breadcrumb transitions
-
-### Cards
-- Hover lift effect
-- Image zoom on hover
-- Content reveal on hover
-- Selection state pulse
-
-### Modals
-- Backdrop fade in
-- Content scale + fade
-- Exit animation before unmount
+Catalogue by surface (buttons, forms, navigation, cards, modals): [references/motion-patterns.md](references/motion-patterns.md) §Micro-interaction catalogue.
 
 ## Accessibility  [LOW freedom — run exactly]
 

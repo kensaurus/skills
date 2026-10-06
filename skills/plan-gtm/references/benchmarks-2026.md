@@ -6,6 +6,19 @@ Shared by `plan-gtm`, `plan-pricing`, `enhance-onboarding`,
 `iterate-gtm-weekly`. Quote a number only with its row here; if a row is
 missing, write **unmeasured** or **no benchmark** in the plan.
 
+## Contents
+
+- Free-to-paid by model
+- Activation, time-to-value, retention
+- Pricing and packaging
+- Pricing research and value metric
+- Lifecycle email
+- Open-source monetization
+- Distribution
+- Positioning and messaging
+- Failure modes (why GTM plans die)
+
+
 ## Free-to-paid by model
 
 ChartMogul × Growth Unhinged (Kyle Poyar) × ProductLed, ~200 self-serve

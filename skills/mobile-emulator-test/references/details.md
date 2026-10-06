@@ -25,6 +25,21 @@ adb shell "uiautomator dump /sdcard/ui.xml && cat /sdcard/ui.xml" \
 # Search for the bounds="[x1,y1][x2,y2]" of the element you want.
 ```
 
+## Contents
+
+- Phase 2.5: Auth area — walk both guest AND signed-in paths
+- Phase 3: Full CRUD round-trip with three-layer verification
+- Phase 4: The "looks empty even though signed in" failure mode
+- Phase 5: Cache-rehydration crashes (`isZero is not a function`)
+- Phase 6: Sentry MCP loop
+- Phase 7: Edge cases the walk should not skip
+- Phase 8: Cleanup
+- Phase 9: Report
+- Native build QA — <project> on Android emulator
+- Anti-pattern catalogue (ship-blockers I want the agent to spot fast)
+- Important rules
+
+
 ### 2b. Walk every tab in order
 
 For each tab in the bottom navigation:

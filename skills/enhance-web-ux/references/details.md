@@ -1,3 +1,20 @@
+# enhance-web-ux — details
+
+Steps 5b–9 of the skill (primitive-first patch decision, enhancement plan, implement, verify, write-up) plus the heuristic cheat sheet, sanity checks, scope limits, and research anchors.
+
+## Contents
+
+- 5b — Primitive-First Patch Decision
+- Step 6 — Enhancement plan (the deliverable)
+- Step 7 — Implement (smallest possible diffs)
+- Step 8 — Verify (three viewports, before/after; 8b silent-bug gates)
+- Step 9 — Write-up
+- Heuristic Mapping Cheat Sheet
+- Quick Sanity Checks Before You Stop (hidden-failure-mode audit, repo health)
+- When NOT to Use This Skill
+- Companion Files
+- Research Anchors
+
 ### 5b — Primitive-First Patch Decision
 
 Before writing the diff, decide: **does this bug live at the leaf I'm

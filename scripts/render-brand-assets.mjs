@@ -15,6 +15,7 @@
  *
  * OUTPUTS:
  *   docs/screenshots/hero-{dark,light}.png        1600×900
+ *   docs/screenshots/ladder-{dark,light}.png      1600×760
  *   docs/screenshots/{grill,build,audit,ship}-dark.png  1200×700
  *   assets/og.png                                  1200×630
  *   assets/logo.png · logo-light.png · logo-dark.png   1024×1024
@@ -38,6 +39,8 @@ const counts = {
 const JOBS = [
   { view: "hero", theme: "dark", w: 1600, h: 900, out: "docs/screenshots/hero-dark.png" },
   { view: "hero", theme: "light", w: 1600, h: 900, out: "docs/screenshots/hero-light.png" },
+  { view: "ladder", theme: "dark", w: 1600, h: 760, out: "docs/screenshots/ladder-dark.png" },
+  { view: "ladder", theme: "light", w: 1600, h: 760, out: "docs/screenshots/ladder-light.png" },
   { view: "grill", theme: "dark", w: 1200, h: 700, out: "docs/screenshots/grill-dark.png" },
   { view: "build", theme: "dark", w: 1200, h: 700, out: "docs/screenshots/build-dark.png" },
   { view: "audit", theme: "dark", w: 1200, h: 700, out: "docs/screenshots/audit-dark.png" },

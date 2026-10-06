@@ -6,6 +6,39 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ## [Unreleased]
 
+## [2.4.0] — 2026-10-06
+
+The README reads as a page again, and the biggest skills load in a fraction of
+the tokens.
+
+### Changed
+
+- **README rebuilt around two images.** The hero, then a new ladder diagram,
+  "How one request lifts the repo" (Orient, Assess, Change, Prove, Ship, each
+  rung naming what the repo gains), then install, the "What should I say" table,
+  and the tour. Everything after that collapses: install options, commands,
+  subagents, MCP servers, rules, shell helpers, upgrading, FAQ. Visible length
+  drops from 823 lines to about 150; the source is 420 lines.
+- **Skill index moved to `docs/SKILLS.md`.** `generate-skill-index.mjs` now writes
+  the full one-line-per-skill list there and only the family counts table into
+  the README. `--check` guards both files. The 314-line table that made the
+  README a wall is gone from it.
+- **22 skills (the 8 largest by prose and the 14 heaviest in inline code) slimmed into reference files**, following Anthropic's
+  authoring guide: SKILL.md keeps the reasoning skeleton, one short example per
+  concept, and the checks; long code, pattern catalogues, probes, and templates
+  move to `references/<topic>.md` with a contents list. Frontmatter and rule
+  meaning are unchanged. Their SKILL.md bodies drop 43% in bytes (364 KB to 206 KB, about 49,000 fewer tokens when all are loaded); the largest, enhance-web-landing, goes from 42 KB to 9.5 KB. Twenty-eight older reference files over 100 lines gain a contents list.
+- **Plan skills share one execution line.** Ten `plan-*` skills carried the same
+  two-sentence execution note; it is now one line each.
+- **`/thirdparty-web-interface-guidelines`** delegates to its skill instead of
+  carrying a 185-line copy of the rule set.
+- `docs/PLAN-LOOPS.md` links to the new README section.
+
+### Added
+
+- `docs/screenshots/ladder-{dark,light}.png` rendered from the `ladder` view in
+  `docs/screenshots/src/showcase.html`; `npm run brand:render` covers it.
+
 ## [2.3.0] — 2026-10-06
 
 A new brand and a plain-language pass, plus the two methods behind them added

@@ -3,6 +3,17 @@
 Purposeful play — every interaction enhances understanding or provides feedback.
 Fun should support the task, not distract from it.
 
+## Contents
+
+- Success celebrations
+- Bouncy / jelly buttons
+- Magnetic button
+- Satisfying toggle
+- Gamification: progress with milestones
+- Easter egg: Konami code
+- Principles
+
+
 ---
 
 ## Success celebrations

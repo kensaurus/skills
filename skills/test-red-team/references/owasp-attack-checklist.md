@@ -3,6 +3,22 @@
 Reference for Phase 4 (Security red team) of `test-red-team`. Load this file
 when you need exhaustive payloads or the full OWASP mapping table.
 
+## Contents
+
+- OWASP Top 10:2021 — Red-team mapping
+- XSS payloads (confirm with benign effect only)
+- SQL injection probes (safe read-only)
+- Path traversal probes
+- SSRF probes (for URL-accepting inputs)
+- Authentication attack checklist
+- IDOR test procedure (per resource type)
+- Tenant-boundary test procedure (multi-tenant apps)
+- File upload attack checklist
+- Security headers checklist
+- MASVS-PLATFORM checks (Capacitor / hybrid apps)
+- Performance benchmark thresholds
+
+
 ---
 
 ## OWASP Top 10:2021 — Red-team mapping

@@ -4,6 +4,13 @@ Read the installed versions first (`package.json`). Every recipe names the versi
 needs. When the app is below that version, list the upgrade under **Open** rather than
 emulating the native component in JS.
 
+## Contents
+
+- Expo / React Native
+- Capacitor (web stack shipped as iOS + Android)
+- Sources
+
+
 ## Expo / React Native
 
 ### Chrome

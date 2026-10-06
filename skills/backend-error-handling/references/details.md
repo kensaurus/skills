@@ -1,3 +1,7 @@
+# Error logging and checklist
+
+Error reporting helper and the full error-handling checklist referenced from `SKILL.md`.
+
 ## Error Logging & Monitoring
 
 ```typescript
