@@ -303,7 +303,7 @@ const promotionResult = applyFileRules(promotionPath, "docs/PROMOTION.md", [
 let packageResult = { src: "", mismatches: [] };
 if (existsSync(packagePath)) {
   const pkg = JSON.parse(readFileSync(packagePath, "utf8"));
-  const nextDesc = `You say the job; the playbook runs. ${count} agent skills, ${commandCount} slash commands, ${agentCount} subagents, and MCP templates for Claude Code, Cursor, Codex CLI, and Gemini CLI. Tuned for React / Next.js / Supabase; works on most stacks.`;
+  const nextDesc = `You say the job; the playbook runs. ${count} agent skills, ${commandCount} slash commands, ${agentCount} subagents, and MCP templates for Claude Code, Cursor, Codex CLI, and Gemini CLI. Each playbook asks first, tests first, and proves the result. Tuned for React, Next.js, and Supabase. Works on most stacks.`;
   if (pkg.description !== nextDesc) {
     packageResult.mismatches.push({
       file: "package.json",
@@ -345,6 +345,15 @@ const marketplaceResult = applyFileRules(
   ".claude-plugin/marketplace.json",
   claudeCountRules,
 );
+
+const siteResult = applyFileRules(join(repoRoot, "site", "index.html"), "site/index.html", [
+  {
+    name: "site inventory",
+    re: /\d+ agent skills, \d+ slash commands, \d+ subagents/g,
+    to: `${count} agent skills, ${commandCount} slash commands, ${agentCount} subagents`,
+    required: true,
+  },
+]);
 
 const llmsResult = applyFileRules(llmsPath, "llms.txt", [
   {
@@ -390,6 +399,7 @@ const allMismatches = [
   ...claudePluginResult.mismatches,
   ...marketplaceResult.mismatches,
   ...llmsResult.mismatches,
+  ...siteResult.mismatches,
   ...gettingStartedResult.mismatches,
   ...docsReadmeResult.mismatches,
 ];
@@ -403,6 +413,7 @@ if (fix) {
   if (claudePluginResult.src) writeFileSync(claudePluginPath, claudePluginResult.src);
   if (marketplaceResult.src) writeFileSync(marketplacePath, marketplaceResult.src);
   if (llmsResult.src) writeFileSync(llmsPath, llmsResult.src);
+  if (siteResult.src) writeFileSync(join(repoRoot, "site", "index.html"), siteResult.src);
   if (gettingStartedResult.src) writeFileSync(gettingStartedPath, gettingStartedResult.src);
   if (docsReadmeResult.src) writeFileSync(docsReadmePath, docsReadmeResult.src);
   console.log(
