@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/skills
 
-**Status:** Pending — `@kensaurus/skills@2.2.0` (enhance-mobile-native-feel; mobile and UX skills refreshed for iOS 26 / Android 16 / Expo SDK 54–58 / Capacitor 8.3). Previous: `2.1.1` (Windows installs retry a briefly held file), `2.1.0` (enhance-ux-laws; Miller/Hick guidance corrected), live on 2026-10-01 as the first release through staged publishing: the workflow stages it, the maintainer approves with 2FA. `2.0.0` was published by the maintainer on 2026-10-01 (first publish of the new name).
+**Status:** Pending — `@kensaurus/skills@2.3.0` (new brand: pixel kensaurus hero, tour cards, OG image, logo; plain-language copy; brand hero kit and ASD-STE100 reference in the skills). Also pending: `2.2.0` (enhance-mobile-native-feel; mobile and UX skills refreshed). Previous: `2.1.1`, live on 2026-10-01 through staged publishing: the workflow stages it, the maintainer approves with 2FA.
 
 ---
 

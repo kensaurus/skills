@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/logo.png" width="72" height="72" alt="kenji mark">
+<img src="assets/logo.png" width="80" height="80" alt="kenji mark: a pixel kensaurus head on lime">
 
 # kenji skills
 
@@ -18,11 +18,11 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/hero-dark.png">
     <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/hero-light.png">
-    <img alt="You say fix this bug and ship it — workflow-fix-and-ship triages, tests, verifies, and opens the PR" src="docs/screenshots/hero-dark.png" width="100%">
+    <img alt="kenji skills. You say the job. The playbook runs. Step 1, you say: fix this bug and ship it. Step 2, workflow-fix-and-ship triages with evidence, fixes with a test, and verifies in the browser. Step 3, tests are green and the PR is open." src="docs/screenshots/hero-dark.png" width="100%">
   </picture>
 </a>
 
-<sub>↑ what happens after install · follows your GitHub theme · not a hosted app</sub>
+<sub>After install, say the job in chat. The matching playbook runs, proves the result, and opens the PR. The image follows your GitHub theme.</sub>
 
 </div>
 
@@ -67,39 +67,39 @@ Full menu → [Every skill](#every-skill-in-plain-english). Trigger phrases → 
 
 ## Tour
 
-Four rooms. Same rule: you talk, a named playbook runs.
+Four examples. The rule is the same: you say the job, and a named playbook runs.
 
 <table>
   <tr>
     <td width="50%" align="center">
       <a href="docs/GETTING-STARTED.md#a-typical-session">
-        <img alt="workflow-grilling — one question at a time before any code" src="docs/screenshots/grill-dark.png" width="100%">
+        <img alt="It asks first. You say: grill me before I build a referral program. workflow-grilling asks one question at a time and ends with a decision log you approve." src="docs/screenshots/grill-dark.png" width="100%">
       </a>
       <br>
-      <sub><b>Grill</b> · <code>workflow-grilling</code> — one question at a time until you share a decision log</sub>
+      <sub><b>Grill</b> · <code>workflow-grilling</code> asks one question at a time. You approve a decision log before any code.</sub>
     </td>
     <td width="50%" align="center">
       <a href="docs/CATALOG.md#workflow-build-feature">
-        <img alt="workflow-build-feature — spec, failing test, code, PR" src="docs/screenshots/build-dark.png" width="100%">
+        <img alt="The failing test comes first. You say: build this feature from those decisions. workflow-build-feature writes the spec, the failing test, the smallest passing change, then opens the PR." src="docs/screenshots/build-dark.png" width="100%">
       </a>
       <br>
-      <sub><b>Build</b> · <code>workflow-build-feature</code> — spec → failing test → code → smoke → PR</sub>
+      <sub><b>Build</b> · <code>workflow-build-feature</code> writes the spec and the failing test first. Then the code, then the PR.</sub>
     </td>
   </tr>
   <tr>
     <td width="50%" align="center">
       <a href="docs/CATALOG.md#audit-security">
-        <img alt="audit-security findings with file and line" src="docs/screenshots/audit-dark.png" width="100%">
+        <img alt="Every finding has a file and line. You say: audit this app for security problems. audit-security lists each finding with its file and line." src="docs/screenshots/audit-dark.png" width="100%">
       </a>
       <br>
-      <sub><b>Audit</b> · <code>audit-security</code> — OWASP-style findings with file:line, not a vibe check</sub>
+      <sub><b>Audit</b> · <code>audit-security</code> reports each finding with a file and line. No vibe checks.</sub>
     </td>
     <td width="50%" align="center">
       <a href="docs/CATALOG.md#workflow-ship-and-observe">
-        <img alt="workflow-ship-and-observe — live revision then a watch window" src="docs/screenshots/ship-dark.png" width="100%">
+        <img alt="Ship it, then watch it. You say: ship it and watch it. workflow-ship-and-observe confirms the live revision, watches the stability window, and rolls back if it breaks." src="docs/screenshots/ship-dark.png" width="100%">
       </a>
       <br>
-      <sub><b>Ship</b> · <code>workflow-ship-and-observe</code> — confirm the live SHA, watch, rollback if it breaks</sub>
+      <sub><b>Ship</b> · <code>workflow-ship-and-observe</code> confirms the live revision, watches the window, and rolls back if it breaks.</sub>
     </td>
   </tr>
 </table>

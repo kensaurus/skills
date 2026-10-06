@@ -1,320 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=1600, initial-scale=1" />
-  <title>kenji — capability preview</title>
-  <style>
-    :root {
-      --bg: #0d1117;
-      --panel: #161b22;
-      --panel-2: #1c2128;
-      --ink: #e6edf3;
-      --muted: #8b949e;
-      --line: #30363d;
-      --you: #1f6feb;
-      --you-ink: #ffffff;
-      --ok: #3fb950;
-      --warn: #d29922;
-      --chip: #21262d;
-      --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
-    }
-    [data-theme="light"] {
-      --bg: #f6f8fa;
-      --panel: #ffffff;
-      --panel-2: #f6f8fa;
-      --ink: #1f2328;
-      --muted: #656d76;
-      --line: #d0d7de;
-      --you: #0969da;
-      --you-ink: #ffffff;
-      --ok: #1a7f37;
-      --warn: #9a6700;
-      --chip: #eef2f6;
-      --shadow: 0 18px 50px rgba(31, 35, 40, 0.08);
-    }
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0;
-      width: 1600px;
-      height: 1000px;
-      overflow: hidden;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-    }
-    .frame {
-      width: 1600px;
-      height: 1000px;
-      padding: 48px 56px 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-    .top {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-    }
-    .brand {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-    }
-    .brand span { color: var(--muted); font-weight: 500; }
-    .meta {
-      color: var(--muted);
-      font-size: 18px;
-    }
-    .headline {
-      font-size: 44px;
-      font-weight: 700;
-      letter-spacing: -0.035em;
-      line-height: 1.15;
-      max-width: 18ch;
-    }
-    .sub {
-      margin-top: 10px;
-      font-size: 22px;
-      color: var(--muted);
-      line-height: 1.4;
-      max-width: 42ch;
-    }
-    .grid {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 28px;
-      min-height: 0;
-    }
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      padding: 28px 30px;
-      display: flex;
-      flex-direction: column;
-      min-height: 0;
-    }
-    .label {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-    .bubble {
-      align-self: flex-start;
-      background: var(--you);
-      color: var(--you-ink);
-      border-radius: 16px 16px 16px 4px;
-      padding: 16px 20px;
-      font-size: 26px;
-      font-weight: 650;
-      line-height: 1.3;
-      max-width: 22ch;
-    }
-    .hint {
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 18px;
-    }
-    .steps { display: flex; flex-direction: column; gap: 14px; }
-    .step {
-      display: grid;
-      grid-template-columns: 36px 1fr;
-      gap: 14px;
-      align-items: start;
-      font-size: 22px;
-      line-height: 1.35;
-    }
-    .n {
-      width: 36px;
-      height: 36px;
-      border-radius: 999px;
-      background: var(--chip);
-      border: 1px solid var(--line);
-      display: grid;
-      place-items: center;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--muted);
-    }
-    .n.done { background: #1a7f3722; color: var(--ok); border-color: #3fb95055; }
-    .n.now { background: #1f6feb22; color: var(--you); border-color: #1f6feb66; }
-    .skill {
-      font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-      font-size: 16px;
-      color: var(--you);
-      margin-bottom: 18px;
-    }
-    .loop {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .loop b {
-      background: var(--chip);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 8px 14px;
-      font-size: 16px;
-      font-weight: 650;
-    }
-    .loop i { color: var(--muted); font-style: normal; }
-    .wide { grid-column: 1 / -1; }
-    .findings { display: flex; flex-direction: column; gap: 12px; }
-    .hit {
-      background: var(--panel-2);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-size: 20px;
-    }
-    .hit code {
-      font-family: ui-monospace, Consolas, monospace;
-      font-size: 16px;
-      color: var(--warn);
-    }
-    .ok { color: var(--ok); font-weight: 700; }
-    .hidden { display: none; }
-  </style>
+<meta charset="utf-8" />
+<title>kenji — brand views</title>
+<!--
+  One source for every shipped brand image. Render with:
+    node scripts/render-brand-assets.mjs
+  Views (?view=): hero · grill · build · audit · ship · og · logo · logo-light · favicon
+  Theme (?theme=): dark (default) · light
+  System: hand-built pixel kensaurus, Bricolage Grotesque display, Press Start 2P labels,
+  JetBrains Mono code, lime / yellow / coral on ink or paper, 3px borders, hard offset shadows.
+  No gradients, no glass, no pills, no Inter.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=JetBrains+Mono:wght@500;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0E1116; --paper: #FFFFFF;
+    --lime: #9BE31A; --lime-2: #D7FF7A; --coral: #FF4D3D; --yellow: #FFD23F; --sky: #3DB7FF;
+    --bg: var(--ink); --fg: #F4F7F2; --muted: #AEB7A8; --tile: #151A21; --border: var(--fg);
+  }
+  [data-theme="light"] { --bg: var(--paper); --fg: var(--ink); --muted: #4B5563; --tile: #FFFFFF; --border: var(--ink); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; overflow: hidden; background: var(--bg); color: var(--fg); font-family: "Bricolage Grotesque", sans-serif; }
+  .frame { position: relative; display: grid; gap: 36px; }
+  .frame::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(var(--fg) 1px, transparent 1.6px); background-size: 28px 28px; opacity: .07; }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .wordmark { display: flex; align-items: center; gap: 16px; font-weight: 800; font-size: 30px; letter-spacing: -0.02em; }
+  .wordmark .mark { width: 48px; height: 48px; background: var(--lime); border: 3px solid var(--border); display: grid; place-items: center; }
+  .label { font-family: "Press Start 2P", monospace; font-size: 16px; letter-spacing: .02em; background: var(--yellow); color: var(--ink);
+    border: 3px solid var(--border); padding: 12px 16px; box-shadow: 6px 6px 0 var(--border); }
+  .label.c { background: var(--coral); color: #fff; }
+  .label.l { background: var(--lime); }
+  h1 { margin: 0; font-size: 104px; line-height: .98; letter-spacing: -0.045em; font-weight: 800; font-variation-settings: "opsz" 96; }
+  h1.md { font-size: 84px; }
+  .hl { position: relative; display: inline-block; color: var(--ink); z-index: 0; padding: 0 .08em; }
+  .hl::before { content: ""; position: absolute; inset: .1em -0.05em .02em; background: var(--lime); z-index: -1; transform: skew(-4deg); }
+  .hl.y::before { background: var(--yellow); }
+  .hl.c::before { background: var(--coral); }
+  .hl.c { color: #fff; }
+  .sub { margin: 26px 0 0; font-size: 30px; line-height: 1.3; max-width: 30ch; color: var(--muted); font-weight: 500; }
+  .sub b { color: var(--fg); font-weight: 800; }
+  .hero { display: grid; grid-template-columns: 1fr 460px; gap: 32px; align-items: center; }
+  .mascot { justify-self: end; position: relative; }
+  .mascot svg { display: block; filter: drop-shadow(10px 10px 0 var(--border)); }
+  .mascot .tag { position: absolute; left: -210px; bottom: 54px; z-index: 2; background: var(--coral); color: #fff; border: 3px solid var(--border);
+    padding: 10px 14px; font-weight: 800; font-size: 20px; transform: rotate(-6deg); box-shadow: 6px 6px 0 var(--border); }
+  .flow { display: grid; grid-template-columns: 1fr 48px 1fr 48px 1fr; align-items: stretch; }
+  .flow.two { grid-template-columns: 1fr 48px 1fr; }
+  .tile { background: var(--tile); border: 3px solid var(--border); box-shadow: 10px 10px 0 var(--border); padding: 24px 26px; min-height: 230px;
+    display: flex; flex-direction: column; gap: 12px; }
+  .tile.y { background: var(--yellow); color: var(--ink); }
+  .tile.l { background: var(--lime); color: var(--ink); }
+  .tile.c { background: var(--coral); color: #fff; }
+  .tile .k { font-family: "Press Start 2P", monospace; font-size: 14px; letter-spacing: .04em; opacity: .9; }
+  .tile .t { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+  .tile .d { font-size: 24px; line-height: 1.3; font-weight: 500; opacity: .92; }
+  .tile code { font-family: "JetBrains Mono", monospace; font-size: 22px; font-weight: 700; background: rgba(0,0,0,.14); padding: 3px 8px; }
+  .tile.c code { background: rgba(255,255,255,.22); }
+  .arrow { display: grid; place-items: center; font-size: 34px; font-weight: 800; }
+  .steps { list-style: none; margin: 4px 0 0; padding: 0; font-size: 23px; font-weight: 600; display: grid; gap: 6px; }
+  .steps li::before { content: "■ "; }
+  /* tour cards: fewer, bigger words (they render at ~400px wide in the README grid) */
+  .card .tile .t { font-size: 44px; }
+  .card .tile .d, .card .steps { font-size: 30px; }
+  .card .tile .k { font-size: 16px; }
+  .card .tile code { font-size: 26px; }
+  .card .tile { min-height: 0; gap: 16px; padding: 28px 30px; position: relative; }
+  .card .tile .peek { position: absolute; right: 22px; bottom: 18px; }
+  .card .tile .peek svg { filter: drop-shadow(5px 5px 0 var(--ink)); }
+  .card h1 { font-size: 84px; }
+  .card .mascot-sm { position: absolute; right: 64px; top: 150px; }
+  .card .mascot-sm svg { filter: drop-shadow(8px 8px 0 var(--border)); }
+  /* og */
+  .og .install { font-family: "JetBrains Mono", monospace; font-size: 30px; font-weight: 700; background: var(--yellow); color: var(--ink);
+    border: 3px solid var(--border); box-shadow: 8px 8px 0 var(--border); padding: 16px 22px; display: inline-block; }
+  /* logo */
+  .logo { display: grid; place-items: center; background: var(--lime); }
+  .logo.light { background: var(--paper); }
+  .logo.dark { background: var(--ink); }
+</style>
 </head>
 <body>
-  <div class="frame" id="app"></div>
-  <script>
-    const params = new URLSearchParams(location.search);
-    const theme = params.get("theme") === "light" ? "light" : "dark";
-    const view = params.get("view") || "hero";
-    document.documentElement.dataset.theme = theme;
+<div class="frame" id="app"></div>
+<script>
+  // Pixel-art kensaurus. One char per pixel.
+  // . transparent  G lime  D dark lime  K ink  W white  R coral  Y yellow
+  const DINO = [
+    "..........GGGGGGGG......",
+    ".........GGGGGGGGGG.....",
+    ".........GGKWGGGGGGG....",
+    ".........GGKKGGGGGGGG...",
+    ".........GGGGGGGGGGGG...",
+    ".........GGGGGGGGRRRRR..",
+    ".........GGGGGGGGGGGG...",
+    "..........GGGGGGGGGG....",
+    "...........GGGGGG.......",
+    "...........GGGGD........",
+    "G..........GGGGD..YYYY..",
+    "GG........GGGGGDGGYKKY..",
+    "GGG......GGGGGGDDGYYYY..",
+    "GGGG...GGGGGGGGGDDYKKY..",
+    ".GGGGGGGGGGGGGGGDD......",
+    "..GGGGGGGGGGGGGGDD......",
+    "....GGGGGGGGGGGDD.......",
+    "......GGGGGGGGDD........",
+    ".......GGG...GGG........",
+    ".......GGG...GGG........",
+    ".......GGGG..GGGG.......",
+    "......DGGGG..GGGGD......",
+  ];
+  const HEAD = [
+    ".GGGGGGGG.",
+    "GGGGGGGGGG",
+    "GGKWGGGGGG",
+    "GGKKGGGGGG",
+    "GGGGGGGGGG",
+    "GGGGGGRRRR",
+    "GGGGGGGGGG",
+    ".GGGGGGGG.",
+  ];
+  const PALETTE = { G: "#9BE31A", D: "#5FA40E", K: "#0E1116", W: "#FFFFFF", R: "#FF4D3D", Y: "#FFD23F" };
+  function sprite({ size = 12, map = DINO, palette = PALETTE } = {}) {
+    const w = map[0].length * size, h = map.length * size;
+    let rects = "";
+    map.forEach((row, y) => [...row].forEach((ch, x) => {
+      if (ch !== ".") rects += `<rect x="${x * size}" y="${y * size}" width="${size}" height="${size}" fill="${palette[ch]}"/>`;
+    }));
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" shape-rendering="crispEdges" role="img" aria-label="kensaurus">${rects}</svg>`;
+  }
+  // Ink-on-lime head for the logo: swap body lime to ink, keep eye/mouth.
+  const MONO = { G: "#0E1116", D: "#0E1116", K: "#9BE31A", W: "#FFFFFF", R: "#FF4D3D", Y: "#FFD23F" };
 
-    const views = {
-      hero: `
-        <div class="top">
-          <div class="brand">kenji skills <span>playbooks for your coding agent</span></div>
-          <div class="meta">158 skills · 63 commands · 4 tools</div>
-        </div>
-        <div>
-          <div class="headline">You say the job. The playbook runs.</div>
-          <div class="sub">Not a prompt library. Installed workflows that grill, build, prove, and ship — then refuse to call it done until it is.</div>
-        </div>
-        <div class="grid">
-          <section class="card">
-            <div class="label">You, in chat</div>
-            <div class="bubble">fix this bug and ship it</div>
-            <div class="hint">No skill name required. Talk like a teammate.</div>
-          </section>
-          <section class="card">
-            <div class="label">What kicks in</div>
-            <div class="skill">workflow-fix-and-ship</div>
-            <div class="steps">
-              <div class="step"><div class="n done">1</div><div>Triage the error with evidence</div></div>
-              <div class="step"><div class="n done">2</div><div>Reproduce, then fix with a test</div></div>
-              <div class="step"><div class="n now">3</div><div>Verify in the browser</div></div>
-              <div class="step"><div class="n">4</div><div>Open the PR — you merge</div></div>
-            </div>
-          </section>
-        </div>
-        <div class="loop">
-          <b>Orient</b><i>→</i><b>Assess</b><i>→</i><b>Change</b><i>→</i><b>Prove</b><i>→</i><b>Ship</b>
-        </div>
-      `,
-      grill: `
-        <div class="top">
-          <div class="brand">Before any code</div>
-          <div class="meta">workflow-grilling</div>
-        </div>
-        <div>
-          <div class="headline">It interviews you first.</div>
-          <div class="sub">One question at a time, with a recommended answer, until you and the agent want the same thing.</div>
-        </div>
-        <div class="grid">
-          <section class="card">
-            <div class="label">You</div>
-            <div class="bubble">grill me before I build a referral program</div>
-          </section>
-          <section class="card">
-            <div class="label">The agent</div>
-            <div class="hit">Should the reward fire on signup or first payment?</div>
-            <div class="hit">I’d recommend <b>first payment</b> — it stops signup-farming. Agree?</div>
-            <div class="hint">Looks up the codebase. Only asks decisions. Ends with a decision log.</div>
-          </section>
-        </div>
-      `,
-      build: `
-        <div class="top">
-          <div class="brand">Build the feature</div>
-          <div class="meta">workflow-build-feature</div>
-        </div>
-        <div>
-          <div class="headline">Spec → test → code → PR.</div>
-          <div class="sub">The agent does not jump to implementation. It writes the failing test first, then the code that makes it pass.</div>
-        </div>
-        <div class="grid">
-          <section class="card">
-            <div class="label">You</div>
-            <div class="bubble">build this feature from those decisions</div>
-          </section>
-          <section class="card">
-            <div class="label">The playbook</div>
-            <div class="steps">
-              <div class="step"><div class="n done">1</div><div>Turn the grill log into a spec</div></div>
-              <div class="step"><div class="n done">2</div><div>Write a failing test</div></div>
-              <div class="step"><div class="n now">3</div><div>Implement the smallest change</div></div>
-              <div class="step"><div class="n">4</div><div>Smoke-test, then open a PR</div></div>
-            </div>
-          </section>
-        </div>
-      `,
-      audit: `
-        <div class="top">
-          <div class="brand">Find what’s actually wrong</div>
-          <div class="meta">audit-security · audit-resilience</div>
-        </div>
-        <div>
-          <div class="headline">Findings with file:line.</div>
-          <div class="sub">Not a vibe check. OWASP-style review, timeouts, retries, and “is this production-ready?” — written down so you can act.</div>
-        </div>
-        <section class="card wide">
-          <div class="label">Example output</div>
-          <div class="findings">
-            <div class="hit"><code>app/api/checkout/route.ts:88</code> — webhook handler is not idempotent</div>
-            <div class="hit"><code>lib/auth.ts:41</code> — <code>getSession()</code> used as the only gate</div>
-            <div class="hit"><code>middleware.ts:19</code> — public matcher misses <code>/api/admin/*</code></div>
-          </div>
-        </section>
-      `,
-      ship: `
-        <div class="top">
-          <div class="brand">Ship and watch it</div>
-          <div class="meta">workflow-ship-and-observe</div>
-        </div>
-        <div>
-          <div class="headline">Live revision, then a watch window.</div>
-          <div class="sub">Deploy is not the finish line. The playbook checks the live SHA, watches the stability window, and rolls back if it breaks.</div>
-        </div>
-        <div class="grid">
-          <section class="card">
-            <div class="label">You</div>
-            <div class="bubble">ship it and watch it</div>
-          </section>
-          <section class="card">
-            <div class="label">Done means</div>
-            <div class="steps">
-              <div class="step"><div class="n done">1</div><div>Repository green before deploy</div></div>
-              <div class="step"><div class="n done">2</div><div>Confirm the live revision</div></div>
-              <div class="step"><div class="n now">3</div><div>Observe the window</div></div>
-              <div class="step"><div class="n">4</div><div class="ok">Stable — or rollback / hotfix</div></div>
-            </div>
-          </section>
-        </div>
-      `,
-    };
+  const params = new URLSearchParams(location.search);
+  const theme = params.get("theme") === "light" ? "light" : "dark";
+  const view = params.get("view") || "hero";
+  document.documentElement.dataset.theme = theme;
+  const counts = { skills: params.get("skills") || "160", commands: params.get("commands") || "63", tools: "4" };
 
-    document.getElementById("app").innerHTML = views[view] || views.hero;
-  </script>
+  const size = { hero: [1600, 900], grill: [1200, 700], build: [1200, 700], audit: [1200, 700], ship: [1200, 700],
+                 og: [1200, 630], logo: [1024, 1024], "logo-light": [1024, 1024], "logo-dark": [1024, 1024], favicon: [64, 64] }[view] || [1600, 900];
+  const app = document.getElementById("app");
+  Object.assign(document.body.style, { width: size[0] + "px", height: size[1] + "px" });
+  Object.assign(app.style, { width: size[0] + "px", height: size[1] + "px" });
+
+  const topBar = (right) => `<div class="top"><div class="wordmark"><span class="mark">${sprite({ size: 3.6, map: HEAD })}</span>kenji skills</div>${right}</div>`;
+
+  const card = ({ label, h1, you, kick, steps, done, accent }) => {
+    app.classList.add("card");
+    app.style.padding = "48px 64px 44px";
+    app.style.gridTemplateRows = "auto auto 1fr";
+    app.style.alignContent = "start";
+    return `${topBar(`<div class="label ${accent}">${label}</div>`)}
+      <h1>${h1}</h1>
+      <div class="flow two">
+        <div class="tile y"><div class="k">YOU SAY</div><div class="t">“${you}”</div><span class="peek">${sprite({ size: 6 })}</span></div>
+        <div class="arrow">→</div>
+        <div class="tile ${accent === "c" ? "c" : "l"}"><div class="k">${kick}</div>
+          <ul class="steps">${steps.map(s => `<li>${s}</li>`).join("")}</ul>
+          ${done ? `<div class="d"><b>${done}</b></div>` : ""}</div>
+      </div>`;
+  };
+
+  const views = {
+    hero: () => {
+      app.style.padding = "56px 64px 52px";
+      app.style.gridTemplateRows = "auto 1fr auto";
+      return `${topBar(`<div class="label">${counts.skills} SKILLS · ${counts.commands} COMMANDS · ${counts.tools} TOOLS</div>`)}
+      <div class="hero">
+        <div>
+          <h1>You say the job.<br>The <span class="hl">playbook</span> runs.</h1>
+          <p class="sub">Installed workflows for <b>Claude Code, Cursor, Codex CLI, and Gemini CLI</b>. They ask first, test first, and stop only when the work is proven.</p>
+        </div>
+        <div class="mascot"><span class="tag">No skill names to memorize.</span>${sprite({ size: 18 })}</div>
+      </div>
+      <div class="flow">
+        <div class="tile y"><div class="k">1 · YOU SAY</div><div class="t">“fix this bug and ship it”</div><div class="d">Plain words in chat. Talk like a teammate.</div></div>
+        <div class="arrow">→</div>
+        <div class="tile l"><div class="k">2 · THE PLAYBOOK RUNS</div><div class="t"><code>workflow-fix-and-ship</code></div>
+          <ul class="steps"><li>Triage with evidence</li><li>Reproduce, then fix with a test</li><li>Verify in the browser</li></ul></div>
+        <div class="arrow">→</div>
+        <div class="tile c"><div class="k">3 · DONE MEANS PROVEN</div><div class="t">Tests green. PR open.</div><div class="d">The agent reports what it proved. You merge.</div></div>
+      </div>`;
+    },
+    grill: () => card({ label: "BEFORE ANY CODE", accent: "", h1: `It asks <span class="hl y">first</span>.`,
+      you: "grill me before I build a referral program",
+      kick: "WORKFLOW-GRILLING", steps: ["One question at a time", "Each question has a recommended answer", "Ends with a decision log you approve"] }),
+    build: () => card({ label: "SPEC → TEST → CODE → PR", accent: "", h1: `The failing test <span class="hl">comes first</span>.`,
+      you: "build this feature from those decisions",
+      kick: "WORKFLOW-BUILD-FEATURE", steps: ["Turn the decision log into a spec", "Write the failing test", "Make the smallest change that passes", "Smoke-test, then open the PR"] }),
+    audit: () => card({ label: "FINDINGS, NOT VIBES", accent: "c", h1: `Every finding has a <span class="hl c">file:line</span>.`,
+      you: "audit this app for security problems",
+      kick: "AUDIT-SECURITY", steps: ["<code>api/checkout/route.ts:88</code> webhook not idempotent", "<code>lib/auth.ts:41</code> getSession() is the only gate", "<code>middleware.ts:19</code> matcher misses /api/admin/*"] }),
+    ship: () => card({ label: "DEPLOY IS NOT THE END", accent: "", h1: `Ship it. Then <span class="hl">watch it</span>.`,
+      you: "ship it and watch it",
+      kick: "WORKFLOW-SHIP-AND-OBSERVE", steps: ["Repository green before deploy", "Confirm the live revision", "Watch the stability window"], done: "Stable, or roll back. Then it says done." }),
+    og: () => {
+      app.classList.add("og");
+      app.style.padding = "44px 56px 40px";
+      app.style.gridTemplateRows = "auto 1fr auto";
+      return `${topBar(`<div class="label">${counts.skills} SKILLS · ${counts.commands} COMMANDS · ${counts.tools} TOOLS</div>`)}
+      <div class="hero" style="grid-template-columns: 1fr 380px">
+        <div><h1 class="md">You say the job.<br>The <span class="hl">playbook</span> runs.</h1>
+          <p class="sub" style="font-size:26px">Agent skills for Claude Code, Cursor, Codex CLI, and Gemini CLI. They ask first, test first, and prove the result.</p></div>
+        <div class="mascot">${sprite({ size: 14 })}</div>
+      </div>
+      <div><span class="install">npx @kensaurus/skills --all</span></div>`;
+    },
+    logo: () => { app.className = "logo"; return sprite({ size: 80, map: HEAD, palette: MONO }); },
+    "logo-light": () => { app.className = "logo light"; return sprite({ size: 80, map: HEAD }); },
+    "logo-dark": () => { app.className = "logo dark"; return sprite({ size: 80, map: HEAD }); },
+    favicon: () => { app.className = "logo"; return sprite({ size: 6, map: HEAD, palette: MONO }); },
+  };
+  app.innerHTML = (views[view] || views.hero)();
+</script>
 </body>
 </html>

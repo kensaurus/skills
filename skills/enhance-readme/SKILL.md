@@ -39,6 +39,10 @@ Add a theme-aware hero image and a tour grid to a project's README so the repo a
 
 ## The words matter as much as the pixels
 
+Write captions, alt text, and the package description in plain language: one idea per sentence, active voice, at most 25 words, no figures of speech. The rules and a prose-lint recipe are in `../docs-writer/references/plain-language-ste.md`.
+
+A README that has no screenshot to take (a CLI, a skills pack, a library) still gets a hero: build it as code. The kit in [references/brand-hero-kit.md](references/brand-hero-kit.md) covers the pixel mascot, the tile grid, type and color rules, npm and GitHub rendering limits, and `scripts/render-views.mjs`, which renders any HTML view to PNG.
+
 A gorgeous hero on top of a jargon wall still loses the reader. This skill owns the **visual** layer; for the **copy**, follow `docs-writer`'s core principle — *write for the reader's mental model first* (answer **what / why / who / how** in plain language before reference detail). Don't ship a beautiful README whose first paragraph a newcomer can't parse.
 
 The finished top of the README should read, in this order:

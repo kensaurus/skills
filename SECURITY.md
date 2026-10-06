@@ -11,7 +11,7 @@ Email or open a **private** [GitHub Security Advisory](https://github.com/kensau
 | Location | Purpose | Commit? |
 |----------|---------|---------|
 | `~/.cursor/mcp.json` | Your personal MCP config with real API keys | **Never** |
-| `.env` (gitignored) | Local maintainer secrets (`NPM_TOKEN`, `FAL_KEY`) | **Never** |
+| `.env` (gitignored) | Local maintainer secrets (`NPM_TOKEN`) | **Never** |
 | `mcp/mcp.json.template` | Essential servers (`firecrawl`, `context7`, `supabase`) via `${env:…}` | Yes — no live keys |
 | `mcp/mcp-full.json.template` | Full suite; Slack/Notion still use `YOUR_*` placeholders | Yes — templates only |
 | Repo root `.mcp.json` | Shared example using `${ENV}` refs | Yes — **no literal secrets** |

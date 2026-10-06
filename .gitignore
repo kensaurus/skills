@@ -38,8 +38,6 @@ mcp.json
 *.orig
 *.tmp
 
-# fal.ai brand-mark experiments (not the shipped assets/)
-assets/candidates/
 
 # Local plan-* audit outputs at repo root (committed samples live under docs/examples/plan-audits/)
 /plan-*.md

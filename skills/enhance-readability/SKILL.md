@@ -73,6 +73,8 @@ Note and hand off. Do not duplicate.
 
 ## Text thresholds (Phase 1)  [LOW freedom — run exactly]
 
+Sentence limits come from ASD-STE100: 20 words in a procedure, 25 in descriptive text, one instruction per sentence. Full rules and the Vale recipe: `../docs-writer/references/plain-language-ste.md`.
+
 House targets, measured not eyeballed. CPL/CJK and line-height come from
 [WCAG 2.2 SC 1.4.8 Visual Presentation](https://www.w3.org/WAI/WCAG22/Understanding/visual-presentation.html)
 (AAA *mechanism* criterion; we use the numbers as authoring targets):

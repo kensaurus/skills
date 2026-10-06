@@ -6,6 +6,53 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ## [Unreleased]
 
+## [2.3.0] — 2026-10-06
+
+A new brand and a plain-language pass, plus the two methods behind them added
+to the skills so other repos can do the same.
+
+### Added
+
+- **Brand built as code.** `docs/screenshots/src/showcase.html` renders every
+  shipped image from one source: the README hero (dark and light), the four tour
+  cards, the OG image, the logo, and the favicon. The mark is a hand-drawn pixel
+  kensaurus (one character per pixel), set in Bricolage Grotesque, Press Start 2P,
+  and JetBrains Mono, in lime, yellow, and coral on ink or paper, with 3px borders
+  and hard offset shadows. No gradients, glass, or generated art.
+  `node scripts/render-brand-assets.mjs` (also `npm run brand:render`) renders all
+  eleven files with Playwright and copies the site set; counts come from
+  `package.json`.
+- **`enhance-readme` brand hero kit.** `references/brand-hero-kit.md` explains the
+  system, the npm and GitHub rendering limits (npm shows the hero at half size and
+  strips `<picture>`), the build steps, and an anti-slop check.
+  `scripts/render-views.mjs` renders any HTML view to PNG.
+- **`docs-writer` plain-language reference.** `references/plain-language-ste.md`
+  carries the ASD-STE100 rules that transfer to developer docs (20 and 25-word
+  limits, one instruction per sentence, active voice, one meaning per word), an
+  AI-tell list, rules for alt text, captions, and package descriptions, and a Vale
+  prose-lint recipe. `docs-writer`, `enhance-readability`, and `enhance-readme`
+  point to it.
+- **`research` grounding contract.** Step 5b: cite or abstain, date the query,
+  pin the version, quote the primary source, separate observation from
+  inference, measure numbers.
+
+### Changed
+
+- **README, npm, and marketplace copy in plain language.** Hero alt text and
+  caption, the four tour captions, the npm description template, both plugin
+  manifests, the marketplace strings, `llms.txt`, and `site/index.html` now use
+  short active sentences. The npm description leads with the inventory and the
+  behavior. Keywords grow from 15 to 24 search terms.
+- **`site/index.html`** uses the new system and reads its counts from the same
+  template as the manifests (`check-skill-count` now checks it).
+- `docs/screenshots/README.md` documents the render pipeline.
+
+### Removed
+
+- `scripts/render-brand-assets.py` (Pillow geometric mark), `scripts/gen-brand-assets.mjs`
+  and `scripts/gen-brand-candidates.mjs` (fal.ai experiments). The shipped brand no
+  longer depends on an image API; `FAL_KEY` leaves `.env.example` and `SECURITY.md`.
+
 ## [2.2.0] — 2026-10-06
 
 Adds the app-wide "make this mobile app feel native" pass the pack lacked, and

@@ -4,21 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>kenji — You say the job. The playbook runs.</title>
-  <meta name="description" content="145 agent skills, 57 slash commands, 6 subagents. Install once. Talk like a teammate. Cursor, Claude Code, Codex CLI, Gemini CLI.">
+  <meta name="description" content="160 agent skills, 63 slash commands, 6 subagents for Claude Code, Cursor, Codex CLI, and Gemini CLI. Each playbook asks first, tests first, and proves the result. One install.">
   <link rel="canonical" href="https://www.skills.sh/kensaurus/skills">
   <meta name="robots" content="index,follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="kenji — You say the job. The playbook runs.">
-  <meta property="og:description" content="145 agent skills. One install. The playbook refuses done until it is.">
+  <meta property="og:description" content="Agent skills for Claude Code, Cursor, Codex CLI, and Gemini CLI. They ask first, test first, and prove the result.">
   <meta property="og:url" content="https://www.skills.sh/kensaurus/skills">
   <meta property="og:image" content="https://raw.githubusercontent.com/kensaurus/skills/main/assets/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="kenji">
-  <meta name="twitter:description" content="You say the job. The playbook runs.">
+  <meta name="twitter:title" content="kenji — You say the job. The playbook runs.">
+  <meta name="twitter:description" content="Agent skills for Claude Code, Cursor, Codex CLI, and Gemini CLI. They ask first, test first, and prove the result.">
   <meta name="twitter:image" content="https://raw.githubusercontent.com/kensaurus/skills/main/assets/og.png">
   <link rel="icon" type="image/png" href="./favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=JetBrains+Mono:wght@500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -29,47 +31,65 @@
     "license": "https://github.com/kensaurus/skills/blob/main/LICENSE",
     "url": "https://www.skills.sh/kensaurus/skills",
     "downloadUrl": "https://www.npmjs.com/package/@kensaurus/skills",
-    "description": "Installable agent skills, slash commands, and subagents for Cursor and Claude Code.",
+    "description": "Agent skills, slash commands, and subagents for Claude Code, Cursor, Codex CLI, and Gemini CLI. Each playbook asks first, tests first, and proves the result.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "author": { "@type": "Person", "name": "kensaurus", "url": "https://github.com/kensaurus" }
   }
   </script>
   <style>
-    :root { color-scheme: dark; --ink:#111; --bone:#f4f4f2; --mute:#a3a3a3; --blue:#3b82f6; }
+    :root { color-scheme: dark; --ink:#0E1116; --fg:#F4F7F2; --muted:#AEB7A8; --lime:#9BE31A; --yellow:#FFD23F; --coral:#FF4D3D; --tile:#151A21; }
     * { box-sizing: border-box; }
-    html, body { margin: 0; background: var(--ink); color: var(--bone); font: 18px/1.45 "Segoe UI", system-ui, sans-serif; }
-    main { max-width: 40rem; margin: 0 auto; padding: 4.5rem 1.25rem 5rem; }
-    img.mark { width: 72px; height: 72px; display: block; }
-    h1 { font-size: clamp(2rem, 6vw, 3rem); line-height: 1.05; letter-spacing: -0.03em; margin: 1.25rem 0 0.75rem; }
-    p.lead { color: var(--mute); margin: 0 0 2rem; }
-    pre { background: #1a1a1a; color: var(--blue); padding: 0.9rem 1rem; overflow-x: auto; font-size: 0.92rem; }
-    nav { display: flex; flex-wrap: wrap; gap: 0.85rem 1.25rem; margin: 1.75rem 0 2.5rem; }
-    a { color: var(--blue); text-underline-offset: 0.18em; }
-    h2 { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mute); margin: 2.5rem 0 0.6rem; font-weight: 600; }
-    ul { margin: 0; padding: 0; list-style: none; }
-    li { padding: 0.45rem 0; border-top: 1px solid #2a2a2a; }
-    footer { margin-top: 3rem; color: var(--mute); font-size: 0.85rem; }
+    html, body { margin: 0; background: var(--ink); color: var(--fg); font: 500 18px/1.45 "Bricolage Grotesque", sans-serif; }
+    body { background-image: radial-gradient(var(--fg) 1px, transparent 1.6px); background-size: 28px 28px; background-attachment: fixed; }
+    body::before { content: ""; position: fixed; inset: 0; background: var(--ink); opacity: .93; z-index: -1; }
+    main { max-width: 44rem; margin: 0 auto; padding: 3.5rem 1rem 5rem; }
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .wordmark { display: flex; align-items: center; gap: .75rem; font-weight: 800; font-size: 1.35rem; letter-spacing: -0.02em; }
+    .wordmark img { width: 44px; height: 44px; border: 3px solid var(--fg); display: block; }
+    .label { font-family: "Press Start 2P", monospace; font-size: .62rem; background: var(--yellow); color: var(--ink); border: 3px solid var(--fg); padding: .6rem .75rem; box-shadow: 5px 5px 0 var(--fg); }
+    h1 { font-size: clamp(2.6rem, 9vw, 4.6rem); line-height: .98; letter-spacing: -0.045em; margin: 2.2rem 0 1rem; font-weight: 800; }
+    .hl { position: relative; display: inline-block; color: var(--ink); padding: 0 .08em; z-index: 0; }
+    .hl::before { content: ""; position: absolute; inset: .1em -.05em .02em; background: var(--lime); z-index: -1; transform: skew(-4deg); }
+    p.lead { color: var(--muted); font-size: 1.2rem; margin: 0 0 1.75rem; max-width: 32ch; }
+    p.lead b { color: var(--fg); font-weight: 800; }
+    pre { margin: 0 0 1.5rem; background: var(--yellow); color: var(--ink); border: 3px solid var(--fg); box-shadow: 8px 8px 0 var(--fg); padding: .9rem 1.1rem; overflow-x: auto; font: 700 1rem/1.4 "JetBrains Mono", monospace; }
+    img.hero { width: 100%; height: auto; display: block; border: 3px solid var(--fg); box-shadow: 10px 10px 0 var(--fg); margin: 2rem 0 .6rem; }
+    .cap { color: var(--muted); font-size: .95rem; margin: 0 0 2.5rem; }
+    nav { display: flex; flex-wrap: wrap; gap: .75rem; margin: 0 0 2.5rem; }
+    nav a { color: var(--ink); background: var(--lime); border: 3px solid var(--fg); padding: .55rem .9rem; font-weight: 800; text-decoration: none; box-shadow: 5px 5px 0 var(--fg); }
+    nav a:hover, nav a:focus-visible { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--fg); outline: none; }
+    h2 { font-family: "Press Start 2P", monospace; font-size: .7rem; letter-spacing: .06em; color: var(--muted); margin: 2.5rem 0 .8rem; font-weight: 400; }
+    ul { margin: 0; padding: 0; list-style: none; display: grid; gap: .5rem; }
+    li { background: var(--tile); border: 3px solid var(--fg); padding: .7rem .9rem; }
+    li code { font: 700 .95rem "JetBrains Mono", monospace; color: var(--lime); }
+    footer { margin-top: 3rem; color: var(--muted); font-size: .9rem; }
+    @media (prefers-reduced-motion: reduce) { nav a:hover { transform: none; } }
   </style>
 </head>
 <body>
   <main>
-    <img class="mark" src="./logo.png" width="72" height="72" alt="kenji mark">
-    <h1>You say the job.<br>The playbook runs.</h1>
-    <p class="lead">Not a prompt paste-bin. 145 skills, 57 commands, 6 subagents. Install once. Talk like a teammate. It will not call the work done until it is.</p>
+    <div class="top">
+      <div class="wordmark"><img src="./logo.png" alt="kenji mark: a pixel kensaurus head on lime">kenji skills</div>
+      <div class="label">160 agent skills, 63 slash commands, 6 subagents</div>
+    </div>
+    <h1>You say the job.<br>The <span class="hl">playbook</span> runs.</h1>
+    <p class="lead">Installed workflows for <b>Claude Code, Cursor, Codex CLI, and Gemini CLI</b>. They ask first, test first, and stop only when the work is proven.</p>
     <pre><code>npx @kensaurus/skills --all</code></pre>
     <nav>
       <a href="https://github.com/kensaurus/skills">GitHub</a>
-      <a href="https://www.skills.sh/kensaurus/skills">skills.sh</a>
       <a href="https://www.npmjs.com/package/@kensaurus/skills">npm</a>
-      <a href="https://github.com/kensaurus/skills/blob/main/docs/GETTING-STARTED.md">Start</a>
+      <a href="https://www.skills.sh/kensaurus/skills">skills.sh</a>
+      <a href="https://github.com/kensaurus/skills/blob/main/docs/GETTING-STARTED.md">Start here</a>
     </nav>
-    <h2>Also</h2>
+    <img class="hero" src="https://raw.githubusercontent.com/kensaurus/skills/main/docs/screenshots/hero-dark.png" width="1600" height="900" alt="You say: fix this bug and ship it. workflow-fix-and-ship triages with evidence, fixes with a test, verifies in the browser. Tests green, PR open.">
+    <p class="cap">What happens after install. You say the job in chat. The matching playbook runs, proves the result, and opens the PR.</p>
+    <h2>OTHER WAYS TO INSTALL</h2>
     <ul>
       <li>Skills only: <code>npx skills add kensaurus/skills</code></li>
       <li>Claude Code plugin: <code>/plugin marketplace add kensaurus/skills</code></li>
-      <li>Re-check: <code>npx @kensaurus/skills --verify --all</code></li>
+      <li>Check an install: <code>npx @kensaurus/skills --verify --all</code></li>
     </ul>
-    <footer>MIT · listed vs submitted is in docs/DISTRIBUTION.md · this page does not invent marketplace status</footer>
+    <footer>MIT license. Listing status lives in docs/DISTRIBUTION.md. This page does not claim a marketplace listing that does not exist.</footer>
   </main>
 </body>
 </html>
