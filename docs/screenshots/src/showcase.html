@@ -6,7 +6,7 @@
 <!--
   One source for every shipped brand image. Render with:
     node scripts/render-brand-assets.mjs
-  Views (?view=): hero · grill · build · audit · ship · og · logo · logo-light · favicon
+  Views (?view=): hero · ladder · grill · build · audit · ship · og · logo · logo-light · favicon
   Theme (?theme=): dark (default) · light
   System: hand-built pixel kensaurus, Bricolage Grotesque display, Press Start 2P labels,
   JetBrains Mono code, lime / yellow / coral on ink or paper, 3px borders, hard offset shadows.
@@ -80,6 +80,18 @@
   .logo { display: grid; place-items: center; background: var(--lime); }
   .logo.light { background: var(--paper); }
   .logo.dark { background: var(--ink); }
+
+  /* ladder: how one request lifts the repo */
+  .ladder { display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; align-items: end; }
+  .rung { background: var(--tile); border: 3px solid var(--border); box-shadow: 10px 10px 0 var(--border); padding: 22px 22px 20px; display: flex; flex-direction: column; gap: 10px; }
+  .rung .k { font-family: "Press Start 2P", monospace; font-size: 13px; letter-spacing: .04em; }
+  .rung .t { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+  .rung .d { font-size: 21px; line-height: 1.3; font-weight: 500; }
+  .rung .g { font-size: 21px; font-weight: 800; border-top: 3px solid var(--border); padding-top: 10px; }
+  .rung.y { background: var(--yellow); color: var(--ink); } .rung.l { background: var(--lime); color: var(--ink); }
+  .rung.c { background: var(--coral); color: #fff; } .rung.s { background: var(--sky); color: var(--ink); } .rung.w { background: #F4F7F2; color: var(--ink); }
+  .rung.c .g { border-color: #fff; }
+  .rung.w, .rung.y, .rung.l, .rung.s { --border: var(--ink); }
 </style>
 </head>
 <body>
@@ -140,7 +152,7 @@
   const counts = { skills: params.get("skills") || "160", commands: params.get("commands") || "63", tools: "4" };
 
   const size = { hero: [1600, 900], grill: [1200, 700], build: [1200, 700], audit: [1200, 700], ship: [1200, 700],
-                 og: [1200, 630], logo: [1024, 1024], "logo-light": [1024, 1024], "logo-dark": [1024, 1024], favicon: [64, 64] }[view] || [1600, 900];
+                 og: [1200, 630], ladder: [1600, 760], logo: [1024, 1024], "logo-light": [1024, 1024], "logo-dark": [1024, 1024], favicon: [64, 64] }[view] || [1600, 900];
   const app = document.getElementById("app");
   Object.assign(document.body.style, { width: size[0] + "px", height: size[1] + "px" });
   Object.assign(app.style, { width: size[0] + "px", height: size[1] + "px" });
@@ -196,6 +208,21 @@
     ship: () => card({ label: "DEPLOY IS NOT THE END", accent: "", h1: `Ship it. Then <span class="hl">watch it</span>.`,
       you: "ship it and watch it",
       kick: "WORKFLOW-SHIP-AND-OBSERVE", steps: ["Repository green before deploy", "Confirm the live revision", "Watch the stability window"], done: "Stable, or roll back. Then it says done." }),
+    ladder: () => {
+      app.style.padding = "48px 64px 48px";
+      app.style.gridTemplateRows = "auto auto 1fr";
+      app.style.alignContent = "start";
+      const r = (cls, h, k, t, d, g) => `<div class="rung ${cls}" style="min-height:${h}px"><div class="k">${k}</div><div class="t">${t}</div><div class="d">${d}</div><div class="g">${g}</div></div>`;
+      return `${topBar(`<div class="label">HOW ONE REQUEST LIFTS THE REPO</div>`)}
+      <h1 class="md">Each step leaves the repo <span class="hl">one rung higher</span>.</h1>
+      <div class="ladder">
+        ${r("y", 300, "1 · ORIENT", "Ask first", "Reads the repo, then asks one question at a time.", "Repo gains: a decision log")}
+        ${r("l", 340, "2 · ASSESS", "Prove the gap", "Writes the failing test before any code.", "Repo gains: a test that fails for the right reason")}
+        ${r("s", 380, "3 · CHANGE", "Smallest fix", "Makes the change that turns the test green.", "Repo gains: a diff you can read in one sitting")}
+        ${r("w", 420, "4 · PROVE", "Run the gates", "Typecheck, tests, browser check, screenshots.", "Repo gains: evidence, not a claim")}
+        ${r("c", 460, "5 · SHIP", "PR and watch", "Opens the PR, confirms the live revision, watches it.", "Repo gains: a release that stayed up")}
+      </div>`;
+    },
     og: () => {
       app.classList.add("og");
       app.style.padding = "44px 56px 40px";

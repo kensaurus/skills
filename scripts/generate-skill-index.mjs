@@ -1,20 +1,18 @@
 #!/usr/bin/env node
 /**
- * Generate a categorized, one-line-per-skill index and inject it into README.md
- * between the <!-- SKILL-INDEX:START --> / <!-- SKILL-INDEX:END --> markers.
+ * Generate the skill index from frontmatter and write it to two places:
+ *   README.md     — the family counts table only, between
+ *                   <!-- SKILL-INDEX:START --> / <!-- SKILL-INDEX:END -->
+ *   docs/SKILLS.md — the full one-line-per-skill list (whole file)
  *
  * Source of truth: the `name` + `description` frontmatter of every
  * skills/<name>/SKILL.md and skills-cursor/<name>/SKILL.md. The one-liner is the
  * summary sentence of each description (the part before the "Use when…" triggers),
  * so this never drifts from the installed skills.
  *
- * Always emits:
- *   1. A category counts table (visible without clicking)
- *   2. Full per-family skill lists under ### headings (always visible — no collapsed details)
- *
- *   node scripts/generate-skill-index.mjs           # print to stdout (preview)
- *   node scripts/generate-skill-index.mjs --write   # inject into README.md
- *   node scripts/generate-skill-index.mjs --check    # exit 1 if README block is stale
+ *   node scripts/generate-skill-index.mjs           # print both to stdout (preview)
+ *   node scripts/generate-skill-index.mjs --write   # write README block + docs/SKILLS.md
+ *   node scripts/generate-skill-index.mjs --check    # exit 1 if either is stale
  */
 import { readdirSync, existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -22,6 +20,7 @@ import { dirname, join } from "node:path";
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const readmePath = join(repoRoot, "README.md");
+const skillsDocPath = join(repoRoot, "docs", "SKILLS.md");
 const START = "<!-- SKILL-INDEX:START -->";
 const END = "<!-- SKILL-INDEX:END -->";
 
@@ -155,21 +154,8 @@ function build() {
 
   const total = familyRows.reduce((n, r) => n + r.count, 0);
 
-  const parts = [];
-  parts.push(START);
-  parts.push("");
-  parts.push(
-    `_Auto-generated from each skill's \`SKILL.md\` — run \`npm run gen:skill-index\` after adding a skill. **${total} skills** listed below._`,
-  );
-  parts.push("");
-  parts.push("_Skills marked `/name only` are user-invoked rituals; `reference only` skills are loaded by other skills; every other skill auto-routes from a plain request._");
-  parts.push("");
-  parts.push("#### Skill families at a glance");
-  parts.push("");
-  parts.push("| Family | Count | In one sentence |");
-  parts.push("|:-------|------:|:----------------|");
   const blurbs = {
-    audit: "Check the codebase — security, UX, analytics, IAP, the skill pack…",
+    audit: "Check the codebase: security, UX, analytics, IAP, the skill pack",
     plan: "Write a fix plan you approve before any code changes",
     enhance: "Polish UI, forms, motion, SEO, PWA, email deliverability",
     design: "Create new UI, APIs, emails, themes from scratch",
@@ -181,7 +167,7 @@ function build() {
     workflow: "End-to-end recipes (build, fix, ship, green the repo)",
     test: "Unit, Playwright, visual regression, load, red-team",
     deploy: "npm release + post-deploy smoke tests",
-    debug: "Errors, Sentry, frontend↔backend mismatches",
+    debug: "Errors, Sentry, frontend-backend mismatches",
     iterate: "Post-launch feedback loops and agent-harness iteration",
     mushi: "Integrate the Mushi Mushi bug-report pipeline",
     protocol: "Keep browser automation from freezing",
@@ -190,44 +176,79 @@ function build() {
     _other: "Close everything, burndown, research, handoff",
     cursor: "Canvas, hooks, rules, PR splitter, CLI helpers",
   };
-  for (const row of familyRows) {
-    parts.push(`| ${row.title} | **${row.count}** | ${blurbs[row.fam] || ""} |`);
-  }
-  parts.push(`| **Total** | **${total}** | |`);
-  parts.push("");
-  parts.push("#### Full list (every skill)");
-  parts.push("");
 
-  for (const row of familyRows) {
-    parts.push(renderGroup(row.title, row.items));
-    parts.push("");
-  }
+  const table = [
+    "| Family | Count | In one sentence |",
+    "|:-------|------:|:----------------|",
+    ...familyRows.map((row) => `| [${row.title}](docs/SKILLS.md#${slug(`${row.title} (${row.count})`)}) | **${row.count}** | ${blurbs[row.fam] || ""} |`),
+    `| **Total** | **${total}** | [Every skill, one line each](docs/SKILLS.md) |`,
+  ].join("\n");
 
-  parts.push(END);
-  return parts.join("\n");
+  const readmeBlock = [
+    START,
+    "",
+    "#### Skill families at a glance",
+    "",
+    table,
+    "",
+    `_Generated from each skill's \`SKILL.md\` by \`npm run gen:skill-index\`. **${total} skills.** The full list is [docs/SKILLS.md](docs/SKILLS.md); trigger phrases are in [docs/CATALOG.md](docs/CATALOG.md)._`,
+    "",
+    END,
+  ].join("\n");
+
+  const doc = [
+    "# Every skill, in plain English",
+    "",
+    `_Generated from each skill's \`SKILL.md\` by \`npm run gen:skill-index\`. Do not edit by hand. **${total} skills.**_`,
+    "",
+    "You do not memorize names. Describe the job in chat and the matching skill runs. Exact trigger phrases are in [CATALOG.md](CATALOG.md); the prefix and stage table is in [CATALOG.md — Skill Taxonomy](CATALOG.md#skill-taxonomy).",
+    "",
+    "Skills marked `/name only` are user-invoked rituals; `reference only` skills are loaded by other skills; every other skill auto-routes from a plain request.",
+    "",
+    "## Families",
+    "",
+    table.replaceAll("docs/SKILLS.md#", "#").replace("[Every skill, one line each](docs/SKILLS.md)", ""),
+    "",
+    ...familyRows.flatMap((row) => [renderGroup(row.title, row.items), ""]),
+  ].join("\n");
+
+  return { readmeBlock, doc };
 }
 
-const block = build();
+/** GitHub-style heading anchor. */
+function slug(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s-]/gu, "")
+    .trim()
+    .replace(/\s+/g, "-");
+}
+
+const { readmeBlock, doc } = build();
 
 if (process.argv.includes("--write") || process.argv.includes("--check")) {
   const readme = readFileSync(readmePath, "utf8");
   const re = new RegExp(`${START}[\\s\\S]*?${END}`);
   if (!re.test(readme)) {
-    console.error(`✗ Markers ${START} … ${END} not found in README.md. Add them where the skill index should live.`);
+    console.error(`✗ Markers ${START} … ${END} not found in README.md. Add them where the family table should live.`);
     process.exit(1);
   }
-  const next = readme.replace(re, block);
+  const nextReadme = readme.replace(re, readmeBlock);
+  const currentDoc = existsSync(skillsDocPath) ? readFileSync(skillsDocPath, "utf8") : "";
   if (process.argv.includes("--check")) {
-    if (next !== readme) {
-      console.error("✗ README skill index is stale. Run: npm run gen:skill-index");
+    if (nextReadme !== readme || currentDoc !== doc) {
+      console.error("✗ Skill index is stale (README.md family table or docs/SKILLS.md). Run: npm run gen:skill-index");
       process.exit(1);
     }
-    console.log("✓ README skill index is in sync.");
+    console.log("✓ Skill index is in sync (README.md + docs/SKILLS.md).");
     process.exit(0);
   }
-  writeFileSync(readmePath, next);
-  const n = (block.match(/^\| `[a-z0-9-]+` \|/gm) || []).length;
-  console.log(`✓ Injected skill index (${n} skills) into README.md.`);
+  writeFileSync(readmePath, nextReadme);
+  writeFileSync(skillsDocPath, doc);
+  const n = (doc.match(/^\| `[a-z0-9-]+` \|/gm) || []).length;
+  console.log(`✓ Wrote the family table to README.md and ${n} skills to docs/SKILLS.md.`);
 } else {
-  console.log(block);
+  console.log(readmeBlock);
+  console.log("\n---\n");
+  console.log(doc);
 }
