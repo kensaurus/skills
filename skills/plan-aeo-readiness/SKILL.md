@@ -163,4 +163,4 @@ Set citation-monitoring baseline before/after so improvement is measured.
 - **Execution:** `enhance-web-seo`, `docs-writer`, `enhance-web-landing`.
 - **Verify:** prompt-test target queries across engines before/after.
 
-> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model.
+> Plan at high effort. Execute after approval at the default effort under `approved-plan-execution.mdc` (no reward hacking, no feature deletion).

@@ -82,67 +82,7 @@ rearranges, subtracts, and stages information before adding decoration.
 > needs tighter grouping. Narrow screens need progressive disclosure and no
 > wrapping CTAs.
 
-> **Tune saturation to product domain.** A consumer learning, kids, fitness,
-> or gamified app needs a *vibrant, semantic* palette where each colour
-> carries meaning (Duolingo: green=correct, red=hearts, orange=streak). A
-> B2B/SaaS/finance dashboard needs *restrained* colour reserved for status
-> only (NN/g 60–30–10, Stripe-style). Faint `/5–/10` tints on a playful
-> consumer surface read as monochromatic and dead. Pick a saturation tier
-> for the product first, then apply it consistently — see *Domain Colour
-> Tier* below.
-
-> **Audit conditional slots for dead-state.** Any optional region — `media`,
-> `aside`, `eyebrow`, `footerSlot`, `cover`, `illustration`, `secondaryCTA`
-> — must be tested with sparse / zero-state content. A slot that reserves
-> `min-h: 160px` for a rich illustration becomes a giant empty card when
-> the only content is "0%". Make the slot *conditional on content* (drop
-> the wrapper when empty) or *collapse the floor* (`min-h-0` on mobile),
-> never reserve space for absent content.
-
-> **Scan for information duplication within one viewport.** The same number,
-> word, date, or status appearing twice in the same fold means one of them
-> is wasted ink. Eyebrow shows "0/10 today" + inline pill shows "0/10
-> today" + footer bar shows "0/10 today" → keep the most actionable copy
-> and delete the rest. Duplicates fragment attention (NN/g #8) and signal
-> that the content rank in step 2 was skipped.
-
-> **Patch the primitive, not the site.** If a layout/colour/wrap bug
-> repeats, fix it where the wrapper, helper, or token lives — not at the
-> consumer. A single `Tooltip` defaulting to `inline-flex` will silently
-> shrink every `w-full` child across the app; one prop fix beats N
-> per-page band-aids. See *Primitive-First Patch Rule* below.
-
-> **Calm chrome before you decorate content.** Wayfinding chrome (header,
-> breadcrumb, tabs, dock, toolbar) should *recede*, not announce itself —
-> Linear's 2025 refresh names this "structure should be felt, not seen". If
-> chrome competes with content for visual weight, it has too much paint:
-> strip backgrounds → borders → tints → fills, in that order, until the
-> chrome reads as a tonal recess that frames the content. The squint test
-> applies to chrome too: at 10 px blur, the page content should dominate;
-> the chrome should look like a quiet frame, not a stack of buttons.
-
-> **One brand-color element per visual zone.** A page should have ONE
-> brand/accent-tinted element per zone (header strip, breadcrumb row, tab
-> row, dock, page body). If breadcrumb chips, tab badges, AND the actual
-> primary CTA all use the brand color, the actual CTA loses scent — every
-> brand-tinted thing claims primacy and the user's eye can't pick a target.
-> Audit the brand budget per zone: count brand-tinted surfaces in the
-> screenshot; if > 1 per zone (excluding the count badge / underline / status
-> chip that *carries* meaning), demote the chrome ones to neutral
-> typography. The brand color is a finite resource — spend it on the action
-> the user is here to take.
-
-> **Active ≠ heavier layout — active = different cue.** When an element
-> moves to active state, its **layout dimensions must not change** (no
-> taller, no wider, no extra padding). The active *signal* should come from
-> a micro-cue: text-color shift + font-weight bump (`font-medium` →
-> `font-semibold`), an underline, an icon-wrapping pill (Material 3
-> NavigationBar pattern: 32×16 `bg-secondaryContainer` rounded-full pill
-> wrapping the icon, NOT the whole cell), or a count-badge tint swap. Full
-> background washes on active tabs/buttons/cells inflate *perceived weight*
-> 50%+ even when the bounding box is identical; the user reads the active
-> sibling as "weirdly big and clunky". Linear, Stripe Apps, Vercel, M3 all
-> obey this — copy them.
+> **Extended rules** — tune saturation to product domain; audit conditional slots for dead-state; scan for information duplication within one viewport; patch the primitive, not the site; calm chrome before you decorate content; one brand-color element per visual zone; active ≠ heavier layout: [references/live-read.md](references/live-read.md) §Extended rules.
 
 > **Named defaults to avoid when restyling.** Without direction the model
 > reaches for the same few styles: Inter / Roboto, pill-shaped buttons on
@@ -288,87 +228,12 @@ For each viewport, note:
 Use the squint test: mentally blur the screenshot. The page should still reveal
 its main regions through scale, contrast, grouping, and whitespace.
 
-### 3a - Two squint passes, not one
-
-Run the squint test twice — both passes are necessary, and the second is
-the one most enhancers skip:
-
-| Pass | Question | Failure looks like |
-|------|----------|--------------------|
-| **Hierarchy squint** | "Where is my eye pulled first?" | Several elements equally loud → primary not chosen |
-| **Category squint** | "Can I tell related items apart by colour/shape alone, without reading?" | All tiles same neutral grey → user must read every label = NN/g #6 violation |
-
-For a Tier A/B product (see *Domain Colour Tier*), a 2-up or 3-up of
-metric tiles that all read the same hue when blurred is a bug — colour is
-your category signal. For a Tier D product, the same blur should show
-*near-uniform* tiles with colour reserved only for the alert row.
-
-### 3b - DOM uniformity gate (catches silent wrapper collapse)
-
-Screenshots are necessary but not sufficient. When a page has *repeated
-elements that should be the same width / height* — grid tiles, segmented
-control segments, table columns, sidebar nav rows, form fields — measure
-them. Many "weird-looking" layouts come from a wrapper higher in the tree
-silently collapsing children to content width.
-
-For each repeated group, query rendered rects and assert uniformity:
-
-```js
-// playwright-cli / Playwright / DevTools console — generic, framework-free
-const rects = [...document.querySelectorAll('<your-tile-selector>')]
- .map(el => el.getBoundingClientRect());
-const widths = rects.map(r => Math.round(r.width));
-const heights = rects.map(r => Math.round(r.height));
-const span = Math.max(...widths) - Math.min(...widths);
-console.table({ widths, heights, widthSpan: span });
-// span > 1px on tiles that share a `grid-cols-N` parent === wrapper-collapse bug
-```
-
-Common wrapper-collapse causes (generic, language/framework agnostic):
-
-- Tooltip / Popover / Trigger primitive defaults to `display: inline-flex`
- or `inline-block` → child `width: 100%` collapses to content width.
-- Grid template uses `1fr` (which is `minmax(auto, 1fr)`) and a child has
- intrinsic content wider than expected → cell expands beyond `1fr`. Fix:
- `repeat(N, minmax(0, 1fr))`.
-- Flex child without `min-width: 0` or `flex: 1 1 0` → content size
- dictates layout instead of the flex track.
-- Animation libraries (Framer Motion `m.div`, Reanimated, GSAP wrappers)
- that inject inline `display: inline-block` for transform performance.
-- Slot patterns (`<Slot>`, `asChild`, `cloneElement`) where the consumer
- drops `w-full` because the inner component doesn't forward `className`.
-
-Fix at the wrapper, not the leaf: see *Primitive-First Patch Rule*.
-
-### 3c - Conditional-slot zero-state pass
-
-For every conditional region (`media`, `aside`, `cover`, `eyebrow`,
-`secondaryCTA`, `illustration`, `footerSlot`), inspect its **sparse
-state** — render the page with the slot's smallest realistic content
-(empty, "0%", a single icon, one short word). If the slot still reserves
-its `min-h` / `aspect-ratio` / `min-w` floor, you have a dead-conditional
-slot. Move to *Composition Move 4 (Stage)* and either:
-
-1. Drop the wrapper when the slot is empty (`{slot && <Region>{slot}</Region>}`).
-2. Collapse the floor on narrow viewports (`min-h-0 lg:min-h-[160px]`).
-3. Inline the data into the body (chip / pill next to the action).
-
-### 3d - Information-duplication scan
-
-Within every fold (one viewport-height slice top-to-bottom), search for
-the same number, word, date, or status appearing more than once. List
-duplicates explicitly:
-
-```
-Fold 1 of /home @ 390×844:
-- "0/10 words today" ×3 (eyebrow metric, action pill, footer strip)
-- "0%" ×2 (action pill, Today metric tile)
-- streak count ×2 (eyebrow metric, Streak tile)
-```
-
-The duplication itself is the diagnosis — pick *one* canonical home for
-each datum (usually the most actionable one) and delete the others. Each
-delete is a hierarchy upgrade for whatever stays.
+Then run the four sub-passes:
+- **3a Two squint passes** — hierarchy ("where is my eye pulled first?") and category ("can I tell related items apart by colour/shape alone?"); tier A/B tiles must blur to distinct hues, tier D to near-uniform.
+- **3b DOM uniformity gate** — query rects of repeated elements; a width span > 1px under a shared `grid-cols-N` parent is wrapper collapse. Fix at the wrapper.
+- **3c Conditional-slot zero-state pass** — render each optional slot with its smallest realistic content; a kept `min-h` / `aspect-ratio` floor is a dead slot.
+- **3d Information-duplication scan** — list every datum that appears more than once per fold; keep one canonical home.
+Rect script, wrapper-collapse causes, and the fold-scan example: [references/live-read.md](references/live-read.md) §Step 3.
 
 ---
 
@@ -400,74 +265,10 @@ feedback is vague-but-visceral ("clunky", "atrocious", "wasted space",
 decoration. Each entry has a **detection probe** (what to look for) and a
 **fix shape** (the smallest move that resolves it). Generic across stacks.
 
-### H1. Active-state mass mismatch
-
-**Symptom:** "Tab/button/dock cell looks weirdly big and clunky", "highlight
-area is huge", "heights are incoherent".
-
-**Detection:** Take a screenshot. Compare bounding boxes of active vs inactive
-siblings (DevTools → element rect, or just eyeball). If layout dimensions
-match but the active one *feels* 1.5× heavier, the active state is using a
-full-cell background fill. Grep your active state for `bg-*` on the
-container element. If found AND the inactive sibling has `bg-transparent`,
-that's the bug.
-
-**Fix shape:** Move the active signal to a **micro-indicator** wrapped *inside*
-the cell, not painted *over* it:
-- Tab → underline + text-color + count-badge swap (Stripe / Vercel pattern).
-- Bottom dock → 32×16 `rounded-full` pill wrapping the **icon only**, not
- the whole button (Material 3 `SecondaryContainer` pattern).
-- Sidebar item → leading 2px brand rail + bg-muted hover only.
-- Button → solid fill is fine for primary CTAs (they SHOULD be heavy);
- forbidden for navigation siblings (they should NOT compete).
-
-### H2. Chrome tautology on root / index routes
-
-**Symptom:** "Breadcrumb is atrocious", "header is too much", "why is 'Home'
-shown 3 times".
-
-**Detection:** On the root route (`/`, `/dashboard`, `/home`), count how many
-chrome zones display the page name or home affordance: company-as-home link,
-breadcrumb chip, page title H1, dock active-item label, tab name. If ≥ 2
-zones say the same word for the *current* page, you have tautology.
-
-**Fix shape:** On root routes, **suppress** redundant chrome — pass
-`showContextRow={false}` (or your equivalent) to the page-layout wrapper, or
-gate the breadcrumb on `pathname !== "/"`. The dock indicator + page H1 +
-greeting copy already answer "where am I?". The breadcrumb's job is "how do
-I go back?" — at the root, there is no back, so the row is dead weight.
-
-### H3. Card-on-card chrome
-
-**Symptom:** Active page chip "feels heavy", "looks like a button stuck on
-another button", a chip on a tonally-recessed row reads as one elevation too
-many.
-
-**Detection:** Inspect the row's background (e.g. `bg-muted`, `bg-chrome-subtle`,
-or any tonal recess). Then inspect the chip inside that row (e.g. `bg-card
-border`). Two distinct elevations within ~6 px of each other = card-on-card.
-
-**Fix shape:** The chip must adopt the row's elevation, not introduce its own.
-Either drop the chip's `bg-*` + `border` and let typography (`font-semibold`
-+ `text-foreground`) carry the active signal, OR drop the row's tonal recess
-and let the chip be the only painted surface. Pick one elevation per row.
-
-### H4. Brand-color competition
-
-**Symptom:** "Page feels noisy even though it's clean", "I can't tell which
-button is the primary action", "everything looks important".
-
-**Detection:** Take a desktop screenshot. Count surfaces tinted in the brand
-color (border, fill, ring, text) within one visual zone. Subtract: the
-single intended primary CTA + status chips that *carry* meaning. Anything
-left over (a brand-tinted breadcrumb chip, a brand-tinted tab background, a
-brand-tinted home icon border) is competition.
-
-**Fix shape:** Demote the chrome surfaces to neutral (`text-muted-foreground`,
-`bg-transparent`, `border-border/40`). Reserve the brand color for: the
-single primary CTA per fold, real status indicators (success / progress /
-new), and the active-item *micro-indicator* (not the cell background).
+Walk H1–H16 with their detection probes and fix shapes: H1 active-state mass mismatch, H2 chrome tautology on root routes, H3 card-on-card chrome, H4 brand-color competition, H5 library-injected inline width, H6 wasted/squeezed column pair, H7 hover-only affordance, H8 hit-area baked into chrome, H9 stale data-priority, H10 missing `aria-current`, H11 motion that fights motion, H12 slot reserving space for absent content, H13 wrapper-collapsed tiles, H14 duplication per fold, H15 monochromatic surface, H16 left-anchored stack.
+Full catalogue, Pattern Library, Primitive-First Patch Rule, motion and implementation rules, plan template, and sanity checks: [references/details.md](references/details.md).
 
 ## Further reading
 
-- [H5. Library-injected inline width beats your CSS rule and more](references/details.md)
+- [Extended rules and Step 3 sub-passes (squints, DOM uniformity, zero-state, duplication)](references/live-read.md)
+- [Hidden Failure Modes H1–H16, Pattern Library, Primitive-First Patch Rule, templates, sanity checks](references/details.md)

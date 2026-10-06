@@ -20,6 +20,23 @@ honors the key, Cursor ignores it. Mechanical fixed-sequence skills declare
 
 # audit-auth-flows — Middleware is edge routing, not a security boundary
 
+
+## Contents
+
+- Degree of freedom: MIXED — declared per phase
+- How to reason in this audit
+- Worked example
+- This skill vs neighbors
+- Phase 0 — Detect the auth stack  [HIGH freedom]
+- Phase 1 — Route × gate coverage matrix  [HIGH freedom — the centerpiece]
+- Phase 2 — Provider and framework traps  [HIGH freedom, except the grep = LOW]
+- Phase 3 — Session lifecycle  [HIGH freedom]
+- Phase 4 — Credentials, OAuth, authorization  [HIGH freedom]
+- Phase 5 — Live probes  [LOW freedom — run each, in order, non-prod]
+- Self-critique before reporting  [LOW freedom — do not skip]
+- Definition of Done
+- Output format
+
 ## Degree of freedom: MIXED — declared per phase
 
 <!-- TECHNIQUE: T1 degree-of-freedom declaration (Anthropic official). The

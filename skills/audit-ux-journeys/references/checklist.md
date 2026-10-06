@@ -4,6 +4,16 @@ Per-phase detection commands, pass/fail signals, and method notes for `audit-ux-
 Sources: 2026 practitioner consensus (data-over-taste, trigger-scoped audits, IA findability,
 task-completion walkthroughs, impact×effort prioritization).
 
+## Contents
+
+- Phase 0 — Story derivation
+- Phase 1 — IA checks in detail
+- Phase 2 — Walkthrough method
+- Phase 3 — Evidence layer method
+- Phase 4 — Prioritization method
+- Delegation map (don't double-count)
+
+
 ---
 
 ## Phase 0 — Story derivation

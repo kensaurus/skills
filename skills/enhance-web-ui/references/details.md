@@ -1,3 +1,89 @@
+# enhance-web-ui — details
+
+Hidden Failure Modes H1–H16 with detection probes and fix shapes, the Pattern Library, the Primitive-First Patch Rule, visual psychology and motion rules, the plan template, sanity checks, scope limits, and research anchors.
+
+## Contents
+
+- Hidden Failure Modes H1–H4 (active-state mass, chrome tautology, card-on-card, brand-color competition)
+- Hidden Failure Modes H5–H16
+- Pattern Library
+- Primitive-First Patch Rule
+- Visual Psychology Map
+- Motion Rules
+- Implementation Rules
+- Enhancement Plan Template
+- Quick Sanity Checks (hidden-failure-mode audit, repo health)
+- When Not To Use
+- Research Anchors
+
+### H1. Active-state mass mismatch
+
+**Symptom:** "Tab/button/dock cell looks weirdly big and clunky", "highlight
+area is huge", "heights are incoherent".
+
+**Detection:** Take a screenshot. Compare bounding boxes of active vs inactive
+siblings (DevTools → element rect, or just eyeball). If layout dimensions
+match but the active one *feels* 1.5× heavier, the active state is using a
+full-cell background fill. Grep your active state for `bg-*` on the
+container element. If found AND the inactive sibling has `bg-transparent`,
+that's the bug.
+
+**Fix shape:** Move the active signal to a **micro-indicator** wrapped *inside*
+the cell, not painted *over* it:
+- Tab → underline + text-color + count-badge swap (Stripe / Vercel pattern).
+- Bottom dock → 32×16 `rounded-full` pill wrapping the **icon only**, not
+ the whole button (Material 3 `SecondaryContainer` pattern).
+- Sidebar item → leading 2px brand rail + bg-muted hover only.
+- Button → solid fill is fine for primary CTAs (they SHOULD be heavy);
+ forbidden for navigation siblings (they should NOT compete).
+
+### H2. Chrome tautology on root / index routes
+
+**Symptom:** "Breadcrumb is atrocious", "header is too much", "why is 'Home'
+shown 3 times".
+
+**Detection:** On the root route (`/`, `/dashboard`, `/home`), count how many
+chrome zones display the page name or home affordance: company-as-home link,
+breadcrumb chip, page title H1, dock active-item label, tab name. If ≥ 2
+zones say the same word for the *current* page, you have tautology.
+
+**Fix shape:** On root routes, **suppress** redundant chrome — pass
+`showContextRow={false}` (or your equivalent) to the page-layout wrapper, or
+gate the breadcrumb on `pathname !== "/"`. The dock indicator + page H1 +
+greeting copy already answer "where am I?". The breadcrumb's job is "how do
+I go back?" — at the root, there is no back, so the row is dead weight.
+
+### H3. Card-on-card chrome
+
+**Symptom:** Active page chip "feels heavy", "looks like a button stuck on
+another button", a chip on a tonally-recessed row reads as one elevation too
+many.
+
+**Detection:** Inspect the row's background (e.g. `bg-muted`, `bg-chrome-subtle`,
+or any tonal recess). Then inspect the chip inside that row (e.g. `bg-card
+border`). Two distinct elevations within ~6 px of each other = card-on-card.
+
+**Fix shape:** The chip must adopt the row's elevation, not introduce its own.
+Either drop the chip's `bg-*` + `border` and let typography (`font-semibold`
++ `text-foreground`) carry the active signal, OR drop the row's tonal recess
+and let the chip be the only painted surface. Pick one elevation per row.
+
+### H4. Brand-color competition
+
+**Symptom:** "Page feels noisy even though it's clean", "I can't tell which
+button is the primary action", "everything looks important".
+
+**Detection:** Take a desktop screenshot. Count surfaces tinted in the brand
+color (border, fill, ring, text) within one visual zone. Subtract: the
+single intended primary CTA + status chips that *carry* meaning. Anything
+left over (a brand-tinted breadcrumb chip, a brand-tinted tab background, a
+brand-tinted home icon border) is competition.
+
+**Fix shape:** Demote the chrome surfaces to neutral (`text-muted-foreground`,
+`bg-transparent`, `border-border/40`). Reserve the brand color for: the
+single primary CTA per fold, real status indicators (success / progress /
+new), and the active-item *micro-indicator* (not the cell background).
+
 ### H5. Library-injected inline width beats your CSS rule
 
 **Symptom:** "Column is squeezed and truncating important info while the

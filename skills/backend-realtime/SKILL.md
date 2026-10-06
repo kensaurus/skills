@@ -72,324 +72,75 @@ The canonical `useRealtimeMessages` hook (initial fetch + INSERT/DELETE
 subscription with unmount cleanup) is in
 [`references/patterns.md`](references/patterns.md).
 
-### Presence (Online Users)
 ```tsx
-'use client'
-import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import type { RealtimePresenceState } from '@supabase/supabase-js'
-
-interface UserPresence {
- id: string
- name: string
- avatar: string
- online_at: string
-}
-
-export function usePresence(roomId: string, currentUser: UserPresence) {
- const [onlineUsers, setOnlineUsers] = useState<UserPresence[]>([])
- const supabase = createClient()
-
- useEffect(() => {
- const channel = supabase.channel(`presence:${roomId}`)
-
- channel
- .on('presence', { event: 'sync' }, () => {
- const state = channel.presenceState<UserPresence>()
- const users = Object.values(state).flat()
- setOnlineUsers(users)
- })
- .on('presence', { event: 'join' }, ({ newPresences }) => {
- console.log('User joined:', newPresences)
- })
- .on('presence', { event: 'leave' }, ({ leftPresences }) => {
- console.log('User left:', leftPresences)
- })
- .subscribe(async (status) => {
- if (status === 'SUBSCRIBED') {
- await channel.track(currentUser)
- }
- })
-
- return () => {
- channel.untrack()
- supabase.removeChannel(channel)
- }
- }, [roomId, currentUser, supabase])
-
- return onlineUsers
-}
+useEffect(() => {
+  const channel = supabase
+    .channel(`room:${roomId}`)
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `room_id=eq.${roomId}` },
+        (payload) => setMessages((prev) => [...prev, payload.new as Message]))
+    .subscribe()
+  return () => { supabase.removeChannel(channel) }
+}, [roomId, supabase])
 ```
+
+### Presence (Online Users)
+
+- One channel per room (`presence:${roomId}`); `channel.track(currentUser)` only after `status === 'SUBSCRIBED'`.
+- Read the roster from `presenceState()` on the `sync` event; `join`/`leave` are for side effects only.
+- Cleanup is `channel.untrack()` then `supabase.removeChannel(channel)`.
+
+Full `usePresence` hook: [references/patterns.md](references/patterns.md) §Presence.
 
 ### Broadcast (Custom Events)
-```tsx
-'use client'
-import { useEffect, useCallback } from 'react'
-import { createClient } from '@/lib/supabase/client'
 
-export function useBroadcast(channelName: string) {
- const supabase = createClient()
- const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null)
+- Hold the channel in a `useRef`; register `.on('broadcast', { event })` handlers once, then `.subscribe()`.
+- Send with `channel.send({ type: 'broadcast', event, payload })`; broadcast is ephemeral, never a source of truth.
+- Use for cursors and typing; use `postgres_changes` for anything that must persist.
 
- useEffect(() => {
- channelRef.current = supabase.channel(channelName)
-
- channelRef.current
- .on('broadcast', { event: 'cursor-move' }, ({ payload }) => {
- // Handle cursor position updates from others
- console.log('Cursor moved:', payload)
- })
- .on('broadcast', { event: 'typing' }, ({ payload }) => {
- // Handle typing indicators
- console.log('User typing:', payload)
- })
- .subscribe()
-
- return () => {
- if (channelRef.current) {
- supabase.removeChannel(channelRef.current)
- }
- }
- }, [channelName, supabase])
-
- const broadcast = useCallback((event: string, payload: unknown) => {
- channelRef.current?.send({
- type: 'broadcast',
- event,
- payload,
- })
- }, [])
-
- return { broadcast }
-}
-
-// Usage: Collaborative cursors
-function CollaborativeCanvas() {
- const { broadcast } = useBroadcast('canvas:123')
-
- const handleMouseMove = (e: React.MouseEvent) => {
- broadcast('cursor-move', {
- userId: currentUser.id,
- x: e.clientX,
- y: e.clientY,
- })
- }
-}
-```
+Full `useBroadcast` hook and collaborative-cursor usage: [references/patterns.md](references/patterns.md) §Broadcast.
 
 ## TanStack Query + Real-time  [HIGH freedom]
 
-```tsx
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
+- Keep `useQuery` as the data source; the realtime channel only calls `queryClient.invalidateQueries({ queryKey })`.
+- Subscribe to `postgres_changes` with `event: '*'` on the table (optional `filter`); remove the channel on unmount.
+- One hook, `useRealtimeQuery(queryKey, queryFn, table, filter?)`, so every list gets the same behaviour.
 
-export function useRealtimeQuery<T>(
- queryKey: string[],
- queryFn: () => Promise<T>,
- table: string,
- filter?: string
-) {
- const queryClient = useQueryClient()
- const supabase = createClient()
-
- const query = useQuery({
- queryKey,
- queryFn,
- })
-
- useEffect(() => {
- const channel = supabase
- .channel(`${table}-changes`)
- .on(
- 'postgres_changes',
- {
- event: '*',
- schema: 'public',
- table,
- filter,
- },
- () => {
- // Invalidate and refetch on any change
- queryClient.invalidateQueries({ queryKey })
- }
- )
- .subscribe()
-
- return () => {
- supabase.removeChannel(channel)
- }
- }, [table, filter, queryKey, queryClient, supabase])
-
- return query
-}
-
-// Usage
-function ProductList() {
- const { data: products } = useRealtimeQuery(
- ['products'],
- () => fetchProducts(),
- 'products'
- )
-}
-```
+Full `useRealtimeQuery` hook: [references/patterns.md](references/patterns.md) §TanStack Query + Real-time.
 
 ## Optimistic Updates  [HIGH freedom]
 
+- `useOptimistic(initial, reducer)` plus `useTransition`; add the optimistic row with `pending: true` and a `crypto.randomUUID()` id, then await the Server Action.
+- Render pending rows at reduced opacity; the realtime INSERT or the action result replaces them.
+- Disable the submit button while `isPending`.
+
 ```tsx
-'use client'
-import { useOptimistic, useTransition } from 'react'
-import { addMessage } from '@/app/actions'
-
-function Chat({ initialMessages }: { initialMessages: Message[] }) {
- const [isPending, startTransition] = useTransition()
- const [optimisticMessages, addOptimisticMessage] = useOptimistic(
- initialMessages,
- (state, newMessage: Message) => [...state, newMessage]
- )
-
- async function handleSubmit(formData: FormData) {
- const content = formData.get('content') as string
-
- // Optimistic update - instant UI feedback
- const optimisticMessage: Message = {
- id: crypto.randomUUID(),
- content,
- created_at: new Date().toISOString(),
- user_id: currentUser.id,
- pending: true,
- }
-
- startTransition(async () => {
- addOptimisticMessage(optimisticMessage)
- await addMessage(content) // Server Action
- })
- }
-
- return (
- <div>
- {optimisticMessages.map((msg) => (
- <div key={msg.id} className={msg.pending ? 'opacity-50' : ''}>
- {msg.content}
- </div>
- ))}
- <form action={handleSubmit}>
- <input name="content" />
- <button type="submit" disabled={isPending}>Send</button>
- </form>
- </div>
- )
-}
+const [optimisticMessages, addOptimisticMessage] = useOptimistic(
+  initialMessages, (state, msg: Message) => [...state, msg]
+)
+startTransition(async () => {
+  addOptimisticMessage({ id: crypto.randomUUID(), content, pending: true, /* ... */ })
+  await addMessage(content) // Server Action
+})
 ```
+
+Full `Chat` component: [references/patterns.md](references/patterns.md) §Optimistic Updates.
 
 ## Server-Sent Events (SSE)  [HIGH freedom]
 
-```tsx
-// app/api/events/route.ts
-export async function GET(request: Request) {
- const encoder = new TextEncoder()
+- Route handler returns a `ReadableStream`; write `data: ${JSON.stringify(x)}\n\n` frames with `TextEncoder`.
+- Headers: `text/event-stream`, `Cache-Control: no-cache`, `Connection: keep-alive`; heartbeat every 30 s.
+- Clean up on `request.signal` `abort` (clear timers, `controller.close()`).
+- Client: `new EventSource(url)`; close in the effect cleanup and on `onerror`, then reconnect with backoff.
+- Pick SSE for one-way server push without Supabase; pick Realtime when the data already lives in Postgres.
 
- const stream = new ReadableStream({
- async start(controller) {
- const send = (data: unknown) => {
- controller.enqueue(
- encoder.encode(`data: ${JSON.stringify(data)}\n\n`)
- )
- }
-
- // Send initial data
- send({ type: 'connected', timestamp: Date.now() })
-
- // Subscribe to changes (e.g., from database)
- const interval = setInterval(() => {
- send({ type: 'heartbeat', timestamp: Date.now() })
- }, 30000)
-
- // Cleanup when the client disconnects
- request.signal.addEventListener('abort', () => {
- clearInterval(interval)
- controller.close()
- })
- },
- })
-
- return new Response(stream, {
- headers: {
- 'Content-Type': 'text/event-stream',
- 'Cache-Control': 'no-cache',
- 'Connection': 'keep-alive',
- },
- })
-}
-
-// Client hook
-function useSSE(url: string) {
- const [data, setData] = useState(null)
-
- useEffect(() => {
- const eventSource = new EventSource(url)
-
- eventSource.onmessage = (event) => {
- setData(JSON.parse(event.data))
- }
-
- eventSource.onerror = () => {
- eventSource.close()
- // Implement reconnection logic
- }
-
- return () => eventSource.close()
- }, [url])
-
- return data
-}
-```
+Full route handler and `useSSE` hook: [references/patterns.md](references/patterns.md) §Server-Sent Events.
 
 ## Typing Indicators  [HIGH freedom]
 
-```tsx
-function useTypingIndicator(channelName: string, userId: string) {
- const [typingUsers, setTypingUsers] = useState<string[]>([])
- const supabase = createClient()
- const timeoutRef = useRef<NodeJS.Timeout>()
+- Broadcast `{ event: 'typing', payload: { userId } }` on keystroke; ignore your own id on receipt.
+- Add the sender to `typingUsers` and drop them after 3 s of silence; debounce sends with a `timeoutRef`.
 
- useEffect(() => {
- const channel = supabase.channel(channelName)
-
- channel
- .on('broadcast', { event: 'typing' }, ({ payload }) => {
- if (payload.userId !== userId) {
- setTypingUsers((prev) =>
- prev.includes(payload.userId) ? prev : [...prev, payload.userId]
- )
-
- // Remove after 3 seconds of no activity
- setTimeout(() => {
- setTypingUsers((prev) =>
- prev.filter((id) => id !== payload.userId)
- )
- }, 3000)
- }
- })
- .subscribe()
-
- return () => {
- supabase.removeChannel(channel)
- }
- }, [channelName, userId, supabase])
-
- const sendTyping = useCallback(() => {
- clearTimeout(timeoutRef.current)
-
- supabase.channel(channelName).send({
- type: 'broadcast',
- event: 'typing',
- payload: { userId },
- })
- }, [channelName, userId, supabase])
-
- return { typingUsers, sendTyping }
-}
-```
+Full `useTypingIndicator` hook: [references/patterns.md](references/patterns.md) §Typing Indicators.
 
 ## Validation  [LOW freedom — do not skip]
 

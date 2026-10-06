@@ -4,6 +4,13 @@ What Knip cannot see: junk *inside* live files, plus assets, env, and
 duplication. `plan-dead-code` records the counts; `housekeep-dead-code`
 applies the fix column. Adjust `src` to the detected source directory.
 
+## Contents
+
+- Dumping grounds
+- Orphan assets
+- Env drift
+- The seven surfaces (3a–3g)
+
 **Counting convention.** Use `rg -o … | wc -l` for a repo total of *matches*.
 `rg -c` prints per-file counts of matching *lines*, so two `console.log` calls
 on one line count once — fine for triage, wrong for a ratchet. Pick one and
@@ -82,3 +89,82 @@ echo "declared, not referenced:"; comm -13 /tmp/env-used /tmp/env-declared
 
 Any `VITE_` / `NEXT_PUBLIC_` key whose value is not meant for the browser is a
 secrets finding, not an env-hygiene one → `plan-secrets-audit`.
+
+## The seven surfaces (3a–3g)
+
+The Phase 3 procedure as `plan-dead-code` runs it. Count each; fix nothing.
+
+**3a. Unused variables and imports inside files.** Knip explicitly does
+not do this. Baseline with `tsc --noEmit` under `noUnusedLocals` +
+`noUnusedParameters`, or your linter's unused rule. Record the count and
+whether the compiler flags are even on.
+
+**3b. Copy-paste duplication.** The class AI-assisted repos are worst at,
+and no other skill in this pack detects it. `npx jscpd src --min-tokens 50
+--reporters json` (50 is the default; raising it cuts boilerplate noise).
+Record duplication % and the top clone pairs. **Duplication is a refactor
+finding, not a deletion finding** — route to `workflow-refactor`.
+
+**3c. Debug residue.** Mechanical and countable:
+
+```
+rg -n "console\.(log|debug|warn)|debugger" --glob '!*test*' --glob '!*spec*'
+rg -n "\.(only|skip|todo)\(|xit\(|xdescribe\(|fdescribe\("
+```
+
+Plus commented-out code blocks and `utils`/`helpers` dumping grounds.
+`.only` in a committed test is worse than dead code — it silently disables
+the rest of the file. Flag those **high**.
+
+**3d. Suppression debt.** The count that must only ever shrink. Use
+`rg -o … | wc -l` for a repo total — `rg -c` prints per-file counts of
+*matching lines*, which is not a number you can ratchet:
+
+```
+rg -o "@ts-ignore|@ts-expect-error|eslint-disable|biome-ignore" | wc -l
+rg -o ":\s*any\b|as any\b" | wc -l
+```
+
+Also catch stale suppressions: a `@ts-expect-error` on a line that no
+longer errors is itself dead code, and TypeScript reports it.
+
+**3e. Orphan assets.** Knip reads the module graph, so it cannot see
+binaries. Cross-reference every filename under `public/`, `assets/`,
+`static/` against source, CSS, and HTML. Beware hashed and templated
+references (`` `/img/${name}.png` ``) — those make a name-based scan
+report false orphans, so a folder referenced only by template string is
+`needs-owner`, not dead.
+
+**3f. Env var drift, both directions.** Referenced-but-undeclared is a
+production break; declared-but-unreferenced is dead config:
+
+```
+rg -o "import\.meta\.env\.[A-Z0-9_]+|process\.env\.[A-Z0-9_]+" -r '$0' --no-filename | sort -u
+```
+
+Diff that set against `.env.example`. Report names only — **never print
+values.**
+
+**3g. Dead database schema.**  [read-only this pass]
+
+These three commands only read, so they are safe against any target
+including production — and index-scan statistics are *only* meaningful
+against real traffic, so prefer production and record the stats window.
+The non-production gate applies to anything that writes.
+
+```
+supabase db lint                            # plpgsql_check: dead code after RETURN, unused variables
+supabase inspect db unused-indexes          # indexes with low scan counts
+supabase inspect db seq-scans
+```
+
+Then cross-reference client usage to find orphans the database cannot know
+about: `rg -o "\.from\('[^']+'\)|\.rpc\('[^']+'\)|functions\.invoke\('[^']+'\)"`
+against the table/function/Edge-Function inventory. Also: Edge Functions
+deployed but never invoked, migration sprawl, and whether generated types
+still match the schema (`supabase gen types` diff).
+
+**Low index scans on a young or read-light database is not evidence of a
+dead index.** Record the stats window. Every schema finding lands in the
+plan as a proposal — **no `DROP` is authored in this pass**, and destructive
+migrations route to `plan-data-integrity` and `db-migrator`.

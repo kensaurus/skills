@@ -228,4 +228,4 @@ cross-check with Supabase's security advisor.
   `audit-security`.
 - **Verify:** Supabase security advisor + a second `plan-rls-audit` pass.
 
-> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model. The plan says *which* tables are exposed; the rule constrains *how* the migration is allowed to touch them.
+> Plan at high effort. Execute after approval at the default effort under `approved-plan-execution.mdc` (no reward hacking, no feature deletion). The plan says *which* tables are exposed; the rule constrains *how* the migration is allowed to touch them.

@@ -4,6 +4,20 @@ The point: the next agent session cannot leave the repo with more dead code
 than it found. One number, shrink-only, enforced in CI. Cleanup without this
 regrows within weeks.
 
+## Contents
+
+- 1. `package.json` scripts
+- 2. Guard the ratchet, not just the number
+- 3. tsconfig
+- 4. ESLint (flat config)
+- 5. lint-staged, and why Knip is not in pre-commit
+- 6. GitHub Actions job
+- 7. Aggregator wiring (`housekeep-gates` contract)
+- 8. Types-drift guard (Supabase repos)
+- 9. Ratchet the other counts
+- 10. Agent rule (hand to `enhance-agent-guardrails`)
+
+
 ## 1. `package.json` scripts
 
 CI calls the scripts, never raw flags, so local and CI cannot drift.

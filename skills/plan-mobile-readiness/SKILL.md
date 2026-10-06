@@ -177,4 +177,4 @@ Real older devices + IAP dry-run before submit.
   `enhance-mobile-native-feel` (pillar F), `mobile-emulator-test` (then real device).
 - **Verify:** real-device crash test + IAP dry-run; Android closed-test gate satisfied.
 
-> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model.
+> Plan at high effort. Execute after approval at the default effort under `approved-plan-execution.mdc` (no reward hacking, no feature deletion).

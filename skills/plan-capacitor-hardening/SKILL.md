@@ -214,4 +214,4 @@ Re-audit native files after each phase; verify secure storage + deep-links on re
 - **Execution:** `mobile-capacitor-platform`, `backend-patterns`, `mobile-emulator-test`; UI-layer edge-to-edge and chrome → `enhance-mobile-native-feel`.
 - **Verify:** real-device secure storage + deep-link test; no dev config in release build.
 
-> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model.
+> Plan at high effort. Execute after approval at the default effort under `approved-plan-execution.mdc` (no reward hacking, no feature deletion).

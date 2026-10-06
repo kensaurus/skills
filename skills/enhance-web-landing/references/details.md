@@ -1,3 +1,98 @@
+# enhance-web-landing — details
+
+Sections 5–14 of the skill plus the source-backed appendices: motion patterns and GSAP skeletons, performance guardrails, dial definitions, dark mode, AI tells, vocabulary, redesign protocol, block library, out of scope, pre-flight check, and install commands.
+
+## Contents
+
+- 5. Context-aware proactivity — 5.A Sticky-Stack, 5.B Horizontal-Pan, 5.C Scroll-Reveal Stagger, 5.D Forbidden animation patterns
+- 6. Performance & accessibility guardrails
+- 7. Dial definitions (technical reference)
+- 8. Dark mode protocol
+- 9. AI tells (forbidden patterns) — 9.F production-test tells, 9.G em-dashes
+- 10. Reference vocabulary
+- 11. Redesign protocol
+- 12. The block library (contract)
+- 13. Out of scope
+- 14. Final pre-flight check
+- Appendix A — install commands per design system
+- Appendix B — canonical sources
+- Appendix C — Apple Liquid Glass: honest web approximation
+
+## 5. CONTEXT-AWARE PROACTIVITY  [HIGH freedom]
+
+These are tools, not defaults. Use them when the design read calls for them. **None of these fire automatically.**
+
+* **Liquid Glass / Glassmorphism:** Appropriate for premium consumer, Apple-adjacent, luxury brand, or media-overlay vibes. Inappropriate for dashboards, public-sector, or "boring B2B." When used, go beyond `backdrop-blur`: add a 1px inner border (`border-white/10`) and a subtle inner shadow (`shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]`) for physical edge refraction. Provide a solid-fill fallback under `prefers-reduced-transparency`.
+* **Magnetic Micro-physics:** Use when `MOTION_INTENSITY > 5` and the brief reads premium / playful / agency. Implement exclusively with Motion's `useMotionValue` / `useTransform` outside the React render cycle. Never `useState`. See Section 3.B.
+* **Perpetual Micro-Interactions** (Pulse, Typewriter, Float, Shimmer, Carousel): Use when `MOTION_INTENSITY > 5` and the section actively benefits from motion (status indicators, live feeds, AI-feel). **Not every card needs an infinite loop.** If a section is informational, leave it still. Apply Spring Physics (`type: "spring", stiffness: 100, damping: 20`) - no linear easing.
+* **"Motion claimed, motion shown."** If `MOTION_INTENSITY > 4`, the page must actually move: entry transitions on hero, scroll-reveal on key sections, hover physics on CTAs, at minimum. A static page that claims `MOTION_INTENSITY: 7` is broken. Conversely, if you cannot ship working motion in the available scope, drop the dial to 3 and ship a clean static page. Never half-build motion that breaks (cut-off ScrollTriggers, jumpy enters, missing cleanups).
+* **Motion must be motivated.** Before adding any animation, ask: "what does this animation communicate?" Valid answers: hierarchy (drawing attention to the right thing), storytelling (revealing content in sequence that matches a narrative), feedback (acknowledging a user action), state transition (showing something changed). Invalid answer: "it looked cool". GSAP everywhere because GSAP is available is amateur. Each ScrollTrigger, each marquee, each pinned section needs a reason. If you cannot articulate the reason in one sentence, drop the animation.
+* **Marquee: max one per page.** Horizontal scrolling text marquees ("logos endlessly scrolling", "manifesto scrolling sideways", "kinetic word strip") are appropriate at most once per page. Two or more marquees on the same page reads as lazy filler. Pick the one section where the marquee actually serves the content; the others get a different layout.
+* **GSAP Sticky-Stack Pattern (when scroll-stack is used).** A "card stack on scroll" must be a REAL sticky-stack, not a sequential reveal list. See Section 5.A below for the canonical code skeleton. Common failure: trigger fires halfway through scroll instead of pinning at viewport top. Fix: `start: "top top"` not `start: "top center"` or `"top 80%"`.
+* **GSAP Horizontal-Pan Pattern (when horizontal scroll-hijack is used).** See Section 5.B below for the canonical skeleton. Common failure: animation starts before the section is pinned, so the user sees half a slide. Same fix: `start: "top top"`, pin the wrapper, scrub the inner track.
+
+### 5.A Sticky-Stack - Canonical Skeleton
+
+```tsx
+"use client";
+import { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useReducedMotion } from "motion/react";
+
+gsap.registerPlugin(ScrollTrigger);
+
+export function StickyStack({ cards }: { cards: React.ReactNode[] }) {
+ const ref = useRef<HTMLDivElement>(null);
+ const reduce = useReducedMotion();
+
+ useEffect(() => {
+ if (reduce || !ref.current) return;
+ const ctx = gsap.context(() => {
+ const cardEls = gsap.utils.toArray<HTMLElement>(".stack-card");
+ cardEls.forEach((card, i) => {
+ if (i === cardEls.length - 1) return;
+ ScrollTrigger.create({
+ trigger: card,
+ start: "top top", // pin at viewport top
+ endTrigger: cardEls[cardEls.length - 1],
+ end: "top top",
+ pin: true,
+ pinSpacing: false,
+ });
+ gsap.to(card, {
+ scale: 0.92,
+ opacity: 0.55,
+ ease: "none",
+ scrollTrigger: {
+ trigger: cardEls[i + 1],
+ start: "top bottom",
+ end: "top top",
+ scrub: true,
+ },
+ });
+ });
+ }, ref);
+ return () => ctx.revert();
+ }, [reduce]);
+
+ return (
+ <div ref={ref} className="relative">
+ {cards.map((card, i) => (
+ <div
+ key={i}
+ className="stack-card sticky top-0 min-h-[100dvh] flex items-center justify-center"
+ >
+ {card}
+ </div>
+ ))}
+ </div>
+ );
+}
+```
+
+Critical points: `start: "top top"`, `pin: true`, every card except the last is pinned, the scale/opacity transform is driven by the NEXT card's scroll trigger (so previous card shrinks as next one arrives).
+
 ### 5.B Horizontal-Pan - Canonical Skeleton
 
 ```tsx

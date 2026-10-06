@@ -1,3 +1,10 @@
+
+## Contents
+
+- Step 5: Prisma Schema Audit
+- Output Template
+- Database Schema Audit Report
+
 ## Step 5: Prisma Schema Audit
 
 When auditing `schema.prisma`, check:

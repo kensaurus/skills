@@ -1,3 +1,16 @@
+
+## Contents
+
+- Phase 6: Edge Case and Stress Testing
+- Phase 7: Cleanup
+- Phase 8: Report
+- QA Test Report — [Project Name]
+- Sentry Integration (optional)
+- Adapting to Different App Types
+- Test Data Guidelines
+- Execution Protocol
+- Important Rules
+
 ### 5d. Data Display Quality
 
 | Check | What to Look For |

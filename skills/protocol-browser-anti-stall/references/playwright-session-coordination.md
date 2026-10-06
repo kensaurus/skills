@@ -3,6 +3,16 @@
 How to run many agents against browsers at once without collisions, and how to stay signed in
 across turns — including the Google sign-in wall that blocks every Playwright-launched browser.
 
+## Contents
+
+- 1. One session per agent
+- 2. Persistent profiles = persisted logins
+- 3. Google sign-in: the one case that needs real Chrome
+- 4. Reusing an app login (non-Google)
+- 5. Cleanup & recovery
+- 6. Dual-identity exploratory sessions (`test-exploratory`)
+
+
 ```bash
 PW="npx --yes @playwright/cli@latest"
 ```

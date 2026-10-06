@@ -7,6 +7,15 @@ dictionary. This file takes the rules that transfer to developer docs, README
 copy, captions, alt text, and package descriptions, and adds the AI-tell list and
 a prose-lint recipe.
 
+## Contents
+
+- Rules that transfer
+- AI tells to remove
+- Captions, alt text, descriptions
+- Prose lint (Vale)
+- Sources
+
+
 ## Rules that transfer
 
 | Rule | Apply as |

@@ -5,6 +5,23 @@ Missing/Partial. Examples lean on TypeScript/Node + Postgres; the patterns are s
 the client libraries and broker. **Implement the pattern that fits your topology tier — don't add a
 service mesh to a monolith or CQRS where reads and writes don't diverge.**
 
+## Contents
+
+- API gateway — centralize cross-cutting concerns
+- BFF — Backend-for-Frontend
+- Bulkhead — isolate resource pools
+- Circuit breaker (architectural placement)
+- Outbox + relay/CDC — kill the dual-write problem
+- Saga — distributed transactions without 2PC
+- Hexagonal / ports-and-adapters — testable, framework-agnostic
+- Anti-corruption layer (ACL)
+- Strangler-fig migration
+- Communication style — sync request/response vs async event-driven
+- Cache-aside (lazy loading)
+- Database-per-service / data ownership
+- When NOT to reach for these
+
+
 ---
 
 ## API gateway — centralize cross-cutting concerns

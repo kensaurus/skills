@@ -3,6 +3,12 @@
 Loaded from `audit-responsive` Phase 1 and Phase 3. Do not invent a second
 scale — if the repo already defines tokens, substitute those numbers below.
 
+## Contents
+
+- Anti-pattern signals
+- Wireframes
+
+
 ---
 
 ## Anti-pattern signals

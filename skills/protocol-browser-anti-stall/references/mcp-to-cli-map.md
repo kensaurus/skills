@@ -4,6 +4,18 @@ This repo migrated off the Playwright **MCP** (one browser per server, single pr
 tool schemas in context) to the **CLI** (`npx --yes @playwright/cli@latest`), which gives every
 agent its own isolated browser via `-s=<session>`.
 
+## Contents
+
+- Core actions
+- Waiting
+- Evidence & inspection
+- Tabs
+- Storage, auth & network control
+- Session management (the parallelism fix)
+- Concepts that no longer apply
+- Gotchas
+
+
 Every command below assumes:
 
 ```bash

@@ -1,3 +1,12 @@
+
+## Contents
+
+- Step 6: User Flow Analysis
+- Step 7: Accessibility UX (Beyond WCAG Compliance)
+- Step 8: HEART Metrics Assessment
+- Output Template
+- UX Audit Report
+
 ### 5b. Emotional Friction Map
 
 Walk through each core flow and note where emotions shift:

@@ -69,415 +69,99 @@ cat supabase/config.toml 2>/dev/null
 
 Next.js 16: Turbopack default; `'use cache'` + `cacheComponents`; `reactCompiler: true`; `middleware.ts` → `proxy.ts` (grep both). Instant navigations → `enhance-web-instant-nav`.
 
-### Basic Pattern
-```tsx
-// app/actions/users.ts
-'use server'
+- Order inside every action: auth check → Zod `safeParse` → execute → map known errors (Prisma `P2002`) → generic failure message.
+- Return `ActionResult<T>`: `{ success: true, data }` or `{ success: false, error, fieldErrors? }`; never throw to the client.
+- `revalidatePath` after a successful write.
+- Post-response work (confirmation email, inventory, notifications) goes in `after()` from `next/server`, keeping the write transactional.
 
-import { z } from 'zod'
-import { revalidatePath } from 'next/cache'
-import { auth } from '@/lib/auth'
-import { db } from '@/lib/db'
-
-const CreateUserSchema = z.object({
- email: z.string().email(),
- name: z.string().min(1).max(100),
-})
-
-type ActionResult<T> =
- | { success: true; data: T }
- | { success: false; error: string; fieldErrors?: Record<string, string[]> }
-
-export async function createUser(
- prevState: ActionResult<User> | null,
- formData: FormData
-): Promise<ActionResult<User>> {
- // 1. Auth check
- const session = await auth()
- if (!session?.user) {
- return { success: false, error: 'Unauthorized' }
- }
-
- // 2. Validate input
- const result = CreateUserSchema.safeParse({
- email: formData.get('email'),
- name: formData.get('name'),
- })
-
- if (!result.success) {
- return {
- success: false,
- error: 'Invalid input',
- fieldErrors: result.error.flatten().fieldErrors,
- }
- }
-
- // 3. Execute
- try {
- const user = await db.user.create({
- data: result.data,
- })
-
- revalidatePath('/users')
- return { success: true, data: user }
- } catch (error) {
- if (isPrismaError(error, 'P2002')) {
- return { success: false, error: 'Email already exists' }
- }
- console.error('createUser error:', error)
- return { success: false, error: 'Failed to create user' }
- }
-}
-```
-
-### With Background Tasks
 ```tsx
 'use server'
-
 import { after } from 'next/server'
 
 export async function createOrder(formData: FormData) {
- const order = await db.order.create({ data: { ... } })
-
- // Run after response sent (Next.js 16)
- after(async () => {
- await sendOrderConfirmation(order.id)
- await updateInventory(order.items)
- await notifyWarehouse(order.id)
- })
-
- revalidatePath('/orders')
- return { success: true, data: order }
+  const order = await db.order.create({ data: { /* ... */ } })
+  after(async () => {                      // runs after the response is sent
+    await sendOrderConfirmation(order.id)
+    await updateInventory(order.items)
+  })
+  revalidatePath('/orders')
+  return { success: true, data: order }
 }
 ```
+
+Full `createUser` action and the `after()` example: [references/request-patterns.md](references/request-patterns.md) §Server Actions.
 
 ## tRPC Setup  [HIGH freedom]
 
-### Router Definition
-```tsx
-// server/api/routers/users.ts
-import { z } from 'zod'
-import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
+- `publicProcedure` for reads anyone may do; `protectedProcedure` for anything that uses `ctx.session`.
+- Every procedure has a Zod `.input()`; mutations stamp `createdById` from the session, not the input.
+- List endpoints paginate by cursor: fetch `limit + 1`, pop the extra row as `nextCursor`.
 
-export const usersRouter = createTRPCRouter({
- getById: publicProcedure
- .input(z.object({ id: z.string() }))
- .query(async ({ ctx, input }) => {
- return ctx.db.user.findUnique({
- where: { id: input.id },
- })
- }),
-
- create: protectedProcedure
- .input(z.object({
- email: z.string().email(),
- name: z.string().min(1),
- }))
- .mutation(async ({ ctx, input }) => {
- return ctx.db.user.create({
- data: {
- ...input,
- createdById: ctx.session.user.id,
- },
- })
- }),
-
- list: protectedProcedure
- .input(z.object({
- limit: z.number().min(1).max(100).default(10),
- cursor: z.string().optional(),
- }))
- .query(async ({ ctx, input }) => {
- const items = await ctx.db.user.findMany({
- take: input.limit + 1,
- cursor: input.cursor ? { id: input.cursor } : undefined,
- orderBy: { createdAt: 'desc' },
- })
-
- let nextCursor: string | undefined
- if (items.length > input.limit) {
- const nextItem = items.pop()
- nextCursor = nextItem?.id
- }
-
- return { items, nextCursor }
- }),
-})
-```
+Full `usersRouter` (getById, create, cursor-paginated list): [references/request-patterns.md](references/request-patterns.md) §tRPC router definition.
 
 ## Supabase Edge Functions  [HIGH freedom]
 
-### Basic Function
-```tsx
-// supabase/functions/process-webhook/index.ts
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+- `Deno.serve`; answer `OPTIONS` with the CORS headers first.
+- Verify the webhook signature against the raw body before parsing JSON; `401` on mismatch.
+- Admin client from `SUPABASE_SERVICE_ROLE_KEY` bypasses RLS; use it only inside the function.
+- Catch everything; log server-side, return a generic `500` JSON body with CORS headers.
 
-const corsHeaders = {
- 'Access-Control-Allow-Origin': '*',
- 'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
-
-Deno.serve(async (req) => {
- // Handle CORS preflight
- if (req.method === 'OPTIONS') {
- return new Response('ok', { headers: corsHeaders })
- }
-
- try {
- // Verify webhook signature
- const signature = req.headers.get('x-webhook-signature')
- if (!verifySignature(signature, await req.text())) {
- return new Response('Invalid signature', { status: 401 })
- }
-
- const payload = await req.json()
-
- // Create admin client (bypasses RLS)
- const supabase = createClient(
- Deno.env.get('SUPABASE_URL')!,
- Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
- )
-
- // Process webhook
- await supabase.from('events').insert({
- type: payload.type,
- data: payload.data,
- })
-
- return new Response(
- JSON.stringify({ success: true }),
- { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
- )
- } catch (error) {
- console.error('Webhook error:', error)
- return new Response(
- JSON.stringify({ error: 'Internal error' }),
- { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
- )
- }
-})
-```
+Full `process-webhook` function: [references/request-patterns.md](references/request-patterns.md) §Supabase Edge Function.
 
 ## Database Patterns  [HIGH freedom]
 
-### Optimistic Locking
+- **Optimistic locking** — `version INT` column; `UPDATE ... WHERE id = $1 AND version = $2` and treat 0 rows as a concurrent update.
+- **Soft deletes** — nullable `deletedAt` with an index; every read filters `deletedAt: null`; delete sets the timestamp.
+- **Audit logging** — `audit_logs(table_name, record_id, action, old_data, new_data, user_id)` filled by a `SECURITY DEFINER` trigger using `TG_OP`, `row_to_json`, `auth.uid()`.
+
 ```sql
--- Add version column
-ALTER TABLE orders ADD COLUMN version INT DEFAULT 1;
-
--- Update with version check
-UPDATE orders
-SET
- status = 'shipped',
- version = version + 1
-WHERE id = $1 AND version = $2;
--- Returns 0 rows if version mismatch (concurrent update)
+UPDATE orders SET status = 'shipped', version = version + 1
+WHERE id = $1 AND version = $2;   -- 0 rows → concurrent update, retry or surface conflict
 ```
 
-### Soft Deletes
-```prisma
-model Post {
- id String @id @default(cuid())
- title String
- deletedAt DateTime?
-
- @@index([deletedAt])
-}
-
-// Query active records
-const posts = await db.post.findMany({
- where: { deletedAt: null }
-})
-
-// Soft delete
-await db.post.update({
- where: { id },
- data: { deletedAt: new Date() }
-})
-```
-
-### Audit Logging
-```sql
--- Audit table
-CREATE TABLE audit_logs (
- id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
- table_name TEXT NOT NULL,
- record_id UUID NOT NULL,
- action TEXT NOT NULL, -- INSERT, UPDATE, DELETE
- old_data JSONB,
- new_data JSONB,
- user_id UUID REFERENCES auth.users(id),
- created_at TIMESTAMPTZ DEFAULT now()
-);
-
--- Trigger function
-CREATE OR REPLACE FUNCTION audit_trigger()
-RETURNS TRIGGER AS $$
-BEGIN
- INSERT INTO audit_logs (table_name, record_id, action, old_data, new_data, user_id)
- VALUES (
- TG_TABLE_NAME,
- COALESCE(NEW.id, OLD.id),
- TG_OP,
- CASE WHEN TG_OP IN ('UPDATE', 'DELETE') THEN row_to_json(OLD) END,
- CASE WHEN TG_OP IN ('INSERT', 'UPDATE') THEN row_to_json(NEW) END,
- auth.uid()
- );
- RETURN COALESCE(NEW, OLD);
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Apply to table
-CREATE TRIGGER orders_audit
-AFTER INSERT OR UPDATE OR DELETE ON orders
-FOR EACH ROW EXECUTE FUNCTION audit_trigger();
-```
+Soft-delete Prisma model and the full audit trigger: [references/data-and-jobs.md](references/data-and-jobs.md) §Soft deletes, §Audit logging.
 
 ## Caching Patterns  [HIGH freedom]
 
-### Next.js Cache
+- Next.js: `fetch(url, { next: { revalidate, tags } })`; `revalidateTag` on demand; `unstable_cache` around DB queries with tags.
+- Redis (Upstash): one `getCachedData(key, fetcher, ttl)` helper, cache-aside; key by entity and id (`user:${id}`).
+- Pick TTL by staleness tolerance, and always tag so a write can bust the cache.
+
 ```tsx
-// Cached fetch
-const data = await fetch('https://api.example.com/data', {
- next: {
- revalidate: 3600, // 1 hour
- tags: ['data']
- }
-})
-
-// Revalidate on demand
-import { revalidateTag } from 'next/cache'
-revalidateTag('data')
-
-// unstable_cache for database queries
-import { unstable_cache } from 'next/cache'
-
 const getCachedUser = unstable_cache(
- async (id: string) => db.user.findUnique({ where: { id } }),
- ['user'],
- { revalidate: 3600, tags: ['users'] }
+  async (id: string) => db.user.findUnique({ where: { id } }),
+  ['user'],
+  { revalidate: 3600, tags: ['users'] }
 )
 ```
 
-### Redis Caching
-```tsx
-import { Redis } from '@upstash/redis'
-
-const redis = Redis.fromEnv()
-
-async function getCachedData<T>(
- key: string,
- fetcher: () => Promise<T>,
- ttl = 3600
-): Promise<T> {
- // Try cache
- const cached = await redis.get<T>(key)
- if (cached) return cached
-
- // Fetch and cache
- const data = await fetcher()
- await redis.set(key, data, { ex: ttl })
- return data
-}
-
-// Usage
-const user = await getCachedData(
- `user:${id}`,
- () => db.user.findUnique({ where: { id } }),
- 600 // 10 minutes
-)
-```
+Next.js cache calls and the Redis helper: [references/data-and-jobs.md](references/data-and-jobs.md) §Next.js cache, §Redis caching.
 
 ## Background Jobs  [HIGH freedom]
 
-### Inngest
-```tsx
-// inngest/functions.ts
-import { inngest } from './client'
+- Default: **Inngest**. `inngest.createFunction({ id }, { event }, async ({ event, step }) => ...)`; each side effect in its own `step.run` so retries resume, not restart.
+- Trigger with `inngest.send({ name: 'order/created', data })` from the Server Action after the write commits.
+- Early exit (out of stock) is a `step.run` + `return { status: 'cancelled' }`, not a throw.
 
+```tsx
 export const processOrder = inngest.createFunction(
- { id: 'process-order' },
- { event: 'order/created' },
- async ({ event, step }) => {
- // Step 1: Validate inventory
- const inventory = await step.run('check-inventory', async () => {
- return await checkInventory(event.data.items)
- })
-
- if (!inventory.available) {
- await step.run('notify-out-of-stock', async () => {
- await notifyCustomer(event.data.userId, 'out-of-stock')
- })
- return { status: 'cancelled' }
- }
-
- // Step 2: Charge payment
- const payment = await step.run('charge-payment', async () => {
- return await chargeCustomer(event.data.paymentMethod)
- })
-
- // Step 3: Send confirmation
- await step.run('send-confirmation', async () => {
- await sendOrderConfirmation(event.data.orderId)
- })
-
- return { status: 'completed', paymentId: payment.id }
- }
+  { id: 'process-order' }, { event: 'order/created' },
+  async ({ event, step }) => {
+    const payment = await step.run('charge-payment', () => chargeCustomer(event.data.paymentMethod))
+    await step.run('send-confirmation', () => sendOrderConfirmation(event.data.orderId))
+    return { status: 'completed', paymentId: payment.id }
+  }
 )
-
-// Trigger from server action
-await inngest.send({
- name: 'order/created',
- data: { orderId, userId, items, paymentMethod }
-})
 ```
 
-### Trigger.dev
-```tsx
-// trigger/sync.ts
-import { schedules } from '@trigger.dev/sdk'
-
-export const syncJob = schedules.task({
- id: 'sync-data',
- cron: '0 * * * *', // every hour (UTC)
- run: async () => {
- const data = await fetchExternalAPI()
- await db.externalData.upsert({
- where: { externalId: data.id },
- create: data,
- update: data,
- })
- return { synced: data.length }
- },
-})
-```
+Full Inngest function and the Trigger.dev scheduled-task alternative: [references/data-and-jobs.md](references/data-and-jobs.md) §Background jobs, §Alternatives.
 
 ## Rate Limiting  [HIGH freedom]
 
-```tsx
-import { Ratelimit } from '@upstash/ratelimit'
-import { Redis } from '@upstash/redis'
+- `@upstash/ratelimit` with `Ratelimit.slidingWindow(10, '10 s')` over `Redis.fromEnv()`.
+- Key by user id (or IP for anonymous); on `!success` return `Too many requests` with `retryAfter` seconds from `reset`.
 
-const ratelimit = new Ratelimit({
- redis: Redis.fromEnv(),
- limiter: Ratelimit.slidingWindow(10, '10 s'), // 10 requests per 10 seconds
- analytics: true,
-})
-
-export async function rateLimitedAction(userId: string) {
- const { success, limit, remaining, reset } = await ratelimit.limit(userId)
-
- if (!success) {
- return {
- success: false,
- error: 'Too many requests',
- retryAfter: Math.ceil((reset - Date.now()) / 1000),
- }
- }
-
- // Proceed with action...
-}
-```
+Full `rateLimitedAction`: [references/request-patterns.md](references/request-patterns.md) §Rate limiting.
 
 ## Architecture patterns (distributed systems)  [HIGH freedom]
 

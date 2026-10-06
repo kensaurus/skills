@@ -105,63 +105,9 @@ Confirm credentials if the app has auth. Most demos use `admin/demo`, `test/test
 
 Use playwright-cli. **Always read the `protocol-browser-anti-stall` skill first** if the user has it — never block the browser for more than 3 seconds at a time.
 
-### 2a. Open the browser at hero quality
-
-```bash
-PW="npx --yes @playwright/cli@latest"
-$PW -s=readme open --headed "<demo-url>"
-$PW -s=readme resize 1600 1000
-```
-
-### 2b. Log in, then capture each page in dark mode
-
-```bash
-sleep 2
-$PW -s=readme snapshot                       # find login refs
-$PW -s=readme fill <username-ref> "<user>"
-$PW -s=readme fill <password-ref> "<pass>"
-$PW -s=readme click <login-button-ref>
-sleep 2
-$PW -s=readme goto "<demo-url>/<page>"
-$PW -s=readme screenshot --filename ".playwright-mcp/<page>-dark.png"
-```
-
-Repeat for each feature page you want in the tour (analytics, settings, list views, etc.). Aim for **1 hero page + 3 tour pages = 4 cells**.
-
-### 2c. Toggle to light mode via direct DOM manipulation (faster than UI hunting)
-
-```bash
-$PW -s=readme eval '() => { document.documentElement.classList.remove("dark"); document.documentElement.classList.add("light"); localStorage.setItem("theme", "light"); return "ok"; }'
-sleep 2
-$PW -s=readme screenshot --filename ".playwright-mcp/<page>-light.png"
-```
-
-Adjust the JS if the app uses `data-theme` or a different localStorage key (detected in Step 1).
-
-### 2d. Move screenshots to `docs/screenshots/`
-
-Screenshots land in `.playwright-mcp/` (gitignored scratch). Promote the keepers:
-
-```bash
-mkdir -p docs/screenshots
-mv .playwright-mcp/*-dark.png .playwright-mcp/*-light.png docs/screenshots/
-```
-
-### 2e. Naming convention
-
-Use kebab-case with a `-dark` / `-light` suffix:
-
-```
-docs/screenshots/
- dashboard-dark.png # hero (auto-detected by name)
- dashboard-light.png
- analytics-dark.png
- analytics-light.png # optional: only needed if used in hero
- projects-dark.png
- ai-palette-dark.png # tour-only cells need just the dark variant
-```
-
-The generator script picks the hero by looking for these keywords (in order): `hero`, `dashboard`, `home`, `landing`, `overview`, `main`. Override with `--hero=<basename>` if needed.
+Open at hero quality (`open --headed`, `resize 1600 1000`), log in, capture each page in dark mode, toggle light mode by direct DOM manipulation (`classList` / `data-theme` / `localStorage` key as detected in Step 1), then promote the keepers from `.playwright-mcp/` to `docs/screenshots/`. Aim for **1 hero page + 3 tour pages = 4 cells**.
+Name files kebab-case with a `-dark` / `-light` suffix; the generator picks the hero by keyword (`hero`, `dashboard`, `home`, `landing`, `overview`, `main`) or `--hero=<basename>`.
+Commands 2a–2e and the naming example: [references/capture.md](references/capture.md) §Step 2.
 
 ---
 
@@ -195,59 +141,9 @@ If any file exceeds 10 MB the script exits non-zero — compress with `oxipng -o
 
 ## Step 4: Weave Blocks Into README  [HIGH freedom]
 
-### 4a. Hero placement
-
-Paste the HERO block **directly under the badges**, replacing any existing tagline:
-
-```markdown
-<div align="center">
-
-# ProjectName
-
-![badges...]
-
-**A one-line tagline that nails what this is — in plain English, no jargon.**
-A second-line elaboration with the most distinctive features (3–5 keywords).
-
-[HERO BLOCK FROM SCRIPT GOES HERE]
-
-<!-- Under the hero, add one line each (see docs-writer): -->
-<!-- **Why it exists** — the problem it solves. **Who it's for** — audience + stack. -->
-
-</div>
-
----
-```
-
-### 4b. Tour placement
-
-Paste the TOUR block **right after the hero**, before the existing Demo / Features / Getting Started sections:
-
-```markdown
-[TOUR BLOCK FROM SCRIPT GOES HERE]
-
----
-
-## Demo
-...
-```
-
-### 4c. Refine the captions
-
-The script generates `<b>Page Name</b> · TODO short caption`. Replace each TODO with a one-line technical description that mentions a specific library or pattern visible in the screenshot. Keep the tone natural and slightly playful — no marketing fluff.
-
-Good caption pattern:
-
-```
-<b>Analytics</b> · Recharts v3 with an 8-color OKLCH palette, split-scale YoY
-(revenue vs counts), donut hover with center value
-```
-
-Bad caption pattern:
-
-```
-<b>Analytics</b> · insights to drive your business forward!
-```
+Paste the HERO block **directly under the badges**, replacing any existing tagline, and add one line each for *why it exists* and *who it's for* under the hero. Paste the TOUR block **right after the hero**, before the existing Demo / Features / Getting Started sections.
+Replace each generated `TODO short caption` with a one-line technical description naming a specific library or pattern visible in the screenshot — natural, slightly playful, no marketing fluff.
+Placement markdown, good vs bad caption patterns, the GitHub rendering reference, and the inline backup templates (hero, tour GIF, 2x2 tour grid): [references/weave-templates.md](references/weave-templates.md).
 
 ---
 
@@ -299,190 +195,15 @@ A short autoplaying GIF placed above the static screenshots gives a clearer feel
 
 The companion script handles everything: launches a headless Chromium, dismisses onboarding overlays, optionally logs in, runs an editorial 4-stop scroll tour, and converts the recording to a palette-dithered GIF.
 
-### 7a. Run the recorder
-
-```bash
-node <skill-dir>/scripts/record-readme-tour.mjs \
- --url=https://your-live-demo.example.com/ \
- --out=docs/screenshots/tour.gif
-```
-
-Optional flags:
-
-- `--width=1280` (default) — final GIF width in pixels
-- `--height=800` (default) — recording viewport height
-- `--duration=9000` (default) — milliseconds of usable tour after dismiss/login is trimmed
-- `--fps=15` (default) — frame rate; lower = smaller file
-- `--user=admin --pass=demo` — fills any visible email/text + password input and submits
-- `--routes=.,reports,fixes,judge` — walk through a sequence of pages instead of scrolling one. Comma-separated paths, resolved against `--url`. The script clicks an in-page link if one matches the target path (smooth SPA transition, no white flash) and falls back to `page.goto()` only when no link exists. Time is split equally across stops.
-- `--storage='{"app:tour-completed":"true","app:mode":"advanced"}'` — JSON object of localStorage entries seeded BEFORE first paint via Playwright's `addInitScript`. Use to skip first-run tours, force a specific theme/density/admin-mode, or hide "what's new" popovers — anything the app gates on a localStorage key. Way more reliable than trying to click-dismiss a coach-mark mid-recording.
-- `--keep-webm` — also writes `tour.webm` next to `tour.gif` (useful if you also want a `<video>`-quality copy to attach to a PR)
-
-> **Authenticated, multi-page tours**: combine `--user`/`--pass` with `--routes` and `--storage` for a "logged in, walking through the app" tour. Pre-seed `localStorage` with whatever flags the app uses to skip onboarding (`tour-completed`, `welcomed`, etc.) so the GIF doesn't open with a coach-mark covering everything. Use **relative paths** in `--routes` (`reports` not `/reports`) when the app has a base path (e.g. GitHub Pages projects served at `/repo-name/`) — absolute paths bypass the base and 404.
-
-### 7b. Recommended size budget
-
-| Output target | Width | FPS | Typical size for 9s | Use when |
-|---------------|-------|-----|---------------------|----------|
-| README inline (default) | 800 | 15 | 4–7 MB | Most projects — fits under GitHub's 10 MB inline cap with headroom |
-| Hero showcase | 1280 | 15 | 7–10 MB | Visually rich apps where detail matters more than file size |
-| Mobile / docs site embed | 600 | 12 | 2–4 MB | When the GIF will be embedded in a docs site that loads it on every page |
-
-A 9 s 1280×800 raw `.webm` is ~150 KB; the same as an unoptimised GIF would be ~30 MB. The two-pass `palettegen` + `paletteuse=dither=bayer:bayer_scale=5` recipe in the script is what makes the GIF land in the single-digit MB range without obvious banding. If the script fails the 10 MB hard cap, lower `--width` first (it has the strongest effect), then `--fps`.
-
-### 7c. Embed the GIF in the README
-
-Paste the GIF block **directly under the static hero `<picture>` block** so the page reads:
-
-1. Tagline
-2. Animated tour (the new GIF)
-3. Static dark/light hero (still good for instant load on slow connections)
-4. Tour grid
-
-See the "Tour GIF" template in the Output Templates section below.
-
-### 7d. Commit the GIF separately
-
-GIFs are large binary blobs — commit them in their own commit so reviewers don't have to load 5 MB to look at a one-line code change later:
-
-```
-docs(readme): animated guided-tour GIF (~5 MB, 9s @ 800px)
-
-- Add docs/screenshots/tour.gif: 4-stop scroll tour of the live demo
-- Embed under the static hero so first-paint stays fast on slow connections
-- Recorded via ~/.cursor/skills/enhance-readme/scripts/record-readme-tour.mjs
-```
-
----
-
-## GitHub README Rendering Reference
-
-What works inside markdown on github.com:
-
-| Element | Status | Notes |
-|---------|--------|-------|
-| `<picture>` + `<source media="(prefers-color-scheme: dark)">` | Yes | Auto-swaps with viewer's GitHub theme |
-| `<table>`, `<tr>`, `<td width="50%" align="center">` | Yes | Use for grid layouts |
-| `<sub>`, `<sup>`, `<details>`, `<summary>` | Yes | For captions and collapsibles |
-| `<a href>` wrapping `<img>` | Yes | Click image → open URL |
-| `<div align="center">` | Yes | The only reliable centering method |
-| `<style>`, `style=""` attributes | **No** | Stripped by GitHub's sanitizer |
-| `class=""` for custom CSS | **No** | Stripped |
-| GIF up to 10 MB | Yes | Autoplays on loop, no pause control. Best for guided tours. |
-| `<img src="docs/screenshots/tour.gif">` | Yes | Same as `<img>` for any image — relative path resolves fine |
-| `<video src="...">` from a relative repo path | **No** | GitHub's sanitizer strips `<video>` from rendered markdown |
-| MP4/WebM uploaded to issues/PRs | Yes (linked) | The upload returns a `user-images.githubusercontent.com` URL that DOES render — paste that URL inside `<video>` or `<img>`. Workaround for >10 MB tours. |
-| Relative image paths (`docs/screenshots/...`) | Yes | Resolved against the README's location |
-
-GitHub content width is ~870 px for desktop. Images at `width="100%"` look good from ~1024 px source up to 1600 px.
+Run `node <skill-dir>/scripts/record-readme-tour.mjs --url=… --out=docs/screenshots/tour.gif`; combine `--user`/`--pass`, `--routes` (relative paths), and `--storage` for authenticated multi-page tours; if the 10 MB hard cap fails, lower `--width` first, then `--fps`.
+Embed the GIF **directly under the static hero `<picture>` block** (tagline → animated tour → static hero → tour grid) and commit it in its own commit.
+Flags, size budget table, embed order, and the GIF commit message (7a–7d): [references/capture.md](references/capture.md) §Step 7.
 
 ---
 
 ## Common Gotchas
 
-1. **SPA deep links 404 on CloudFront** — if `/dashboard` returns 404 on direct navigation, go to root first, then click the in-app navigation. CloudFront serves the SPA's `index.html` only for the configured paths.
-
-2. **First navigation may show empty charts** — Recharts and similar libs render after data fetches resolve. Wait 2–3 seconds after navigation, then take the screenshot. Re-shoot if the snapshot shows a chart placeholder instead of bars/lines.
-
-3. **Theme toggle button is hidden in a settings panel** — skip the UI hunt. `eval` with `document.documentElement.classList.toggle('dark')` is one tool call versus four.
-
-4. **Screenshot filename collisions** — Playwright overwrites silently. After each capture, immediately move the file to `docs/screenshots/` with the final name.
-
-5. **Forward slashes in markdown image paths** — even on Windows, `<img src="docs/screenshots/foo.png">` not `docs\screenshots\foo.png`. The generator script handles this.
-
-6. **Local file:// previews can't load adjacent images** due to cross-origin restrictions. To preview the hero locally, run `vite preview` / `npx serve` and visit via `http://localhost:...`.
-
-7. **First-time login may persist a session** — if Playwright shows the dashboard already on `goto` to the login page, the session was preserved from a prior run. Use it; no need to re-log-in.
-
-8. **GitHub Camo caches images by URL hash, not by content** — `camo.githubusercontent.com` (the proxy that serves every README image) keys its cache off the source URL. **Overwriting an existing file with new bytes will NOT update the rendered image on github.com** — Camo will keep serving the cached pre-overwrite version for hours, sometimes days. If you re-record `tour.gif` and the github.com README still shows the old one, **rename the file** (e.g. `tour.gif` → `tour-v2.gif` or something self-documenting like `tour-pdca-loop.gif`) and update the `<img src>` — the new URL hashes fresh and Camo refetches immediately. This applies to ALL images in the README, not just GIFs. The raw.githubusercontent.com endpoint is NOT cached this way, so always verify file contents there before assuming the file is wrong.
-
----
-
-## Output Templates (Inline Backups)
-
-If the script is unavailable, here are the raw templates.
-
-### Hero block
-
-```markdown
-<div align="center">
-
-# ProjectName
-
-![badges...]
-
-**Tagline.**
-Subtitle line.
-
-<a href="LIVE_URL" title="Open the live demo">
- <picture>
- <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/HERO-dark.png">
- <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/HERO-light.png">
- <img alt="Project hero — what it shows" src="docs/screenshots/HERO-dark.png" width="100%">
- </picture>
-</a>
-
-<sub>↑ click to open the live demo · the image swaps with your system theme</sub>
-
-</div>
-```
-
-### Tour GIF (animated, autoplays inline on github.com)
-
-```markdown
-<div align="center">
-
-<a href="LIVE_URL" title="Open the live demo">
- <img alt="Animated guided tour of the app" src="docs/screenshots/tour.gif" width="100%">
-</a>
-
-<sub>↑ a 9-second guided tour · click to open the live demo</sub>
-
-</div>
-```
-
-### Tour grid (2x2)
-
-```markdown
-## Tour
-
-A quick look at the rooms inside. Click any panel to land on it in the live demo.
-
-<table>
- <tr>
- <td width="50%" align="center">
- <a href="LIVE_URL/page-1">
- <img alt="Page 1 alt" src="docs/screenshots/page-1-dark.png" width="100%">
- </a>
- <br>
- <sub><b>Page 1</b> · concrete technical detail with library name</sub>
- </td>
- <td width="50%" align="center">
- <a href="LIVE_URL/page-2">
- <img alt="Page 2 alt" src="docs/screenshots/page-2-dark.png" width="100%">
- </a>
- <br>
- <sub><b>Page 2</b> · concrete technical detail with library name</sub>
- </td>
- </tr>
- <tr>
- <td width="50%" align="center">
- <a href="LIVE_URL/page-3">
- <img alt="Page 3 alt" src="docs/screenshots/page-3-dark.png" width="100%">
- </a>
- <br>
- <sub><b>Page 3</b> · concrete technical detail with library name</sub>
- </td>
- <td width="50%" align="center">
- <a href="LIVE_URL">
- <img alt="Light mode showcase" src="docs/screenshots/HERO-light.png" width="100%">
- </a>
- <br>
- <sub><b>Light mode</b> · how the app looks in daytime</sub>
- </td>
- </tr>
-</table>
-```
+SPA deep links on CloudFront, empty first-render charts, hidden theme toggles, filename collisions, forward slashes in image paths, `file://` previews, persisted sessions, and GitHub Camo caching by URL hash (rename an overwritten image, never just replace it): [references/capture.md](references/capture.md) §Common gotchas.
 
 ---
 
@@ -498,3 +219,9 @@ The skill is done when:
 - Tech badges + Tech Stack table reflect actual `package.json` versions
 - One conventional-commits commit ships the README, screenshots, and badge sync; the optional GIF goes in its own commit (7d)
 - **Optional**: an animated `tour.gif` lives at `docs/screenshots/tour.gif`, autoplays under the static hero, and weighs less than 8 MB
+
+## Further reading
+
+- [Capture commands, GIF recorder, common gotchas](references/capture.md)
+- [Weave placement, GitHub rendering reference, backup templates](references/weave-templates.md)
+- [Brand hero kit for repos with nothing to screenshot](references/brand-hero-kit.md)

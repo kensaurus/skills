@@ -63,417 +63,83 @@ cat tailwind.config.* | grep -A10 "chart\|colors"
 
 ## Recharts (Recommended for React)  [HIGH freedom]
 
-### Line Chart
+- Wrap every chart in `ResponsiveContainer width="100%"`; set a fixed `height`.
+- Style through tokens: `hsl(var(--primary))`, `fill-muted-foreground`, `stroke-muted`; no hard-coded hex.
+- Hide axis lines and tick lines (`tickLine={false} axisLine={false}`); format Y ticks (`$`, `%`).
+- Custom `Tooltip` content uses `bg-background border rounded-lg` so it matches the theme.
+- Chart types: line (trend over time), bar (`radius={[4,4,0,0]}`, highlight the latest `Cell`), area (gradient `<defs>` fill), donut (`innerRadius`/`outerRadius` + center `Label` for the total).
+
 ```tsx
 'use client'
-import {
- LineChart,
- Line,
- XAxis,
- YAxis,
- CartesianGrid,
- Tooltip,
- ResponsiveContainer,
- Legend,
-} from 'recharts'
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 
-const data = [
- { month: 'Jan', revenue: 4000, users: 2400 },
- { month: 'Feb', revenue: 3000, users: 1398 },
- { month: 'Mar', revenue: 2000, users: 9800 },
-]
-
-export function RevenueChart() {
- return (
- <ResponsiveContainer width="100%" height={350}>
- <LineChart data={data}>
- <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
- <XAxis
- dataKey="month"
- className="text-xs fill-muted-foreground"
- tickLine={false}
- axisLine={false}
- />
- <YAxis
- className="text-xs fill-muted-foreground"
- tickLine={false}
- axisLine={false}
- tickFormatter={(value) => `$${value}`}
- />
- <Tooltip
- content={<CustomTooltip />}
- cursor={{ stroke: 'hsl(var(--muted))' }}
- />
- <Legend />
- <Line
- type="monotone"
- dataKey="revenue"
- stroke="hsl(var(--primary))"
- strokeWidth={2}
- dot={{ fill: 'hsl(var(--primary))' }}
- activeDot={{ r: 6 }}
- />
- <Line
- type="monotone"
- dataKey="users"
- stroke="hsl(var(--secondary))"
- strokeWidth={2}
- dot={{ fill: 'hsl(var(--secondary))' }}
- />
- </LineChart>
- </ResponsiveContainer>
- )
-}
-
-function CustomTooltip({ active, payload, label }: any) {
- if (!active || !payload) return null
-
- return (
- <div className="rounded-lg border bg-background p-2 shadow-sm">
- <p className="text-sm font-medium">{label}</p>
- {payload.map((entry: any, index: number) => (
- <p key={index} className="text-sm" style={{ color: entry.color }}>
- {entry.name}: {entry.value}
- </p>
- ))}
- </div>
- )
+export function RevenueChart({ data }: { data: { month: string; revenue: number }[] }) {
+  return (
+    <ResponsiveContainer width="100%" height={350}>
+      <LineChart data={data}>
+        <XAxis dataKey="month" tickLine={false} axisLine={false} className="text-xs fill-muted-foreground" />
+        <YAxis tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} />
+        <Tooltip cursor={{ stroke: 'hsl(var(--muted))' }} />
+        <Line type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" strokeWidth={2} activeDot={{ r: 6 }} />
+      </LineChart>
+    </ResponsiveContainer>
+  )
 }
 ```
 
-### Bar Chart
-```tsx
-'use client'
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from 'recharts'
-
-const data = [
- { name: 'Mon', value: 12 },
- { name: 'Tue', value: 19 },
- { name: 'Wed', value: 3 },
- { name: 'Thu', value: 5 },
- { name: 'Fri', value: 2 },
-]
-
-export function WeeklyChart() {
- return (
- <ResponsiveContainer width="100%" height={200}>
- <BarChart data={data}>
- <XAxis
- dataKey="name"
- tickLine={false}
- axisLine={false}
- className="text-xs fill-muted-foreground"
- />
- <YAxis hide />
- <Bar
- dataKey="value"
- radius={[4, 4, 0, 0]}
- className="fill-primary"
- >
- {data.map((entry, index) => (
- <Cell
- key={index}
- className={index === data.length - 1 ? 'fill-primary' : 'fill-primary/60'}
- />
- ))}
- </Bar>
- </BarChart>
- </ResponsiveContainer>
- )
-}
-```
-
-### Area Chart with Gradient
-```tsx
-'use client'
-import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer } from 'recharts'
-
-export function GradientAreaChart({ data }: { data: any[] }) {
- return (
- <ResponsiveContainer width="100%" height={200}>
- <AreaChart data={data}>
- <defs>
- <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
- <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
- <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
- </linearGradient>
- </defs>
- <XAxis dataKey="date" hide />
- <YAxis hide />
- <Area
- type="monotone"
- dataKey="value"
- stroke="hsl(var(--primary))"
- strokeWidth={2}
- fill="url(#colorValue)"
- />
- </AreaChart>
- </ResponsiveContainer>
- )
-}
-```
-
-### Pie/Donut Chart
-```tsx
-'use client'
-import { PieChart, Pie, Cell, ResponsiveContainer, Label } from 'recharts'
-
-const COLORS = [
- 'hsl(var(--primary))',
- 'hsl(var(--secondary))',
- 'hsl(var(--accent))',
- 'hsl(var(--muted))',
-]
-
-export function DonutChart({ data, total }: { data: any[]; total: number }) {
- return (
- <ResponsiveContainer width="100%" height={200}>
- <PieChart>
- <Pie
- data={data}
- cx="50%"
- cy="50%"
- innerRadius={60}
- outerRadius={80}
- paddingAngle={2}
- dataKey="value"
- >
- {data.map((_, index) => (
- <Cell key={index} fill={COLORS[index % COLORS.length]} />
- ))}
- <Label
- value={total}
- position="center"
- className="fill-foreground text-2xl font-bold"
- />
- </Pie>
- </PieChart>
- </ResponsiveContainer>
- )
-}
-```
+Full line chart with custom tooltip, bar, area-gradient and donut components: [references/recharts.md](references/recharts.md) §Line chart, §Bar chart, §Area chart, §Pie/Donut chart.
 
 ## Sparklines (Mini Charts)  [HIGH freedom]
 
-```tsx
-'use client'
-import { LineChart, Line, ResponsiveContainer } from 'recharts'
+- A `LineChart` with one `Line`, `dot={false}`, `strokeWidth={1.5}`, no axes, height ~40.
+- Map a `number[]` to `{ index, value }` inside the component so callers pass plain arrays.
+- Place it in a `w-20` slot beside the stat value, never as its own card.
 
-interface SparklineProps {
- data: number[]
- color?: string
- height?: number
-}
-
-export function Sparkline({ data, color = 'hsl(var(--primary))', height = 40 }: SparklineProps) {
- const chartData = data.map((value, index) => ({ index, value }))
-
- return (
- <ResponsiveContainer width="100%" height={height}>
- <LineChart data={chartData}>
- <Line
- type="monotone"
- dataKey="value"
- stroke={color}
- strokeWidth={1.5}
- dot={false}
- />
- </LineChart>
- </ResponsiveContainer>
- )
-}
-
-// Usage in stats card
-<div className="flex items-center justify-between">
- <div>
- <p className="text-sm text-muted-foreground">Revenue</p>
- <p className="text-2xl font-bold">$45,231</p>
- </div>
- <div className="w-20">
- <Sparkline data={[10, 15, 8, 22, 18, 25, 30]} />
- </div>
-</div>
-```
+`Sparkline` component and stats-card usage: [references/recharts.md](references/recharts.md) §Sparklines.
 
 ## Stat Cards with Trends  [HIGH freedom]
 
-```tsx
-import { ArrowUpIcon, ArrowDownIcon } from 'lucide-react'
-import { cn } from '@/lib/utils'
+- `rounded-xl border bg-card p-6`; title in `text-muted-foreground`, value `text-3xl font-semibold`.
+- Trend arrow + `Math.abs(change)%`; green for up, red for down; pass the same color to the sparkline.
+- `sparklineData` is optional; render the sparkline only when present.
 
-interface StatCardProps {
- title: string
- value: string
- change: number
- trend: 'up' | 'down'
- sparklineData?: number[]
-}
-
-export function StatCard({ title, value, change, trend, sparklineData }: StatCardProps) {
- return (
- <div className="rounded-xl border bg-card p-6">
- <p className="text-sm font-medium text-muted-foreground">{title}</p>
- <div className="mt-2 flex items-baseline justify-between">
- <p className="text-3xl font-semibold">{value}</p>
- <div className={cn(
- 'flex items-center text-sm font-medium',
- trend === 'up' ? 'text-green-600' : 'text-red-600'
- )}>
- {trend === 'up' ? (
- <ArrowUpIcon className="mr-1 h-4 w-4" />
- ) : (
- <ArrowDownIcon className="mr-1 h-4 w-4" />
- )}
- {Math.abs(change)}%
- </div>
- </div>
- {sparklineData && (
- <div className="mt-4">
- <Sparkline
- data={sparklineData}
- color={trend === 'up' ? 'rgb(22 163 74)' : 'rgb(220 38 38)'}
- />
- </div>
- )}
- </div>
- )
-}
-```
+`StatCard` component: [references/recharts.md](references/recharts.md) §Stat cards with trends.
 
 ## Real-time Data Updates  [HIGH freedom]
 
-```tsx
-'use client'
-import { useEffect, useState } from 'react'
-import { LineChart, Line, ResponsiveContainer, YAxis } from 'recharts'
+- Append in `setData(prev => [...prev, point].slice(-N))`; keep a bounded window (about 20 points).
+- `isAnimationActive={false}` and a fixed `YAxis domain` so the chart does not jump per tick.
+- Clear the interval or socket subscription in the effect cleanup.
 
-export function RealtimeChart() {
- const [data, setData] = useState<{ time: number; value: number }[]>([])
-
- useEffect(() => {
- const interval = setInterval(() => {
- setData((prev) => {
- const newPoint = {
- time: Date.now(),
- value: Math.random() * 100,
- }
- // Keep last 20 points
- const updated = [...prev, newPoint].slice(-20)
- return updated
- })
- }, 1000)
-
- return () => clearInterval(interval)
- }, [])
-
- return (
- <ResponsiveContainer width="100%" height={100}>
- <LineChart data={data}>
- <YAxis domain={[0, 100]} hide />
- <Line
- type="monotone"
- dataKey="value"
- stroke="hsl(var(--primary))"
- strokeWidth={2}
- dot={false}
- isAnimationActive={false}
- />
- </LineChart>
- </ResponsiveContainer>
- )
-}
-```
+`RealtimeChart` component: [references/recharts.md](references/recharts.md) §Real-time data updates.
 
 ## D3.js for Custom Visualizations  [HIGH freedom]
 
-```tsx
-'use client'
-import { useEffect, useRef } from 'react'
-import * as d3 from 'd3'
+- Reach for D3 only when Recharts cannot express the mark; never add it beside an existing chart library.
+- Render into a `ref`'d `<svg>` from `useEffect`; `svg.selectAll('*').remove()` before redrawing on data change.
+- `scaleBand` for categories, `scaleLinear().nice()` for values; size from `clientWidth`/`clientHeight`, with margins.
+- Animate with `.transition().duration(750)` from the baseline; color with the same `hsl(var(--primary))` tokens.
 
-export function CustomD3Chart({ data }: { data: { label: string; value: number }[] }) {
- const svgRef = useRef<SVGSVGElement>(null)
-
- useEffect(() => {
- if (!svgRef.current || !data.length) return
-
- const svg = d3.select(svgRef.current)
- const width = svgRef.current.clientWidth
- const height = svgRef.current.clientHeight
- const margin = { top: 20, right: 20, bottom: 30, left: 40 }
-
- svg.selectAll('*').remove()
-
- const x = d3
- .scaleBand()
- .domain(data.map((d) => d.label))
- .range([margin.left, width - margin.right])
- .padding(0.1)
-
- const y = d3
- .scaleLinear()
- .domain([0, d3.max(data, (d) => d.value) || 0])
- .nice()
- .range([height - margin.bottom, margin.top])
-
- // Bars
- svg
- .selectAll('rect')
- .data(data)
- .join('rect')
- .attr('x', (d) => x(d.label) || 0)
- .attr('y', height - margin.bottom)
- .attr('width', x.bandwidth())
- .attr('height', 0)
- .attr('fill', 'hsl(var(--primary))')
- .attr('rx', 4)
- .transition()
- .duration(750)
- .attr('y', (d) => y(d.value))
- .attr('height', (d) => y(0) - y(d.value))
-
- // X Axis
- svg
- .append('g')
- .attr('transform', `translate(0,${height - margin.bottom})`)
- .call(d3.axisBottom(x).tickSize(0))
- .selectAll('text')
- .attr('class', 'fill-muted-foreground text-xs')
-
- }, [data])
-
- return <svg ref={svgRef} className="w-full h-64" />
-}
-```
+Full D3 bar chart component: [references/d3-and-accessibility.md](references/d3-and-accessibility.md) §D3.js custom bar chart.
 
 ## Accessibility  [LOW freedom — run exactly]
 
-```tsx
-// Always include ARIA labels and descriptions
-<div role="img" aria-label="Revenue chart showing monthly data from January to December">
- <ResponsiveContainer>
- <LineChart data={data} aria-hidden="true">
- {/* Chart content */}
- </LineChart>
- </ResponsiveContainer>
+- Wrap the chart in `<div role="img" aria-label="...">` that states what the chart shows and its range.
+- Mark the SVG chart `aria-hidden="true"`; provide the data as an `sr-only` `<table>` with a `<caption>`.
+- Color is never the only encoding: pair it with labels, markers, or a legend.
 
- {/* Screen reader alternative */}
- <table className="sr-only">
- <caption>Monthly Revenue Data</caption>
- <thead>
- <tr><th>Month</th><th>Revenue</th></tr>
- </thead>
- <tbody>
- {data.map((d) => (
- <tr key={d.month}>
- <td>{d.month}</td>
- <td>${d.revenue}</td>
- </tr>
- ))}
- </tbody>
- </table>
+```tsx
+<div role="img" aria-label="Revenue chart showing monthly data from January to December">
+  <ResponsiveContainer><LineChart data={data} aria-hidden="true">{/* ... */}</LineChart></ResponsiveContainer>
+  <table className="sr-only">
+    <caption>Monthly Revenue Data</caption>
+    <thead><tr><th>Month</th><th>Revenue</th></tr></thead>
+    <tbody>{data.map((d) => <tr key={d.month}><td>{d.month}</td><td>${d.revenue}</td></tr>)}</tbody>
+  </table>
 </div>
 ```
+
+Full accessibility block: [references/d3-and-accessibility.md](references/d3-and-accessibility.md) §Accessibility.
 
 ## Validation  [LOW freedom — do not skip]
 

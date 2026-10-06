@@ -1,3 +1,17 @@
+
+## Contents
+
+- Step 7 — Enhancement Plan
+- Step 8 — Implement (smallest possible diffs)
+- Step 9 — Verify
+- Hidden Failure Modes — RN-Specific (N1–N15)
+- Pattern Library
+- Motion Rules
+- Quick Sanity Checks Before You Stop
+- When Not To Use This Skill
+- Companion Skills
+- Research Anchors
+
 ## Step 7 — Enhancement Plan
 
 A single, reviewable table ordered by impact / risk:

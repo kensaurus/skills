@@ -135,15 +135,7 @@ single finding.** Hints are Knip telling you your config is wrong.
 
 **1b. Fix hints in `knip.json` — not with `ignore`.**
 
-| Symptom | Correct fix | Not this |
-|---|---|---|
-| Whole directory unused | Add `entry` pattern for its real entry | `ignore` the directory |
-| `vite.config.ts` reported unused | Enable/disable that plugin explicitly | `ignore` the file |
-| Flood of unused `interface`/`type` | `ignoreExportsUsedInFile: { interface: true, type: true }` | `--exclude types` |
-| Unresolved path-alias imports | Add `paths` (tsconfig semantics) | `ignore` the importer |
-| Node builtins as unused deps | `ignoreDependencies` | blanket `ignore` |
-| Test files reported | `--production` | negated `project` patterns |
-| Generated file's exports unused | `ignore` that one file *(legitimate)* | — |
+Symptom → correct fix → not-this table (entry patterns, `ignoreExportsUsedInFile`, `paths`, `ignoreDependencies`, `--production`, the one legitimate `ignore`): [references/knip-config.md](references/knip-config.md) §Hint symptom → correct fix.
 
 Knip already respects `.gitignore` — do not re-list `node_modules`,
 `dist`, `build`. Do not duplicate entry points that auto-detected plugins
@@ -215,100 +207,21 @@ commands, false positives, and the fix column are in
 > is a live credential in shipped output — stop the pass and go to
 > `plan-secrets-audit`.
 
-**3a. Unused variables and imports inside files.** Knip explicitly does
-not do this. Baseline with `tsc --noEmit` under `noUnusedLocals` +
-`noUnusedParameters`, or your linter's unused rule. Record the count and
-whether the compiler flags are even on.
-
-**3b. Copy-paste duplication.** The class AI-assisted repos are worst at,
-and no other skill in this pack detects it. `npx jscpd src --min-tokens 50
---reporters json` (50 is the default; raising it cuts boilerplate noise).
-Record duplication % and the top clone pairs. **Duplication is a refactor
-finding, not a deletion finding** — route to `workflow-refactor`.
-
-**3c. Debug residue.** Mechanical and countable:
-
-```
-rg -n "console\.(log|debug|warn)|debugger" --glob '!*test*' --glob '!*spec*'
-rg -n "\.(only|skip|todo)\(|xit\(|xdescribe\(|fdescribe\("
-```
-
-Plus commented-out code blocks and `utils`/`helpers` dumping grounds.
-`.only` in a committed test is worse than dead code — it silently disables
-the rest of the file. Flag those **high**.
-
-**3d. Suppression debt.** The count that must only ever shrink. Use
-`rg -o … | wc -l` for a repo total — `rg -c` prints per-file counts of
-*matching lines*, which is not a number you can ratchet:
-
-```
-rg -o "@ts-ignore|@ts-expect-error|eslint-disable|biome-ignore" | wc -l
-rg -o ":\s*any\b|as any\b" | wc -l
-```
-
-Also catch stale suppressions: a `@ts-expect-error` on a line that no
-longer errors is itself dead code, and TypeScript reports it.
-
-**3e. Orphan assets.** Knip reads the module graph, so it cannot see
-binaries. Cross-reference every filename under `public/`, `assets/`,
-`static/` against source, CSS, and HTML. Beware hashed and templated
-references (`` `/img/${name}.png` ``) — those make a name-based scan
-report false orphans, so a folder referenced only by template string is
-`needs-owner`, not dead.
-
-**3f. Env var drift, both directions.** Referenced-but-undeclared is a
-production break; declared-but-unreferenced is dead config:
-
-```
-rg -o "import\.meta\.env\.[A-Z0-9_]+|process\.env\.[A-Z0-9_]+" -r '$0' --no-filename | sort -u
-```
-
-Diff that set against `.env.example`. Report names only — **never print
-values.**
-
-**3g. Dead database schema.**  [read-only this pass]
-
-These three commands only read, so they are safe against any target
-including production — and index-scan statistics are *only* meaningful
-against real traffic, so prefer production and record the stats window.
-The non-production gate applies to anything that writes.
-
-```
-supabase db lint                            # plpgsql_check: dead code after RETURN, unused variables
-supabase inspect db unused-indexes          # indexes with low scan counts
-supabase inspect db seq-scans
-```
-
-Then cross-reference client usage to find orphans the database cannot know
-about: `rg -o "\.from\('[^']+'\)|\.rpc\('[^']+'\)|functions\.invoke\('[^']+'\)"`
-against the table/function/Edge-Function inventory. Also: Edge Functions
-deployed but never invoked, migration sprawl, and whether generated types
-still match the schema (`supabase gen types` diff).
-
-**Low index scans on a young or read-light database is not evidence of a
-dead index.** Record the stats window. Every schema finding lands in the
-plan as a proposal — **no `DROP` is authored in this pass**, and destructive
-migrations route to `plan-data-integrity` and `db-migrator`.
+- **3a Unused variables and imports inside files** — Knip does not do this; baseline with `tsc --noEmit` under `noUnusedLocals` + `noUnusedParameters`, or the linter's unused rule, and record whether the flags are even on
+- **3b Copy-paste duplication** — `npx jscpd src --min-tokens 50 --reporters json`; record duplication % and top clone pairs; a refactor finding, not a deletion finding → `workflow-refactor`
+- **3c Debug residue** — `console.*` / `debugger`, `.only` / `.skip` / `.todo` / `x`-prefixed tests (flag `.only` **high**), commented-out blocks, `utils`/`helpers` dumping grounds
+- **3d Suppression debt** — `@ts-ignore` / `@ts-expect-error` / `eslint-disable` / `biome-ignore` and `any`, counted with `rg -o … | wc -l`; a stale `@ts-expect-error` is itself dead code
+- **3e Orphan assets** — every filename under `public/`, `assets/`, `static/` cross-referenced against source, CSS, and HTML; a folder referenced only by template string is `needs-owner`, not dead
+- **3f Env var drift, both directions** — referenced-but-undeclared vs declared-but-unreferenced, diffed against `.env.example`; names only, **never print values**
+- **3g Dead database schema** [read-only this pass] — `supabase db lint`, `supabase inspect db unused-indexes`, `supabase inspect db seq-scans`, cross-referenced with `.from(` / `.rpc(` / `functions.invoke(` usage; low scans on a young or read-light database are not evidence; **no `DROP` is authored in this pass**
+Full commands, caveats, and routing for 3a–3g: [references/residue-greps.md](references/residue-greps.md) §The seven surfaces.
 
 ---
 
 ## Phase 4 — Write `plan-dead-code.md`  [LOW freedom on format]
 
 **4a. Baseline table** — the ratchet's starting line. Numbers only ever go down.
-
-| Metric | Command | Today |
-|---|---|---|
-| Knip issues (production) | `knip --production` | |
-| Knip issues (default) | `knip` | |
-| Unused files / exports / types / deps | `knip --files` etc. | |
-| Unused locals | `tsc --noEmit` | |
-| Duplication % | `jscpd` | |
-| `console.*` / `debugger` | `rg -o … \| wc -l` | |
-| `.only` / `.skip` / `.todo` / `x`-prefixed | `rg -o … \| wc -l` | |
-| Suppressions / `any` | `rg -o … \| wc -l` | |
-| Orphan assets | asset scan | |
-| Env drift (missing / unused) | env diff | |
-| Unused indexes / orphan tables / functions | `supabase inspect` | |
+Metric | command | today rows (Knip both modes, unused locals, duplication %, debug residue, suppressions, orphan assets, env drift, schema): [references/output-templates.md](references/output-templates.md) §Baseline table (4a).
 
 **4b. Keep/kill list** — one row per **chain head**:
 `path:line | class | evidence | verdict | sev | effort | children | what must keep working`

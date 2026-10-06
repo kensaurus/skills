@@ -278,4 +278,4 @@ Re-run `plan-antislop` after execution to confirm the burndown closed.
 - **Verify:** after execution, `test-playwright` (does it still work?) and a
   second `plan-antislop` pass (did the slop actually drop?).
 
-> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model. The plan says *which* slop to remove; the rule constrains *how*.
+> Plan at high effort. Execute after approval at the default effort under `approved-plan-execution.mdc` (no reward hacking, no feature deletion). The plan says *which* slop to remove; the rule constrains *how*.

@@ -123,24 +123,6 @@ Apply these to every email before looking at design:
 
 ### Common email types — copy templates
 
-**Welcome email:**
-```
-Subject: Welcome to [App Name], [First Name] 👋
-Preview: Here's how to get started in 2 minutes.
-
-Hi [First Name],
-
-You're in. [App Name] helps you [core value in 1 sentence].
-
-Here's the first thing to do: [single CTA — most valuable first action].
-
-[Primary Button: Get started]
-
-If you have any questions, just reply to this email.
-
-— [Name], [App Name]
-```
-
 **Password reset:**
 ```
 Subject: Reset your [App Name] password
@@ -156,23 +138,7 @@ If that was you, click the button below. If not, you can ignore this email.
 This link expires in 1 hour. After that, you'll need to request a new one.
 ```
 
-**Billing confirmation:**
-```
-Subject: Your payment of [amount] was successful
-Preview: Next billing date: [date].
-
-Hi [First Name],
-
-Your payment of [amount] for [Plan Name] went through.
-
-Amount: [amount]
-Date: [date]
-Next billing date: [date]
-
-[Button: View your invoice]
-
-Questions about your bill? Reply here and we'll sort it out.
-```
+**Welcome** (subject with first name, preview "get started in 2 minutes", one Get started button, "just reply" close) and **Billing confirmation** (subject "Your payment of [amount] was successful", amount/date/next billing date lines, View your invoice button): [references/copy-templates.md](references/copy-templates.md).
 
 ---
 
@@ -183,62 +149,8 @@ Install if not present:
 npm install react-email @react-email/components
 ```
 
-Base template structure (illustrative — swap the indigo button and off-white ground for the brand):
-```tsx
-// emails/welcome.tsx
-import {
-  Body, Button, Container, Head, Heading, Hr, Html,
-  Link, Preview, Section, Text, Img,
-} from '@react-email/components';
-
-interface WelcomeEmailProps {
-  firstName: string;
-  ctaUrl: string;
-}
-
-export function WelcomeEmail({ firstName, ctaUrl }: WelcomeEmailProps) {
-  return (
-    <Html lang="en">
-      <Head />
-      <Preview>Welcome to AppName — here's how to get started.</Preview>
-      <Body style={body}>
-        <Container style={container}>
-          <Img src="https://yourdomain.com/logo.png" width="48" height="48" alt="AppName" />
-          <Heading style={h1}>Welcome, {firstName}</Heading>
-          <Text style={text}>
-            You're in. AppName helps you [core value in one sentence].
-          </Text>
-          <Text style={text}>
-            Here's the first thing to do:
-          </Text>
-          <Section style={btnContainer}>
-            <Button style={button} href={ctaUrl}>
-              Get started
-            </Button>
-          </Section>
-          <Text style={text}>
-            If you have any questions, just reply to this email.
-          </Text>
-          <Hr style={hr} />
-          <Text style={footer}>
-            AppName · 123 Street · City · {' '}
-            <Link href="{{{UNSUBSCRIBE_URL}}}">Unsubscribe</Link>
-          </Text>
-        </Container>
-      </Body>
-    </Html>
-  );
-}
-
-const body = { backgroundColor: '#f6f9fc', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' };
-const container = { backgroundColor: '#ffffff', margin: '40px auto', padding: '40px', maxWidth: '600px', borderRadius: '8px' };
-const h1 = { fontSize: '24px', fontWeight: '700', color: '#1a1a1a', marginBottom: '16px' };
-const text = { fontSize: '16px', lineHeight: '1.6', color: '#444', marginBottom: '16px' };
-const btnContainer = { textAlign: 'center' as const, marginBottom: '24px' };
-const button = { backgroundColor: '#6366f1', borderRadius: '6px', color: '#fff', fontSize: '16px', fontWeight: '600', padding: '12px 28px', textDecoration: 'none', display: 'inline-block' };
-const hr = { borderColor: '#e5e7eb', marginTop: '32px', marginBottom: '32px' };
-const footer = { fontSize: '12px', color: '#9ca3af', textAlign: 'center' as const };
-```
+Base template structure: `Html lang` → `Head` → `Preview` → `Body` → `Container` (600px max, white on off-white) with `Img` logo (alt text), `Heading`, `Text`, one `Button` in a centered `Section`, `Hr`, and a footer `Text` with address + `{{{UNSUBSCRIBE_URL}}}` link. Styles are inline objects; swap the indigo button and off-white ground for the brand.
+Full `emails/welcome.tsx`: [references/react-email-and-send.md](references/react-email-and-send.md) §Base template.
 
 ### Dark mode support
 
@@ -261,40 +173,13 @@ const footer = { fontSize: '12px', color: '#9ca3af', textAlign: 'center' as cons
 
 ### Resend (recommended for new projects)
 
-```typescript
-import { Resend } from 'resend';
-import { WelcomeEmail } from '../emails/welcome';
-import { render } from '@react-email/render';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-await resend.emails.send({
-  from: 'AppName <hello@yourdomain.com>',
-  to: user.email,
-  subject: `Welcome to AppName, ${user.firstName}`,
-  react: <WelcomeEmail firstName={user.firstName} ctaUrl={ctaUrl} />,
-});
-```
+`new Resend(process.env.RESEND_API_KEY)` → `resend.emails.send({ from: 'AppName <hello@yourdomain.com>', to, subject, react: <WelcomeEmail … /> })`.
+Code: [references/react-email-and-send.md](references/react-email-and-send.md) §Send with Resend.
 
 ### Add a Supabase Edge Function trigger (if using Supabase)
 
-```typescript
-// supabase/functions/send-welcome-email/index.ts
-import { serve } from 'https://deno.land/std/http/server.ts';
-import { Resend } from 'npm:resend';
-
-serve(async (req) => {
-  const { record } = await req.json(); // from a database webhook
-  const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
-  await resend.emails.send({
-    from: 'AppName <hello@yourdomain.com>',
-    to: record.email,
-    subject: `Welcome to AppName!`,
-    html: '...', // rendered HTML
-  });
-  return new Response('OK');
-});
-```
+`supabase/functions/send-welcome-email/index.ts`: Deno `serve`, read `record` from the database webhook body, `npm:resend` with `Deno.env.get('RESEND_API_KEY')`, send rendered HTML, return `OK`.
+Code: [references/react-email-and-send.md](references/react-email-and-send.md) §Supabase Edge Function trigger.
 
 Deploy:
 ```bash

@@ -202,4 +202,4 @@ Approve a phase to run it. Re-run after to confirm failures are now observable.
   `debug-sentry-monitor`.
 - **Verify:** trigger a controlled failure post-fix; confirm Sentry/Langfuse capture.
 
-> Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model. The plan says *what* is invisible; the rule constrains *how* it's wired.
+> Plan at high effort. Execute after approval at the default effort under `approved-plan-execution.mdc` (no reward hacking, no feature deletion). The plan says *what* is invisible; the rule constrains *how* it's wired.

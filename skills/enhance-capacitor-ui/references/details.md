@@ -528,6 +528,19 @@ alwaysApply: true
 
 Use the right axis for the right question:
 
+## Contents
+
+- Three-Layer Architecture (the deliverable shape)
+- Six-Step Rollout (the implementation sequence)
+- Squint-Test Matrix (the verification grid)
+- Pattern Library
+- Implementation Rules
+- Quick Sanity Checks Before You Stop
+- When Not To Use This Skill
+- Companion / Sibling Skills
+- Research Anchors
+
+
 - **Container queries (`@md:`/`@lg:`/`@4xl:`)** — component micro-layout. The
   primitive doesn't know the viewport; it knows its slot.
 - **Form-factor variants (`ff-compact:`/`ff-medium:`/`ff-expanded:`)** — when

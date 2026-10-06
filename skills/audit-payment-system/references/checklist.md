@@ -4,6 +4,18 @@ Per-control detection for `audit-payment-system` Phase 2. Each entry: **what**, 
 **good signal**, **red flag**, **fix via**. Amounts are always integer **minor units** (cents) as
 strings across boundaries — never floats. Run only the groups in scope for the detected tier (P0/P1/P2).
 
+## Contents
+
+- A. Money-movement correctness
+- B. Ledger & data integrity  *(P1 internal balances · P2 full ledger — `N/A` for P0)*
+- C. Async orchestration & webhook delivery
+- D. Reconciliation & settlement  *(P1/P2 — `N/A` for P0 beyond PSP-dashboard spot checks)*
+- E. Fraud, risk & SCA
+- F. Compliance & security — PCI DSS v4.0.1 (all tiers)
+- G. Error handling & resilience
+- Delegation map (don't double-count)
+
+
 ---
 
 ## A. Money-movement correctness
