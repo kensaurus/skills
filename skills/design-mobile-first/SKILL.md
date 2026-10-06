@@ -1,9 +1,9 @@
 ---
 name: design-mobile-first
 description: >
-  Design mobile-first UIs: touch targets, safe areas, gestures, then enhance up.
-  Use when building for small screens, touch, swipe, PWA, or tablet. Linearized
-  desktop / responsive audit → audit-responsive.
+  Design a new touch-first UI: targets, safe areas, gestures, then enhance up.
+  Use when building for phones, touch, swipe, PWA, or tablet. Responsive audit →
+  audit-responsive.
 license: MIT
 ---
 
@@ -127,72 +127,30 @@ rg "viewport" src/app/layout.tsx index.html
 
 ## Responsive Patterns
 
-### Mobile Navigation
-```tsx
-'use client'
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+### Native shell first (Expo / Capacitor, 2026)
 
-export function MobileNav() {
- const [isOpen, setIsOpen] = useState(false)
+When the UI ships inside a native shell, the platform already owns the chrome.
+Do not rebuild it in JS or HTML:
 
- return (
- <>
- <button
- className="lg:hidden p-2"
- onClick={() => setIsOpen(true)}
- aria-label="Open menu"
- >
- <MenuIcon className="h-6 w-6" />
- </button>
+- **Tab bar:** Expo Router `NativeTabs` (`expo-router/native-tabs`, SDK 58+;
+  `unstable-native-tabs` on SDK 54–57) or Ionic `ion-tab-bar`. 3–5 destinations,
+  filled symbols, one-word labels. iOS 26 draws Liquid Glass and minimizes on scroll.
+- **Edge-to-edge:** Android 16 enforces it. Expo: `react-native-safe-area-context`
+  insets at the screen root. Capacitor 8.3.2+: `viewport-fit=cover` plus
+  `padding: var(--safe-area-inset-top, env(safe-area-inset-top, 0px))`; the legacy
+  `StatusBar.setBackgroundColor` is a no-op on Android 16.
+- **Secondary flows:** a sheet with snap points (Gorhom v5 / `ion-modal` breakpoints),
+  not a new page.
+- **Feedback:** press scale 0.96–0.98 on the UI thread; haptics only on confirm,
+  selection, and snap, never on plain taps.
 
- <AnimatePresence>
- {isOpen && (
- <>
- {/* Backdrop */}
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- className="fixed inset-0 bg-black/50 z-40 lg:hidden"
- onClick={() => setIsOpen(false)}
- />
+For an app that already exists and feels like a web page, run
+`enhance-mobile-native-feel`; the drawer below is the web / PWA pattern.
 
- {/* Drawer */}
- <motion.div
- initial={{ x: '-100%' }}
- animate={{ x: 0 }}
- exit={{ x: '-100%' }}
- transition={{ type: 'spring', damping: 25, stiffness: 200 }}
- className="fixed inset-y-0 left-0 w-[280px] bg-background z-50 lg:hidden"
- >
- <div className="p-4">
- <button
- className="absolute top-4 right-4 p-2"
- onClick={() => setIsOpen(false)}
- >
- <XIcon className="h-6 w-6" />
- </button>
- <nav className="mt-8 space-y-2">
- {navItems.map((item) => (
- <a
- key={item.href}
- href={item.href}
- className="block py-3 px-4 rounded-lg hover:bg-muted"
- >
- {item.label}
- </a>
- ))}
- </nav>
- </div>
- </motion.div>
- </>
- )}
- </AnimatePresence>
- </>
- )
-}
-```
+### Mobile Navigation (web / PWA)
+
+A slide-in drawer with backdrop, spring transition, and a close control. Full component in
+[references/web-nav-drawer.md](references/web-nav-drawer.md). Keep it `lg:hidden`; on native shells the system tab bar replaces it.
 
 ### Responsive Tables
 ```tsx
@@ -496,10 +454,11 @@ export function InstallPrompt() {
 
 ## Validation  [LOW freedom — do not skip]
 
-Touch ≥44px · thumb-zone CTAs · gestures with feedback · 60fps · no focus-zoom · safe-area · offline-graceful · real device (not emulator-only).
+Touch ≥44px · thumb-zone CTAs · gestures with feedback · 60fps · no focus-zoom · safe-area (edge-to-edge on Android 16) · offline-graceful · real device (not emulator-only).
 
 ## Related
 
+- `enhance-mobile-native-feel` — an existing Expo/RN or Capacitor app that feels like a website
 - `audit-responsive` — unstack desktop; layout/IA at 375 / 768 / 1440
 - `enhance-capacitor-ui` — hybrid web + native form-factor axes
 - `design-frontend` — new visual surfaces

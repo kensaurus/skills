@@ -1,9 +1,9 @@
 ---
 name: design-motion
 description: >
-  Build one new animation — micro-interaction, page transition, scroll, or
-  hover — with Framer Motion, CSS, or GSAP. Use when adding one animation to a
-  new surface. A coherent pass across an existing app → enhance-motion.
+  Build one new animation (micro-interaction, page transition, scroll, hover)
+  with Motion, CSS, or GSAP. Use when adding one animation to a new surface. A
+  pass across an existing app → enhance-motion.
 license: MIT
 ---
 
@@ -72,6 +72,15 @@ Every animation should serve a purpose:
 - Avoid animating `width`, `height`, `top`, `left` (trigger layout)
 - Use `will-change` sparingly and remove after animation
 - Target 60fps - keep animations under 100ms for interactions
+
+### 3. Springs, not bezier soup (2026)
+- One spring vocabulary per app: **spatial** springs (position, size, radius) may
+  overshoot; **effects** springs (color, opacity) never do. Three speeds: fast for
+  small controls, default for sheets and panels, slow for full-screen changes
+  (Material 3 motion-physics system; Motion `type: "spring"` on the web).
+- React Native / Expo: this is Reanimated territory (`withSpring` on the UI thread,
+  Reanimated 4 CSS-style transitions). The native recipe lives in
+  `enhance-mobile-native-feel` → `references/stack-recipes.md`; this skill stays web.
 
 ## Framer Motion Patterns (React)
 
@@ -328,6 +337,6 @@ After implementing animations:
 
 1. **Performance** → 60fps in Chrome DevTools Performance tab
 2. **Reduced motion** → Test with `prefers-reduced-motion: reduce`
-3. **Mobile** → Test on actual device (not just emulator)
+3. **Mobile** → Test on actual device (not just emulator); native apps also check the OS reduce-motion switch, not only the CSS media query
 4. **Purpose** → Each animation serves a clear UX purpose
 5. **Consistency** → Timing/easing matches rest of app

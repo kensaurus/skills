@@ -1,9 +1,9 @@
 ---
 name: audit-ux-journeys
 description: >
-  Cross-page UX audit of user stories, task completion, and information
-  architecture. Use when "audit user flows", "IA audit", "can users find X",
-  "navigation audit", or "funnel drop-off". Per-page heuristics → audit-ux.
+  Cross-page UX audit of user stories, task completion, and IA. Use when "audit
+  user flows", "IA audit", "can users find X", "navigation audit", or "funnel
+  drop-off". Per-page heuristics → audit-ux.
 license: MIT
 effort: high
 ---
@@ -115,8 +115,11 @@ and pass/fail signals in [references/checklist.md](references/checklist.md).
 | IA7 | **Wayfinding** — breadcrumbs in hierarchies ≥3 deep; current location highlighted | User can't answer "where am I?" |
 | IA8 | **Search & filtering** — present and functional for large content/data sets | 200 items, no search; filter resets on nav |
 | IA9 | **URL sanity** — URLs human-readable, hierarchical, shareable | Opaque ids everywhere; state lost on refresh |
+| IA10 | **Mobile destinations** (native apps) — 3–5 tab destinations, one-word labels, bar visible in every section | 6+ tabs, a "More" tab, or a hamburger drawer as the only nav |
+| IA11 | **One question per screen** (mobile) — home shows ≤5 cards and one primary action; the rest is progressive disclosure | Long page, three CTAs above the fold, everything on the home screen |
+| IA12 | **Sheet vs page** (mobile) — filters, pickers, confirmations open as sheets and keep context | Full-page detour for a two-field task; back-stack grows per filter |
 
-Verdicts: `Pass / Fail / N-A` with `file:line` or route evidence. IA6 requires the browser (Phase 2).
+Verdicts: `Pass / Fail / N-A` with `file:line` or route evidence. IA6 requires the browser (Phase 2). IA10–IA12 apply to native mobile apps (Expo / RN / Capacitor); mark `N-A` on web.
 
 ## Phase 2 — Story-by-story task walkthroughs (headed browser)  [LOW freedom — run exactly]
 
@@ -206,6 +209,7 @@ alone is not a journey audit).
 - `audit-responsive` — page-level layout/IA at 375 / 768 / 1440 (this skill is cross-page stories)
 - `audit-ux` — per-page NN/g heuristics, Laws of UX, microcopy, emotional design (the page lens to this skill's path lens)
 - `enhance-web-ux` / `enhance-web-forms` — fix the screens and forms this audit flags
+- `enhance-mobile-native-feel` — fix IA10–IA12 and the rest of a web-shaped mobile app in one pass
 - `audit-uiux-design-system` — visual token/component compliance
 - `audit-accessibility` / `audit-performance` — WCAG and speed lenses (delegated)
 - `audit-realworld` — full-stack feature parity vs the RealWorld reference

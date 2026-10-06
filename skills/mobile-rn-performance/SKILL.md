@@ -1,6 +1,9 @@
 ---
 name: mobile-rn-performance
-description: Fix React Native / Expo performance, build, and upgrade issues. Use for jank, frame drops, slow startup, large bundles, memory leaks, Hermes, FlashList, Reanimated, Turbo Modules, Android 16KB alignment, or RN/Expo version upgrades.
+description: >
+  Fix React Native / Expo performance, build, and upgrade issues: jank, slow
+  startup, large bundles, memory leaks, Hermes, FlashList, Reanimated, Turbo
+  Modules, 16KB alignment, SDK upgrades.
 license: MIT
 paths:
   - "**/ios/**"
@@ -59,7 +62,7 @@ Never optimize blind. Identify the symptom, then apply the matching category. Me
 - Profile with React DevTools + the RN perf monitor before changing code. Find the component re-rendering, don't guess.
 - Memoize hot paths: `React.memo`, `useMemo`, `useCallback` — but only where a profile shows wasted renders (over-memoization adds its own cost).
 - Stable references: don't create new objects/arrays/functions inline in props of list rows or memoized children.
-- **Lists:** use `FlashList` (Shopify) over `FlatList` for long/heterogeneous lists. Provide stable `keyExtractor`, avoid anonymous `renderItem` closures, and give size hints. A FlatList re-render storm is the #1 RN list perf bug.
+- **Lists:** under ~300 simple rows `FlatList` is fine (stable `keyExtractor`, memoized `renderItem`, `getItemLayout` for fixed heights). Beyond that, or with images or blank cells on fling, use `@shopify/flash-list` **v2**: New Architecture only, no `estimatedItemSize`, `getItemType` for mixed rows, and drop `removeClippedSubviews`/`windowSize`. On the old architecture stay on FlashList v1 with `estimatedItemSize`. `@legendapp/list` is the Fabric-only option for chat and media feeds (`recycleItems`, `maintainScrollAtEnd`). A FlatList re-render storm is the #1 RN list perf bug.
 - Move continuous values (scroll, gesture, animation) off React state — see Animations.
 
 ## 2. Bundle & app size (CRITICAL)
@@ -85,6 +88,7 @@ Never optimize blind. Identify the symptom, then apply the matching category. Me
 
 ## 6. Animations (MEDIUM)
 - Use `react-native-reanimated` on the **UI thread** (`useSharedValue` / `useAnimatedStyle` / worklets). Never drive continuous animation through `setState` — it re-renders the tree every frame and collapses FPS.
+- Reanimated 4 moves worklets to `react-native-worklets` (peer dependency; import `runOnUI`/`runOnJS` from it) and adds CSS-style `transitionProperty` / `animationName` on `Animated.View`; shared-value code from 3.x keeps working. Gesture-linked motion stays in `react-native-gesture-handler` worklets.
 - Use the native driver for `Animated` when staying on the core API.
 
 ## React Native / Expo upgrades  [LOW freedom — run exactly]
@@ -101,6 +105,7 @@ Never optimize blind. Identify the symptom, then apply the matching category. Me
 - [ ] Both platforms still build and run.
 
 ## Composes with
+- `enhance-mobile-native-feel` — app-wide chrome, lists, motion, haptics when the UI itself is web-shaped.
 - `mobile-rn-screen` — layout, safe-area, touch-target, native feel.
 - `mobile-emulator-start` / `mobile-emulator-test` — boot + on-device verification.
 - `workflow-spec-tdd` — spec + test the perf fix so it doesn't regress.

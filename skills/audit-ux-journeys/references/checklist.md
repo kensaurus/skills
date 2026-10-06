@@ -106,6 +106,24 @@ rg -n -i "breadcrumb|aria-current" -g '*.{tsx,jsx,vue,svelte}' -l
 
 ---
 
+### IA10–IA12 — Mobile IA (native apps only)
+
+```bash
+# Tab destinations and how the bar is drawn
+rg -n "NativeTabs|createBottomTabNavigator|<Tabs|ion-tab-button|position: ?'absolute'.*bottom: ?0" -g "*.{tsx,ts,html}"
+# Long pages and sheets
+rg -n "<ScrollView|<FlatList|<FlashList|BottomSheet|ion-modal|presentation: ?'formSheet'" -g "*.{tsx,ts,html}" -c
+```
+
+- **IA10** — count destinations; 3–5 passes, a "More" tab or 6+ fails. Bar visible on every
+  section screenshot (modals excepted). Source: HIG Tab bars.
+- **IA11** — on the home screenshot count cards above the fold and primary CTAs; ≤5 cards and
+  one CTA passes. Secondary content behind a sheet, segmented control, or second screen.
+  Source: NN/g progressive disclosure.
+- **IA12** — walk one filter and one confirm flow; a sheet that keeps the list visible passes,
+  a full-page push for ≤2 fields fails.
+- Fix owner for all three: `enhance-mobile-native-feel`.
+
 ## Phase 2 — Walkthrough method
 
 - **Anti-stall first:** apply `protocol-browser-anti-stall` on every step; screenshots go to

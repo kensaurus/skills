@@ -2,9 +2,8 @@
 name: enhance-capacitor-ui
 description: >
   Separate desktop and mobile UI in hybrid apps shipped as PWA + iOS + Android
-  (Capacitor, Tauri, Expo Web, Ionic, RN-Web). Use when a UI sweep "improved
-  one surface and broke the other": desktop polished but mobile cramped, or
-  the reverse.
+  (Capacitor, Tauri, Expo Web, Ionic). Use when a UI sweep "improved one surface
+  and broke the other".
 license: MIT
 paths:
   - "**/ios/**"
@@ -128,6 +127,17 @@ predictable, reviewable change instead of a regression.
 > Cursor / AGENTS rule (`responsive-design-axes.mdc`) keeps them there.
 > A future enhancer (human or AI) will reach for `lg:grid-cols-2` in a
 > primitive within a week unless the rule warns them.
+
+> **Edge-to-edge is the platform default (2026).** Android 16 enforces it
+> and Capacitor 8.3.2+ handles insets in core: set `viewport-fit=cover`,
+> pad chrome with `var(--safe-area-inset-*, env(safe-area-inset-*, 0px))`,
+> style bars with `SystemBars` (`@capacitor/core`). The legacy
+> `StatusBar.setBackgroundColor()` / `overlaysWebView: false` are no-ops
+> on Android 16; color the bar area with an element instead.
+> `tailwindcss-safe-area` reads `env()` only, so hand-roll the `var()`
+> fallback on critical chrome while Android WebView < 140 is in the fleet.
+> Capacitor 7 keeps the `@capawesome/capacitor-android-edge-to-edge-support`
+> plugin only as an opt-out.
 
 > **Patch the axis primitive, not the consumer.** Same rule as
 > `enhance-web-ui` *Primitive-First Patch Rule*, scoped to axes: if
@@ -461,3 +471,4 @@ matches the slot's typical width, not the viewport's.
 ## Further reading
 
 - [M5. `(hover: hover)` media queries copy-pasted across components and more](references/details.md)
+- `enhance-mobile-native-feel` — once the surfaces are separated, make the compact native surface feel native (chrome, sheets, haptics, motion)

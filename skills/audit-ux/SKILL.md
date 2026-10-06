@@ -2,8 +2,8 @@
 name: audit-ux
 description: >
   Per-page UX audit with NN/g heuristics, microcopy review, and Google HEART.
-  Use when evaluating usability, auditing microcopy, checking UX heuristics,
-  or assessing cognitive load. Cross-page flows/IA → audit-ux-journeys.
+  Use when evaluating usability, auditing microcopy, or assessing cognitive
+  load. Cross-page flows/IA → audit-ux-journeys.
 license: MIT
 effort: high
 ---
@@ -310,6 +310,8 @@ Search `*.tsx` for in-app help: `Tooltip|tooltip|HelpCircle|InfoIcon|help.*text|
 | **Doherty Threshold** | Productivity rises when response <400ms | Do interactions feel instant? | Optimistic UI, skeleton screens, prefetching, perceived performance tricks |
 | **Postel's Law** | Be liberal in what you accept | Flexible input parsing (phone, date, case) | Accept multiple input formats, auto-format, don't reject valid variations |
 | **Peak-End Rule** | People judge by peaks and endings | Success moment satisfying? Error moments handled gracefully? | Celebrate completions (confetti, clear confirmation). Soften errors |
+
+On a native mobile app also score: primary action in the thumb zone, targets ≥ 44pt / 48dp, 3–5 tab destinations, press feedback on every tappable, haptics on confirm only, body ≥ 16sp. The fix pass for those is `enhance-mobile-native-feel`.
 
 ---
 
