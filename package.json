@@ -1,13 +1,14 @@
 {
   "name": "@kensaurus/skills",
-  "version": "2.2.0",
-  "description": "You say the job; the playbook runs. 160 agent skills, 63 slash commands, 6 subagents, and MCP templates for Claude Code, Cursor, Codex CLI, and Gemini CLI. Tuned for React / Next.js / Supabase; works on most stacks.",
+  "version": "2.3.0",
+  "description": "You say the job; the playbook runs. 160 agent skills, 63 slash commands, 6 subagents, and MCP templates for Claude Code, Cursor, Codex CLI, and Gemini CLI. Each playbook asks first, tests first, and proves the result. Tuned for React, Next.js, and Supabase. Works on most stacks.",
   "type": "module",
   "bin": {
     "kenji": "bin/kenji.js"
   },
   "scripts": {
     "install:cursor": "node bin/install.mjs",
+    "brand:render": "node scripts/render-brand-assets.mjs",
     "install:auto": "node bin/install.mjs --auto",
     "install:claude": "node bin/install.mjs --claude",
     "install:codex": "node bin/install.mjs --codex",
@@ -39,18 +40,27 @@
     "agent-skills",
     "claude-code",
     "claude-code-plugin",
-    "codex",
+    "claude-skills",
     "cursor",
+    "cursor-skills",
+    "codex",
+    "codex-cli",
     "gemini-cli",
     "skills-sh",
-    "vibe-coding",
+    "slash-commands",
+    "subagents",
+    "coding-agent",
+    "agent-workflows",
+    "playbooks",
+    "skill-pack",
     "mcp",
     "nextjs",
     "supabase",
     "react",
     "typescript",
     "ai-agents",
-    "llm-tools"
+    "llm-tools",
+    "vibe-coding"
   ],
   "files": [
     "skills/",
