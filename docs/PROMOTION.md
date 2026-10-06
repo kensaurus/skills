@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
 
-**Status:** Published — `@kensaurus/cursor-kenji@1.40.0` via OIDC run [36510742813](https://github.com/kensaurus/cursor-kenji/actions/runs/36510742813) (housekeep-files organizer; its Windows script fixed for PowerShell 5.1). Previous: `1.39.0` via OIDC run [35853156100](https://github.com/kensaurus/cursor-kenji/actions/runs/35853156100).
+**Status:** Pending — `@kensaurus/cursor-kenji@1.41.0` (enhance-mobile-native-feel; mobile and UX skills refreshed for iOS 26 / Android 16 / Expo SDK 54–58 / Capacitor 8.3). Previous: `1.40.0` via OIDC run [36510742813](https://github.com/kensaurus/cursor-kenji/actions/runs/36510742813).
 
 ---
 
