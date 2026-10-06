@@ -1,10 +1,9 @@
 ---
 name: plan-capacitor-hardening
 description: >
-  Plan-only Capacitor/Ionic native-layer security audit: WebView, token
-  storage, deep links, OAuth, cleartext traffic, exported activities. Use
-  when "is my Capacitor app secure?" or "harden my hybrid app". Store
-  readiness → plan-mobile-readiness.
+  Plan-only Capacitor/Ionic native-layer security audit: WebView, token storage,
+  deep links, OAuth, cleartext, exported activities. Use when "is my Capacitor
+  app secure?". Store readiness → plan-mobile-readiness.
 license: MIT
 effort: high
 ---
@@ -110,6 +109,7 @@ Keychain/Keystore. Hybrid-native gaps are invisible if you only review web code.
 - **`addJavascriptInterface` / bridge exposure** — untrusted content + JS interface =
   Critical RCE vector.
 - **`setAllowFileAccess*` / `file://`**, `eval` on user input, insecure `postMessage`.
+- **Stale system-bar config** — `StatusBar.setBackgroundColor` / `overlaysWebView: false` are no-ops on Android 16 (Capacitor 8.3.2+ `SystemBars`); not a security hole, but flag it as dead config whose removal is owed to `enhance-mobile-native-feel`.
 
 ### 5 · OTA / live-update governance
 - **Update channel integrity** — OTA bundles signed/encrypted; unauthenticated path = RCE.
@@ -211,7 +211,7 @@ Re-audit native files after each phase; verify secure storage + deep-links on re
 - **Launch gates** — run with `plan-mobile-readiness` before store submit.
 - **`plan-secrets-audit`** — bundle secrets cross-hand.
 - **`plan-input-validation`** — deep-link / WebView input validation cross-hand.
-- **Execution:** `mobile-capacitor-platform`, `backend-patterns`, `mobile-emulator-test`.
+- **Execution:** `mobile-capacitor-platform`, `backend-patterns`, `mobile-emulator-test`; UI-layer edge-to-edge and chrome → `enhance-mobile-native-feel`.
 - **Verify:** real-device secure storage + deep-link test; no dev config in release build.
 
 > Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model.

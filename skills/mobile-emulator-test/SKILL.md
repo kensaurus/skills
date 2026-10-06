@@ -1,9 +1,9 @@
 ---
 name: mobile-emulator-test
 description: >
-  QA a native Android or Expo dev-client build end to end on the emulator,
-  checking UI, Supabase, and Sentry for each CRUD step. Use for "test on
-  emulator", "QA Android build", "verify native build", or "white screen".
+  QA a native Android or Expo dev-client build end to end on the emulator: UI,
+  Supabase, Sentry per CRUD step. Use for "test on emulator", "QA Android
+  build", "white screen", or "adb reverse".
 license: MIT
 ---
 
@@ -71,6 +71,14 @@ refetch loops, and silent error swallows.
 > bundle threw inside the React tree (caught by ErrorBoundary into Sentry),
 > or the persisted cache hydrated a class instance as a plain object.
 > Diagnose, don't restart blindly.
+
+> **Score native feel while you walk.**
+> On every tab screenshot note: tab bar visible and drawn by the system,
+> content under the status bar with correct insets, press response on the
+> tap you just made, no blank cells after a fast fling, body text legible
+> at the largest accessibility size. A fail is a finding routed to
+> `enhance-mobile-native-feel`; emulators may not vibrate, so haptics are a
+> device check.
 
 > **Clean up server state.**
 > Anything you POST during the walk gets deleted before you finish, via the

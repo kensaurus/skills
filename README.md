@@ -6,7 +6,7 @@
 
 **You say the job. The playbook runs.** Agent skills, slash commands, and subagents for **Claude Code, Cursor, Codex CLI, and Gemini CLI**.
 
-159 agent skills · 63 slash commands · 15 MCP servers · 12 Cursor skills · 6 subagents — for React / Next.js / Supabase, usable on almost any stack.
+160 agent skills · 63 slash commands · 15 MCP servers · 12 Cursor skills · 6 subagents — for React / Next.js / Supabase, usable on almost any stack.
 
 <p>
   <a href="https://www.npmjs.com/package/@kensaurus/skills"><img src="https://img.shields.io/npm/v/@kensaurus/skills?style=flat-square&color=cb3837&logo=npm" alt="npm version" /></a>
@@ -114,7 +114,7 @@ Four rooms. Same rule: you talk, a named playbook runs.
 | **Rule** | A house rule the AI always obeys | Drop a `.mdc` into your project |
 | **MCP server** | A connection to your database / GitHub / browser | Copy a template + set env vars |
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **171** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://labs.cloudsecurityalliance.org/research/csa-research-note-slopsquatting-ai-supply-chain-20260419-csa/).
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **172** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://labs.cloudsecurityalliance.org/research/csa-research-note-slopsquatting-ai-supply-chain-20260419-csa/).
 
 ## How it works
 
@@ -142,7 +142,7 @@ The 23 `plan-*` skills audit first and wait for your approval. See [docs/PLAN-LO
 
 | | Count | What it does |
 |:--|------:|:-------------|
-| **Skills** | 159 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
+| **Skills** | 160 | Auto-triggering playbooks (audit, enhance, debug, test, build, plan) |
 | **Cursor Skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) |
 | **Commands** | 63 | Slash shortcuts (`/commit`, `/pr`, `/burndown-full`, …) |
 | **Subagents** | 6 | Background helpers (code-reviewer, debugger, db-migrator…) |
@@ -269,7 +269,7 @@ You don't memorize names — describe the job in chat. Exact trigger phrases →
 
 <!-- SKILL-INDEX:START -->
 
-_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **171 skills** listed below._
+_Auto-generated from each skill's `SKILL.md` — run `npm run gen:skill-index` after adding a skill. **172 skills** listed below._
 
 _Skills marked `/name only` are user-invoked rituals; `reference only` skills are loaded by other skills; every other skill auto-routes from a plain request._
 
@@ -279,7 +279,7 @@ _Skills marked `/name only` are user-invoked rituals; `reference only` skills ar
 |:-------|------:|:----------------|
 | Audit — inspect; some then fix | **32** | Check the codebase — security, UX, analytics, IAP, the skill pack… |
 | Plan — audit first, change only after you approve | **23** | Write a fix plan you approve before any code changes |
-| Enhance — improve what already exists | **22** | Polish UI, forms, motion, SEO, PWA, email deliverability |
+| Enhance — improve what already exists | **23** | Polish UI, forms, motion, SEO, PWA, email deliverability |
 | Design — build something new | **10** | Create new UI, APIs, emails, themes from scratch |
 | Backend — server & data patterns | **5** | Auth, caching, queues, realtime, observability |
 | Mobile — React Native / Capacitor | **5** | RN screens, emulators, Capacitor, App Store prep |
@@ -297,7 +297,7 @@ _Skills marked `/name only` are user-invoked rituals; `reference only` skills ar
 | Third-party (upstream-maintained) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
 | Core & cross-cutting | **4** | Close everything, burndown, research, handoff |
 | Cursor IDE skills | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **171** | |
+| **Total** | **172** | |
 
 #### Full list (every skill)
 
@@ -336,7 +336,7 @@ _Skills marked `/name only` are user-invoked rituals; `reference only` skills ar
 | `audit-ui-states` | Read-only audit of unhappy-path UI states — empty, loading, error, offline, zero-results, permission, overflow — then a fix plan |
 | `audit-uiux-design-system` | Audit visual-system coherence: tokens, component variants, color, type, spacing, dark mode |
 | `audit-ux` | Per-page UX audit with NN/g heuristics, microcopy review, and Google HEART |
-| `audit-ux-journeys` | Cross-page UX audit of user stories, task completion, and information architecture |
+| `audit-ux-journeys` | Cross-page UX audit of user stories, task completion, and IA |
 
 ### Plan — audit first, change only after you approve (23)
 
@@ -346,7 +346,7 @@ _Skills marked `/name only` are user-invoked rituals; `reference only` skills ar
 | `plan-antislop` | Plan-only authenticity / AI-slop audit across prose, UI, code, and IA |
 | `plan-aso` | Plan-only ASO audit of App Store and Google Play listings: keywords, localized metadata, screenshots, ratings prompts |
 | `plan-backup-dr` | Plan-only audit of whether a project can actually recover from data loss, not just whether backups exist |
-| `plan-capacitor-hardening` | Plan-only Capacitor/Ionic native-layer security audit: WebView, token storage, deep links, OAuth, cleartext traffic, exported activities |
+| `plan-capacitor-hardening` | Plan-only Capacitor/Ionic native-layer security audit: WebView, token storage, deep links, OAuth, cleartext, exported activities |
 | `plan-data-integrity` | Plan-only audit of destructive-operation and migration safety |
 | `plan-dead-code` | Plan-only dead-code audit: Knip baseline for unused files, exports, and deps, plus duplication, debug residue, suppressions, orphan assets,… |
 | `plan-dependency-provenance` | Plan-only audit of dependencies for hallucinated or slopsquatted packages, supply-chain risk, and license gaps |
@@ -355,7 +355,7 @@ _Skills marked `/name only` are user-invoked rituals; `reference only` skills ar
 | `plan-gtm` | Plan-only GTM audit: monetization, positioning, activation funnel, SEO/AEO, distribution, and a founder interview |
 | `plan-input-validation` | Plan-only trust-boundary audit for missing validation, injection, XSS, and forged requests across forms, APIs, and webhooks |
 | `plan-llm-cost-guardrails` | Plan-only audit of an LLM app's runaway-cost and quota-abuse exposure |
-| `plan-mobile-readiness` | Plan-only App Store / Google Play submission audit for Capacitor and React Native: manifests, permissions, privacy forms, signing |
+| `plan-mobile-readiness` | Plan-only App Store / Google Play submission audit for Capacitor and React Native: manifests, permissions, privacy, signing |
 | `plan-perf-audit` | Plan-only performance audit across web, mobile, backend, and data; measures first, fixes nothing |
 | `plan-pricing` | Plan-only pricing audit: value metric, tiers, price points, free-tier boundary, annual and enterprise anchors, and a willingness-to-pay… |
 | `plan-privacy-compliance` | Plan-only audit mapping real personal-data flows to the privacy policy, GDPR, Japan APPI, and store labels |
@@ -366,17 +366,18 @@ _Skills marked `/name only` are user-invoked rituals; `reference only` skills ar
 | `plan-test-coverage` | Plan-only, user-story-driven test coverage audit |
 | `plan-uiux-unification` | Plan-only UI/UX and design-system audit that emits a unification burndown; no code until a phase is approved |
 
-### Enhance — improve what already exists (22)
+### Enhance — improve what already exists (23)
 
 | Skill | What it does |
 |:------|:-------------|
 | `enhance-agent-guardrails` | Install guardrails as code so AI sessions cannot reintroduce leaked secrets, injection, or untested code |
 | `enhance-arch-boundaries` | Enforce architecture boundaries in CI with dependency-cruiser or eslint-boundaries: layer direction, feature isolation, forbidden imports |
-| `enhance-capacitor-ui` | Separate desktop and mobile UI in hybrid apps shipped as PWA + iOS + Android (Capacitor, Tauri, Expo Web, Ionic, RN-Web) |
+| `enhance-capacitor-ui` | Separate desktop and mobile UI in hybrid apps shipped as PWA + iOS + Android (Capacitor, Tauri, Expo Web, Ionic) |
 | `enhance-email-deliverability` | Audit and fix email deliverability: SPF, DKIM, DMARC, reputation, bounces and complaints, list hygiene, unsubscribe compliance |
 | `enhance-growth-loops` | Add growth loops to a live product: a "powered by" badge, shareable artifacts, invites and referral credit, each with K-factor events |
 | `enhance-lifecycle-email` | Lifecycle email from product events: activation nudges, trial expiry by activated vs stalled, limit-reached upgrades, win-back, with exits… |
-| `enhance-motion` | Audit an existing app's motion, then apply one coherent, performant, reduced-motion-safe pass |
+| `enhance-mobile-native-feel` | Make an existing Expo/RN or Capacitor app feel native, not web: system tabs and sheets, edge-to-edge, haptics, spring motion, virtualized… |
+| `enhance-motion` | Audit an existing web app's motion, then apply one coherent, reduced-motion-safe pass |
 | `enhance-onboarding` | Activation pass: define the activation event, cut steps to first value, add templates, sample data, a short checklist, and signup →… |
 | `enhance-pwa` | Add or upgrade PWA features: manifest, service worker, offline mode, install prompt, push, background sync |
 | `enhance-readability` | Audit and fix how easily content is understood: line length (CPL), reading level, grouping, deadspace, icons or tables that cut verbosity |
@@ -402,8 +403,8 @@ _Skills marked `/name only` are user-invoked rituals; `reference only` skills ar
 | `design-email` | Design and build transactional and marketing email templates |
 | `design-frontend` | Create a new production-grade UI from scratch, not a polish pass |
 | `design-generative-art` | Create algorithmic visuals with p5.js, Canvas, or SVG using seeded randomness and interactive controls |
-| `design-mobile-first` | Design mobile-first UIs: touch targets, safe areas, gestures, then enhance up |
-| `design-motion` | Build one new animation — micro-interaction, page transition, scroll, or hover — with Framer Motion, CSS, or GSAP |
+| `design-mobile-first` | Design a new touch-first UI: targets, safe areas, gestures, then enhance up |
+| `design-motion` | Build one new animation (micro-interaction, page transition, scroll, hover) with Motion, CSS, or GSAP |
 | `design-prd` | Generate Product Requirements Documents through structured conversation for any project |
 | `design-system` | Build a new design system (tokens, variants, theming) |
 | `design-theme` | Apply one of 11 preset themes (colors, fonts) to slides, docs, or landing pages |
@@ -424,9 +425,9 @@ _Skills marked `/name only` are user-invoked rituals; `reference only` skills ar
 |:------|:-------------|
 | `mobile-capacitor-platform` | Capacitor work beyond UI: plugins, OTA, deep links, push, offline, native CI/CD, store submission, Cordova migration |
 | `mobile-emulator-start` | Boot the Android emulator and Metro (Expo or bare RN) in order: check terminals, kill stale ports, pick an AVD |
-| `mobile-emulator-test` | QA a native Android or Expo dev-client build end to end on the emulator, checking UI, Supabase, and Sentry for each CRUD step |
-| `mobile-rn-performance` | Fix React Native / Expo performance, build, and upgrade issues |
-| `mobile-rn-screen` | Polish an existing React Native screen so it feels native and intentional |
+| `mobile-emulator-test` | QA a native Android or Expo dev-client build end to end on the emulator: UI, Supabase, Sentry per CRUD step |
+| `mobile-rn-performance` | Fix React Native / Expo performance, build, and upgrade issues: jank, slow startup, large bundles, memory leaks, Hermes, FlashList,… |
+| `mobile-rn-screen` | Polish one existing React Native screen so it feels native |
 
 ### Data — charts & pipelines (2)
 
@@ -722,7 +723,7 @@ Full definitions in [shell-aliases/cursor-helpers.sh](shell-aliases/cursor-helpe
 
 ```
 skills/
-├── skills/           # 159 Agent Skills (SKILL.md each)
+├── skills/           # 160 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
 ├── commands/         # 63 slash commands
 ├── agents/           # 6 subagents
@@ -771,7 +772,7 @@ You say the job in chat; a playbook runs. [Agent Skills](https://agentskills.io)
 `npx @kensaurus/skills --all` for skills **and** slash commands. `npx skills add kensaurus/skills` installs skills only. Claude Code as a plugin: `/plugin marketplace add kensaurus/skills`. Restart Cursor after install. Re-check with `npx @kensaurus/skills --verify --all`.
 
 **How many skills?**
-**159** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**171** total). Counts come from the filesystem via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
+**160** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**172** total). Counts come from the filesystem via `npm run check:skills`. See the [family counts table](#skill-families-at-a-glance).
 
 **How do skills trigger?**
 You talk normally. Cursor matches your words to each skill's YAML `description`. To force one: *"use \`audit-security\` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).

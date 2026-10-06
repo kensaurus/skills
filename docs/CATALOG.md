@@ -31,7 +31,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (159)
+## Skills (160)
 
 ### Enhance
 
@@ -74,6 +74,11 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Triggers:** "improved one surface and broke the other", "looks great on web but cramped on mobile", "ad-hoc useIsMobile branches", "Capacitor / Tauri / Expo Web cross-surface issues", "hover-only affordances on touch"
 **What it does:** Cross-surface UIUX separation for hybrid PWA + iOS + Android. Establishes three orthogonal axes — form factor, platform, pointer capability — and a three-layer architecture (context hook, mode tokens, container-query primitives).
 **Related:** `enhance-web-ui`, `enhance-web-ux`, `design-mobile-first`
+
+#### `enhance-mobile-native-feel`
+**Triggers:** "feels like a website", "not native", "HTML-like mobile app", "add haptics", "immersive full screen", "declutter the home screen", "long page on mobile"
+**What it does:** One app-wide pass that makes an existing Expo / React Native or Capacitor app read as native on iOS 26 and Android 16: system tab bar and sheets, edge-to-edge insets, virtualized lists (FlashList v2 / LegendList), one spring vocabulary on the UI thread, haptics by meaning, platform symbols, Dynamic Type, two accent roles. Scores ten native-feel checks before and after; version-gated recipes for Expo SDK 54–58 and Capacitor 8.3+.
+**Related:** `mobile-rn-screen`, `enhance-capacitor-ui`, `design-mobile-first`, `mobile-rn-performance`, `mobile-emulator-test`
 
 #### `enhance-readme`
 **Triggers:** "enhance README", "make README prettier", "add screenshots to README", "add hero image", "make README more fun", "add animated demo to README", "record a tour GIF"

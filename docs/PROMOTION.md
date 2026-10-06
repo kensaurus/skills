@@ -46,7 +46,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **PR copy:**
 ```markdown
-- [kensaurus/skills](https://github.com/kensaurus/skills) — ready-made AI playbooks your editor auto-triggers: 159 agent skills,
+- [kensaurus/skills](https://github.com/kensaurus/skills) — ready-made AI playbooks your editor auto-triggers: 160 agent skills,
   63 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.
   `npx skills add kensaurus/skills`
 ```
@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/skills
 
-**Status:** Pending — `@kensaurus/skills@2.1.1` (Windows installs retry a briefly held file). Previous: `2.1.0` (enhance-ux-laws; Miller/Hick guidance corrected), live on 2026-10-01 as the first release through staged publishing: the workflow stages it, the maintainer approves with 2FA. `2.0.0` was published by the maintainer on 2026-10-01 (first publish of the new name).
+**Status:** Pending — `@kensaurus/skills@2.2.0` (enhance-mobile-native-feel; mobile and UX skills refreshed for iOS 26 / Android 16 / Expo SDK 54–58 / Capacitor 8.3). Previous: `2.1.1` (Windows installs retry a briefly held file), `2.1.0` (enhance-ux-laws; Miller/Hick guidance corrected), live on 2026-10-01 as the first release through staged publishing: the workflow stages it, the maintainer approves with 2FA. `2.0.0` was published by the maintainer on 2026-10-01 (first publish of the new name).
 
 ---
 
@@ -91,7 +91,7 @@ Submit the GitHub repo URL; Cursor reviews manually.
 - https://enterprisedna.co/directories/submit (alternative submission form)
 
 **One-liner description:**
-> 159 Cursor agent skills for React/Next.js/Supabase — installs in one command.
+> 160 Cursor agent skills for React/Next.js/Supabase — installs in one command.
 
 **Status:** Re-checked 2026-09-09. cursorlist.com is a **`.cursorrules` dump**, not a skill-pack catalog. “Submit Rule” goes to a Youform for individual rule files. **Not submitted** — listing a 155-skill pack there would be the wrong category. Do not treat as listed.
 

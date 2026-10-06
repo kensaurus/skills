@@ -1,9 +1,9 @@
 ---
 name: mobile-rn-screen
 description: >
-  Polish an existing React Native screen so it feels native and intentional.
-  Use for "this screen looks off", "feels clunky on iOS", "Android version
-  looks wrong", "jank when scrolling", or "button is unreachable".
+  Polish one existing React Native screen so it feels native. Use for "this
+  screen looks off", "clunky on iOS", "Android looks wrong", "jank when
+  scrolling", or "button is unreachable".
 license: MIT
 paths:
   - "**/ios/**"
@@ -106,6 +106,14 @@ iOS and Android without forking.
 > **Use the local design system.** The repo's token system and component
 > primitives exist for a reason. Extend an existing primitive before
 > inventing a one-off `<View style={{...}}>`.
+
+> **Feedback is native, not web.** Tappables are `Pressable` with a UI-thread
+> spring (Reanimated `withSpring`, scale 0.96–0.98) plus Android ripple; never
+> a bare `TouchableOpacity`. Haptics carry one meaning each (`expo-haptics`:
+> selection for pickers and tabs, impact for snaps, notification for
+> success/error) and never fire on plain taps. A two-field secondary flow is
+> a sheet with snap points, not a new page. When these smells cover the whole
+> app, run `enhance-mobile-native-feel` first and return here per screen.
 
 ---
 
@@ -416,6 +424,8 @@ are often invisible to them.
 | S16 | Left-anchored stacked cards | Screenshot | #4 Consistency | Every card full-width, every label left; no horizontal balance |
 | S17 | Missing Android ripple | Tap Pressable on Android with ripple=null | #1 Visibility | No visual feedback on Android tap |
 | S18 | Double safe-area inset | Check wrapper chain for 2× useSafeAreaInsets | #4 Consistency | Extra gap at top/bottom; ScreenBackButton appears too low |
+| S19 | Web-shaped feedback | Grep `TouchableOpacity`, `Vibration.vibrate`; tap on device | #1 Visibility, #4 | Opacity-only press, no ripple, haptic on every tap or none on confirm |
+| S20 | JS-drawn tab bar on iOS 26 | `position: 'absolute'` bar in a layout file | #4 Consistency | Bar ignores Liquid Glass, does not minimize on scroll, dates the app |
 
 ---
 
@@ -474,3 +484,4 @@ Concrete RN cues that the primitive is broken:
 ## Further reading
 
 - [Step 7 — Enhancement Plan and more](references/details.md)
+- `enhance-mobile-native-feel` — app-wide chrome, IA, lists, motion, haptics before per-screen polish

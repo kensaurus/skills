@@ -390,6 +390,8 @@ Strict Mode.
 - **R3F mobile performance (2026)** — Draco + LOD + `OffscreenCanvas`/Web Worker + instancing for stable 60 FPS. <https://www.krapton.com/blog/boosting-react-three-fiber-mobile-performance-in-2026-a-deep-dive-d6105c>
 - **Optimizing 3D website performance** — device-tier detection, IntersectionObserver pause, static fallback for no-WebGL. <https://svilenkovic.com/3d/how-to-optimize-3d-website>
 
+- **`references/css-canvas-effects.md`** — CSS, SVG and Canvas 2D effect patterns to use when Three.js / R3F is overkill.
+
 > Adapted and generalized from the `web3d-integration-patterns` meta-skill in
 > [freshtechbro/claudedesignskills](https://github.com/freshtechbro/claudedesignskills)
 > (and its `threejs-webgl` / `gsap-scrolltrigger` / `react-three-fiber` /

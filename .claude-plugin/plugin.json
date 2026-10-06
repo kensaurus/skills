@@ -1,8 +1,8 @@
 {
   "name": "kenji",
   "displayName": "kenji skills",
-  "description": "You say the job; the playbook runs. 159 agent skills, 63 slash commands, 6 subagents, and MCP templates for Claude Code, Cursor, Codex CLI, and Gemini CLI. Tuned for React / Next.js / Supabase; works on most stacks. Effort-routed for Claude Opus 5.5.",
-  "version": "2.1.1",
+  "description": "You say the job; the playbook runs. 160 agent skills, 63 slash commands, 6 subagents, and MCP templates for Claude Code, Cursor, Codex CLI, and Gemini CLI. Tuned for React / Next.js / Supabase; works on most stacks. Effort-routed for Claude Opus 5.5.",
+  "version": "2.2.0",
   "author": {
     "name": "kensaurus",
     "email": "kensaurus@gmail.com"

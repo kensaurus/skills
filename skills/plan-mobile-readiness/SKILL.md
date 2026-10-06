@@ -2,8 +2,8 @@
 name: plan-mobile-readiness
 description: >
   Plan-only App Store / Google Play submission audit for Capacitor and React
-  Native: manifests, permissions, privacy forms, signing. Use when "ready for
-  App Store?", "will Google Play reject this?", or "pre-submission check".
+  Native: manifests, permissions, privacy, signing. Use when "ready for App
+  Store?" or "will Google Play reject this?".
 license: MIT
 effort: high
 ---
@@ -94,6 +94,15 @@ compliance and rejection-risk*.
 ### E · Listing & metadata
 - **Screenshots/icon match build**; metadata limits; content rating/CSAE.
 
+### F · Native feel (2.5.2 "web-view-only" evidence)
+- **System chrome** — platform tab bar / stack headers, not a JS or HTML bar; 3–5 destinations.
+- **Edge-to-edge** — correct insets on Android 16 and iOS 26; no opaque status-bar hack.
+- **Lists virtualize** — no blank cells on fling; pull-to-refresh present.
+- **Feedback** — press response on every tappable; haptics on confirm with a settings switch.
+- **Type** — body ≥ 16sp, honors Dynamic Type / `fontScale`.
+A fail here is a rejection risk on its own and the strongest signal for a
+2.5.2 "thin app" verdict. Remediation is one pass of `enhance-mobile-native-feel`.
+
 ---
 
 ## Procedure  [HIGH freedom — plan only]
@@ -165,7 +174,7 @@ Real older devices + IAP dry-run before submit.
 - **`audit-monetization-iap`** — receipt validation / restore (not just "uses official billing").
 - **`plan-stub-checker`** — placeholders are rejections on mobile.
 - **Execution:** `mobile-capacitor-platform`, `enhance-capacitor-ui`,
-  `mobile-emulator-test` (then real device).
+  `enhance-mobile-native-feel` (pillar F), `mobile-emulator-test` (then real device).
 - **Verify:** real-device crash test + IAP dry-run; Android closed-test gate satisfied.
 
 > Planned at high effort; executed at the default effort under the approved-plan execution rule (`approved-plan-execution.mdc`), which forbids reward hacking and feature deletion on any model.

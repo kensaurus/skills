@@ -1,9 +1,9 @@
 ---
 name: enhance-motion
 description: >
-  Audit an existing app's motion, then apply one coherent, performant,
+  Audit an existing web app's motion, then apply one coherent,
   reduced-motion-safe pass. Use when "motion pass", "animate the app", or "add
-  micro-interactions across the app". One new animation → design-motion.
+  micro-interactions". One new animation → design-motion.
 license: MIT
 ---
 
@@ -54,7 +54,9 @@ existing system to respect), use `design-motion`. For pure animation-perf triage
 ### 0a. Applicability gate
 
 This skill targets **web / React (or Vue/Svelte) UI**. If the repo is a CLI, library,
-backend, or non-visual target, **bow out** and say so.
+backend, or non-visual target, **bow out** and say so. If it is an Expo / React Native
+or Capacitor app, hand off to `enhance-mobile-native-feel`: spring motion on the UI
+thread, haptics, and native chrome live there, and the web tiers below do not apply.
 
 ### 0b. Inventory the design system + motion state
 
@@ -186,6 +188,7 @@ rg -n "prefers-reduced-motion|useReducedMotion|motion-reduce" -g "*.{tsx,css}"  
 ## Related
 
 - `design-motion` — from-scratch motion cookbook (Framer/Motion/GSAP/CSS patterns)
+- `enhance-mobile-native-feel` — the mobile-app counterpart (Reanimated springs, haptics, native chrome)
 - `audit-uiux-design-system` — the broader visual coherency audit this builds on
 - `audit-performance` — animation performance / Core Web Vitals triage
 - `audit-accessibility` — reduced-motion and focus-order verification
