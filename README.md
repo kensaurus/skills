@@ -374,7 +374,7 @@ _Skills marked `/name only` are user-invoked rituals; `reference only` skills ar
 | `enhance-growth-loops` | Add growth loops to a live product: a "powered by" badge, shareable artifacts, invites and referral credit, each with K-factor events |
 | `enhance-lifecycle-email` | Lifecycle email from product events: activation nudges, trial expiry by activated vs stalled, limit-reached upgrades, win-back, with exits… |
 | `enhance-mobile-native-feel` | Make an existing Expo/RN or Capacitor app feel native, not web: system tabs and sheets, edge-to-edge, haptics, spring motion, virtualized… |
-| `enhance-motion` | Audit an existing web app's motion, then apply one coherent, reduced-motion- safe pass |
+| `enhance-motion` | Audit an existing web app's motion, then apply one coherent, reduced-motion-safe pass |
 | `enhance-onboarding` | Activation pass: define the activation event, cut steps to first value, add templates, sample data, a short checklist, and signup →… |
 | `enhance-pwa` | Add or upgrade PWA features: manifest, service worker, offline mode, install prompt, push, background sync |
 | `enhance-readability` | Audit and fix how easily content is understood: line length (CPL), reading level, grouping, deadspace, icons or tables that cut verbosity |
