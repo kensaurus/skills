@@ -297,6 +297,28 @@ WebSearch(search_term: "[tech] [topic] github example implementation")
 
 ---
 
+## Step 5b: Grounding contract  [LOW freedom — run exactly]
+
+Every fact that reaches the plan carries its source. This is what keeps the
+plan from drifting into confident filler.
+
+- **Cite or abstain.** A claim gets a URL (or a repo `file:line`) and the date you
+  read it. A claim with no source is written as `[unverified]` or dropped.
+- **Date the query.** Search with the current year in the query and prefer pages
+  dated this year or last. Record the publication date next to the source.
+- **Pin the version.** Library facts name the version they apply to (`FlashList v2`,
+  `Capacitor 8.3.2+`), never "the latest".
+- **Quote the primary source once.** Vendor docs, changelogs, RFCs, and standards
+  bodies outrank blog posts. When only a blog says it, say so.
+- **Separate observation from inference.** "The docs say X" and "so the repo
+  should do Y" are two sentences.
+- **Numbers are measured, not remembered.** Any figure (chars, ms, %) comes from a
+  command you ran or a page you read, and the plan names which.
+
+The same contract applies to prose you ship: `docs-writer`'s
+`references/plain-language-ste.md` has the writing side (plain language, no AI
+tells) and a prose-lint recipe.
+
 ## Step 6: Synthesize and Decide
 
 ### Trust Hierarchy (when sources conflict)

@@ -18,6 +18,8 @@ Create clear, useful documentation for developers.
 
 ## Core principle — write for the reader's mental model first
 
+Write in plain language. Follow [references/plain-language-ste.md](references/plain-language-ste.md): short active sentences, one instruction per sentence, one meaning per word, and no AI tells. It also has a Vale prose-lint recipe to keep the docs that way.
+
 Documentation rarely fails because it's *incomplete*. It fails because the reader can't build a mental model fast enough to care. So before any reference detail, answer the questions the reader is silently asking — in their words, in this order:
 
 | The reader is silently asking… | Answer it with… |

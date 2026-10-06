@@ -5,8 +5,8 @@
     "email": "kensaurus@gmail.com"
   },
   "metadata": {
-    "description": "Playbooks your coding agent runs from a plain-English request.",
-    "version": "2.2.0"
+    "description": "Playbooks your coding agent runs from a plain request. They ask first, test first, and prove the result.",
+    "version": "2.3.0"
   },
   "plugins": [
     {
@@ -46,7 +46,7 @@
       ]
     }
   ],
-  "description": "kenji: playbooks your coding agent runs from a plain-English request.",
+  "description": "kenji: playbooks your coding agent runs from a plain request. They ask first, test first, and prove the result.",
   "renames": {
     "cursor-kenji": "kenji"
   }
