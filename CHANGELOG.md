@@ -6,6 +6,45 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ## [Unreleased]
 
+## [2.5.0] — 2026-10-06
+
+A lighter package and a README that shows more than it tells.
+
+### Fixed
+
+- **The npm tarball was 9.8 MB (12.2 MB unpacked, 484 files).** Ten fal.ai
+  logo experiments under `assets/candidates/` were tracked and shipped, along
+  with every README screenshot. npm's package page loads README images from
+  GitHub, not from the tarball, so none of it was needed. `files` now ships the
+  pack, `assets/logo.png` and `assets/logo.svg` only: 1.2 MB packed, 3.4 MB
+  unpacked, 459 files. Supply-chain scanners score what ships; this is the part
+  of the Socket.dev score that was ours to fix. The rest of that score is
+  download count and "recently published", which only time changes.
+
+### Added
+
+- **Architecture diagram** under the install command: what gets installed
+  (skills, commands, subagents, rules, MCP templates), through
+  `npx @kensaurus/skills --all`, into `~/.cursor`, `~/.claude`, `~/.codex`,
+  and `~/.gemini`. States the installer's footprint: no install scripts, no
+  network, no shell.
+- **Pieces strip** replacing the what's-inside table: seven tiles with pixel
+  glyphs and counts.
+- **Section icons**: twelve 8×8 pixel glyphs rendered from `showcase.html`
+  (`?view=icon&name=…`) and placed in the README headings.
+- **More from KENSAURUS** rebuilt as cards with the real store listing names
+  and links: glot.it (App Store: glot.it; Google Play: glot.it – Learn Thai),
+  yen-yen – Expense Tracker, the wanting mind – Living Book, Help Her Take
+  Photo (Google Play: help her take photo – Pose Cam), lets-talk – Conversation
+  Coach, Solo Boss, Tsumagoi, Mushi Mushi, plus the Google Play developer page.
+  Names and links come from the store listings and the portfolio data file,
+  not from memory.
+
+### Changed
+
+- `npm run brand:render` covers the new views; `docs/screenshots/README.md`
+  lists them.
+
 ## [2.4.0] — 2026-10-06
 
 The README reads as a page again, and the biggest skills load in a fraction of

@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/skills
 
-**Status:** Pending — `@kensaurus/skills@2.4.0` (README rebuilt around the hero and the ladder diagram; skill index moved to docs/SKILLS.md; 22 skills slimmed into references). Previous: `2.3.0` and `2.2.0`, approved 2026-10-06 (brand, plain-language copy, enhance-mobile-native-feel).
+**Status:** Pending — `@kensaurus/skills@2.5.0` (tarball 9.8 MB → 1.2 MB; README with architecture and pieces diagrams, section icons, real store listings). Previous: `2.4.0`, `2.3.0`, `2.2.0`, all approved 2026-10-06.
 
 ---
 
