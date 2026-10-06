@@ -160,7 +160,9 @@ where convention exists.
 > Time to make a decision = log₂(N+1) of options.
 
 **Implication:** group related actions; collapse rarely-used options under "More"; never
-show all 12 filters at once if 3 cover 90% of use.
+show all 12 filters at once if 3 cover 90% of use. Applies only when options must be
+weighed; looking up a known item in an ordered list (a country, a prefecture) is search,
+so give it typeahead instead of trimming it.
 
 ### Fitts's Law
 
@@ -172,10 +174,14 @@ NOT immediately adjacent to common ones.
 
 ### Miller's Law
 
-> The average person can hold ~7 ± 2 items in working memory.
+> The average person can hold ~7 ± 2 items in working memory; later work puts it nearer 4
+> (Cowan, 2001).
 
-**Implication:** chunk long lists; group nav into 5-7 sections, not 20 items; break long
-forms into ≤7 steps; show running totals so users don't have to keep them in their head.
+**Implication:** it is about what the user must *hold in mind*, not how many items a screen
+shows. A visible menu is read, not memorised, so this law sets no cap on menu length. Do:
+keep labels visible while fields are filled, show earlier choices instead of making users
+remember them, group long codes in 3–4s with Copy, split long forms into labelled groups of
+3–5 fields, show running totals. For a measured pass on one flow, use `enhance-ux-laws`.
 
 ### Tesler's Law (Law of Conservation of Complexity)
 

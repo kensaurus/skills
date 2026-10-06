@@ -1,10 +1,10 @@
 # Security
 
-How to handle secrets when using cursor-kenji skills, MCP templates, and the npm installer.
+How to handle secrets when using kenji skills, MCP templates, and the npm installer.
 
 ## Reporting vulnerabilities
 
-Email or open a **private** [GitHub Security Advisory](https://github.com/kensaurus/cursor-kenji/security/advisories/new) for credential leaks, malicious skill content, or installer issues. Do not post live tokens in public issues.
+Email or open a **private** [GitHub Security Advisory](https://github.com/kensaurus/skills/security/advisories/new) for credential leaks, malicious skill content, or installer issues. Do not post live tokens in public issues.
 
 ## Where secrets belong
 
@@ -40,7 +40,7 @@ This is clone-only. There is no `prepare` script — consumer `npm install` must
 
 ## npm publish (maintainers)
 
-**Primary:** npm Trusted Publishing (OIDC) — configured for `kensaurus/cursor-kenji` + workflow [`npm-publish.yml`](.github/workflows/npm-publish.yml). Releases publish with `--provenance` via GitHub Actions; no long-lived token required.
+**Primary:** npm Trusted Publishing (OIDC) — configured for `kensaurus/skills` + workflow [`npm-publish.yml`](.github/workflows/npm-publish.yml). Releases publish with `--provenance` via GitHub Actions; no long-lived token required.
 
 **Fallback:** `NPM_TOKEN` in GitHub Actions secrets (optional). The workflow only sets `NODE_AUTH_TOKEN` when the secret is non-empty so OIDC is not blocked.
 

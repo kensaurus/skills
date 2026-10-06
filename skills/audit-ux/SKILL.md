@@ -302,8 +302,10 @@ Search `*.tsx` for in-app help: `Tooltip|tooltip|HelpCircle|InfoIcon|help.*text|
 |-----|-----------|---------------|----------------------|
 | **Jakob's Law** | Users expect your site to work like other sites | Navigation, form patterns, checkout flows follow platform conventions | Research 3 competitors via Firecrawl, adopt their common patterns |
 | **Fitts's Law** | Larger, closer targets are faster to click | Primary CTAs large enough, not in corners. Touch targets ≥44px | Increase CTA size, move primary actions to natural thumb zones on mobile |
-| **Hick's Law** | More choices = longer decisions | Menus ≤7 items, option lists not overwhelming, progressive disclosure | Group options, add search/filter, hide advanced options behind "More" |
-| **Miller's Law** | Working memory holds ~7 items | Groups of >7 chunked. Nav items ≤7 per level | Chunk long lists, add category headers, paginate |
+| **Hick's Law** | More options to *weigh* = longer decisions | Choice sets the user must evaluate (plans, actions, filters) are grouped, staged, or have a default. Not known-item lookups (countries, prefectures): that is search | Group options, preselect one with a true reason, hide the long tail behind "More", typeahead for lookups |
+| **Miller's Law** | Working memory holds ~4–7 chunks | Nothing must be carried in memory between screens; codes shown grouped with Copy; fields keep visible labels. Not a cap on visible menu items: a visible menu is read, not memorised | Persistent labels, summaries of earlier choices, chunked codes, labelled field groups |
+| **Von Restorff** | The item that differs is noticed | One filled accent action per view | Demote competing CTAs to outline/ghost variants |
+| **Goal-Gradient / Zeigarnik** | Visible progress and unfinished work pull users to finish | Multi-step flows show honest position and total; input survives reload and Back | "Step 2 of 3" from real state, autosave drafts (never card numbers or codes) |
 | **Cognitive Load** | Minimize mental effort | No unnecessary fields, no memory burden between steps | Remove optional fields from default view, show only what's needed now |
 | **Aesthetic-Usability** | Beautiful = perceived as easier | First impression inspires confidence | Visual polish on landing + key flows. Personality, not just correctness |
 | **Tesler's Law** | Complexity can't be eliminated, only moved | Complex tasks simplified for the user, not pushed to them | Smart defaults, auto-detection, progressive disclosure of complexity |

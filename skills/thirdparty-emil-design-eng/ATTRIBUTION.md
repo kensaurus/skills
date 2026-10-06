@@ -7,7 +7,7 @@
 | **Author** | Emil Kowalski |
 | **License** | [MIT](https://github.com/emilkowalski/skills/blob/main/LICENSE) — Copyright (c) 2026 Emil Kowalski |
 | **Local name** | `thirdparty-emil-design-eng` |
-| **Curated in** | [cursor-kenji](https://github.com/kensaurus/cursor-kenji) |
+| **Curated in** | [kenji](https://github.com/kensaurus/skills) |
 
 ## Update policy
 

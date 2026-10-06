@@ -26,8 +26,10 @@ workflow skill, not a chain of single-phase skills. Where a name misleads:
   onboarding → `enhance-onboarding`).
 - Is a lint or ratchet rule right → `audit-doctrine`; is it enforced →
   `audit-gate-logic`.
+- The agent or the machine is slow (hooks, status line, CPU) →
+  `audit-agent-speed`; the product is slow → `audit-performance`.
 - These `audit-*` skills fix after reporting, not present-then-stop:
   `audit-responsive`, `audit-code-quality`, `audit-performance`,
-  `audit-security`, `audit-i18n`, `audit-bundle-size`.
+  `audit-security`, `audit-i18n`, `audit-bundle-size`, `audit-agent-speed`.
 
 Rules hold always-on policy and routing; procedures stay in skills.

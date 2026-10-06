@@ -61,7 +61,7 @@ if (publishing.includes("v1.4.2")) {
   errors.push("docs/PUBLISHING.md: must not use hardcoded v1.4.2 as the release example");
 }
 
-const promoPinned = promotion.match(/@kensaurus\/cursor-kenji@(\d+\.\d+\.\d+)/);
+const promoPinned = promotion.match(/@kensaurus\/skills@(\d+\.\d+\.\d+)/);
 if (promoPinned && promoPinned[1] !== version) {
   errors.push(
     `docs/PROMOTION.md: published version @${promoPinned[1]} does not match package.json ${version}`,

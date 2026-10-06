@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.skills.sh/kensaurus/cursor-kenji</loc>
+    <loc>https://www.skills.sh/kensaurus/skills</loc>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://github.com/kensaurus/cursor-kenji</loc>
+    <loc>https://github.com/kensaurus/skills</loc>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.npmjs.com/package/@kensaurus/cursor-kenji</loc>
+    <loc>https://www.npmjs.com/package/@kensaurus/skills</loc>
     <changefreq>monthly</changefreq>
   </url>
 </urlset>

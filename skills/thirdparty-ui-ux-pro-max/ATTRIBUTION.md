@@ -6,7 +6,7 @@
 | **Install tool** | [uipro-cli](https://www.npmjs.com/package/uipro-cli) (`npx uipro-cli init --ai cursor`) |
 | **License** | MIT |
 | **Local name** | `thirdparty-ui-ux-pro-max` |
-| **Curated in** | [cursor_kenji](https://github.com/kenji/cursor_kenji) |
+| **Curated in** | [kensaurus/skills](https://github.com/kensaurus/skills) |
 
 ## Bundled assets
 

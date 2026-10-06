@@ -3,8 +3,8 @@ name: research
 description: >
   Research current practice with Context7, Firecrawl, and official docs before
   a non-trivial change: gap analysis and a file-mapped plan, no
-  implementation. Use when "look up current docs", "what does the industry
-  recommend", or before anything unfamiliar.
+  implementation. Use when "look up current docs" or before anything
+  unfamiliar.
 license: MIT
 effort: high
 ---

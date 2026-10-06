@@ -270,8 +270,8 @@ const promotionResult = applyFileRules(promotionPath, "docs/PROMOTION.md", [
   },
   {
     name: "promotion inventory",
-    re: /cursor-kenji \(\d+ skills, \d+ commands, \d+ subagents\)/g,
-    to: `cursor-kenji (${count} skills, ${commandCount} commands, ${agentCount} subagents)`,
+    re: /kenji \(\d+ skills, \d+ commands, \d+ subagents\)/g,
+    to: `kenji (${count} skills, ${commandCount} commands, ${agentCount} subagents)`,
   },
   {
     name: "promotion auto-activate",
@@ -303,7 +303,7 @@ const promotionResult = applyFileRules(promotionPath, "docs/PROMOTION.md", [
 let packageResult = { src: "", mismatches: [] };
 if (existsSync(packagePath)) {
   const pkg = JSON.parse(readFileSync(packagePath, "utf8"));
-  const nextDesc = `${count} Cursor AI agent skills, ${commandCount} slash commands, ${agentCount} subagents, and MCP configs for React/Next.js/Supabase development.`;
+  const nextDesc = `You say the job; the playbook runs. ${count} agent skills, ${commandCount} slash commands, ${agentCount} subagents, and MCP templates for Claude Code, Cursor, Codex CLI, and Gemini CLI. Tuned for React / Next.js / Supabase; works on most stacks.`;
   if (pkg.description !== nextDesc) {
     packageResult.mismatches.push({
       file: "package.json",
@@ -319,8 +319,8 @@ if (existsSync(packagePath)) {
 const pluginResult = applyFileRules(pluginPath, ".cursor-plugin/plugin.json", [
   {
     name: "plugin description",
-    re: /\d+ Cursor agent skills, \d+ slash commands, \d+ subagents/g,
-    to: `${count} Cursor agent skills, ${commandCount} slash commands, ${agentCount} subagents`,
+    re: /\d+ agent skills, \d+ slash commands, \d+ subagents/g,
+    to: `${count} agent skills, ${commandCount} slash commands, ${agentCount} subagents`,
     required: true,
   },
 ]);

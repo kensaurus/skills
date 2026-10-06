@@ -2,7 +2,7 @@
 # ============================================================
 # Cursor Helper Aliases & Functions
 # Add to ~/.bashrc or ~/.zshrc:
-#   source ~/cursor-kenji/shell-aliases/cursor-helpers.sh
+#   source ~/skills/shell-aliases/cursor-helpers.sh
 # ============================================================
 
 # --- Skill Management ---
@@ -77,11 +77,13 @@ lsskills() {
 
 # --- Sync ---
 
-# Sync skills from cursor-kenji repo
+# Sync skills from the kensaurus/skills repo (cursor-kenji before 2.0.0)
 cursor-sync() {
-  local repo_dir="${CURSOR_KENJI_DIR:-}"
+  local repo_dir="${KENJI_SKILLS_DIR:-${CURSOR_KENJI_DIR:-}}"
   if [ -z "$repo_dir" ]; then
     for candidate in \
+      "$HOME/Documents/GitHub/skills" \
+      "$HOME/skills" \
       "$HOME/Documents/GitHub/cursor-kenji" \
       "$HOME/cursor-kenji" \
       "$HOME/cursor_kenji"; do
@@ -92,7 +94,7 @@ cursor-sync() {
     done
   fi
   if [ -z "$repo_dir" ] || [ ! -d "$repo_dir" ]; then
-    echo "cursor-kenji repo not found. Set CURSOR_KENJI_DIR or clone to ~/Documents/GitHub/cursor-kenji"
+    echo "kensaurus/skills repo not found. Set KENJI_SKILLS_DIR or clone to ~/Documents/GitHub/skills"
     return 1
   fi
   cd "$repo_dir" && git pull origin main && node ./bin/install.mjs --cursor --claude --quiet

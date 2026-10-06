@@ -1,4 +1,4 @@
-# Getting Started with cursor-kenji
+# Getting Started with kenji
 
 A short guide for first-time Cursor users.
 
@@ -6,7 +6,7 @@ A short guide for first-time Cursor users.
 
 ## What is this?
 
-**cursor-kenji** is not a prompt library. It is a set of installed playbooks for [Cursor](https://cursor.com), Claude Code, Codex CLI, and Gemini CLI. You describe the job in chat — "audit my security", "grill me before I build", "fix this and ship it" — and a named workflow runs: look first, change, prove it, then go live.
+**kenji** is not a prompt library. It is a set of installed playbooks for [Cursor](https://cursor.com), Claude Code, Codex CLI, and Gemini CLI. You describe the job in chat — "audit my security", "grill me before I build", "fix this and ship it" — and a named workflow runs: look first, change, prove it, then go live.
 
 ---
 
@@ -16,10 +16,10 @@ If you don't have Cursor yet: [download it at cursor.com](https://cursor.com).
 
 ---
 
-## Step 2: Install cursor-kenji
+## Step 2: Install kenji
 
 ```bash
-npx @kensaurus/cursor-kenji --all
+npx @kensaurus/skills --all
 ```
 
 That installs skills **and** slash commands (and agents/rules) for every tool the installer supports, then hash-checks the copies. Windows works too, including from a clone of this repo.
@@ -27,7 +27,7 @@ That installs skills **and** slash commands (and agents/rules) for every tool th
 **Skills only** (no `/commands` — Vercel skills CLI, current project by default):
 
 ```bash
-npx skills add kensaurus/cursor-kenji
+npx skills add kensaurus/skills
 ```
 
 Add `-g` to put skills in `~/.cursor/skills`. That CLI's `--all` means “all skills to all agents”, not the same as kenji `--all`.
@@ -35,18 +35,18 @@ Add `-g` to put skills in `~/.cursor/skills`. That CLI's `--all` means “all sk
 **Alternative — clone:**
 
 ```bash
-git clone https://github.com/kensaurus/cursor-kenji.git
-cd cursor-kenji
+git clone https://github.com/kensaurus/skills.git
+cd skills
 ./install.sh
 ```
 
-From a clone you can also run `node bin/install.mjs --all`. Re-check anytime with `npx @kensaurus/cursor-kenji --verify --all`.
+From a clone you can also run `node bin/install.mjs --all`. Re-check anytime with `npx @kensaurus/skills --verify --all`.
 
 **Claude Code as a plugin** (this repo as a marketplace — not the Anthropic community catalog until they list it):
 
 ```
-/plugin marketplace add kensaurus/cursor-kenji
-/plugin install cursor-kenji@cursor-kenji
+/plugin marketplace add kensaurus/skills
+/plugin install kenji@kenji
 ```
 
 ---
@@ -122,13 +122,13 @@ Full phrase list → [TRIGGER-CHEATSHEET.md](TRIGGER-CHEATSHEET.md). Plan loops 
 ## Updating
 
 ```bash
-npx @kensaurus/cursor-kenji --all
-npx @kensaurus/cursor-kenji --verify --all
+npx @kensaurus/skills --all
+npx @kensaurus/skills --verify --all
 ```
 
 The installer merge-overwrites same-name files and hash-checks them. Extra personal skills are left alone.
 
-Skills-only refresh: `npx skills add kensaurus/cursor-kenji` (does not update slash commands).
+Skills-only refresh: `npx skills add kensaurus/skills` (does not update slash commands).
 
 ---
 
@@ -147,7 +147,7 @@ Yes — delete the folder from `~/.cursor/skills/`.
 Yes. See [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 **Does this work with Claude, Codex, or Gemini?**
-Yes. `npx @kensaurus/cursor-kenji --all` installs the full pack for Cursor and Claude Code, and ports rules plus a few commands to Codex CLI and Gemini CLI. Skills-only: `npx skills add kensaurus/cursor-kenji`. Claude Code plugin: `/plugin marketplace add kensaurus/cursor-kenji`. Both hosts read the same skill text. On Claude Code the default model is Claude Opus 5.5 and each skill's `effort:` key sets how hard it thinks (audits and plans high, implementation medium); Cursor ignores that key and runs at the model you pick. See [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md).
+Yes. `npx @kensaurus/skills --all` installs the full pack for Cursor and Claude Code, and ports rules plus a few commands to Codex CLI and Gemini CLI. Skills-only: `npx skills add kensaurus/skills`. Claude Code plugin: `/plugin marketplace add kensaurus/skills`. Both hosts read the same skill text. On Claude Code the default model is Claude Opus 5.5 and each skill's `effort:` key sets how hard it thinks (audits and plans high, implementation medium); Cursor ignores that key and runs at the model you pick. See [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md).
 
 **Is it free?**
 Yes, MIT licensed.
@@ -158,8 +158,8 @@ Yes, MIT licensed.
 
 - [PLAN-LOOPS.md](PLAN-LOOPS.md) — how to chain the 23 planning skills
 - [AGENTS.template.md](AGENTS.template.md) — project constitution for your app repo
-- [GitHub Issues](https://github.com/kensaurus/cursor-kenji/issues)
-- [GitHub Discussions](https://github.com/kensaurus/cursor-kenji/discussions)
+- [GitHub Issues](https://github.com/kensaurus/skills/issues)
+- [GitHub Discussions](https://github.com/kensaurus/skills/discussions)
 - [CATALOG.md](CATALOG.md) — full list of skills and trigger phrases
 
 ---

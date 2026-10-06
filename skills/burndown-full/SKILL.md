@@ -160,7 +160,7 @@ Produce a concise final report:
 - **Intentional exceptions:** each file left unchanged, with reason.
 - **Genuine ambiguities for a human:** anything you could not resolve mechanically. Surface these explicitly — never silently skip an occurrence to reach a clean number.
 
-Leave `.cursor/burndown-state.md` in place (fully ticked) as an audit trail unless the user asks to delete it; leave the Claude Code Stop hook's `.cursor/completion-gate.count.json` in place too, and keep both out of the commit. Suggest committing the change as one reviewable unit, or splitting mechanical vs. judgment edits into separate commits if that aids review.
+Leave `.cursor/burndown-state.md` in place (fully ticked) as an audit trail unless the user asks to delete it, and keep it out of the commit. Suggest committing the change as one reviewable unit, or splitting mechanical vs. judgment edits into separate commits if that aids review.
 
 ---
 

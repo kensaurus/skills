@@ -261,7 +261,7 @@ Match specificity to the task's fragility:
 1. **Discovery** — purpose, location, triggers, constraints
 2. **Design** — name, description, sections, supporting files
 3. **Implement** — `SKILL.md` + `references/` + `scripts/` as needed
-4. **Verify** — in cursor-kenji run `npm run validate:skills`; description ≤320 chars, body <500 lines
+4. **Verify** — in kenji run `npm run validate:skills`; description ≤320 chars, body <500 lines
 
 ## Additional resources
 

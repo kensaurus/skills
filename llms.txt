@@ -1,40 +1,40 @@
-# cursor-kenji
+# kenji
 
-> You say the job; the playbook runs. Installable workflows for Cursor, Claude Code, Codex CLI, and Gemini CLI: 158 agent skills, 63 slash commands, 6 subagents, and MCP templates for React / Next.js / Supabase.
+> You say the job; the playbook runs. Installable workflows for Cursor, Claude Code, Codex CLI, and Gemini CLI: 160 agent skills, 63 slash commands, 6 subagents, and MCP templates for React / Next.js / Supabase.
 >
-> Full pack: `npx @kensaurus/cursor-kenji --all` (skills + commands; kenji `--all` = four tools). Skills only: `npx skills add kensaurus/cursor-kenji` (that CLI's `--all` means every skill to every agent). Claude Code plugin: `/plugin marketplace add kensaurus/cursor-kenji`. Re-check: `npx @kensaurus/cursor-kenji --verify --all`.
+> Full pack: `npx @kensaurus/skills --all` (skills + commands; kenji `--all` = four tools). Skills only: `npx skills add kensaurus/skills` (that CLI's `--all` means every skill to every agent). Claude Code plugin: `/plugin marketplace add kensaurus/skills`. Re-check: `npx @kensaurus/skills --verify --all`.
 
-Validated against the [Agent Skills specification](https://agentskills.io/specification) on every commit. npm package: `@kensaurus/cursor-kenji`.
+Validated against the [Agent Skills specification](https://agentskills.io/specification) on every commit. npm package: `@kensaurus/skills`.
 
 Runs on Claude Opus 5.5 — the Claude Code default since 2.1.280 and a Cursor agent model — with effort routing declared per skill: audit / plan / judge at high, implementation at the medium default, inventory / handoff at low. Prompts do not steer thinking on Opus 5.5; effort does.
 
 ## Install
 
-- [README.md](https://github.com/kensaurus/cursor-kenji/blob/main/README.md): Quick start, install modes, FAQ, skill taxonomy
-- [docs/GETTING-STARTED.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/GETTING-STARTED.md): First-time install, first phrases, typical session
+- [README.md](https://github.com/kensaurus/skills/blob/main/README.md): Quick start, install modes, FAQ, skill taxonomy
+- [docs/GETTING-STARTED.md](https://github.com/kensaurus/skills/blob/main/docs/GETTING-STARTED.md): First-time install, first phrases, typical session
 
 ## Reference
 
-- [docs/CATALOG.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/CATALOG.md): Full skill list with trigger phrases and composition patterns
-- [docs/THIRD-PARTY-SKILLS.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/THIRD-PARTY-SKILLS.md): Vendored upstream skills (`thirdparty-*`), attribution, update policy
-- [docs/TRIGGER-CHEATSHEET.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/TRIGGER-CHEATSHEET.md): Plain lookup table for skill triggers
-- [docs/PLAN-LOOPS.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/PLAN-LOOPS.md): 23 `plan-*` audit skills in grouped loops (approve before execution)
-- [docs/AGENTS.template.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/AGENTS.template.md): Project constitution template for consumer repos
-- [docs/MODEL-AND-EFFORT.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/MODEL-AND-EFFORT.md): Default model per host, how to set effort (`/effort`, `modelSettings`, frontmatter `effort:`), the pack's routing table, what changed for Opus 5.5
+- [docs/CATALOG.md](https://github.com/kensaurus/skills/blob/main/docs/CATALOG.md): Full skill list with trigger phrases and composition patterns
+- [docs/THIRD-PARTY-SKILLS.md](https://github.com/kensaurus/skills/blob/main/docs/THIRD-PARTY-SKILLS.md): Vendored upstream skills (`thirdparty-*`), attribution, update policy
+- [docs/TRIGGER-CHEATSHEET.md](https://github.com/kensaurus/skills/blob/main/docs/TRIGGER-CHEATSHEET.md): Plain lookup table for skill triggers
+- [docs/PLAN-LOOPS.md](https://github.com/kensaurus/skills/blob/main/docs/PLAN-LOOPS.md): 23 `plan-*` audit skills in grouped loops (approve before execution)
+- [docs/AGENTS.template.md](https://github.com/kensaurus/skills/blob/main/docs/AGENTS.template.md): Project constitution template for consumer repos
+- [docs/MODEL-AND-EFFORT.md](https://github.com/kensaurus/skills/blob/main/docs/MODEL-AND-EFFORT.md): Default model per host, how to set effort (`/effort`, `modelSettings`, frontmatter `effort:`), the pack's routing table, what changed for Opus 5.5
 
 ## MCP & security
 
-- [mcp/README.md](https://github.com/kensaurus/cursor-kenji/blob/main/mcp/README.md): MCP server setup, pinned package versions
-- [SECURITY.md](https://github.com/kensaurus/cursor-kenji/blob/main/SECURITY.md): Secrets hygiene, `.mcp.json` guidance, reporting vulnerabilities
+- [mcp/README.md](https://github.com/kensaurus/skills/blob/main/mcp/README.md): MCP server setup, pinned package versions
+- [SECURITY.md](https://github.com/kensaurus/skills/blob/main/SECURITY.md): Secrets hygiene, `.mcp.json` guidance, reporting vulnerabilities
 
 ## Distribution & publishing
 
-- [docs/DISTRIBUTION.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/DISTRIBUTION.md): Install channels, directory listings, discovery status
-- [skills.sh listing](https://www.skills.sh/kensaurus/cursor-kenji): Live installable catalog page (`npx skills add kensaurus/cursor-kenji`)
+- [docs/DISTRIBUTION.md](https://github.com/kensaurus/skills/blob/main/docs/DISTRIBUTION.md): Install channels, directory listings, discovery status
+- [skills.sh listing](https://www.skills.sh/kensaurus/skills): Live installable catalog page (`npx skills add kensaurus/skills`)
 - [SkillsMP pack page](https://skillsmp.com/creators/kensaurus/cursor-kenji): Aggregator crawl of this repo’s `SKILL.md` files (their count can lag)
-- [docs/PUBLISHING.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/PUBLISHING.md): Maintainer release guide (GitHub Release → OIDC npm)
-- [docs/PROMOTION.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/PROMOTION.md): Listing copy for skills.sh, cursor.directory, marketplace, Claude plugin
-- [Claude Code plugin](https://github.com/kensaurus/cursor-kenji/blob/main/.claude-plugin/marketplace.json): `/plugin marketplace add kensaurus/cursor-kenji` (community catalog is a separate submit)
-- [docs/examples/plan-audits/](https://github.com/kensaurus/cursor-kenji/tree/main/docs/examples/plan-audits): Sample `plan-*.md` audit outputs
-- [CHANGELOG.md](https://github.com/kensaurus/cursor-kenji/blob/main/CHANGELOG.md): Release history
-- [CONTRIBUTING.md](https://github.com/kensaurus/cursor-kenji/blob/main/CONTRIBUTING.md): Adding skills, validation, PR workflow
+- [docs/PUBLISHING.md](https://github.com/kensaurus/skills/blob/main/docs/PUBLISHING.md): Maintainer release guide (GitHub Release → OIDC-staged npm publish → owner approves with 2FA)
+- [docs/PROMOTION.md](https://github.com/kensaurus/skills/blob/main/docs/PROMOTION.md): Listing copy for skills.sh, cursor.directory, marketplace, Claude plugin
+- [Claude Code plugin](https://github.com/kensaurus/skills/blob/main/.claude-plugin/marketplace.json): `/plugin marketplace add kensaurus/skills` (community catalog is a separate submit)
+- [docs/examples/plan-audits/](https://github.com/kensaurus/skills/tree/main/docs/examples/plan-audits): Sample `plan-*.md` audit outputs
+- [CHANGELOG.md](https://github.com/kensaurus/skills/blob/main/CHANGELOG.md): Release history
+- [CONTRIBUTING.md](https://github.com/kensaurus/skills/blob/main/CONTRIBUTING.md): Adding skills, validation, PR workflow

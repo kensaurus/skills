@@ -2,9 +2,9 @@
 name: debug-sentry-monitor
 description: >
   Operate Sentry: triage and fix unresolved issues, cut noise, audit
-  instrumentation, monitor after deploy. Use when "check Sentry", "review
-  production errors", or "improve error tracking". One bug →
-  workflow-fix-and-ship. Plan-only audit → plan-error-handling.
+  instrumentation, monitor after deploy. Use when "check Sentry" or "review
+  production errors". One bug → workflow-fix-and-ship. Plan-only audit →
+  plan-error-handling.
 license: MIT
 effort: high
 ---

@@ -13,7 +13,7 @@ Checklist for external listings and launch copy. Repo-side requirements (plugin 
 **URL:** https://cursor.directory/plugins/new
 
 **What to fill in:**
-- Repository URL: `https://github.com/kensaurus/cursor-kenji`
+- Repository URL: `https://github.com/kensaurus/skills`
 - The site auto-detects skills from `skills/*/SKILL.md`, rules from `rules/`, agents from `agents/`, MCP config from `.mcp.json`
 - No extra config needed — the repo structure matches the Open Plugins standard
 
@@ -27,14 +27,14 @@ Checklist for external listings and launch copy. Repo-side requirements (plugin 
 
 **Install command already works (skills only — this is the skills.sh channel):**
 ```bash
-npx skills add kensaurus/cursor-kenji
+npx skills add kensaurus/skills
 ```
 
-Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That CLI's `--all` is not the skills.sh `--all`.
+Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `--all` is not the skills.sh `--all`.
 
 **Issue opened:** https://github.com/vercel-labs/skills/issues/1499
 
-**Status:** **Live** — https://www.skills.sh/kensaurus/cursor-kenji (verified 2026-09-09: HTTP 200, “2.9K total installs”). Their crawler still shows a higher skill count than this repo’s 155 because it keeps old rename slugs. Issue #1499 is leftover; the repo page is already indexed.
+**Status:** **Live** — https://www.skills.sh/kensaurus/skills (new page, created by a fresh install 2026-10-01). The old https://www.skills.sh/kensaurus/cursor-kenji (3.4K installs) stays until [vercel-labs/skills#2352](https://github.com/vercel-labs/skills/issues/2352) merges the listings and drops the retired skill names. Stale #1499 closed.
 
 ---
 
@@ -42,13 +42,13 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 
 **URL:** https://github.com/PatrickJS/awesome-cursorrules
 
-**How:** Open a PR adding cursor-kenji to the Directories section.
+**How:** Open a PR adding kenji to the Directories section.
 
 **PR copy:**
 ```markdown
-- [cursor-kenji](https://github.com/kensaurus/cursor-kenji) — ready-made AI playbooks your editor auto-triggers: 158 agent skills,
+- [kensaurus/skills](https://github.com/kensaurus/skills) — ready-made AI playbooks your editor auto-triggers: 160 agent skills,
   63 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.
-  `npx skills add kensaurus/cursor-kenji`
+  `npx skills add kensaurus/skills`
 ```
 
 **Status:** [x] PR opened — https://github.com/PatrickJS/awesome-cursorrules/pull/320
@@ -61,14 +61,14 @@ Full pack (skills + slash commands): `npx @kensaurus/cursor-kenji --all`. That C
 
 **Preferred — Trusted Publishing (OIDC):** configured ✅
 
-- Publisher: `kensaurus/cursor-kenji` · workflow `npm-publish.yml` · permission `npm publish`
+- Publisher: `kensaurus/skills` · workflow `npm-publish.yml` · permission `npm publish`
 - Create a GitHub Release (tag `vX.Y.Z` matching `package.json`) → `.github/workflows/npm-publish.yml` publishes with `--provenance`
 
 **Fallback — `NPM_TOKEN` secret:** optional; CI uses OIDC when the secret is unset.
 
-**Verify at:** https://www.npmjs.com/package/@kensaurus/cursor-kenji
+**Verify at:** https://www.npmjs.com/package/@kensaurus/skills
 
-**Status:** Pending — `@kensaurus/cursor-kenji@1.41.0` (enhance-mobile-native-feel; mobile and UX skills refreshed for iOS 26 / Android 16 / Expo SDK 54–58 / Capacitor 8.3). Previous: `1.40.0` via OIDC run [36510742813](https://github.com/kensaurus/cursor-kenji/actions/runs/36510742813).
+**Status:** Pending — `@kensaurus/skills@2.2.0` (enhance-mobile-native-feel; mobile and UX skills refreshed for iOS 26 / Android 16 / Expo SDK 54–58 / Capacitor 8.3). Previous: `2.1.1` (Windows installs retry a briefly held file), `2.1.0` (enhance-ux-laws; Miller/Hick guidance corrected), live on 2026-10-01 as the first release through staged publishing: the workflow stages it, the maintainer approves with 2FA. `2.0.0` was published by the maintainer on 2026-10-01 (first publish of the new name).
 
 ---
 
@@ -91,7 +91,7 @@ Submit the GitHub repo URL; Cursor reviews manually.
 - https://enterprisedna.co/directories/submit (alternative submission form)
 
 **One-liner description:**
-> 158 Cursor agent skills for React/Next.js/Supabase — installs in one command.
+> 160 Cursor agent skills for React/Next.js/Supabase — installs in one command.
 
 **Status:** Re-checked 2026-09-09. cursorlist.com is a **`.cursorrules` dump**, not a skill-pack catalog. “Submit Rule” goes to a Youform for individual rule files. **Not submitted** — listing a 155-skill pack there would be the wrong category. Do not treat as listed.
 
@@ -166,8 +166,8 @@ Official MCP Registry, Smithery, mcp.so, PulseMCP, and AgenticSkills “Submit M
 **This repo is already a marketplace.** Users do not wait for Anthropic:
 
 ```
-/plugin marketplace add kensaurus/cursor-kenji
-/plugin install cursor-kenji@cursor-kenji
+/plugin marketplace add kensaurus/skills
+/plugin install kenji@kenji
 ```
 
 Validate before any catalog submit:
@@ -176,7 +176,7 @@ Validate before any catalog submit:
 claude plugin validate .
 ```
 
-**Community catalog (separate):** https://platform.claude.com/plugins/submit — public GitHub URL. Review pins a SHA into `anthropics/claude-plugins-community`. **Not listed** until that catalog shows `cursor-kenji`. Do not treat local marketplace install as official listing.
+**Community catalog (separate):** https://platform.claude.com/plugins/submit — public GitHub URL. Review pins a SHA into `anthropics/claude-plugins-community`. **Not listed** until that catalog shows `kenji`. Do not treat local marketplace install as official listing.
 
 ---
 
@@ -207,8 +207,8 @@ complete-everything loop writes a durable checklist, keeps going through
 phase checkpoints, and a second agent (completion-judge) reads the tree
 and the evidence — not the model’s confidence.
 
-Install: npx @kensaurus/cursor-kenji --all
-skills.sh: https://www.skills.sh/kensaurus/cursor-kenji
+Install: npx @kensaurus/skills --all
+skills.sh: https://www.skills.sh/kensaurus/skills
 ```
 
 ### Reddit (r/cursor, r/ClaudeAI) — short
@@ -217,13 +217,13 @@ skills.sh: https://www.skills.sh/kensaurus/cursor-kenji
 Title: Playbooks that will not call a PR done
 
 I got tired of agents skipping the interview, the failing test, and the
-live check. cursor-kenji is installable playbooks: you say the job, a
+live check. kenji is installable playbooks: you say the job, a
 named skill runs, and “done” has to survive a judge.
 Skills declare effort for Opus 5.5: audits and plans at high, implementation
 at the medium default, handoff at low.
 
-npx @kensaurus/cursor-kenji --all
-https://github.com/kensaurus/cursor-kenji
+npx @kensaurus/skills --all
+https://github.com/kensaurus/skills
 ```
 
 ### X / Twitter
@@ -234,7 +234,7 @@ You say the job. The playbook runs.
 Not a prompt paste-bin. A completion gate that keeps going until the
 checklist is empty.
 
-npx @kensaurus/cursor-kenji --all
+npx @kensaurus/skills --all
 ```
 
 ### Article outline (one piece, not a listicle)
@@ -253,13 +253,13 @@ Title: Agents lie about “done.” Make them prove it.
 
 ## 14. Cross-promote via Mushi Mushi
 
-Mushi Mushi's README already mentions cursor-kenji skills:
+Mushi Mushi's README already mentions kenji skills:
 > "Install Mushi skills in your Cursor or Claude Code project"
 > `npx skills add kensaurus/mushi-mushi`
 
-Reciprocal links are live in cursor-kenji's README ("More from KENSAURUS" section).
+Reciprocal links are live in kenji's README ("More from KENSAURUS" section).
 
-**Optional:** Add a note to Mushi's GitHub Issues template pointing users to cursor-kenji's `debug-sentry-monitor` skill for Sentry triage from Cursor.
+**Optional:** Add a note to Mushi's GitHub Issues template pointing users to kenji's `debug-sentry-monitor` skill for Sentry triage from Cursor.
 
 **Status:** [x] Done (reciprocal links live)
 
@@ -268,7 +268,7 @@ Reciprocal links are live in cursor-kenji's README ("More from KENSAURUS" sectio
 ## Post-launch tracking
 
 - Watch GitHub stars (badge in README)
-- Watch npm download count: https://www.npmjs.com/package/@kensaurus/cursor-kenji
+- Watch npm download count: https://www.npmjs.com/package/@kensaurus/skills
 - Check skills.sh install count (if they expose it)
 - Monitor GitHub Issues for user feedback
 - Directory status table: [DISTRIBUTION.md](DISTRIBUTION.md)

@@ -1,10 +1,10 @@
 {
-  "name": "@kensaurus/cursor-kenji",
-  "version": "1.41.0",
-  "description": "158 Cursor AI agent skills, 63 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.",
+  "name": "@kensaurus/skills",
+  "version": "2.2.0",
+  "description": "You say the job; the playbook runs. 160 agent skills, 63 slash commands, 6 subagents, and MCP templates for Claude Code, Cursor, Codex CLI, and Gemini CLI. Tuned for React / Next.js / Supabase; works on most stacks.",
   "type": "module",
   "bin": {
-    "cursor-kenji": "bin/cursor-kenji.js"
+    "kenji": "bin/kenji.js"
   },
   "scripts": {
     "install:cursor": "node bin/install.mjs",
@@ -29,25 +29,28 @@
     "check:skill-refs": "node scripts/check-skill-refs.mjs --self-test && node scripts/check-skill-refs.mjs",
     "check:docs-facts": "node scripts/check-docs-facts.mjs",
     "check:md-structure": "node scripts/check-md-structure.mjs --self-test && node scripts/check-md-structure.mjs",
-    "check:dead-code": "npx -y knip@6.36.0 --max-issues 0 --treat-config-hints-as-errors",
-    "check:dead-code:prod": "npx -y knip@6.36.0 --production --max-issues 0",
+    "check:dead-code": "npx -y knip@6.38.0 --max-issues 0 --treat-config-hints-as-errors",
+    "check:dead-code:prod": "npx -y knip@6.38.0 --production --max-issues 0",
     "test:install": "node scripts/test-install.mjs",
     "test:completion-gate": "node scripts/test-completion-gate.mjs",
     "test": "node scripts/validate-skills.mjs && node scripts/check-skill-count.mjs && node scripts/generate-skill-index.mjs --check && node scripts/scan-secrets.mjs --self-test && node scripts/check-mcp-pins.mjs && node scripts/check-docs-facts.mjs && node scripts/check-skill-refs.mjs --self-test && node scripts/check-skill-refs.mjs && node scripts/check-md-structure.mjs --self-test && node scripts/check-md-structure.mjs && node scripts/test-completion-gate.mjs && node scripts/test-install.mjs && npm run -s check:dead-code && npm run -s check:dead-code:prod"
   },
   "keywords": [
-    "cursor",
-    "cursor-ai",
-    "cursor-skills",
     "agent-skills",
-    "ai-agents",
-    "llm-tools",
-    "claude",
     "claude-code",
+    "claude-code-plugin",
+    "codex",
+    "cursor",
+    "gemini-cli",
     "skills-sh",
+    "vibe-coding",
     "mcp",
     "nextjs",
-    "supabase"
+    "supabase",
+    "react",
+    "typescript",
+    "ai-agents",
+    "llm-tools"
   ],
   "files": [
     "skills/",
@@ -63,6 +66,7 @@
     "README.md",
     "CHANGELOG.md",
     "LICENSE",
+    "LICENSE-APACHE",
     "NOTICE",
     "llms.txt",
     "docs/screenshots/",
@@ -81,11 +85,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kensaurus/cursor-kenji.git"
+    "url": "git+https://github.com/kensaurus/skills.git"
   },
-  "homepage": "https://www.skills.sh/kensaurus/cursor-kenji",
+  "homepage": "https://github.com/kensaurus/skills#readme",
   "bugs": {
-    "url": "https://github.com/kensaurus/cursor-kenji/issues"
+    "url": "https://github.com/kensaurus/skills/issues"
   },
   "author": "kensaurus",
   "license": "MIT"

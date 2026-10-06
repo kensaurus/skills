@@ -187,4 +187,4 @@ State issue + location. Skip explanation unless fix non-obvious. No preamble.
 
 ---
 
-**Source:** [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) · [Vercel Web Interface Guidelines](https://vercel.com/design/guidelines). Installed in cursor_kenji as `thirdparty-web-interface-guidelines`. See [ATTRIBUTION.md](ATTRIBUTION.md).
+**Source:** [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) · [Vercel Web Interface Guidelines](https://vercel.com/design/guidelines). Installed in kenji as `thirdparty-web-interface-guidelines`. See [ATTRIBUTION.md](ATTRIBUTION.md).

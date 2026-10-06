@@ -151,12 +151,15 @@ continuation mechanism in addition to the state file:
 - **Cursor and Claude Code:** the packaged Stop hook reads
   `.cursor/complete-everything-state.md` and continues the turn only while
   actionable unchecked items remain. It ignores completed states, errored or
-  aborted turns, and human-gate-only states. On Claude Code it keeps a small
-  counter in `.cursor/completion-gate.count.json` (leave it in place and keep
-  it out of commits, like the state file), and the client labels each block "Stop hook error
-  occurred" — that is the gate working, not a failure. If hooks are
-  disabled, continue manually from the state file; do not lower the
-  completion contract.
+  aborted turns, human-gate-only states, items marked
+  `blocked by: <who or what>`, and a state file untouched for 24 hours. Each
+  conversation gets three follow-ups while none of the items it saw closes;
+  closing one restores them, and another agent's edits neither spend nor
+  reset them. The counter lives outside the repo, in
+  `~/.cache/kenji/completion-gate/`. Claude Code labels each block
+  "Stop hook error occurred" — that is the gate working, not a failure. If
+  hooks are disabled, continue manually from the state file; do not lower
+  the completion contract.
 - **Claude Code 2.1.139+:** start the run with:
 
   ```text

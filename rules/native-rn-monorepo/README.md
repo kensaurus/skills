@@ -17,7 +17,7 @@ is on **Linux/Windows (no Mac)** and iOS verification is **CI-only**.
 
 ```bash
 mkdir -p <project>/.cursor/rules
-cp ~/cursor-kenji/rules/native-rn-monorepo/*.mdc <project>/.cursor/rules/
+cp ~/skills/rules/native-rn-monorepo/*.mdc <project>/.cursor/rules/
 ```
 
 Rename the files to match the project's existing naming if needed
@@ -59,5 +59,5 @@ project that doesn't justify dedicated Mac hardware.
 ## Companion commands
 
 The matching slash-command bundle lives at
-`~/cursor-kenji/commands/native-rn-monorepo/`. Install both
+`~/skills/commands/native-rn-monorepo/`. Install both
 together for the full workflow.

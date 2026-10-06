@@ -3,7 +3,7 @@
   "hooks": {
     "stop": [
       {
-        "command": "node hooks/completion-gate.mjs",
+        "command": "node hooks/completion-gate.mjs --host=cursor",
         "timeout": 5,
         "loop_limit": 12,
         "failClosed": false

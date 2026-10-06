@@ -1,8 +1,8 @@
 cff-version: 1.2.0
-message: "If you use cursor-kenji in your work or build on top of it, please cite it as below."
+message: "If you use kenji in your work or build on top of it, please cite it as below."
 type: software
-title: cursor-kenji
-version: 1.39.0
+title: kenji skills
+version: 2.1.1
 abstract: >
   Installable playbooks for Cursor, Claude Code, Codex CLI, and Gemini CLI:
   agent skills, slash commands, MCP templates, subagents, and project rules
@@ -11,13 +11,16 @@ abstract: >
 authors:
   - alias: kensaurus
     given-names: Kenji
-repository-code: https://github.com/kensaurus/cursor-kenji
-url: https://github.com/kensaurus/cursor-kenji
+repository-code: https://github.com/kensaurus/skills
+url: https://github.com/kensaurus/skills
 license: MIT
-date-released: "2026-09-23"
+date-released: "2026-10-01"
 keywords:
+  - agent-skills
+  - claude-code
+  - codex
   - cursor
-  - cursor-ai
+  - gemini-cli
   - ai-agent
   - mcp
   - model-context-protocol

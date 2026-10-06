@@ -2,9 +2,8 @@
 name: test-red-team
 description: >
   Red-team a running web, React Native, or Capacitor app. Use when "red team
-  this app", "attack my app", "break it", "find all the defects", "adversarial
-  test", "pentest the app", "pre-launch hardening", or "full app QA". Monkey
-  test → test-exploratory.
+  this app", "attack my app", "break it", "pentest the app", or "pre-launch
+  hardening". Monkey test → test-exploratory.
 license: MIT
 effort: high
 ---

@@ -3,8 +3,7 @@ name: mobile-capacitor-platform
 description: >
   Capacitor work beyond UI: plugins, OTA, deep links, push, offline, native
   CI/CD, store submission, Cordova migration. Use for "add push
-  notifications", "deep linking", "OTA update", "native build CI", "App Store
-  rejection", or "migrate to Capacitor".
+  notifications", "deep linking", "OTA update", or "App Store rejection".
 license: MIT
 paths:
   - "**/ios/**"

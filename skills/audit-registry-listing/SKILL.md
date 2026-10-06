@@ -48,7 +48,7 @@ Do **not** fire for "make the README prettier" → `enhance-readme`.
 > **Ten lines:** README opens with a logo and a count ("145 skills · 57 commands"); the outcome appears in paragraph 3.
 > **Metadata:** npm description repeats the count; GitHub description empty; 4 topics; no social preview; `homepage` points at skills.sh (good).
 > **Tarball:** `npm pack --dry-run` shows `docs/screenshots/` (12 MB) shipping; `llms.txt` present.
-> **Path:** `npx @kensaurus/cursor-kenji --all` works; first-run message tells the user to restart Cursor — good.
+> **Path:** `npx @kensaurus/skills --all` works; first-run message tells the user to restart Cursor — good.
 > **Findings:** hero leads with counts (major → `enhance-readme`/`docs-writer`); GitHub description + preview missing (minor → repo settings); screenshots bloat the tarball (minor → `deploy-npm` `files`).
 
 ## Self-critique before reporting

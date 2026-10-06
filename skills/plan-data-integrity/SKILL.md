@@ -2,9 +2,9 @@
 name: plan-data-integrity
 description: >
   Plan-only audit of destructive-operation and migration safety. Use when "is
-  my migration safe", "could I lose data", "my agent might delete prod", or
-  "safe schema changes". Restore drills, RPO/RTO → plan-backup-dr. Code
-  transforms → audit-codemod-safety.
+  my migration safe", "could I lose data", or "my agent might delete prod".
+  Restore drills, RPO/RTO → plan-backup-dr. Code transforms →
+  audit-codemod-safety.
 license: MIT
 effort: high
 ---

@@ -202,7 +202,7 @@ google-chrome --remote-debugging-port=9222
 
 Or use the shell alias:
 ```bash
-source ~/cursor-kenji/shell-aliases/cursor-helpers.sh
+source ~/skills/shell-aliases/cursor-helpers.sh
 cursor-dev  # Opens Chrome + Cursor together
 ```
 

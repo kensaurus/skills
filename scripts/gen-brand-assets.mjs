@@ -80,7 +80,7 @@ const JOBS = [
     model: "fal-ai/ideogram/v3",
     payload: {
       prompt:
-        "16:9 Open Graph poster. Solid charcoal #111111 field. Left: a thick off-white vertical playbook spine with one cobalt-blue tick. Right of the spine, huge tight grotesk type in white: YOU SAY THE JOB. Under it, smaller: THE PLAYBOOK RUNS. Bottom-left micro-label: cursor-kenji. No photos, no robots, no UI, no glow. Print poster.",
+        "16:9 Open Graph poster. Solid charcoal #111111 field. Left: a thick off-white vertical playbook spine with one cobalt-blue tick. Right of the spine, huge tight grotesk type in white: YOU SAY THE JOB. Under it, smaller: THE PLAYBOOK RUNS. Bottom-left micro-label: kenji. No photos, no robots, no UI, no glow. Print poster.",
       image_size: "landscape_16_9",
       rendering_speed: "QUALITY",
       style: "DESIGN",

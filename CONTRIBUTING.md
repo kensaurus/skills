@@ -1,4 +1,4 @@
-# Contributing to cursor-kenji
+# Contributing to kenji
 
 Thanks for wanting to improve this toolkit. Every contribution — a better skill description, a new command, a bug fix, or a new MCP config — helps everyone who uses Cursor.
 
@@ -9,7 +9,7 @@ Thanks for wanting to improve this toolkit. Every contribution — a better skil
 - [Full contribution guide](docs/CONTRIBUTING.md) — detailed instructions for adding skills, commands, and rules
 - [Skill catalog](docs/CATALOG.md) — full reference with all trigger phrases
 - [AGENTS.template.md](docs/AGENTS.template.md) — copy to consumer projects as root `AGENTS.md`
-- [Open an issue](https://github.com/kensaurus/cursor-kenji/issues) — report a bug or request a skill
+- [Open an issue](https://github.com/kensaurus/skills/issues) — report a bug or request a skill
 
 ---
 
@@ -31,8 +31,8 @@ Thanks for wanting to improve this toolkit. Every contribution — a better skil
 
 ```bash
 # 1. Fork & clone
-git clone https://github.com/<you>/cursor-kenji.git
-cd cursor-kenji
+git clone https://github.com/<you>/skills.git
+cd skills
 
 # 2. Create your skill
 mkdir -p skills/my-new-skill
@@ -73,6 +73,8 @@ description: >
 
 Brief purpose statement.
 
+**Degree of freedom: MIXED.** What is judgment `[HIGH freedom]`; what must run exactly `[LOW freedom]`.
+
 ## When to Use
 
 - Trigger phrase 1
@@ -83,15 +85,21 @@ Brief purpose statement.
 1. Step one
 2. Step two
 
-## Related Skills
+## Worked example
 
-- `other-skill` — how it complements this one
+> Illustrative: one input, the classification, and the action taken.
 
-## Validation
+## Self-critique before reporting
 
 - [ ] Check 1
 - [ ] Check 2
+
+## Related Skills
+
+- `other-skill` — how it complements this one
 ```
+
+A skill whose name starts with a family prefix (`audit-`, `plan-`, `data-`, `workflow-`, …) fails `npm test` without the **Degree of freedom** line, `## Worked example`, and `## Self-critique`. Every skill's `description` also counts toward a fixed skill-listing budget ([ADR-0010](docs/adr/0010-measure-the-skill-listing-like-the-client.md)). If a new skill pushes it over, shorten descriptions or mark a user-only ritual `disable-model-invocation: true`; never raise the cap.
 
 See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for the full quality checklist.
 

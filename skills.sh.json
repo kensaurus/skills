@@ -7,6 +7,7 @@
       "description": "Inspect the repo; some skills then fix.",
       "skills": [
         "audit-accessibility",
+        "audit-agent-speed",
         "audit-analytics",
         "audit-auth-flows",
         "audit-backend-architecture",
@@ -84,6 +85,7 @@
         "enhance-readability",
         "enhance-readme",
         "enhance-skill-prompts",
+        "enhance-ux-laws",
         "enhance-web-conversion",
         "enhance-web-forms",
         "enhance-web-instant-nav",

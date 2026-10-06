@@ -24,6 +24,8 @@ purpose.
 | [0009](0009-retire-sequential-thinking-server.md) | Retire the Sequential Thinking MCP server | Accepted | Removed from the full template and pins; depth is set with effort |
 | [0010](0010-measure-the-skill-listing-like-the-client.md) | Measure the skill listing like the client | Accepted | `validate-skills` counts `- name: description` per listed entry and ratchets `LISTING_MAX_CHARS`; full descriptions on Opus 5.5 need `skillListingBudgetFraction` 0.02 |
 | [0011](0011-routing-rule-keeps-only-name-disambiguation.md) | Routing rule keeps only name disambiguation | Accepted | `skill-workflows.mdc` lists only mappings a skill name gets wrong (3,246 → 1,614 bytes); descriptions carry the rest |
+| [0012](0012-completion-gate-one-registration-per-host.md) | Completion gate: one registration per host, per-conversation budget | Accepted | `--host=` on each entry; the Claude-config copy stands aside inside Cursor; three follow-ups per conversation while nothing closes; `blocked by:` items and day-old state files do not gate |
+| [0013](0013-rename-to-kensaurus-skills.md) | Rename cursor-kenji to kensaurus/skills, plugin `kenji` | Accepted | Repo `kensaurus/skills`, npm `@kensaurus/skills`, plugin `kenji@kenji` in 2.0.0; `renames` map plus installer migration; old package forwards, then is deprecated |
 
 ## Conventions
 

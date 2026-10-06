@@ -2,7 +2,7 @@
 name: meta-skill-creator
 description: >
   Create or update a pack SKILL.md (frontmatter, house limits, T1–T8). Use
-  when authoring a cursor-kenji skill. Prompt-only upgrade →
+  when authoring a kenji skill. Prompt-only upgrade →
   enhance-skill-prompts. Cursor skill wizard → create-skill.
 license: Apache-2.0
 ---

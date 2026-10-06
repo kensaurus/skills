@@ -10,7 +10,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if ! command -v node >/dev/null 2>&1; then
-  echo "cursor-kenji: Node.js is required to install." >&2
+  echo "kenji: Node.js is required to install." >&2
   exit 1
 fi
 

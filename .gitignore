@@ -1,6 +1,7 @@
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Editor
 *.swp
@@ -14,6 +15,13 @@ node_modules/
 mcp.json
 *.env
 *.env.local
+.env.*
+!.env.example
+# npm auth tokens
+.npmrc
+
+# npm pack output
+*.tgz
 
 # Playwright / browser MCP scratch (logs, screenshots, page snapshots)
 .playwright-mcp/

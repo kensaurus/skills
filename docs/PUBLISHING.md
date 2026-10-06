@@ -1,12 +1,12 @@
-# Publishing cursor-kenji
+# Publishing kenji
 
-How maintainers ship a new npm version. Consumers who want skills **and** slash commands run `npx @kensaurus/cursor-kenji --all`. `npx skills add kensaurus/cursor-kenji` installs skills only.
+How maintainers ship a new npm version. Consumers who want skills **and** slash commands run `npx @kensaurus/skills --all`. `npx skills add kensaurus/skills` installs skills only.
 
 ## Prerequisites
 
-- Write access to `kensaurus/cursor-kenji`
-- npm package `@kensaurus/cursor-kenji` with **Trusted Publisher** configured:
-  - Repo: `kensaurus/cursor-kenji`
+- Write access to `kensaurus/skills`
+- npm package `@kensaurus/skills` with **Trusted Publisher** configured:
+  - Repo: `kensaurus/skills`
   - Workflow: `npm-publish.yml`
   - Permission: `npm publish`
 
@@ -36,8 +36,8 @@ gh release create "$TAG" --title "$TAG" --notes "$(cat <<EOF
 - …
 
 ## Install
-npx @kensaurus/cursor-kenji --all
-npx @kensaurus/cursor-kenji --verify --all
+npx @kensaurus/skills --all
+npx @kensaurus/skills --verify --all
 EOF
 )"
 ```
@@ -45,16 +45,28 @@ EOF
 Creating the release triggers [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml), which:
 
 1. Validates skills + counts + MCP pins
-2. Publishes to npm with `--provenance` via OIDC
+2. **Stages** the version with `npm stage publish --provenance` via OIDC. The
+   trusted publisher (`kensaurus/skills` · `npm-publish.yml`, set up
+   2026-10-01) allows staging only, so nothing is public yet.
+3. **You approve it**, with 2FA: npmjs.com → `@kensaurus/skills` → staged
+   versions → Approve, or from a terminal (npm ≥ 11.x with `stage`):
+
+   ```bash
+   npm stage list @kensaurus/skills
+   npm stage approve <stage-id>
+   ```
+
+   A release that isn't approved never goes live. Reject a bad one with
+   `npm stage reject <stage-id>`.
 
 ## Verify
 
 ```bash
-npm view @kensaurus/cursor-kenji version
-npm view @kensaurus/cursor-kenji bin
+npm view @kensaurus/skills version
+npm view @kensaurus/skills bin
 ```
 
-Confirm the [GitHub Actions publish run](https://github.com/kensaurus/cursor-kenji/actions/workflows/npm-publish.yml) succeeded.
+Confirm the [GitHub Actions publish run](https://github.com/kensaurus/skills/actions/workflows/npm-publish.yml) succeeded.
 
 ## Emergency local publish
 
@@ -73,7 +85,7 @@ Official marketplace submission uses the same repo — [`.cursor-plugin/plugin.j
 
 ## Optional: Claude Code plugin
 
-This repo is already a marketplace: `.claude-plugin/marketplace.json` + `.claude-plugin/plugin.json`. Users can add it with `/plugin marketplace add kensaurus/cursor-kenji`.
+This repo is already a marketplace: `.claude-plugin/marketplace.json` + `.claude-plugin/plugin.json`. Users can add it with `/plugin marketplace add kensaurus/skills`.
 
 To apply to Anthropic’s **community** catalog (separate from this repo marketplace):
 

@@ -1,4 +1,4 @@
-# Contributing to cursor-kenji
+# Contributing to kenji
 
 Guide for adding, updating, and maintaining skills and commands.
 

@@ -124,3 +124,5 @@ ask one precise question immediately rather than starting a run that will fail.
 - `complete-everything` / `burndown-full` — run this first for long closures
 - `workflow-onboard` — orient to an unfamiliar codebase
 - `debug-error` — diagnose a command that cannot start
+- `audit-agent-speed` — the environment runs but the agent host is slow
+  (hooks, status line, CPU hogs, worktree pile-up)

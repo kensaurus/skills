@@ -1,4 +1,4 @@
-# Prompt-Enhancement Playbook for cursor-kenji Skills
+# Prompt-Enhancement Playbook for kenji Skills
 
 **Purpose.** Upgrade how a skill in this pack instructs the agent — not what
 it does — against 2026 prompt-engineering practice. This is a prompt-craft

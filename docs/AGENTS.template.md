@@ -2,6 +2,10 @@
 
 > Copy to your **project repo root** as `AGENTS.md`. Cursor, Claude Code, Codex, and
 > Antigravity read it; Cursor also uses `.cursor/rules/`. Fill the `<PLACEHOLDERS>`.
+> Claude Code skips `AGENTS.md` when a `CLAUDE.md` exists in the repo **or any parent
+> folder** (for example one beside all your repos). Set user setting
+> `pluginConfigs["agents-md@builtin"].options.instructionFiles` to
+> `"claude-md-and-agents-md"`, or import it from `CLAUDE.md` with `@AGENTS.md`.
 >
 > This is the *constitution*: the always-on contract between you and any coding agent.
 > The `plan-*` skills produce burndowns; this file governs how every change happens.
@@ -126,10 +130,10 @@ shows the new path, spec/roadmap reflect reality. **"The agent stopped editing" 
 
 ---
 
-## Using with cursor-kenji
+## Using with kenji
 
-Install the full pack (skills + commands): `npx @kensaurus/cursor-kenji --all`. Skills only: `npx skills add kensaurus/cursor-kenji`. Re-check: `npx @kensaurus/cursor-kenji --verify`.
+Install the full pack (skills + commands): `npx @kensaurus/skills --all`. Skills only: `npx skills add kensaurus/skills`. Re-check: `npx @kensaurus/skills --verify`.
 
-Plan loops: [PLAN-LOOPS.md](https://github.com/kensaurus/cursor-kenji/blob/main/docs/PLAN-LOOPS.md)
+Plan loops: [PLAN-LOOPS.md](https://github.com/kensaurus/skills/blob/main/docs/PLAN-LOOPS.md)
 
-This template ships with cursor-kenji at `docs/AGENTS.template.md`.
+This template ships with kenji at `docs/AGENTS.template.md`.

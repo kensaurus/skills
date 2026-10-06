@@ -3,8 +3,7 @@ name: plan-pricing
 description: >
   Plan-only pricing audit: value metric, tiers, price points, free-tier
   boundary, annual and enterprise anchors, and a willingness-to-pay study. Use
-  when "pricing strategy", "what should I charge", "value metric", "seat vs
-  usage", or "are we underpriced".
+  when "pricing strategy", "what should I charge", or "are we underpriced".
 license: MIT
 effort: high
 ---

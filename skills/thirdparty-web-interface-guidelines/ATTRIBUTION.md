@@ -8,7 +8,7 @@
 | **Author** | Vercel Design Engineering |
 | **License** | [MIT](https://github.com/vercel-labs/web-interface-guidelines/blob/main/LICENSE) — Copyright (c) 2025 Vercel Labs |
 | **Local name** | `thirdparty-web-interface-guidelines` |
-| **Curated in** | [cursor_kenji](https://github.com/kenji/cursor_kenji) |
+| **Curated in** | [kensaurus/skills](https://github.com/kensaurus/skills) |
 
 ## Companion command
 

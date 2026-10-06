@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://raw.githubusercontent.com/kensaurus/cursor-kenji/main/site/sitemap.xml
+Sitemap: https://raw.githubusercontent.com/kensaurus/skills/main/site/sitemap.xml

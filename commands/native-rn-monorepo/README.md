@@ -23,7 +23,7 @@ target.
 
 ```bash
 mkdir -p <project>/.cursor/commands
-cp ~/cursor-kenji/commands/native-rn-monorepo/*.md <project>/.cursor/commands/
+cp ~/skills/commands/native-rn-monorepo/*.md <project>/.cursor/commands/
 ```
 
 (Skip this `README.md` — it's documentation, not a slash command.)
@@ -74,5 +74,5 @@ TestFlight installs build on iPhone (Apple processing ~5–30 min)
 ## Companion rules
 
 The matching `.mdc` rule bundle lives at
-`~/cursor-kenji/rules/native-rn-monorepo/`. Install both together
+`~/skills/rules/native-rn-monorepo/`. Install both together
 so the agent has both the *what* (rules) and the *how* (commands).

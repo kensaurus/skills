@@ -1,24 +1,34 @@
 {
-  "name": "cursor-kenji",
-  "displayName": "cursor-kenji",
-  "description": "You say the job; the playbook runs. 158 agent skills, 63 slash commands, 6 subagents, and MCP templates for React / Next.js / Supabase. Effort-routed for Claude Opus 5.5: audit, plan, and judge skills at high, implementation at the medium default.",
-  "version": "1.41.0",
+  "name": "kenji",
+  "displayName": "kenji skills",
+  "description": "You say the job; the playbook runs. 160 agent skills, 63 slash commands, 6 subagents, and MCP templates for Claude Code, Cursor, Codex CLI, and Gemini CLI. Tuned for React / Next.js / Supabase; works on most stacks. Effort-routed for Claude Opus 5.5.",
+  "version": "2.2.0",
   "author": {
     "name": "kensaurus",
     "email": "kensaurus@gmail.com"
   },
-  "homepage": "https://www.skills.sh/kensaurus/cursor-kenji",
-  "repository": "https://github.com/kensaurus/cursor-kenji",
+  "homepage": "https://github.com/kensaurus/skills#readme",
+  "repository": "https://github.com/kensaurus/skills",
   "license": "MIT",
   "keywords": [
     "agent-skills",
     "claude-code",
+    "claude-code-plugin",
+    "codex",
     "cursor",
+    "gemini-cli",
+    "skills-sh",
+    "vibe-coding",
+    "mcp",
     "nextjs",
     "supabase"
   ],
-  "skills": ["./skills"],
-  "commands": ["./commands"],
+  "skills": [
+    "./skills"
+  ],
+  "commands": [
+    "./commands"
+  ],
   "agents": [
     "./agents/code-reviewer.md",
     "./agents/completion-judge.md",

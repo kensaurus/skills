@@ -1,9 +1,9 @@
-# Agent notes — cursor-kenji
+# Agent notes — kenji
 
 ## Architecture in one breath
 
 This repo **is** the playbook pack: skills + slash commands + agents +
-rules. `npx @kensaurus/cursor-kenji --all` installs Cursor, Claude
+rules. `npx @kensaurus/skills --all` installs Cursor, Claude
 Code, Codex CLI, and Gemini CLI; a bare `npx` stays Cursor-only.
 `npx skills add` is skills-only.
 Default install merges; `--clean` is opt-in. Descriptions cap at 320

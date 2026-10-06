@@ -3,8 +3,7 @@ name: enhance-pwa
 description: >
   Add or upgrade PWA features: manifest, service worker, offline mode, install
   prompt, push, background sync. Use when "make it a PWA", "offline support",
-  "install prompt", "service worker", or "add to home screen". Native →
-  mobile-capacitor-platform.
+  or "install prompt". Native → mobile-capacitor-platform.
 license: MIT
 ---
 

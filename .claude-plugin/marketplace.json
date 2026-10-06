@@ -1,31 +1,41 @@
 {
-  "name": "cursor-kenji",
+  "name": "kenji",
   "owner": {
     "name": "kensaurus",
     "email": "kensaurus@gmail.com"
   },
   "metadata": {
     "description": "Playbooks your coding agent runs from a plain-English request.",
-    "version": "1.41.0"
+    "version": "2.2.0"
   },
   "plugins": [
     {
-      "name": "cursor-kenji",
+      "name": "kenji",
       "source": ".",
-      "description": "158 agent skills, 63 slash commands, 6 subagents, effort-routed for Claude Opus 5.5. Install: /plugin install cursor-kenji@cursor-kenji",
-      "homepage": "https://www.skills.sh/kensaurus/cursor-kenji",
-      "repository": "https://github.com/kensaurus/cursor-kenji",
+      "description": "160 agent skills, 63 slash commands, 6 subagents for Claude Code, effort-routed for Opus 5.5. Install: /plugin install kenji@kenji",
+      "homepage": "https://github.com/kensaurus/skills#readme",
+      "repository": "https://github.com/kensaurus/skills",
       "license": "MIT",
       "category": "productivity",
       "keywords": [
         "agent-skills",
         "claude-code",
+        "claude-code-plugin",
+        "codex",
         "cursor",
+        "gemini-cli",
+        "skills-sh",
+        "vibe-coding",
+        "mcp",
         "nextjs",
         "supabase"
       ],
-      "skills": ["./skills"],
-      "commands": ["./commands"],
+      "skills": [
+        "./skills"
+      ],
+      "commands": [
+        "./commands"
+      ],
       "agents": [
         "./agents/code-reviewer.md",
         "./agents/completion-judge.md",
@@ -35,5 +45,9 @@
         "./agents/perf-monitor.md"
       ]
     }
-  ]
+  ],
+  "description": "kenji: playbooks your coding agent runs from a plain-English request.",
+  "renames": {
+    "cursor-kenji": "kenji"
+  }
 }

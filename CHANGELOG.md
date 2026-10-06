@@ -1,12 +1,12 @@
 # Changelog
 
-All notable additions and changes to cursor-kenji are listed here.
+All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-kenji` before 2.0.0) are listed here.
 
 ---
 
 ## [Unreleased]
 
-## [1.41.0] — 2026-10-06
+## [2.2.0] — 2026-10-06
 
 Adds the app-wide "make this mobile app feel native" pass the pack lacked, and
 refreshes the mobile and UX skills against 2026 platform facts: iOS 26 Liquid
@@ -57,6 +57,119 @@ new skill's references.
   is unchanged.
 - `enhance-web-web3d` now links its `references/css-canvas-effects.md`, which
   was shipped but unreachable from the skill.
+
+## [2.1.1] — 2026-10-01
+
+### Fixed
+
+- **Installs on Windows survive a briefly held file.** An open editor
+  watching `~/.cursor` or `~/.claude`, or an antivirus scan, can hold a file
+  for a moment right after it is written. Windows then failed the next copy
+  with `EPERM`, which aborted the install and left the target half-copied:
+  Cursor failed three runs in a row on a different `SKILL.md` each time. The
+  installer now retries a copy, write or delete on `EPERM`, `EBUSY` or
+  `EACCES` for up to about 3 seconds per file. If the lock never clears it
+  still fails, and says which file is held and that closing the editor fixes
+  it. Other platforms are unchanged.
+
+## [2.1.0] — 2026-10-01
+
+UX laws as a measured fix pass, and the Miller misreading removed from the
+pack.
+
+### Added
+
+- **`enhance-ux-laws`.** Measure-then-fix pass on one screen or flow against
+  seven Laws of UX: Fitts, Hick, Miller, Jakob, Zeigarnik, Goal-Gradient and
+  Von Restorff. A browser probe measures tap targets, competing accents,
+  choice sets, unlabeled fields and progress cues at phone and desktop widths;
+  an eight-check flow walk covers what the DOM cannot show (resume after
+  reload, dead controls, pasted codes). Each law states its precondition and
+  what it does not say. Progress and resume cues must read real state, and
+  drafts never store card numbers or one-time codes.
+
+### Changed
+
+- **Miller and Hick read correctly.** `audit-ux` and `enhance-web-ux` no
+  longer cap menus or navigation at seven items: Miller is about what the user
+  must hold in mind, and Hick applies only when options must be weighed, not to
+  known-item lookups. `audit-ux` gains Von Restorff and
+  Goal-Gradient/Zeigarnik rows.
+- **Releases are staged.** `npm-publish.yml` runs `npm stage publish
+  --provenance`; a version goes live only when the maintainer approves it with
+  2FA. CI actions moved to v5 (Node 24).
+- Six skill descriptions dropped duplicate trigger phrases so the listing stays
+  under its 39,000-character ratchet with the new skill (ADR-0010).
+
+## [2.0.0] — 2026-10-01
+
+**cursor-kenji is now kenji: `kensaurus/skills` on GitHub, `@kensaurus/skills`
+on npm, plugin `kenji@kenji`.** Same pack, tool-neutral name. Breaking because
+the plugin ID and the `/cursor-kenji:` slash namespace change (ADR-0013).
+Upgrade steps: README → "Upgrading from cursor-kenji".
+
+### Changed
+
+- **Renamed.** Repo `kensaurus/cursor-kenji` → `kensaurus/skills` (old URLs
+  redirect), npm `@kensaurus/cursor-kenji` → `@kensaurus/skills`, CLI
+  `cursor-kenji` → `kenji`, plugin and marketplace `cursor-kenji` → `kenji`,
+  Windows shim `cursor-kenji.cmd` → `kenji.cmd`.
+- **Existing installs migrate.** The installer replaces a pre-2.0.0
+  completion-gate entry (`cursor-kenji-hooks/`) with `kenji-hooks/`, keeps every
+  other hook and setting, and removes the orphaned folder. `--restore` also
+  reads the legacy `.cursor-kenji-backups/`. Claude plugin installs follow the
+  marketplace `renames` map. `CURSOR_KENJI_GATE_STATE_DIR` and
+  `CURSOR_KENJI_DIR` still work beside `KENJI_GATE_STATE_DIR` and
+  `KENJI_SKILLS_DIR`.
+- **Tool-neutral listing.** Descriptions and keywords name Claude Code, Cursor,
+  Codex CLI, and Gemini CLI; the homepage is the GitHub README until the new
+  skills.sh page is indexed.
+- Ten skill descriptions dropped duplicate trigger phrases to keep the skill
+  listing under its 39,000-character ratchet (ADR-0010). Every routing pointer
+  stays.
+
+### Added
+
+- **`audit-agent-speed`.** Measures, then fixes a slow coding-agent host:
+  transcript-parsing status lines, per-call and blocking Stop hooks, AGENTS.md
+  skipped under a parent CLAUDE.md, un-ignored worktree folders doubling
+  search, global effort and Explore model, worktree pile-up, antivirus,
+  indexer and vendor WMI pollers. Ships
+  `scripts/stop-typecheck.mjs`, an `asyncRewake` Stop hook that typechecks in
+  the background, skips when nothing changed, wakes the agent only on a new
+  error set, and summarizes codegen cascades.
+- Routing rule: agent or machine slow → `audit-agent-speed`; product slow →
+  `audit-performance`.
+
+### Fixed
+
+- `docs/AGENTS.template.md` now says Claude Code skips `AGENTS.md` when a
+  `CLAUDE.md` exists in the repo or any parent folder, and how to load both.
+
+## [1.40.1] — 2026-09-29
+
+The completion gate stops looping. In Cursor it ran twice on every stop, and
+the copy loaded from the Claude Code config had no cap, so an open checklist
+sent the same follow-up for hours, including to sessions that did not own it.
+
+### Fixed
+
+- **The completion gate looped for hours in Cursor.** Cursor also runs Claude
+  Code hooks from `~/.claude/settings.json`, with no `loop_limit`, so every
+  stop was gated twice and the Claude-config copy never stood aside. Each
+  registration now carries `--host=cursor` or `--host=claude`, and inside
+  Cursor the Claude-config copy stands aside when the native entry exists
+  (ADR-0012).
+- **Two agents in one repo restarted each other's loop.** The follow-up budget
+  was one workspace counter. It is now per conversation, kept in
+  `~/.cache/cursor-kenji/completion-gate/`: three follow-ups while none of the
+  items that conversation saw closes. The old
+  `.cursor/completion-gate.count.json` is deleted on the next run.
+- **The gate pushed work that waits on a person.** Items marked
+  `blocked by:`, `blocked on:`, or `waiting on:` no longer gate, and neither
+  does a state file untouched for 24 hours. The follow-up now says how to
+  stand down: mark an item that waits on a person as blocked, leave a
+  checklist another agent owns unchanged, say so in one line, and stop.
 
 ## [1.40.0] — 2026-09-29
 

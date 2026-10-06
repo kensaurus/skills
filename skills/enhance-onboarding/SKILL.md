@@ -3,8 +3,8 @@ name: enhance-onboarding
 description: >
   Activation pass: define the activation event, cut steps to first value, add
   templates, sample data, a short checklist, and signup → activated events.
-  Use when "improve onboarding", "users sign up and leave", "time to value",
-  or "activation rate".
+  Use when "improve onboarding", "users sign up and leave", or "activation
+  rate".
 license: MIT
 ---
 

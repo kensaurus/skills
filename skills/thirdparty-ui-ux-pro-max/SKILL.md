@@ -301,4 +301,4 @@ Before delivering UI code, verify these items:
 
 ---
 
-**Source:** [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) (MIT). Installed via uipro-cli in cursor_kenji as `thirdparty-ui-ux-pro-max`. See [ATTRIBUTION.md](ATTRIBUTION.md).
+**Source:** [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) (MIT). Installed via uipro-cli in kenji as `thirdparty-ui-ux-pro-max`. See [ATTRIBUTION.md](ATTRIBUTION.md).

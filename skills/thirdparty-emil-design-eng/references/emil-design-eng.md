@@ -673,4 +673,4 @@ When reviewing UI code, check for:
 
 ---
 
-**Source:** [emilkowalski/skills — emil-design-eng](https://github.com/emilkowalski/skills/blob/main/skills/emil-design-eng/SKILL.md) by Emil Kowalski. Installed in cursor-kenji as `thirdparty-emil-design-eng`. See [ATTRIBUTION.md](../ATTRIBUTION.md).
+**Source:** [emilkowalski/skills — emil-design-eng](https://github.com/emilkowalski/skills/blob/main/skills/emil-design-eng/SKILL.md) by Emil Kowalski. Installed in kenji as `thirdparty-emil-design-eng`. See [ATTRIBUTION.md](../ATTRIBUTION.md).

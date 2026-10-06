@@ -2,9 +2,9 @@
 name: docs-writer
 description: >
   Write developer docs: README content, API references, code comments,
-  changelog entries. Use when "write docs", "document this API", "add code
-  comments", or "explain for contributors". README visuals → enhance-readme.
-  Co-authored specs → docs-coauthor.
+  changelog entries. Use when "write docs", "document this API", or "explain
+  for contributors". README visuals → enhance-readme. Co-authored specs →
+  docs-coauthor.
 license: MIT
 ---
 
