@@ -167,6 +167,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | Say this in chat | Skill |
 |:-----------------|:------|
 | "make this Capacitor/Ionic app work on all screen sizes" | `enhance-capacitor-ui` |
+| "feels like a website", "not native", "add haptics", "immersive full screen", "declutter the home screen" | `enhance-mobile-native-feel` |
 | "make it a PWA", "offline support", "service worker", "install prompt", "add to home screen" | `enhance-pwa` |
 | "improve my README", "add screenshots to README", "make README prettier" | `enhance-readme` |
 | "improve onboarding", "users sign up and leave", "time to value", "first-run experience", "activation rate" | `enhance-onboarding` |

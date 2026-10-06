@@ -1,6 +1,6 @@
 # cursor-kenji
 
-> You say the job; the playbook runs. Installable workflows for Cursor, Claude Code, Codex CLI, and Gemini CLI: 157 agent skills, 63 slash commands, 6 subagents, and MCP templates for React / Next.js / Supabase.
+> You say the job; the playbook runs. Installable workflows for Cursor, Claude Code, Codex CLI, and Gemini CLI: 158 agent skills, 63 slash commands, 6 subagents, and MCP templates for React / Next.js / Supabase.
 >
 > Full pack: `npx @kensaurus/cursor-kenji --all` (skills + commands; kenji `--all` = four tools). Skills only: `npx skills add kensaurus/cursor-kenji` (that CLI's `--all` means every skill to every agent). Claude Code plugin: `/plugin marketplace add kensaurus/cursor-kenji`. Re-check: `npx @kensaurus/cursor-kenji --verify --all`.
 
