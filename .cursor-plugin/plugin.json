@@ -1,7 +1,7 @@
 {
   "name": "cursor-kenji",
   "displayName": "cursor-kenji",
-  "version": "1.40.0",
+  "version": "1.41.0",
   "description": "Ready-made playbooks your AI editor auto-triggers from a plain-English request — 158 Cursor agent skills, 63 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.",
   "author": {
     "name": "kensaurus"

@@ -6,6 +6,58 @@ All notable additions and changes to cursor-kenji are listed here.
 
 ## [Unreleased]
 
+## [1.41.0] — 2026-10-06
+
+Adds the app-wide "make this mobile app feel native" pass the pack lacked, and
+refreshes the mobile and UX skills against 2026 platform facts: iOS 26 Liquid
+Glass tab bars, Android 16 enforced edge-to-edge, Expo SDK 54–58 native tabs,
+Reanimated 4, FlashList v2, Capacitor 8.3 system bars. Every fact was pulled
+from the vendor docs or maintainer posts dated 2025–2026 and is cited in the
+new skill's references.
+
+### Added
+
+- **`enhance-mobile-native-feel`** skill: one coherent pass over an existing
+  Expo / React Native or Capacitor app that reads as a website: system tab bar
+  and sheets, edge-to-edge insets, virtualized lists, one spring vocabulary on
+  the UI thread, haptics by meaning, platform symbols, Dynamic Type, two accent
+  roles. Scores ten native-feel checks before and after
+  (`references/native-feel-scorecard.md`), names the web-shaped smells it
+  removes (`references/anti-patterns.md`), and carries version-gated recipes
+  for both stacks (`references/stack-recipes.md`). Routes per-screen polish to
+  `mobile-rn-screen` and surface splitting to `enhance-capacitor-ui`.
+
+### Changed
+
+- **Mobile and UX skills refreshed for 2026.** `design-mobile-first` gains a
+  native-shell-first section (NativeTabs, Android 16 edge-to-edge, Capacitor
+  8.3 safe-area variables, sheets, press feedback) and moves the web drawer
+  example to `references/web-nav-drawer.md`. `mobile-rn-screen` adds the
+  native-feedback rule and pain classes S19–S20. `mobile-rn-performance`
+  states the FlashList v2 (New Architecture, no `estimatedItemSize`) and
+  LegendList rules and the Reanimated 4 `react-native-worklets` split.
+  `enhance-capacitor-ui` and `plan-capacitor-hardening` record that
+  `StatusBar.setBackgroundColor` / `overlaysWebView: false` are no-ops on
+  Android 16 and that Capacitor 8.3.2+ handles insets in core.
+  `plan-mobile-readiness` adds pillar F (native feel as 2.5.2 evidence).
+  `design-motion` and `enhance-motion` add the spring vocabulary (Material 3
+  spatial vs effects) and hand native apps to the new skill.
+  `audit-ux-journeys` adds IA10–IA12 (tab destinations, one question per
+  screen, sheet vs page) with methods in its checklist; `audit-ux` and
+  `mobile-emulator-test` score the same signals.
+- **Descriptions trimmed** on the twelve skills above (418 chars reclaimed) so
+  the new skill fits under the 39,000-char listing ratchet (ADR-0010); the
+  ratchet did not move.
+
+### Fixed
+
+- **Phantom modified files on every checkout.** Fourteen tracked files were
+  committed with CRLF while `.gitattributes` declares `eol=lf`, so `git status`
+  listed them as modified with an empty diff. They are renormalized; content
+  is unchanged.
+- `enhance-web-web3d` now links its `references/css-canvas-effects.md`, which
+  was shipped but unreachable from the skill.
+
 ## [1.40.0] — 2026-09-29
 
 Ships the `housekeep-files` document organizer, with the Windows script fixed

@@ -1,8 +1,8 @@
 {
   "name": "cursor-kenji",
   "displayName": "cursor-kenji",
-  "description": "You say the job; the playbook runs. 157 agent skills, 63 slash commands, 6 subagents, and MCP templates for React / Next.js / Supabase. Effort-routed for Claude Opus 5.5: audit, plan, and judge skills at high, implementation at the medium default.",
-  "version": "1.40.0",
+  "description": "You say the job; the playbook runs. 158 agent skills, 63 slash commands, 6 subagents, and MCP templates for React / Next.js / Supabase. Effort-routed for Claude Opus 5.5: audit, plan, and judge skills at high, implementation at the medium default.",
+  "version": "1.41.0",
   "author": {
     "name": "kensaurus",
     "email": "kensaurus@gmail.com"
