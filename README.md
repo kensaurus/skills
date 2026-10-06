@@ -26,17 +26,23 @@
 
 </div>
 
-## Install (30 seconds)
+## <img src="docs/screenshots/icons/install.png" width="28" height="28" alt="" align="absmiddle"> Install (30 seconds)
 
 ```bash
 npx @kensaurus/skills --all
 ```
 
-That installs skills, slash commands, agents, and rules into every tool it supports, then hash-checks the copies. Restart Cursor. Done.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/architecture-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/architecture-light.png">
+  <img alt="One command, four tools. 160 skills, 63 commands, 6 subagents, 13 rules, and 15 MCP templates flow through npx @kensaurus/skills --all into ~/.cursor, ~/.claude, ~/.codex, and ~/.gemini. No install scripts, no network, no shell." src="docs/screenshots/architecture-dark.png" width="100%">
+</picture>
+
+One command merge-installs skills, slash commands, agents, and rules into every tool it finds, then hash-checks every copy. The installer has no install scripts, opens no network connection, and runs no shell. Restart Cursor. Done.
 
 > Skills only? `npx skills add kensaurus/skills`. Claude Code plugin? `/plugin marketplace add kensaurus/skills` then `/plugin install kenji@kenji`. All flags → [Install options](#install-options). New to this? **[Plain-language guide →](docs/GETTING-STARTED.md)**. Renamed from `cursor-kenji` in 2.0.0 → [Upgrading](#upgrading-from-cursor-kenji).
 
-## How one request lifts the repo
+## <img src="docs/screenshots/icons/ladder.png" width="28" height="28" alt="" align="absmiddle"> How one request lifts the repo
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/ladder-dark.png">
@@ -56,7 +62,7 @@ Every playbook walks the same five rungs. Assess before you change. Prove before
 
 The 23 `plan-*` skills audit first and wait for your approval. See [docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md).
 
-## What should I say?
+## <img src="docs/screenshots/icons/say.png" width="28" height="28" alt="" align="absmiddle"> What should I say?
 
 | You say… | What kicks in | What you get |
 |:---------|:--------------|:-------------|
@@ -73,7 +79,7 @@ The 23 `plan-*` skills audit first and wait for your approval. See [docs/PLAN-LO
 
 To force a skill: *"use `enhance-web-ux` on `/dashboard`"*. Every trigger phrase → [docs/CATALOG.md](docs/CATALOG.md).
 
-## Tour
+## <img src="docs/screenshots/icons/tour.png" width="28" height="28" alt="" align="absmiddle"> Tour
 
 Four examples. The rule is the same: you say the job, and a named playbook runs.
 
@@ -112,17 +118,15 @@ Four examples. The rule is the same: you say the job, and a named playbook runs.
   </tr>
 </table>
 
-## What's inside
+## <img src="docs/screenshots/icons/inside.png" width="28" height="28" alt="" align="absmiddle"> What's inside
 
-| Piece | Count | What it is | How you use it |
-|:------|------:|:-----------|:---------------|
-| **Skills** | 160 | A playbook for one job | Describe the job in chat |
-| **Cursor skills** | 12 | IDE tools (canvas, hooks, rules, PR splitter) | Same, inside Cursor |
-| **Commands** | 63 | Shortcuts | Type `/commit`, `/pr`, `/plan-mode` |
-| **Subagents** | 6 | Helpers that peel off one task | Say *"review this PR"* |
-| **MCP servers** | 15 | Templates for your database, GitHub, browser | Copy a template, set env vars (essential is 3) |
-| **Project rules** | 7 | House rules the AI always obeys | Drop a `.mdc` into `.cursor/rules/` |
-| **Completion hook** | 1 | Opt-in stop gate | Continues only unfinished closure state |
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/pieces-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/pieces-light.png">
+  <img alt="160 skills, a playbook for one job. 63 commands, type slash in chat. 6 subagents, one task peeled off. 13 rules, house rules always on. 15 MCP templates with pinned servers. 12 Cursor skills, IDE tools. 1 opt-in stop hook." src="docs/screenshots/pieces-dark.png" width="100%">
+</picture>
+
+Skills run from a plain request. Commands start with `/`. Subagents peel off one task. Rules are `.mdc` files the AI always obeys. MCP templates pin exact server versions. Details for each → [Commands, subagents, MCP, rules](#commands-subagents-mcp-rules).
 
 Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **172** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://labs.cloudsecurityalliance.org/research/csa-research-note-slopsquatting-ai-supply-chain-20260419-csa/).
 
@@ -158,7 +162,7 @@ _Generated from each skill's `SKILL.md` by `npm run gen:skill-index`. **172 skil
 
 <!-- SKILL-INDEX:END -->
 
-## Install options
+## <img src="docs/screenshots/icons/options.png" width="28" height="28" alt="" align="absmiddle"> Install options
 
 | Method | Command | What it installs |
 |:-------|:--------|:-----------------|
@@ -219,7 +223,7 @@ Pairs with `mushi-health` and `test-playwright`. Repo: [kensaurus/mushi-mushi](h
 
 </details>
 
-## Commands, subagents, MCP, rules
+## <img src="docs/screenshots/icons/commands.png" width="28" height="28" alt="" align="absmiddle"> Commands, subagents, MCP, rules
 
 <details>
 <summary><b>Commands (63)</b> — type <code>/</code> in chat to see them all</summary>
@@ -330,7 +334,7 @@ skills/
 
 </details>
 
-## Upgrading from cursor-kenji
+## <img src="docs/screenshots/icons/upgrade.png" width="28" height="28" alt="" align="absmiddle"> Upgrading from cursor-kenji
 
 2.0.0 renamed the pack: repo `kensaurus/cursor-kenji` → `kensaurus/skills`, npm `@kensaurus/cursor-kenji` → `@kensaurus/skills`, plugin `cursor-kenji@cursor-kenji` → `kenji@kenji`, slash namespace `/cursor-kenji:` → `/kenji:`. Old GitHub URLs redirect.
 
@@ -348,7 +352,7 @@ skills/
 
 </details>
 
-## FAQ
+## <img src="docs/screenshots/icons/faq.png" width="28" height="28" alt="" align="absmiddle"> FAQ
 
 <details>
 <summary><b>How do skills trigger? How do I force one?</b></summary>
@@ -378,7 +382,7 @@ Copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and set the env vars; never
 
 </details>
 
-## Contributing
+## <img src="docs/screenshots/icons/contrib.png" width="28" height="28" alt="" align="absmiddle"> Contributing
 
 ```bash
 mkdir -p skills/my-skill && vim skills/my-skill/SKILL.md
@@ -398,19 +402,58 @@ kenji ships executable skills, MCP configs, commands, and subagents in one insta
 
 ## More from KENSAURUS
 
-| | App | What it is |
-|---|---|---|
-| <img src="https://kensaur.us/glot-it/icon-512.png" width="28" height="28" alt=""> | [Glot It](https://kensaur.us/glot-it/?utm_source=github&utm_medium=readme) | Learn Thai: bite-size lessons, smart flashcards, and an AI tutor |
-| <img src="https://kensaur.us/yen-yen/icon.svg" width="28" height="28" alt=""> | [yen-yen](https://kensaur.us/yen-yen/?utm_source=github&utm_medium=readme) | Where did the money go? A kakeibo for households |
-| <img src="https://kensaur.us/the-wanting-mind/pwa-512x512.png" width="28" height="28" alt=""> | [The Wanting Mind](https://kensaur.us/the-wanting-mind/?utm_source=github&utm_medium=readme) | A 147,000-word interactive webbook with 268 concepts and 242 citations |
-| <img src="https://kensaur.us/help-her-take-photo/assets/apple-touch-icon.png" width="28" height="28" alt=""> | [Help Her Take Photo](https://kensaur.us/help-her-take-photo/?utm_source=github&utm_medium=readme) | Pair phones, direct the pose, nail the photo |
-| <img src="https://talk.kensaur.us/pwa-192.png" width="28" height="28" alt=""> | [Cooler Heads](https://talk.kensaur.us/?utm_source=github&utm_medium=readme) | Practice hard conversations before you have them |
-| <img src="https://solo-boss.kensaur.us/apple-touch-icon.png" width="28" height="28" alt=""> | [一人社長 Solo Boss](https://solo-boss.kensaur.us/?utm_source=github&utm_medium=readme) | Bookkeeping and tax-filing co-pilot for one-person companies in Japan |
-| <img src="https://tsumagoi.kensaur.us/apple-touch-icon.png" width="28" height="28" alt=""> | [Tsumagoi Work&Camp 嬬恋牧場](https://tsumagoi.kensaur.us/?utm_source=github&utm_medium=readme) | Coworking camp at 1,444 m · [Instagram](https://www.instagram.com/tsumagoicamp/) · [Facebook](https://www.facebook.com/profile.php?id=61592113053042) · [Maps](https://maps.app.goo.gl/JCNnTfsdQVHCS1FA7) |
-| <img src="https://kensaur.us/mushi-mushi/admin/favicon.svg" width="28" height="28" alt=""> | [mushi-mushi](https://github.com/kensaurus/mushi-mushi) | Open-source in-app bug reporting SDK |
-| <img src="https://kensaur.us/favicon.svg" width="28" height="28" alt=""> | [KENSAURUS](https://kensaur.us/?view=portfolio&utm_source=github&utm_medium=readme) | Everything else built under the same roof |
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="https://kensaur.us/glot-it/icon-512.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>glot.it</b> · A Thai tutor that talks back.<br>
+      <sub><a href="https://apps.apple.com/us/app/glot-it/id6761582648">App Store: glot.it</a> · <a href="https://play.google.com/store/apps/details?id=com.glotit.app">Google Play: glot.it – Learn Thai</a> · <a href="https://kensaur.us/glot-it/?utm_source=github&utm_medium=readme">Web</a></sub>
+    </td>
+    <td width="50%" valign="top">
+      <img src="https://kensaur.us/yen-yen/icon.svg" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>yen-yen</b> · Mindful money for two. A kakeibo with no bank login and no ads.<br>
+      <sub><a href="https://apps.apple.com/app/id6764548441">App Store: yen-yen – Expense Tracker</a> · <a href="https://play.google.com/store/apps/details?id=app.yenyen">Google Play: yen-yen – Expense Tracker</a> · <a href="https://kensaur.us/yen-yen/?utm_source=github&utm_medium=readme">Web</a></sub>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <img src="https://kensaur.us/the-wanting-mind/pwa-512x512.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>the wanting mind</b> · A free living book on why we want what we want. Read it, hear it, ask it questions.<br>
+      <sub><a href="https://apps.apple.com/us/app/the-wanting-mind/id6761361305">App Store: the wanting mind – Living Book</a> · <a href="https://play.google.com/store/apps/details?id=us.kensaur.thewantingmind">Google Play: the wanting mind – Living Book</a> · <a href="https://kensaur.us/the-wanting-mind/?utm_source=github&utm_medium=readme">Web</a></sub>
+    </td>
+    <td valign="top">
+      <img src="https://kensaur.us/help-her-take-photo/assets/apple-touch-icon.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>Help Her Take Photo</b> · A pose coach for couple photos. See her camera live on your phone.<br>
+      <sub><a href="https://apps.apple.com/app/help-her-take-photo/id6762513666">App Store: Help Her Take Photo</a> · <a href="https://play.google.com/store/apps/details?id=com.kensaurus.helphertakephoto">Google Play: help her take photo – Pose Cam</a> · <a href="https://kensaur.us/help-her-take-photo/?utm_source=github&utm_medium=readme">Web</a></sub>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <img src="https://talk.kensaur.us/pwa-192.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>lets-talk</b> · Practice hard conversations before you have them, scored.<br>
+      <sub><a href="https://play.google.com/store/apps/details?id=us.kensaur.howtotalktogirls">Google Play: lets-talk – Conversation Coach</a> · <a href="https://talk.kensaur.us/?utm_source=github&utm_medium=readme">Web</a></sub>
+    </td>
+    <td valign="top">
+      <img src="https://solo-boss.kensaur.us/apple-touch-icon.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>一人社長 Solo Boss</b> · Accounting that mostly runs itself, for one-person companies in Japan.<br>
+      <sub><a href="https://solo-boss.kensaur.us/?utm_source=github&utm_medium=readme">Web</a></sub>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <img src="https://tsumagoi.kensaur.us/apple-touch-icon.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>Tsumagoi Work&amp;Camp 嬬恋牧場</b> · A bookable mountain campground at 1,444 m, built end to end.<br>
+      <sub><a href="https://tsumagoi.kensaur.us/?utm_source=github&utm_medium=readme">Web</a> · <a href="https://www.instagram.com/tsumagoicamp/">Instagram</a> · <a href="https://maps.app.goo.gl/JCNnTfsdQVHCS1FA7">Maps</a></sub>
+    </td>
+    <td valign="top">
+      <img src="https://kensaur.us/mushi-mushi/admin/favicon.svg" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>Mushi Mushi</b> · Open-source in-app bug reporting SDK. Bug intel for when the graphs lie.<br>
+      <sub><a href="https://www.npmjs.com/package/mushi-mushi">npm</a> · <a href="https://github.com/kensaurus/mushi-mushi">GitHub</a></sub>
+    </td>
+  </tr>
+</table>
 
-All apps live under [kensaur.us](https://kensaur.us).
+All apps on Google Play: [kensaurus developer page](https://play.google.com/store/apps/developer?id=kensaurus). Everything else: [kensaur.us](https://kensaur.us/?view=portfolio&utm_source=github&utm_medium=readme).
 
 ---
 

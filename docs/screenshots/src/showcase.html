@@ -6,7 +6,7 @@
 <!--
   One source for every shipped brand image. Render with:
     node scripts/render-brand-assets.mjs
-  Views (?view=): hero · ladder · grill · build · audit · ship · og · logo · logo-light · favicon
+  Views (?view=): hero · ladder · architecture · pieces · grill · build · audit · ship · og · logo · logo-light · favicon · icon&name=<glyph>&bg=<lime|yellow|coral>
   Theme (?theme=): dark (default) · light
   System: hand-built pixel kensaurus, Bricolage Grotesque display, Press Start 2P labels,
   JetBrains Mono code, lime / yellow / coral on ink or paper, 3px borders, hard offset shadows.
@@ -92,6 +92,30 @@
   .rung.c { background: var(--coral); color: #fff; } .rung.s { background: var(--sky); color: var(--ink); } .rung.w { background: #F4F7F2; color: var(--ink); }
   .rung.c .g { border-color: #fff; }
   .rung.w, .rung.y, .rung.l, .rung.s { --border: var(--ink); }
+
+  /* architecture: pack -> installer -> tools */
+  .arch { display: grid; grid-template-columns: 420px 60px 1fr 60px 420px; gap: 0; align-items: center; }
+  .stack { display: grid; gap: 12px; }
+  .box { border: 3px solid var(--border); box-shadow: 8px 8px 0 var(--border); padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--tile); }
+  .box .n { font-family: "Press Start 2P", monospace; font-size: 13px; }
+  .box .t { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+  .box .d { font-size: 17px; font-weight: 500; opacity: .85; }
+  .box.y { background: var(--yellow); color: var(--ink); --border: var(--ink); } .box.l { background: var(--lime); color: var(--ink); --border: var(--ink); }
+  .box.c { background: var(--coral); color: #fff; } .box.s { background: var(--sky); color: var(--ink); --border: var(--ink); } .box.w { background: #F4F7F2; color: var(--ink); --border: var(--ink); }
+  .hub { background: var(--lime); color: var(--ink); --border: var(--ink); border: 3px solid var(--border); box-shadow: 12px 12px 0 var(--border); padding: 26px; text-align: center; display: grid; gap: 10px; justify-items: center; }
+  .hub code { font-family: "JetBrains Mono", monospace; font-size: 26px; font-weight: 700; background: var(--ink); color: var(--lime); padding: 10px 16px; display: inline-block; }
+  .hub .d { font-size: 19px; font-weight: 600; }
+  .arrows { display: grid; place-items: center; font-size: 40px; font-weight: 800; }
+  .path { font-family: "JetBrains Mono", monospace; font-size: 15px; font-weight: 700; opacity: .85; }
+  /* pieces strip */
+  .pieces { display: grid; grid-template-columns: repeat(7, 1fr); gap: 18px; align-items: stretch; }
+  .piece { border: 3px solid var(--ink); box-shadow: 8px 8px 0 var(--border); padding: 18px 16px 16px; display: grid; gap: 8px; justify-items: start; color: var(--ink); }
+  .piece .count { font-family: "Bricolage Grotesque", sans-serif; font-size: 56px; font-weight: 800; letter-spacing: -0.04em; line-height: .9; }
+  .piece .k { font-family: "Press Start 2P", monospace; font-size: 11px; letter-spacing: .04em; }
+  .piece .d { font-size: 17px; line-height: 1.25; font-weight: 500; }
+  .piece svg { display: block; }
+  /* icon tile */
+  .icontile { display: grid; place-items: center; background: var(--lime); }
 </style>
 </head>
 <body>
@@ -143,6 +167,22 @@
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" shape-rendering="crispEdges" role="img" aria-label="kensaurus">${rects}</svg>`;
   }
   // Ink-on-lime head for the logo: swap body lime to ink, keep eye/mouth.
+
+  const GLYPHS = {
+    install:  ["...KK...","...KK...","...KK...","K..KK..K","KK.KK.KK",".KKKKKK.","..KKKK..","KKKKKKKK"],
+    say:      [".KKKKKK.","K......K","K.K.K..K","K......K","K......K",".KKKKKK.","..K.....",".K......"],
+    ladder:   ["......KK","....KKKK","....KK..","..KKKK..","..KK....","KKKK....","KK......","KKKKKKKK"],
+    tour:     ["..KKKK..",".K....K.","K.KK...K","K.KK...K","K......K",".K....K.","..KKKK..","..K..K.."],
+    inside:   ["KKKKKKKK","K......K","K.KKKK.K","K.K..K.K","K.K..K.K","K.KKKK.K","K......K","KKKKKKKK"],
+    options:  ["KKKKKKKK","........","KK.KKKKK","........","KKKKK.KK","........","KKK.KKKK","........"],
+    commands: ["K.......","KK......","KKK.....","KKKK....","KKK.....","KK......","K...KKKK","....KKKK"],
+    upgrade:  ["...KK...","..KKKK..",".KKKKKK.","KKKKKKKK","...KK...","...KK...","...KK...","...KK..."],
+    faq:      [".KKKKKK.","KK....KK","......KK","....KKK.","...KK...","...KK...","........","...KK..."],
+    apps:     ["KKK.KKK.","KKK.KKK.","KKK.KKK.","........","KKK.KKK.","KKK.KKK.","KKK.KKK.","........"],
+    shield:   ["KKKKKKKK","K......K","K.KKKK.K","K.K..K.K","K.K..K.K",".K.KK.K.","..K..K..","...KK..."],
+    contrib:  ["..K..K..","..K..K..","KKKKKKKK","..K..K..","..K..K..","KKKKKKKK","..K..K..","..K..K.."],
+  };
+  const glyph = (name, size = 8, color = "#0E1116") => sprite({ size, map: GLYPHS[name] || GLYPHS.inside, palette: { K: color } });
   const MONO = { G: "#0E1116", D: "#0E1116", K: "#9BE31A", W: "#FFFFFF", R: "#FF4D3D", Y: "#FFD23F" };
 
   const params = new URLSearchParams(location.search);
@@ -152,7 +192,7 @@
   const counts = { skills: params.get("skills") || "160", commands: params.get("commands") || "63", tools: "4" };
 
   const size = { hero: [1600, 900], grill: [1200, 700], build: [1200, 700], audit: [1200, 700], ship: [1200, 700],
-                 og: [1200, 630], ladder: [1600, 760], logo: [1024, 1024], "logo-light": [1024, 1024], "logo-dark": [1024, 1024], favicon: [64, 64] }[view] || [1600, 900];
+                 og: [1200, 630], ladder: [1600, 760], architecture: [1600, 760], pieces: [1600, 420], icon: [96, 96], logo: [1024, 1024], "logo-light": [1024, 1024], "logo-dark": [1024, 1024], favicon: [64, 64] }[view] || [1600, 900];
   const app = document.getElementById("app");
   Object.assign(document.body.style, { width: size[0] + "px", height: size[1] + "px" });
   Object.assign(app.style, { width: size[0] + "px", height: size[1] + "px" });
@@ -223,6 +263,47 @@
         ${r("c", 460, "5 · SHIP", "PR and watch", "Opens the PR, confirms the live revision, watches it.", "Repo gains: a release that stayed up")}
       </div>`;
     },
+    architecture: () => {
+      app.style.padding = "48px 64px 48px";
+      app.style.gridTemplateRows = "auto auto 1fr";
+      app.style.alignContent = "start";
+      const box = (cls, n, t, d) => `<div class="box ${cls}"><div><div class="n">${n}</div><div class="t">${t}</div></div><div class="d">${d}</div></div>`;
+      return `${topBar(`<div class="label">WHAT GETS INSTALLED, AND WHERE</div>`)}
+      <h1 class="md">One command. <span class="hl">Four tools.</span></h1>
+      <div class="arch">
+        <div class="stack">
+          ${box("y", counts.skills, "Skills", "SKILL.md playbooks")}
+          ${box("l", counts.commands, "Commands", "/slash shortcuts")}
+          ${box("s", "6", "Subagents", "review, debug, migrate")}
+          ${box("w", "13", "Rules", "7 project + 6 global")}
+          ${box("c", "15", "MCP templates", "pinned versions")}
+        </div>
+        <div class="arrows">→</div>
+        <div class="hub"><code>npx @kensaurus/skills --all</code><div class="d">merge-install, then hash-check every copy</div><div class="d">no install scripts · no network · no shell</div></div>
+        <div class="arrows">→</div>
+        <div class="stack">
+          ${box("w", "CURSOR", "~/.cursor/", "<span class=path>skills · commands · agents · rules</span>")}
+          ${box("w", "CLAUDE CODE", "~/.claude/", "<span class=path>skills · commands · agents · rules</span>")}
+          ${box("w", "CODEX CLI", "~/.codex/", "<span class=path>AGENTS.md · prompts</span>")}
+          ${box("w", "GEMINI CLI", "~/.gemini/", "<span class=path>GEMINI.md · commands</span>")}
+        </div>
+      </div>`;
+    },
+    pieces: () => {
+      app.style.padding = "36px 64px 40px";
+      app.style.gridTemplateRows = "1fr";
+      const piece = (cls, g, count, k, d) => `<div class="piece ${cls}" style="background: var(--${cls})">${glyph(g, 6)}<div class="count">${count}</div><div class="k">${k}</div><div class="d">${d}</div></div>`;
+      return `<div class="pieces">
+        ${piece("yellow", "inside", counts.skills, "SKILLS", "A playbook for one job")}
+        ${piece("lime", "commands", counts.commands, "COMMANDS", "Type / in chat")}
+        ${piece("sky", "say", "6", "SUBAGENTS", "One task, peeled off")}
+        ${piece("yellow", "shield", "13", "RULES", "House rules, always on")}
+        ${piece("lime", "options", "15", "MCP", "Pinned server templates")}
+        ${piece("sky", "tour", "12", "CURSOR SKILLS", "IDE tools")}
+        ${piece("yellow", "upgrade", "1", "STOP HOOK", "Opt-in completion gate")}
+      </div>`;
+    },
+    icon: () => { app.className = "icontile"; app.style.background = params.get("bg") === "yellow" ? "var(--yellow)" : params.get("bg") === "coral" ? "var(--coral)" : "var(--lime)"; return glyph(params.get("name") || "inside", 9, params.get("bg") === "coral" ? "#FFFFFF" : "#0E1116"); },
     og: () => {
       app.classList.add("og");
       app.style.padding = "44px 56px 40px";

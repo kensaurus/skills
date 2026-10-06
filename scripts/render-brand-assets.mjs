@@ -16,6 +16,9 @@
  * OUTPUTS:
  *   docs/screenshots/hero-{dark,light}.png        1600×900
  *   docs/screenshots/ladder-{dark,light}.png      1600×760
+ *   docs/screenshots/architecture-{dark,light}.png 1600×760
+ *   docs/screenshots/pieces-{dark,light}.png      1600×420
+ *   docs/screenshots/icons/<name>.png              96×96 section icons
  *   docs/screenshots/{grill,build,audit,ship}-dark.png  1200×700
  *   assets/og.png                                  1200×630
  *   assets/logo.png · logo-light.png · logo-dark.png   1024×1024
@@ -41,6 +44,13 @@ const JOBS = [
   { view: "hero", theme: "light", w: 1600, h: 900, out: "docs/screenshots/hero-light.png" },
   { view: "ladder", theme: "dark", w: 1600, h: 760, out: "docs/screenshots/ladder-dark.png" },
   { view: "ladder", theme: "light", w: 1600, h: 760, out: "docs/screenshots/ladder-light.png" },
+  { view: "architecture", theme: "dark", w: 1600, h: 760, out: "docs/screenshots/architecture-dark.png" },
+  { view: "architecture", theme: "light", w: 1600, h: 760, out: "docs/screenshots/architecture-light.png" },
+  { view: "pieces", theme: "dark", w: 1600, h: 420, out: "docs/screenshots/pieces-dark.png" },
+  { view: "pieces", theme: "light", w: 1600, h: 420, out: "docs/screenshots/pieces-light.png" },
+  ...["install", "say", "ladder", "tour", "inside", "options", "commands", "upgrade", "faq", "apps", "shield", "contrib"].map((name) => (
+    { view: "icon", theme: "dark", w: 96, h: 96, out: `docs/screenshots/icons/${name}.png`, extra: { name } }
+  )),
   { view: "grill", theme: "dark", w: 1200, h: 700, out: "docs/screenshots/grill-dark.png" },
   { view: "build", theme: "dark", w: 1200, h: 700, out: "docs/screenshots/build-dark.png" },
   { view: "audit", theme: "dark", w: 1200, h: 700, out: "docs/screenshots/audit-dark.png" },
@@ -59,7 +69,7 @@ try {
   for (const job of jobs) {
     const page = await browser.newPage({ viewport: { width: job.w, height: job.h }, deviceScaleFactor: 1 });
     page.on("pageerror", (e) => { throw new Error(`${job.view}: ${e.message}`); });
-    const q = new URLSearchParams({ view: job.view, theme: job.theme, ...counts });
+    const q = new URLSearchParams({ view: job.view, theme: job.theme, ...counts, ...(job.extra || {}) });
     await page.goto(`${src}?${q}`);
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(300);

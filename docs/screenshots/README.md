@@ -13,6 +13,9 @@ node scripts/render-brand-assets.mjs hero og  # a subset
 |---|---|---|
 | `hero` (dark, light) | `hero-dark.png`, `hero-light.png` | 1600×900 |
 | `ladder` (dark, light) | `ladder-dark.png`, `ladder-light.png` | 1600×760 |
+| `architecture` (dark, light) | `architecture-dark.png`, `architecture-light.png` | 1600×760 |
+| `pieces` (dark, light) | `pieces-dark.png`, `pieces-light.png` | 1600×420 |
+| `icon&name=<glyph>` | `icons/<glyph>.png` (12 section icons) | 96×96 |
 | `grill` `build` `audit` `ship` | `<view>-dark.png` | 1200×700 |
 | `og` | `assets/og.png` (copied to `site/`) | 1200×630 |
 | `logo` `logo-light` `logo-dark` | `assets/logo*.png`, `assets/logo.svg` | 1024×1024 |
