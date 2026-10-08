@@ -31,7 +31,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 ---
 
-## Skills (160)
+## Skills (161)
 
 ### Enhance
 
@@ -77,7 +77,7 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 
 #### `enhance-mobile-native-feel`
 **Triggers:** "feels like a website", "not native", "HTML-like mobile app", "add haptics", "immersive full screen", "declutter the home screen", "long page on mobile"
-**What it does:** One app-wide pass that makes an existing Expo / React Native or Capacitor app read as native on iOS 26 and Android 16: system tab bar and sheets, edge-to-edge insets, virtualized lists (FlashList v2 / LegendList), one spring vocabulary on the UI thread, haptics by meaning, platform symbols, Dynamic Type, two accent roles. Scores ten native-feel checks before and after; version-gated recipes for Expo SDK 54–58 and Capacitor 8.3+.
+**What it does:** One app-wide pass that makes an existing Expo / React Native or Capacitor app read as native on iOS 26+ and Android 16: system tab bar and sheets, edge-to-edge insets, Android back, virtualized lists (FlashList v2 / LegendList), one spring vocabulary on the UI thread, haptics by meaning, platform symbols, Dynamic Type, two accent roles. Scores ten native-feel checks plus reduced-motion, target-size, and back gates before and after; version-gated recipes for Expo SDK 54–58 and Capacitor 8 (shell plumbing from `mobile-capacitor-platform`). For the full run with accessibility, device QA, and a PR → `workflow-mobile-native-uiux`.
 **Related:** `mobile-rn-screen`, `enhance-capacitor-ui`, `design-mobile-first`, `mobile-rn-performance`, `mobile-emulator-test`
 
 #### `enhance-readme`
@@ -640,9 +640,9 @@ Every skill carries a **family** (the prefix) and belongs to a **lifecycle stage
 **Related:** `mobile-rn-screen`, `mobile-emulator-start`, `mobile-emulator-test`
 
 #### `mobile-capacitor-platform`
-**Triggers:** "add push notifications", "deep linking", "ship an OTA update", "set up native build CI", "submit to the App Store", "fix an App Store rejection", "make the app work offline", "migrate my web app to Capacitor"
-**What it does:** Capacitor platform + pipeline depth — plugin selection, OTA/live updates, deep/universal links, push (FCM/APNs), offline-first, safe-area, native build CI/CD, App Store/Play Store submission, Capsec security scan.
-**Related:** `enhance-capacitor-ui`, `workflow-spec-tdd`
+**Triggers:** "keyboard covers the input", "status bar overlaps the header", "add push notifications", "deep linking", "ship an OTA update", "set up native build CI", "submit to the App Store", "fix an App Store rejection", "make the app work offline", "migrate my web app to Capacitor"
+**What it does:** Capacitor platform + pipeline depth. Owns the native shell plumbing other mobile skills point to — core `SystemBars` and safe-area CSS, dead `StatusBar` config, keyboard resize, splash, Android back, haptics defaults, large-screen orientation — each with a device probe and a done line; plus Capacitor 8 / targetSdk 36 / Xcode 26 floors, plugin selection, OTA/live updates, deep/universal links, push (FCM/APNs), offline-first, native build CI/CD, store submission, Capsec scan.
+**Related:** `enhance-capacitor-ui`, `enhance-mobile-native-feel`, `workflow-mobile-native-uiux`, `workflow-spec-tdd`
 
 #### `mobile-emulator-start`
 **Triggers:** "start emulator", "start Metro", "restart dev loop", "fix Cannot connect to Expo", "spin up new terminal instance", "stuck bundler", "align emulator geometry"
@@ -812,6 +812,12 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 **What it does:** Full launch preparation sweep. Sequences: SEO (`enhance-web-seo`) → PWA (`enhance-pwa`) → bundle (`audit-bundle-size`) → i18n (`audit-i18n`) → quality gate (`workflow-quality-gate`) → deploy smoke (`deploy-verify`) → day-1 iteration (`iterate-post-launch`). Produces a launch checklist with go/no-go verdict. Local dirty-tree PR prep is `workflow-release-prep`.
 **Chain:** `enhance-web-seo` → `enhance-pwa` → `audit-bundle-size` → `audit-i18n` → `workflow-quality-gate` → `deploy-verify` → `iterate-post-launch`
 **Related:** `workflow-quality-gate`, `iterate-post-launch`, `deploy-verify`, `workflow-release-prep`
+
+#### `workflow-mobile-native-uiux`
+**Triggers:** "fix our mobile UI/UX end to end", "make the app feel native and ship it", "native pass through device QA and a PR"
+**What it does:** End-to-end native UI/UX run on an existing Capacitor, Expo, or React Native app, on one branch: baseline screenshots + scorecard → separate web/native surfaces (hybrid only) → Capacitor shell plumbing (Capacitor only) → the native-feel pass → WCAG 2.2 AA accessibility (fixes on touched screens) → native layout cells (landscape, tablet) → Android 16 device QA with back / font-scale / reduce-motion / large-screen probes → one PR with before/after, scorecard, probe table, and a store-build flag.
+**Chain:** `enhance-capacitor-ui` → `mobile-capacitor-platform` → `enhance-mobile-native-feel` → `audit-accessibility` → `audit-responsive` → `mobile-emulator-test` → `workflow-pr`
+**Related:** `enhance-mobile-native-feel`, `mobile-capacitor-platform`, `plan-mobile-readiness`, `plan-capacitor-hardening`, `mobile-rn-screen`
 
 #### `workflow-gtm`
 **Triggers:** "go to market", "grow users", "increase traffic and visibility", "market this repo", "get this in front of users", "/gtm"
@@ -983,6 +989,7 @@ These are the loops that move a product the most. Paste the phrase; the pack cha
 | Fix a bug and ship it | `workflow-fix-and-ship` | debug → fix → smoke → PR → deploy |
 | Pre-release quality check | `workflow-quality-gate` | (optional explore) → red-team → security → bundle → perf → unit tests |
 | Full launch preparation | `workflow-launch-ready` | SEO + PWA + bundle + i18n + quality gate + deploy + iterate |
+| Make an existing mobile app feel native, verified | `workflow-mobile-native-uiux` | surfaces → Capacitor plumbing → native feel → a11y → layout → device QA → PR |
 | Take a shipped product to market | `workflow-gtm` | plan-gtm ⏸ approve → analytics → conversion → onboarding + lifecycle email → SEO / comparison pages / AEO → launch kit + loops → `iterate-gtm-weekly` |
 | Green the whole repository (authorized) | `workflow-green-repo` | discover gates → enumerate failures → batch fix → prove green from scratch |
 | Deploy to production and observe | `workflow-ship-and-observe` | preflight → deploy → verify live revision → observe → stable/rollback |
@@ -1007,6 +1014,11 @@ test-exploratory → workflow-feedback-to-closure → test-playwright
 workflow-launch-ready
   └─ enhance-web-seo → enhance-pwa → audit-bundle-size → audit-i18n
      → workflow-quality-gate → deploy-verify → iterate-post-launch
+
+workflow-mobile-native-uiux
+  └─ (hybrid) enhance-capacitor-ui → (Capacitor) mobile-capacitor-platform
+     → enhance-mobile-native-feel → audit-accessibility → audit-responsive
+     → mobile-emulator-test → workflow-pr
 
 workflow-ship-and-observe
   └─ preflight (green) → deploy → verify live revision → observe window

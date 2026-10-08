@@ -6,6 +6,8 @@ description: >
   launch-ready?", or "pre-launch sweep". Working tree to a PR →
   workflow-release-prep.
 license: MIT
+metadata:
+  chain: "enhance-web-seo enhance-pwa audit-bundle-size audit-i18n workflow-quality-gate deploy-verify iterate-post-launch"
 ---
 
 # workflow-launch-ready — Full Launch Preparation

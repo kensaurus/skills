@@ -183,6 +183,7 @@
         "workflow-housekeep",
         "workflow-launch-ready",
         "workflow-merge-conflicts",
+        "workflow-mobile-native-uiux",
         "workflow-onboard",
         "workflow-parallel-agents",
         "workflow-pr",

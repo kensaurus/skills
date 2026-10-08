@@ -35,8 +35,9 @@ at 1440, stretched buttons). That is `audit-responsive`.
 
 - **Base is mobile** — primary layout is not `lg:`-only
 - **44px + safe-area** — tap targets and notches were measured
+- **No drag-only action** — every swipe or drag has a tap alternative (WCAG 2.5.7)
 - **Real device** — not emulator-or-resize only
-- **Right owner** — linearized 1440 desktop → `audit-responsive`; hybrid native chrome → `enhance-capacitor-ui`
+- **Right owner** — linearized 1440 desktop → `audit-responsive`; an existing app that feels like a website → `enhance-mobile-native-feel`; hybrid web + native axes → `enhance-capacitor-ui`
 
 ## Check existing first  [LOW freedom — run exactly]
 
@@ -78,8 +79,12 @@ Base styles are mobile; media queries and `sm:`/`md:`/`lg:` prefixes only add (`
 }
 ```
 
-### 2. Touch Targets (44px minimum)
-List items too: `py-3 px-4 min-h-[44px] active:bg-muted`. Icon buttons extend the hit area with negative margin.
+### 2. Touch Targets (44px goal, 24px floor)
+Size every control to 44×44 CSS px (Apple's default control size; WCAG 2.5.5 AAA); 48 when
+the page ships in an Android shell (Material's 48dp). WCAG 2.2 SC 2.5.8 (AA) is the floor:
+24×24 CSS px, or a 24px-diameter circle around a smaller target that touches no other
+target. List items too: `py-3 px-4 min-h-[44px] active:bg-muted`. Icon buttons extend the
+hit area with negative margin.
 ```tsx
 <button className="min-h-[44px] min-w-[44px] px-4 py-3">
  Tap me
@@ -95,6 +100,9 @@ List items too: `py-3 px-4 min-h-[44px] active:bg-muted`. Icon buttons extend th
 
 ### 3. Thumb-Friendly Zones
 Primary actions in a fixed bottom nav; `.safe-area-pb { padding-bottom: env(safe-area-inset-bottom); }` for notched devices.
+A fixed bar can hide the focused field: set `html { scroll-padding-bottom: <bar height> }`
+(and `scroll-padding-top` for a sticky header) so keyboard focus is never fully covered
+(WCAG 2.4.11, technique C43).
 ```tsx
 <nav className="fixed bottom-0 left-0 right-0 border-t bg-background safe-area-pb">
  <div className="flex justify-around py-2">
@@ -111,23 +119,11 @@ Primary actions in a fixed bottom nav; `.safe-area-pb { padding-bottom: env(safe
 
 ### Native shell first (Expo / Capacitor, 2026)
 
-When the UI ships inside a native shell, the platform already owns the chrome.
-Do not rebuild it in JS or HTML:
-
-- **Tab bar:** Expo Router `NativeTabs` (`expo-router/native-tabs`, SDK 58+;
-  `unstable-native-tabs` on SDK 54–57) or Ionic `ion-tab-bar`. 3–5 destinations,
-  filled symbols, one-word labels. iOS 26 draws Liquid Glass and minimizes on scroll.
-- **Edge-to-edge:** Android 16 enforces it. Expo: `react-native-safe-area-context`
-  insets at the screen root. Capacitor 8.3.2+: `viewport-fit=cover` plus
-  `padding: var(--safe-area-inset-top, env(safe-area-inset-top, 0px))`; the legacy
-  `StatusBar.setBackgroundColor` is a no-op on Android 16.
-- **Secondary flows:** a sheet with snap points (Gorhom v5 / `ion-modal` breakpoints),
-  not a new page.
-- **Feedback:** press scale 0.96–0.98 on the UI thread; haptics only on confirm,
-  selection, and snap, never on plain taps.
-
-For an app that already exists and feels like a web page, run
-`enhance-mobile-native-feel`; the drawer below is the web / PWA pattern.
+When the UI ships inside a native shell, the platform already owns the chrome: a
+system tab bar (3–5 destinations), sheets for secondary flows, edge-to-edge insets.
+Do not rebuild it in JS or HTML. The version-gated APIs live in
+`enhance-mobile-native-feel` (`references/stack-recipes.md`); Capacitor bars, insets,
+and keyboard live in `mobile-capacitor-platform`. The drawer below is the web / PWA pattern.
 
 ### Mobile Navigation (web / PWA)
 
@@ -148,12 +144,14 @@ Auto-fit variant (`grid-cols-[repeat(auto-fit,minmax(280px,1fr))]`): [references
 
 - **Swipe to delete** — `drag="x"` with `dragConstraints={{ left: -100, right: 0 }}`; background interpolates to red via `useTransform`; delete when `offset.x < -100`
 - **Pull to refresh** — `drag="y"`, `dragElastic={0.5}`; indicator opacity/scale follow `y` over 0–60px; refresh when `y > 60`
+- **Single-pointer alternative** — WCAG 2.2 SC 2.5.7 (AA): a swipe-to-delete row also has a delete button or menu item; pull-to-refresh also has a refresh control; a drag-to-dismiss sheet also has a visible close button
+- **Reduced motion** — under `@media (prefers-reduced-motion: reduce)` drop the travel and keep the state change (fade, color)
 
 Full components: [references/components.md](references/components.md) §Swipe to Delete, §Pull to Refresh.
 
 ## Mobile-Specific Components  [HIGH freedom]
 
-- **Bottom sheet** — backdrop + `y: '100%' → 0` panel, `rounded-t-xl max-h-[90vh]`, drag handle via `useDragControls`; close on `velocity.y > 500` or `offset.y > 200`; `pb-safe` content
+- **Bottom sheet** — backdrop + `y: '100%' → 0` panel, `rounded-t-xl max-h-[90dvh]` (`vh` ignores the mobile browser toolbar), drag handle via `useDragControls`; close on `velocity.y > 500` or `offset.y > 200`, plus a visible close button; `pb-safe` content
 - **Forms** — stack fields, `sm:grid-cols-2` up; inputs `h-12` with `fontSize: '16px'` to prevent iOS focus-zoom; `w-full sm:w-auto h-12` submit
 
 Full components: [references/components.md](references/components.md) §Bottom Sheet, §Mobile-Optimized Forms.
@@ -167,12 +165,25 @@ Code: [references/pwa.md](references/pwa.md).
 
 ## Validation  [LOW freedom — do not skip]
 
-Touch ≥44px · thumb-zone CTAs · gestures with feedback · 60fps · no focus-zoom · safe-area (edge-to-edge on Android 16) · offline-graceful · real device (not emulator-only).
+Run at a 390×844 viewport, then on a real phone:
+
+| Check | Probe | Done |
+|---|---|---|
+| Targets | `document.querySelectorAll('a,button,input,select,[role=button]')` → `getBoundingClientRect()` | none under 24×24; primary controls ≥ 44×44 |
+| Drag alternatives | list every swipe / drag handler | each has a tap path |
+| Focus under fixed bars | Tab through a long form with the bottom nav visible | focused field never fully hidden |
+| Reduced motion | DevTools → Rendering → emulate `prefers-reduced-motion: reduce` | no travel; state changes still visible |
+| Safe area | iPhone with Dynamic Island + Android 16 gesture nav | nothing under the notch or home indicator |
+| Inputs | focus each input on iOS Safari | font-size ≥ 16px, no focus-zoom |
+
+Also: thumb-zone CTAs · 60fps gestures · offline-graceful.
 
 ## Related
 
 - `enhance-mobile-native-feel` — an existing Expo/RN or Capacitor app that feels like a website
 - `audit-responsive` — unstack desktop; layout/IA at 375 / 768 / 1440
+- `audit-accessibility` — the full WCAG 2.2 AA audit, including the checks above
+- `mobile-capacitor-platform` — Capacitor bars, insets, keyboard
 - `enhance-capacitor-ui` — hybrid web + native form-factor axes
 - `design-frontend` — new visual surfaces
 - `audit-performance` — mobile perf budgets

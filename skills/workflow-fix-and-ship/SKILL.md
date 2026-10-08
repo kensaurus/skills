@@ -6,6 +6,8 @@ description: >
   ticket", "patch this and ship", or a named production error. Many reports →
   workflow-feedback-to-closure.
 license: MIT
+metadata:
+  chain: "debug-error test-playwright workflow-pr"
 ---
 
 # workflow-fix-and-ship — Bug Fix Lifecycle

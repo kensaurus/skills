@@ -36,6 +36,8 @@ This command is a thin entry point. Pick the right skill for the goal:
 - **`enhance-web-forms`** — production-quality forms.
 - **`enhance-motion`** — coherent motion pass across an existing app.
 - **`design-motion`** — one new isolated animation.
+- **`enhance-mobile-native-feel`** — an existing Expo / RN / Capacitor app that feels like a website; one pass.
+- **`workflow-mobile-native-uiux`** — the same pass plus accessibility, layout, device QA, and a PR.
 - **`mobile-rn-screen`** — React Native screen (Expo / bare).
 - **`enhance-capacitor-ui`** — Capacitor / hybrid shell, then the web or RN skill.
 - **`enhance-readme`** — repo README showcase.

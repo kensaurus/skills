@@ -92,7 +92,7 @@ export function SwipeableItem({ onDelete, children }: SwipeableItemProps) {
  ['rgb(239 68 68)', 'rgb(255 255 255)']
  )
 
- const handleDragEnd = (_: any, info: PanInfo) => {
+ const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
  if (info.offset.x < -100) {
  onDelete()
  }
@@ -167,7 +167,7 @@ import { motion, useDragControls, PanInfo } from 'framer-motion'
 export function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
  const controls = useDragControls()
 
- const handleDragEnd = (_: any, info: PanInfo) => {
+ const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
  if (info.velocity.y > 500 || info.offset.y > 200) {
  onClose()
  }
@@ -193,16 +193,26 @@ export function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
  dragConstraints={{ top: 0 }}
  dragElastic={0.2}
  onDragEnd={handleDragEnd}
- className="fixed bottom-0 left-0 right-0 bg-background rounded-t-xl z-50 max-h-[90vh] overflow-hidden"
+ role="dialog"
+ aria-modal="true"
+ className="fixed bottom-0 left-0 right-0 bg-background rounded-t-xl z-50 max-h-[90dvh] overflow-hidden"
  >
- {/* Drag handle */}
+ {/* Drag handle, plus a close button: dragging must not be the only way out (WCAG 2.5.7) */}
+ <div className="relative flex justify-center py-3">
  <div
- className="flex justify-center py-3 cursor-grab active:cursor-grabbing"
+ className="w-12 h-1.5 bg-muted-foreground/30 rounded-full cursor-grab active:cursor-grabbing"
  onPointerDown={(e) => controls.start(e)}
+ />
+ <button
+ type="button"
+ onClick={onClose}
+ aria-label="Close"
+ className="absolute right-2 top-1 min-h-[44px] min-w-[44px]"
  >
- <div className="w-12 h-1.5 bg-muted-foreground/30 rounded-full" />
+ ✕
+ </button>
  </div>
- <div className="px-4 pb-safe overflow-y-auto max-h-[calc(90vh-40px)]">
+ <div className="px-4 pb-safe overflow-y-auto max-h-[calc(90dvh-56px)]">
  {children}
  </div>
  </motion.div>

@@ -6,6 +6,8 @@ description: >
   gate", or "pre-release checklist". Working tree to a PR →
   workflow-release-prep.
 license: MIT
+metadata:
+  chain: "test-red-team audit-security audit-bundle-size audit-performance test-unit"
 effort: high
 ---
 
