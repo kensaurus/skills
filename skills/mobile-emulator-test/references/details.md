@@ -501,11 +501,19 @@ made, no blank cells after a fast fling.
 
 | Probe | Command | Pass |
 |---|---|---|
-| Back | `adb shell input keyevent KEYCODE_BACK` on a nested route, with a sheet open, then on the root | route pops; sheet closes; root backgrounds the app (`adb shell dumpsys activity activities \| grep -i resumed` no longer shows it) |
+| Back | `adb shell input keyevent KEYCODE_BACK` on a nested route, with a sheet open, then on the root | route pops; sheet closes; root backgrounds the app (first command below) |
+| Back preview | gesture nav on, slow left-edge swipe at the root (second command below) | record whether the back-to-home preview appears; a key event never shows it |
 | Font scale | `adb shell settings put system font_scale 2.0`, relaunch | no clipped or overlapping text; primary action still reachable |
 | Reduce motion | `adb shell settings put global animator_duration_scale 0` (also `transition_animation_scale`, `window_animation_scale`) | no slide or zoom travel; state changes still visible. Capacitor: read `matchMedia('(prefers-reduced-motion: reduce)').matches` via `chrome://inspect` and record it |
 | Large screen | boot a tablet or foldable AVD, rotate to landscape | layout reflows; no stretched portrait phone (API 36 ignores orientation locks at ≥ 600dp) |
 | Gesture vs 3-button nav | `adb shell cmd overlay enable-exclusive --category com.android.internal.systemui.navbar.threebutton` (revert with `...navbar.gestural`) | tab bar and bottom sheet clear the nav bar in both modes |
+
+```bash
+# Root back: the app's activity should no longer be the resumed one
+adb shell "dumpsys activity activities | grep -i resumed"
+# Back preview: slow swipe from the left edge (adjust y/x to `adb shell wm size`)
+adb shell input swipe 5 1200 600 1200 800
+```
 
 Restore: `adb shell settings put system font_scale 1.0`; set the three animation scales
 back to `1`. iOS (simulator on macOS only): Settings → Accessibility → Display & Text Size

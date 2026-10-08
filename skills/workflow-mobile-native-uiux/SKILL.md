@@ -1,9 +1,9 @@
 ---
 name: workflow-mobile-native-uiux
 description: >
-  Run the whole native UI/UX pass on an existing Capacitor, Expo, or RN app:
-  plumbing, native feel, a11y, layout, device QA, PR. Use for "fix our mobile
-  UI/UX end to end".
+  Full native UI/UX run on a Capacitor, Expo, or RN app: plumbing, native
+  feel, a11y, device QA, PR. Use for "fix our mobile UI/UX", "native pass to a
+  PR", or "feel native and ship".
 license: MIT
 metadata:
   chain: "enhance-capacitor-ui mobile-capacitor-platform enhance-mobile-native-feel audit-accessibility audit-responsive mobile-emulator-test workflow-pr"
@@ -135,8 +135,10 @@ mark the axe rows `not run`.
 
 > Read the `audit-responsive` skill and follow it.
 
-Include the native cells (`844 390` and `1024 768`). Done when no screen is a
-stretched portrait phone in landscape or on a tablet.
+Include the native cells (`844 390` and `1024 768`). That skill waits for approval
+when the scope is large; here, the request to fix the app's UI/UX is that approval
+for the screens steps 1–3 touched, so implement without stopping and list the rest.
+Done when no screen is a stretched portrait phone in landscape or on a tablet.
 
 ## Step 6: Device QA (read mobile-emulator-test)  [LOW freedom — hand off]
 

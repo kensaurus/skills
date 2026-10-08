@@ -19,7 +19,7 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "is this ready to ship?", "quality gate", "pre-release checklist", "ship-readiness" | `workflow-quality-gate` |
 | "prepare this for a PR", "get my working tree merge-ready", "release prep this branch", "review everything uncommitted and open a PR" | `workflow-release-prep` |
 | "prepare for launch", "launch week", "everything before going live", "pre-launch sweep" | `workflow-launch-ready` |
-| "fix our mobile UI/UX end to end", "native pass through device QA and a PR" | `workflow-mobile-native-uiux` |
+| "fix our mobile UI/UX", "native pass to a PR", "feel native and ship" | `workflow-mobile-native-uiux` |
 | "go to market", "grow users", "increase traffic and visibility", "market this repo", "get this in front of users" | `workflow-gtm` |
 | "I'm new to this repo", "orient me", "explain this codebase", "onboard me" | `workflow-onboard` |
 
@@ -219,7 +219,7 @@ Attribution and update policy → [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.m
 | Say this in chat | Skill |
 |:-----------------|:------|
 | "keyboard covers the input", "status bar overlaps", "Capacitor push notifications", "deep linking", "OTA update", "App Store submission" | `mobile-capacitor-platform` |
-| "fix our mobile UI/UX end to end", "make the app feel native and ship it" | `workflow-mobile-native-uiux` |
+| "fix our mobile UI/UX", "native pass to a PR", "feel native and ship" | `workflow-mobile-native-uiux` |
 | "start emulator", "boot Metro", "Android emulator", "Expo dev-client" | `mobile-emulator-start` |
 | "test on emulator", "QA Android build", "white screen", "adb reverse" | `mobile-emulator-test` |
 | "React Native jank", "frame drops", "slow startup", "RN bundle too big" | `mobile-rn-performance` |

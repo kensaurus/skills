@@ -814,7 +814,7 @@ Orchestrator skills that sequence multiple individual skills into a tracked, pha
 **Related:** `workflow-quality-gate`, `iterate-post-launch`, `deploy-verify`, `workflow-release-prep`
 
 #### `workflow-mobile-native-uiux`
-**Triggers:** "fix our mobile UI/UX end to end", "make the app feel native and ship it", "native pass through device QA and a PR"
+**Triggers:** "fix our mobile UI/UX", "fix our mobile UI/UX end to end", "native pass to a PR", "feel native and ship", "make the app feel native and ship it"
 **What it does:** End-to-end native UI/UX run on an existing Capacitor, Expo, or React Native app, on one branch: baseline screenshots + scorecard → separate web/native surfaces (hybrid only) → Capacitor shell plumbing (Capacitor only) → the native-feel pass → WCAG 2.2 AA accessibility (fixes on touched screens) → native layout cells (landscape, tablet) → Android 16 device QA with back / font-scale / reduce-motion / large-screen probes → one PR with before/after, scorecard, probe table, and a store-build flag.
 **Chain:** `enhance-capacitor-ui` → `mobile-capacitor-platform` → `enhance-mobile-native-feel` → `audit-accessibility` → `audit-responsive` → `mobile-emulator-test` → `workflow-pr`
 **Related:** `enhance-mobile-native-feel`, `mobile-capacitor-platform`, `plan-mobile-readiness`, `plan-capacitor-hardening`, `mobile-rn-screen`

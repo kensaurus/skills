@@ -205,7 +205,7 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 | `workflow-housekeep` | Repository maintenance: sync the README, remove confirmed dead artifacts, update dependencies safely |
 | `workflow-launch-ready` | Launch-preparation sweep for a new app or major release |
 | `workflow-merge-conflicts` | Resolve an in-progress merge or rebase conflict by tracing each side back to its intent |
-| `workflow-mobile-native-uiux` | Run the whole native UI/UX pass on an existing Capacitor, Expo, or RN app: plumbing, native feel, a11y, layout, device QA, PR |
+| `workflow-mobile-native-uiux` | Full native UI/UX run on a Capacitor, Expo, or RN app: plumbing, native feel, a11y, device QA, PR |
 | `workflow-onboard` | First-contact orientation for an unfamiliar codebase |
 | `workflow-parallel-agents` | Run multiple agents in parallel via git worktrees, cloud agents, or multi-model comparison |
 | `workflow-pr` | Manage an existing PR lifecycle — review, bot feedback, conflicts, merge |
