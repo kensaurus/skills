@@ -46,7 +46,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **PR copy:**
 ```markdown
-- [kensaurus/skills](https://github.com/kensaurus/skills) — ready-made AI playbooks your editor auto-triggers: 160 agent skills,
+- [kensaurus/skills](https://github.com/kensaurus/skills) — ready-made AI playbooks your editor auto-triggers: 161 agent skills,
   63 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.
   `npx skills add kensaurus/skills`
 ```
@@ -91,7 +91,7 @@ Submit the GitHub repo URL; Cursor reviews manually.
 - https://enterprisedna.co/directories/submit (alternative submission form)
 
 **One-liner description:**
-> 160 Cursor agent skills for React/Next.js/Supabase — installs in one command.
+> 161 Cursor agent skills for React/Next.js/Supabase — installs in one command.
 
 **Status:** Re-checked 2026-09-09. cursorlist.com is a **`.cursorrules` dump**, not a skill-pack catalog. “Submit Rule” goes to a Youform for individual rule files. **Not submitted** — listing a 155-skill pack there would be the wrong category. Do not treat as listed.
 

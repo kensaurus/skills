@@ -17,19 +17,23 @@ emulating the native component in JS.
 
 | Need | API | Gate |
 |---|---|---|
-| System tab bar (Liquid Glass on iOS 26, Material on Android) | `import { NativeTabs } from 'expo-router/native-tabs'` | Expo SDK 58+. SDK 54–57: `expo-router/unstable-native-tabs` |
+| System tab bar (Liquid Glass on iOS 26+, Material on Android) | `import { NativeTabs } from 'expo-router/native-tabs'` | Expo SDK 58+. SDK 54–57: `expo-router/unstable-native-tabs` |
 | Tab icon | `<NativeTabs.Trigger name="index"><Icon sf="house.fill" md="home" /><Label>Home</Label></NativeTabs.Trigger>` | SDK 55+ (`md` prop for Material Symbols) |
-| Search tab | `<NativeTabs.Trigger name="search" role="search" />` | iOS 26 draws it at the trailing end |
+| Search tab | `<NativeTabs.Trigger name="search" role="search" />` | iOS 26+ draws it at the trailing end |
+| Minimize on scroll | `<NativeTabs minimizeBehavior="onScrollDown">` | Liquid Glass needs an Xcode 26 build; Android allows at most 5 tabs |
 | Scroll-to-top on tab re-tap | built into `NativeTabs`; delete custom scroll-to-top code | SDK 54+ |
 | Native stack header + toolbar | `expo-router` `Stack` with `Stack.Toolbar` | SDK 55+ |
 | Form sheet | `<Stack.Screen options={{ presentation: 'formSheet', sheetAllowedDetents: [0.5, 1] }} />` | SDK 54+; give the root view `flex: 1` |
-| Edge-to-edge insets | `react-native-safe-area-context` `useSafeAreaInsets()`; `SafeAreaView` only at screen root | Android 16 enforces edge-to-edge; Expo SDK 53+ enables it by default |
-| Status / nav bar style | `expo-status-bar` `<StatusBar style="auto" />`; `expo-navigation-bar` for Android button-nav devices | — |
+| Edge-to-edge insets | `react-native-safe-area-context` `useSafeAreaInsets()`; `SafeAreaView` only at screen root | Mandatory and not switchable from Expo SDK 54 / RN 0.81 (targets Android 16); drop `react-native-edge-to-edge`; use `androidNavigationBar.enforceContrast` |
+| Status / nav bar style | `expo-status-bar` `<StatusBar style="auto" />`; `expo-navigation-bar` for Android button-nav devices | SDK 58 removes RN `StatusBar` `backgroundColor` / `translucent`; delete them |
+| Android back | `BackHandler` only to close an open sheet or menu; let the navigator pop routes | `android.predictiveBackGestureEnabled` still defaults to `false` in Expo's app config, while Android 16 + targetSdk 36 turns the system back animations on. Read `android:enableOnBackInvokedCallback` in the merged manifest and test back on an Android 16 AVD |
 
-Rule: do not draw a tab bar with `View` + `position: 'absolute'` on iOS 26. The system bar
+Rule: do not draw a tab bar with `View` + `position: 'absolute'` on iOS 26+. The system bar
 floats, minimizes on scroll, and adopts Liquid Glass; a JS copy dates the app on day one.
-Bars prefer symbols over text (WWDC25). If the content layer is colorful, keep the bar
-monochrome or pick one accent with clear contrast (HIG: Tab bars).
+Bars prefer symbols over text. If the content layer is colorful, keep the bar monochrome
+or pick one accent with clear contrast (HIG: Tab bars). Liquid Glass is the control layer
+(bars, sheets, transient controls); never on content cards or backgrounds (HIG: Materials),
+and no custom background painted on a system bar.
 
 ### Sheets
 
@@ -62,7 +66,7 @@ End-of-list: `onEndReached` + `ListFooterComponent` spinner. Never a "Load more"
 | Spring vocabulary | two springs: **spatial** (position, size, radius; may overshoot) and **effects** (color, opacity; critically damped, no overshoot); three speeds fast/default/slow | Material 3 motion-physics system |
 | CSS-style transitions | Reanimated 4 `transitionProperty` / `transitionDuration` on `Animated.View`; `@keyframes`-style `animationName` | Reanimated 4 (`react-native-worklets` is a peer dependency; import worklet helpers from it) |
 | Gesture-driven motion | `react-native-gesture-handler` `Gesture.Pan()` + shared values; runs on the UI thread | RNGH 2+ |
-| Zoom transition into detail | Expo Router `Link` zoom transition on iOS 26 | SDK 55+ |
+| Zoom transition into detail | Expo Router `Link` zoom transition on iOS 26+ | SDK 55+ |
 | Reduced motion | `useReducedMotion()` from Reanimated, or `AccessibilityInfo.isReduceMotionEnabled()`; drop travel, keep opacity | — |
 
 Anything that animates on every frame runs as a worklet on the UI thread. JS-thread
@@ -70,8 +74,8 @@ Anything that animates on every frame runs as a worklet on the UI thread. JS-thr
 
 ### Haptics
 
-`expo-haptics` (SDK 57: `~57.0.3`). Mapping follows the HIG meanings; keep each meaning
-fixed across the app.
+`expo-haptics` (SDK 57: `~57.0.3`; `impactAsync()` defaults to `Medium`). Mapping follows
+the HIG meanings; keep each meaning fixed across the app.
 
 | Moment | Call | Android |
 |---|---|---|
@@ -98,36 +102,16 @@ not `Vibration.vibrate`.
 
 ### Edge-to-edge and system bars
 
-Capacitor **8.3.2+** ships edge-to-edge on both platforms without a plugin.
+One owner: `mobile-capacitor-platform` § Native shell plumbing (SystemBars, insets CSS,
+dead `StatusBar` config, keyboard, splash, back). Apply it before this pass. The design
+choices that stay here:
 
-```html
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-```
-
-```css
-/* Injected --safe-area-inset-* first (correct on Android WebView < 140), env() fallback */
-.app-header { padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); }
-.app-tabbar { padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)); }
-```
-
-```ts
-// capacitor.config.ts — leave insetsHandling at its "css" default
-plugins: { SystemBars: { style: "DARK" } }   // DARK icons for a light app, LIGHT for dark
-```
-
-```ts
-import { SystemBars, SystemBarsStyle, SystemBarType } from "@capacitor/core";
-await SystemBars.setStyle({ bar: SystemBarType.StatusBar, style: SystemBarsStyle.Light });
-```
-
-- `StatusBar.setBackgroundColor()` and `overlaysWebView: false` are **no-ops on Android 16**.
-  Color the bar area with an HTML element plus safe-area padding instead.
-- Android three-button navigation bar color: `@capawesome/capacitor-navigation-bar` `setColor`.
-- Immersive media screens on iOS: `@capawesome/capacitor-home-indicator` to hide the indicator.
-- Tailwind: `tailwindcss-safe-area` (`pt-safe`, `pb-safe-or-8`, `h-dvh-safe`) uses `env()`
-  only; hand-roll the `var()`/`env()` pair on critical elements if WebView < 140 matters.
-- Capacitor 7 or older: upgrade first; the `@capawesome/capacitor-android-edge-to-edge-support`
-  plugin is the fallback only for apps that must opt out of edge-to-edge.
+- Paint the bar area with the header's own background, padded by the safe-area inset;
+  never a solid band in a different color.
+- Tailwind: `tailwindcss-safe-area` (`pt-safe`, `pb-safe-or-8`, `h-dvh-safe`) reads `env()`
+  only; Capacitor injects `--safe-area-inset-*` for older Android WebViews, so hand-roll
+  `var(--safe-area-inset-top, env(safe-area-inset-top, 0px))` on the header and tab bar.
+- Immersive media screens on iOS: `@capawesome/capacitor-home-indicator` hides the indicator.
 
 ### Chrome, sheets, lists, motion, haptics on the web stack
 
@@ -137,12 +121,16 @@ await SystemBars.setStyle({ bar: SystemBarType.StatusBar, style: SystemBarsStyle
   spring transform; backdrop tap closes; visible close button.
 - Lists: virtualize beyond ~300 rows (`@tanstack/virtual`, Ionic `ion-infinite-scroll`);
   images lazy and sized; `content-visibility: auto` for long static sections.
-- Motion: `transform`/`opacity` only; `@media (prefers-reduced-motion: reduce)` zeros travel;
+- Motion: `transform`/`opacity` only; `@media (prefers-reduced-motion: reduce)` zeros travel
+  (supported in WKWebView and Android WebView; confirm on device that it follows the OS
+  toggle). `prefers-reduced-transparency` is not supported in Safari or WKWebView, so blur
+  and glass layers must keep text contrast without it;
   `:active { transform: scale(0.97) }` for press feedback; `-webkit-tap-highlight-color`
   transparent plus the active state, so taps are not web-blue.
 - Haptics: `@capacitor/haptics` `Haptics.impact({ style: ImpactStyle.Light })`,
   `Haptics.notification({ type: NotificationType.Success })`, `Haptics.selectionChanged()`;
-  same meaning table as Expo above.
+  same meaning table as Expo above. `impact()` with no style plays `Heavy`, and only
+  Light / Medium / Heavy exist; always pass the style.
 - Icons/type: Ionicons or Material Symbols (one set); body ≥ 16px to also stop iOS
   zoom-on-focus in inputs; `font-size` with `clamp()` for display text.
 
@@ -153,5 +141,8 @@ await SystemBars.setStyle({ bar: SystemBarType.StatusBar, style: SystemBarsStyle
 - Shopify Engineering: FlashList v2 (New Architecture rewrite, no size estimates)
 - Gorhom Bottom Sheet v5 docs; PkgPulse 2026 list and sheet comparisons
 - Material Design 3: Motion physics system (spring tokens)
-- Apple HIG: Tab bars (2026-06), Materials, Playing haptics; WWDC25 "Get to know the new design system"
-- Capacitor docs: System Bars API (v8); Capawesome, May 2026: Edge-to-Edge & Safe Areas guide
+- Apple HIG: Tab bars (2026-06), Materials, Layout (2026-09), Playing haptics; WWDC25 "Get to know the new design system"
+- Android: Android 16 behavior changes (edge-to-edge opt-out removed, predictive back on by default for targetSdk 36)
+- Expo: SDK 54 changelog (edge-to-edge mandatory), SDK 58 beta changelog, app config `predictiveBackGestureEnabled`
+- Capacitor docs: System Bars API (v8), Haptics (v8); Capawesome, May 2026: Edge-to-Edge & Safe Areas guide
+- MDN browser-compat-data 8.1.4: `prefers-reduced-motion`, `prefers-reduced-transparency`

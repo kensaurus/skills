@@ -5,7 +5,7 @@ pattern beats a general "make it feel native" instruction.
 
 | Smell | Why it reads as web | Removed in |
 |---|---|---|
-| Header + footer drawn with `View`/`div`, `position: absolute`, opaque background | Browser chrome metaphor; ignores Liquid Glass and scroll-edge effects on iOS 26 | Chrome |
+| Header + footer drawn with `View`/`div`, `position: absolute`, opaque background | Browser chrome metaphor; ignores Liquid Glass and scroll-edge effects on iOS 26+ | Chrome |
 | Custom JS tab bar with 6+ items or text-only labels | HIG caps at 5; symbols carry recognition in bars | Chrome |
 | `StatusBar.setBackgroundColor` / `overlaysWebView: false` hacks | No-ops on Android 16; content ends up under bars | Chrome |
 | One `ScrollView` per section, 1,000+ px tall | Page metaphor; no virtualization; no section rhythm | IA, Lists |

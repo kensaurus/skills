@@ -22,6 +22,47 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
   - `workflow-launch-ready`: `enhance-web-seo enhance-pwa audit-bundle-size audit-i18n workflow-quality-gate deploy-verify iterate-post-launch`
   - `workflow-gtm`: the seven-step sequence, `plan-gtm` through `iterate-gtm-weekly`
   - `workflow-release-prep`: `audit-code-review workflow-git-commit workflow-pr`
+- **`workflow-mobile-native-uiux`**: the end-to-end native UI/UX run on an
+  existing Capacitor, Expo, or React Native app. Baseline screenshots and
+  scorecard, then `enhance-capacitor-ui` (hybrid only) →
+  `mobile-capacitor-platform` (Capacitor only) → `enhance-mobile-native-feel` →
+  `audit-accessibility` → `audit-responsive` → `mobile-emulator-test` →
+  `workflow-pr`, on one branch, ending in one PR that says whether a store
+  build is needed.
+
+### Changed
+
+- **Mobile skills checked against 2026 primary sources** (Apple HIG, Android 15
+  and 16 behavior changes, Google Play target-SDK policy, Capacitor 8 docs and
+  changelog, WCAG 2.2, MDN compat data, Expo SDK 54–58 changelogs; read
+  2026-10-08). Each skill now owns one job and points to the others:
+  - `mobile-capacitor-platform` owns the shell plumbing: a *Native shell
+    plumbing* table (SystemBars and safe-area CSS, dead `StatusBar` config,
+    keyboard resize, splash, Android back, haptics defaults, large screens),
+    each row with a device probe and a done line; Capacitor 8, targetSdk 36,
+    and Xcode 26 floors with their dates.
+  - `enhance-mobile-native-feel`: Android back is part of the chrome step and a
+    scorecard gate; Expo edge-to-edge is mandatory from SDK 54 (was "SDK 53+
+    default"); Capacitor's `impact()` defaults to `Heavy`; Liquid Glass stays
+    in the control layer; the Capacitor edge-to-edge block moved to its owner.
+  - `design-mobile-first`: the WCAG 2.2 rules it lacked — 2.5.8 target-size
+    floor (24 px) under the 44 px goal, 2.5.7 tap alternatives for every drag,
+    2.4.11 `scroll-padding` under fixed bars; `dvh` sheets with a close button;
+    a probe table replaces the one-line validation.
+  - `audit-accessibility` claimed WCAG 2.2 AA but checked none of the AA
+    criteria new in 2.2. It now probes 2.4.11, 2.5.7, 2.5.8, and 3.3.8 and
+    reports them.
+  - `plan-mobile-readiness`: a thin web-view app is a Guideline **4.2**
+    rejection and app-generator output is **4.2.6**, not 2.5.2 (downloaded
+    code, now in `plan-capacitor-hardening`'s OTA pillar). The "25%" figure
+    is now cited (Apple's 2024 transparency report). Adds targetSdk 36 (Play,
+    2026-08-31), the Xcode 26 upload floor (2026-04-28), and age-rating answers.
+  - "Capacitor 8.3.2+" was replaced everywhere: SystemBars exists since 8.0.0
+    and its inset fixes continued through 8.5.2, so the skills now say "latest 8.x".
+  - `audit-responsive` adds phone-landscape and tablet cells for native apps
+    (Android 16 ignores orientation locks at ≥ 600dp); `mobile-emulator-test`
+    gains adb probes for back, font scale, reduce motion, large screen, and nav
+    mode.
 
 ## [2.5.0] — 2026-10-06
 

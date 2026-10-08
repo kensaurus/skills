@@ -1,10 +1,10 @@
 ---
 name: enhance-mobile-native-feel
 description: >
-  Make an existing Expo/RN or Capacitor app feel native, not web: system tabs
-  and sheets, edge-to-edge, haptics, spring motion, virtualized lists, type +
-  icons, decluttered home. Use when "feels like a website", "not native", "add
-  haptics", "immersive full screen", or "declutter the home screen".
+  Make an existing Expo/RN or Capacitor app feel native: system tabs, sheets,
+  edge-to-edge, back, haptics, springs, lists. Use when "feels like a
+  website", "not native", "add haptics", "immersive full screen", or
+  "declutter the home screen".
 license: MIT
 ---
 
@@ -16,8 +16,8 @@ license: MIT
 The app already ships. It compiles, it works, and it looks like a website wrapped in an
 app shell: a header + footer drawn in JS, one long scrolling page per section, buttons
 with no press response, five accent colors, 12px body text, no motion, no haptics.
-This skill runs **one coherent pass** over the whole app so it reads as native on iOS 26
-and Android 16, using the platform's own chrome wherever it exists.
+This skill runs **one coherent pass** over the whole app so it reads as native on iOS 26+
+(Liquid Glass) and Android 16, using the platform's own chrome wherever it exists.
 
 The failure mode this prevents: fixing one screen's padding while the navigation
 model, list rendering, and feedback language stay web-shaped.
@@ -27,6 +27,8 @@ model, list rendering, and feedback language stay web-shaped.
 | Skill | Owns |
 |---|---|
 | **enhance-mobile-native-feel** (this) | App-wide pass on an existing mobile app: chrome, IA, lists, motion, haptics, type/icon/color |
+| `workflow-mobile-native-uiux` | This pass plus accessibility, layout, device QA, and a PR, in order |
+| `mobile-capacitor-platform` | Capacitor shell plumbing this pass relies on: SystemBars, keyboard, splash, back |
 | `mobile-rn-screen` | One React Native screen, pixel-level polish after this pass |
 | `enhance-capacitor-ui` | Hybrid apps where the same code also ships a desktop web surface |
 | `design-mobile-first` | A new touch-first UI from scratch |
@@ -56,7 +58,8 @@ model, list rendering, and feedback language stay web-shaped.
 
 ## Self-critique before reporting
 
-- **Chrome is native** — tab bar / sheets come from the platform where the SDK allows it; no JS tab bar on iOS 26
+- **Chrome is native** — tab bar / sheets come from the platform where the SDK allows it; no JS tab bar on iOS 26+
+- **Back behaves** — Android back closes the open sheet, then pops the route, then leaves the app; probed, not assumed
 - **IA shrank** — the home screen answers one question; secondary flows moved to sheets
 - **Lists virtualize** — nothing over ~300 rows is a `ScrollView` or `FlatList` with blank cells on fling
 - **Feedback is consistent** — each haptic keeps its documented meaning; none on routine taps
@@ -82,9 +85,11 @@ rg -n "TouchableOpacity|TouchableHighlight|Pressable|Haptics\.|impactAsync|selec
 rg -n "<ScrollView|<FlatList|<FlashList|<LegendList|<SectionList" -g "*.{tsx,ts}" -c
 # Capacitor edge-to-edge state
 rg -n "viewport-fit=cover|safe-area-inset|SystemBars|StatusBar\.setBackgroundColor" -g "*.{html,css,ts,tsx}"
+# Android back handling
+rg -n "predictiveBackGestureEnabled|addListener\('backButton'|BackHandler" -g "*.{ts,tsx,json}"
 ```
 
-Record `STACK · NAV · LISTS · FEEDBACK · CHROME` in five lines before any edit.
+Record `STACK · NAV · LISTS · FEEDBACK · CHROME · BACK` in six lines before any edit.
 
 ## Phase 0 — Observe  [LOW freedom — run exactly]
 
@@ -106,7 +111,9 @@ exact API for the installed stack from `references/stack-recipes.md`.
 
 1. **Chrome.** System tab bar (3–5 destinations; a Search tab when the app has search),
    native stack headers, sheets for secondary flows, edge-to-edge with safe-area insets.
-   Delete JS-drawn bars and opaque status-bar hacks.
+   Delete JS-drawn bars and opaque status-bar hacks. Android back closes the sheet, then
+   pops the route, then leaves the app. Capacitor: the bars, keyboard, splash, and back
+   come from `mobile-capacitor-platform` § Native shell plumbing; apply that first.
 2. **IA.** Home answers one question; keep 3–5 cards above the fold; move the rest behind
    progressive disclosure (sheet, segmented control, or a secondary screen). Primary
    action lives in the thumb zone. One long page becomes sections, a sheet, or a list.
@@ -131,9 +138,12 @@ Preserve all existing data flow and handlers. This pass is additive to behavior.
 - Re-shoot every top-level screen (same device set, light + dark). Compare with "before".
 - Fling the longest list: no blank cells, 60 fps in the profiler.
 - Toggle reduced motion in system settings: travel disappears, feedback remains.
-- Targets ≥ 44×44 pt (iOS) / 48×48 dp (Android), measured on the screenshot grid.
+- Targets ≥ 44×44 pt on iOS (the HIG default size) / 48×48 dp on Android, measured on
+  the screenshot grid. WCAG 2.5.8's 24×24 CSS px is the legal floor, not the goal.
+- Largest text size (iOS AX5 / Android font scale 200%): nothing truncates or overlaps.
+- Back on Android: nested route pops, open sheet closes, root leaves the app.
 - Haptic on confirm fires once; none on scroll or plain tap (device check; emulators may not vibrate).
-- Capacitor: content sits under the bars with correct insets on Android 16 and iOS 26.
+- Capacitor: the `mobile-capacitor-platform` plumbing probes pass on Android 16 and iOS 26+.
 - Run the repo's typecheck and tests. Re-score the card.
 
 Report format:
@@ -158,6 +168,7 @@ old, dependency missing) is listed under **Open** with the upgrade that unblocks
 - `references/stack-recipes.md` — version-gated Expo/RN and Capacitor APIs for each step
 - `references/native-feel-scorecard.md` — the ten checks and their sources
 - `references/anti-patterns.md` — the web-shaped smells this pass removes
+- `mobile-capacitor-platform` — Capacitor SystemBars, keyboard, splash, back, haptics defaults
 - `mobile-rn-screen` — per-screen polish after this pass
 - `mobile-rn-performance` — if lists still drop frames after virtualization
 - `enhance-capacitor-ui` — when a desktop web surface shares the code

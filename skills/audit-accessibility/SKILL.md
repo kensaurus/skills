@@ -1,10 +1,9 @@
 ---
 name: audit-accessibility
 description: >
-  WCAG 2.2 audit via playwright-cli: crawl every page, inject axe-core, test
-  keyboard nav, contrast, ARIA labels, heading order. Use when "audit
-  accessibility", "check a11y", "WCAG audit", "check keyboard nav", or "test
-  screen reader".
+  WCAG 2.2 AA audit via playwright-cli: axe-core, keyboard, contrast, target
+  size, focus, ARIA. Use when "audit accessibility", "check a11y", "WCAG
+  audit", "check keyboard nav", or "test screen reader".
 license: MIT
 effort: high
 ---
@@ -37,6 +36,7 @@ playwright/axe/Tab sequences `[LOW freedom — run exactly]`. Read
 3. **Every reachable page** — obscure routes still count
 4. **Severity justified** — Level A = P0
 5. **Axe is ~30–40%** — heading/focus/link-text/reading-order always manual
+6. **2.2 additions probed** — 2.4.11, 2.5.7, 2.5.8, 3.3.8 each have a probe result, not "axe clean"
 
 ---
 
@@ -204,6 +204,45 @@ $PW -s=a11y eval '() => ({ htmlLang: document.documentElement.lang, htmlDir: doc
 ```
 
 Verify: `<html>` has a valid `lang` attribute.
+
+**WCAG 2.2 additions (all Level AA; axe does not settle them):** run each at a
+phone viewport (`$PW -s=a11y resize 390 844`) and at desktop width.
+
+Target Size (2.5.8) — list controls under 24×24 CSS px:
+
+```bash
+$PW -s=a11y eval '() => [...document.querySelectorAll("a[href],button,input,select,textarea,[role=button],[role=link],[tabindex]")].filter(el => el.tabIndex >= 0 && el.type !== "hidden").map(el => { const r = el.getBoundingClientRect(); return { el: el.tagName.toLowerCase() + (el.id ? "#" + el.id : ""), label: (el.innerText || el.getAttribute("aria-label") || "").trim().slice(0, 30), w: Math.round(r.width), h: Math.round(r.height), inline: getComputedStyle(el).display === "inline" }; }).filter(t => t.w > 0 && (t.w < 24 || t.h < 24))'
+```
+
+Each hit fails unless an exception holds: a 24px-diameter circle centered on it touches
+no other target (spacing), an equivalent control elsewhere on the page meets the size,
+it sits inline in a sentence, or the browser draws it unstyled.
+
+Focus Not Obscured (2.4.11) — after each Tab press in Phase 3a, with sticky headers,
+footers, cookie banners, and chat launchers visible:
+
+```bash
+$PW -s=a11y eval '() => { const el = document.activeElement; const r = el.getBoundingClientRect(); const pts = [[r.left + r.width / 2, r.top + r.height / 2], [r.left + 2, r.top + 2], [r.right - 2, r.bottom - 2]]; const covered = pts.filter(([x, y]) => { const hit = document.elementFromPoint(x, y); return hit && hit !== el && !el.contains(hit); }).length; return { el: el.tagName + (el.id ? "#" + el.id : ""), covered: covered + "/3" }; }'
+```
+
+`3/3` is a fail (the focused control is entirely hidden; F110). Fix with
+`scroll-padding-top` / `scroll-padding-bottom` equal to the sticky bar's height (C43).
+
+Dragging Movements (2.5.7) — `rg -n "draggable|onDrag|useDrag|dnd-kit|Sortable|swipe" src`;
+every drag or swipe action needs a single-tap alternative (buttons, menu, arrows).
+
+Accessible Authentication (3.3.8) — on each sign-in and sign-up page:
+
+```bash
+$PW -s=a11y eval '() => [...document.querySelectorAll("input[type=password],input[autocomplete=one-time-code]")].map(i => ({ name: i.name, autocomplete: i.getAttribute("autocomplete"), pasteBlocked: i.hasAttribute("onpaste") }))'
+```
+
+Pass: `autocomplete` is `current-password` / `new-password` / `one-time-code`, paste is
+not blocked (also `rg -n "onPaste.*preventDefault" src`), and any CAPTCHA has a
+non-puzzle alternative.
+
+Native shells (Capacitor, Expo, RN): the font-scale, reduced-motion, and back probes run
+on a device in `mobile-emulator-test`; record them here as their own rows.
 
 ### 2d. Take Evidence Screenshots
 
@@ -390,7 +429,11 @@ Light gray text on white background is the most common contrast failure. Flag fi
 | 2.4.3 | Focus Order | A | ... | ... | ... | PASS/FAIL |
 | 2.4.4 | Link Purpose | A | ... | ... | ... | PASS/FAIL |
 | 2.4.7 | Focus Visible | AA | ... | ... | ... | PASS/FAIL |
+| 2.4.11 | Focus Not Obscured (Minimum) | AA | ... | ... | ... | PASS/FAIL |
+| 2.5.7 | Dragging Movements | AA | ... | ... | ... | PASS/FAIL |
+| 2.5.8 | Target Size (Minimum) | AA | ... | ... | ... | PASS/FAIL |
 | 3.1.1 | Language of Page | A | ... | ... | ... | PASS/FAIL |
+| 3.3.8 | Accessible Authentication (Minimum) | AA | ... | ... | ... | PASS/FAIL |
 | 4.1.2 | Name, Role, Value | A | ... | ... | ... | PASS/FAIL |
 
 ## 4. KEYBOARD NAVIGATION

@@ -1,10 +1,9 @@
 ---
 name: audit-responsive
 description: >
-  Audit and fix layouts at every breakpoint — desktop is not a wide phone. Use
-  when "responsive audit", desktop looks stacked or stretched, there is no
-  max-width, or 1440 looks like a phone. Touch-first build →
-  design-mobile-first.
+  Audit and fix layouts at every breakpoint; desktop is not a wide phone. Use
+  when "responsive audit", desktop looks stretched, there is no max-width, or
+  1440 looks like a phone. Touch-first build → design-mobile-first.
 license: MIT
 effort: high
 ---
@@ -118,6 +117,11 @@ done
 ```
 
 If the 1440 screenshot is a stretched phone, that is a **blocker** for the page.
+
+Shipped as a native app (Capacitor, Expo, RN)? Add `844 390` (phone landscape) and
+`1024 768` (tablet / unfolded foldable) to the loop. For apps targeting Android 16,
+displays ≥ 600dp ignore orientation and resizability locks, so a portrait-locked phone
+layout appears stretched there. Confirm on the tablet AVD with `mobile-emulator-test`.
 
 ---
 

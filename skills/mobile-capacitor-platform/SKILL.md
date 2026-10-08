@@ -1,9 +1,9 @@
 ---
 name: mobile-capacitor-platform
 description: >
-  Capacitor work beyond UI: plugins, OTA, deep links, push, offline, native
-  CI/CD, store submission, Cordova migration. Use for "add push
-  notifications", "deep linking", "OTA update", or "App Store rejection".
+  Capacitor native layer: system bars, keyboard, back, plugins, push, deep
+  links, OTA, native CI. Use for "keyboard covers the input", "status bar
+  overlaps", "add push", or "OTA update".
 license: MIT
 paths:
   - "**/ios/**"
@@ -21,7 +21,19 @@ paths:
 major matching, `cap sync`, secrets, and store preflight
 `[LOW freedom — run exactly]`.
 
-> The native-runtime and shipping layer for Capacitor apps. `enhance-capacitor-ui` handles cross-surface *layout architecture*; this skill handles *platform features, native builds, store submission, and migrations*.
+> The native-runtime and shipping layer for Capacitor apps. This skill owns the
+> shell plumbing every other mobile skill points to: system bars and insets,
+> keyboard, splash, Android back, haptics defaults.
+
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **mobile-capacitor-platform** (this) | Native config and plugins: system bars, keyboard, splash, back, push, deep links, OTA, CI, migrations |
+| `enhance-capacitor-ui` | One codebase on web + iOS + Android: form factor vs platform vs pointer |
+| `enhance-mobile-native-feel` | App-wide native-feel pass: chrome, IA, lists, motion, haptic meaning |
+| `plan-capacitor-hardening` | Native-layer security plan (plan-only) |
+| `plan-mobile-readiness` | Store submission audit (plan-only) |
 >
 > Distilled from [cap-go/capgo-skills](https://github.com/cap-go/capgo-skills) (MIT). For deep per-task playbooks, install the full pack: `npx skills add Cap-go/capgo-skills` or `claude plugin marketplace add Cap-go/capgo-skills`.
 
@@ -44,12 +56,26 @@ major matching, `cap sync`, secrets, and store preflight
 - **Majors match** — every plugin major equals the Capacitor major
 - **Native config present** — entitlements / usage strings / plist-or-json for the capability
 - **Secrets out of band** — CI/Keychain only; never committed or bundled
-- **Right owner** — form-factor layout → `enhance-capacitor-ui`; listing ASO → `plan-aso`; native-security plan-only → `plan-capacitor-hardening`
+- **Plumbing proved** — each shell row touched has its probe result (screenshot or command output), iOS marked `not run` when no Mac was available
+- **Right owner** — form-factor layout → `enhance-capacitor-ui`; native-feel design → `enhance-mobile-native-feel`; listing ASO → `plan-aso`; native-security plan-only → `plan-capacitor-hardening`
 
 ## Version discipline (do this first)  [LOW freedom — run exactly]
 - Read `package.json`: the Capacitor major (`@capacitor/core`) drives everything. Match plugin majors to it (Capacitor 8 → plugin v8).
 - Check `capacitor.config.ts` for `appId`, `webDir`, `server.url` (live-reload vs bundled), and plugin config.
 - Confirm the target platforms present (`ios/`, `android/`) before suggesting platform-specific steps.
+
+```bash
+grep -E '"@capacitor/[a-z-]+"' package.json                       # every major equal?
+grep -nE 'targetSdkVersion|compileSdkVersion|minSdkVersion' android/variables.gradle
+grep -n "IPHONEOS_DEPLOYMENT_TARGET" ios/App/App.xcodeproj/project.pbxproj | head -2
+```
+
+Capacitor 8 floor (`capacitorjs.com/docs/updating/8-0`): Node 22+, Xcode 26+,
+iOS 15 deployment target, `minSdkVersion 24`, `compileSdkVersion`/`targetSdkVersion 36`.
+Google Play has required `targetSdkVersion 36` for new apps and updates since
+2026-08-31; Apple has required the iOS 26 SDK (Xcode 26) for uploads since
+2026-04-28. Stay on the latest 8.x: SystemBars inset fixes landed through 8.5.2.
+Capacitor 7 or older → run `npx cap migrate` before any UI work below.
 
 ## Pick the right area  [HIGH freedom]
 
@@ -59,9 +85,24 @@ major matching, `cap sync`, secrets, and store preflight
 | **Deep / universal links** | iOS Associated Domains + `apple-app-site-association`; Android intent filters + `assetlinks.json`. Handle cold-start vs warm via `appUrlOpen` listener. Test both install states. |
 | **Push notifications** | `@capacitor/push-notifications` → FCM (Android) + APNs (iOS). Register token, handle foreground vs background, deep-link from tap. Verify entitlements + `GoogleService-Info.plist` / `google-services.json`. |
 | **Offline-first** | Cache + queue writes; reconcile on reconnect. Use a real DB plugin (SQLite / Fast SQL), not localStorage, for structured data. Define the conflict-resolution rule explicitly. |
-| **Keyboard** | `@capacitor/keyboard` — resize mode, scroll-into-view on focus, accessory bar. The #1 source of "input hidden behind keyboard" bugs. |
-| **Safe area / notch** | Use safe-area insets (env vars / plugin), not hardcoded padding. Account for notch, Dynamic Island, home indicator, Android gesture nav. (Pairs with `enhance-capacitor-ui`.) |
-| **Splash screen** | Configure via plugin + native assets; hide programmatically after first paint to avoid white flash. |
+| **System bars, keyboard, splash, back, haptics** | See *Native shell plumbing* below — each has a probe and a done line. |
+
+## Native shell plumbing  [LOW freedom — run exactly]
+
+Each row: what to set, how to prove it on a device, what "done" means. Run the
+probes on an Android 16 emulator (`mobile-emulator-test`) and an iOS 26+
+simulator; on a host without macOS, report iOS as `not run`.
+
+| Area | Set | Probe | Done |
+|---|---|---|---|
+| **Edge-to-edge** | `viewport-fit=cover` in the viewport meta; core `SystemBars` (`import { SystemBars, SystemBarsStyle } from '@capacitor/core'`), `plugins.SystemBars.insetsHandling` left at `'css'`; pad chrome with `var(--safe-area-inset-top, env(safe-area-inset-top, 0px))` (and bottom/left/right) | Screenshot a scrolled list on Android 16 (gesture nav and 3-button) and on a Dynamic Island iPhone | Content scrolls under both bars; header and tab bar clear the status bar, cutout and home indicator; no white or black band |
+| **Bar style** | `SystemBars.setStyle({ style: SystemBarsStyle.Dark })` for a dark UI (light icons), `.Light` for a light UI; switch with the app theme. iOS needs `UIViewControllerBasedStatusBarAppearance = YES` in `Info.plist` | Toggle the app theme on both platforms | Bar icons stay legible in both themes |
+| **Dead bar config** | Delete `StatusBar.setBackgroundColor`, `setOverlaysWebView`, and the `overlaysWebView` / `backgroundColor` config: they have no effect on Android 15+ with `targetSdkVersion 36`. `android.adjustMarginsForEdgeToEdge` was removed in Capacitor 8 | `rg -n "setBackgroundColor\|setOverlaysWebView\|overlaysWebView\|adjustMarginsForEdgeToEdge" src capacitor.config.*` | Zero hits; bar color comes from an element painted under the bar |
+| **Keyboard** | iOS: `plugins.Keyboard.resize` (`native` resizes the whole WebView and changes `vh`; `body` resizes `<body>` only; `ionic`; `none`). Android: the WebView resizes the visual viewport (WebView 139+); `resizeOnFullScreen: true` only for a full-screen app | Focus the lowest input on the longest form, on both platforms, with a hardware-keyboard-off emulator | Focused input and its submit button stay visible above the keyboard; nothing jumps when it closes |
+| **Splash** | `launchAutoHide: false`, then `SplashScreen.hide()` after the first meaningful paint. Android 12+ ignores `backgroundColor`, `showSpinner`, `splashFullScreen`, `splashImmersive` at launch; use `launchFadeOutDuration` | Cold-start 3 times (`adb shell am force-stop <appId>` then launch) | No white flash between splash and first screen |
+| **Android back** | `App.addListener('backButton', ({ canGoBack }) => canGoBack ? history.back() : App.minimizeApp())`; close an open sheet or dialog first. A listener replaces the default handling | `adb shell input keyevent KEYCODE_BACK` on a nested route, with a sheet open, and on the root route | Nested → previous route; sheet → closes; root → app backgrounds. Record whether the system back preview animation shows: an app-registered back callback suppresses it on Android 16, so note it, do not guess |
+| **Haptics defaults** | `@capacitor/haptics` `impact()` defaults to `ImpactStyle.Heavy`; always pass `style`. Only `Light` / `Medium` / `Heavy` exist (no Rigid/Soft) | `rg -n "Haptics\.impact\(\s*\)" src` | Zero hits; meanings follow `enhance-mobile-native-feel` |
+| **Large screens** | Android 16 ignores orientation and resizability locks on displays ≥ 600dp for apps targeting 36; `@capacitor/screen-orientation` `lock()` has no effect there | Run the tablet or unfolded-foldable AVD in landscape | Layout reflows; nothing is a stretched portrait phone (`audit-responsive`) |
 
 ## Shipping pipeline  [LOW freedom — run exactly]
 
@@ -95,9 +136,12 @@ major matching, `cap sync`, secrets, and store preflight
 - [ ] Permissions / entitlements / native config present for any native capability used.
 - [ ] Secrets are in CI/Keychain, never in the repo or the JS bundle.
 - [ ] If OTA: the bundle is compatible with the shipped native binary.
+- [ ] Shell plumbing rows touched pass their probe; the dead-bar-config grep returns zero hits.
 
 ## Composes with
 - `enhance-capacitor-ui` — form-factor / platform / pointer layout architecture.
+- `enhance-mobile-native-feel` — the native-feel design pass that uses this plumbing.
+- `mobile-emulator-test` — the Android device loop the probes run in.
 - `workflow-spec-tdd` — spec + TDD spine for the feature itself.
 - `full-stack-ship-discipline` — backend deps deployed + verified.
 - `enhance-web-*` — the underlying web UI the Capacitor shell renders.

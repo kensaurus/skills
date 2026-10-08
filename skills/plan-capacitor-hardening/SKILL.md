@@ -1,7 +1,7 @@
 ---
 name: plan-capacitor-hardening
 description: >
-  Plan-only Capacitor/Ionic native-layer security audit: WebView, token storage,
+  Plan-only Capacitor native-layer security audit: WebView, token storage,
   deep links, OAuth, cleartext, exported activities. Use when "is my Capacitor
   app secure?". Store readiness → plan-mobile-readiness.
 license: MIT
@@ -24,7 +24,7 @@ effort: high
 ## How to reason (every plan item)
 
 1. **Propose** — config, storage, deep-link, or WebView change
-2. **Risk** — what a extracted APK or hijacked scheme actually exposes
+2. **Risk** — what an extracted APK or hijacked scheme actually exposes
 3. **Keep-working** — native controls that already hold in production
 4. **Phase** — prod-config leaks → tokens → auth → WebView → OTA (do not execute)
 
@@ -109,12 +109,13 @@ Keychain/Keystore. Hybrid-native gaps are invisible if you only review web code.
 - **`addJavascriptInterface` / bridge exposure** — untrusted content + JS interface =
   Critical RCE vector.
 - **`setAllowFileAccess*` / `file://`**, `eval` on user input, insecure `postMessage`.
-- **Stale system-bar config** — `StatusBar.setBackgroundColor` / `overlaysWebView: false` are no-ops on Android 16 (Capacitor 8.3.2+ `SystemBars`); not a security hole, but flag it as dead config whose removal is owed to `enhance-mobile-native-feel`.
+- **Stale system-bar config** — `StatusBar.setBackgroundColor`, `setOverlaysWebView`, and the `overlaysWebView` / `backgroundColor` config have no effect with `targetSdkVersion 36` (Capacitor 8 replaced them with core `SystemBars`); not a security hole, but flag it as dead config whose removal is owed to `mobile-capacitor-platform` § Native shell plumbing.
 
 ### 5 · OTA / live-update governance
 - **Update channel integrity** — OTA bundles signed/encrypted; unauthenticated path = RCE.
-- **Store-policy** — Google permits WebView updates; **Apple: OTA must not alter core
-  functionality** (App Store violation independent of security).
+- **Store-policy** — Google permits WebView updates; **Apple Guideline 2.5.2: an app may
+  not "download, install, or execute code which introduces or changes features or
+  functionality"** (App Store violation independent of security).
 - **Rollback / kill switch** — can a bad update be reverted?
 
 Severity aligned with Capsec (`@capgo/capgo-sec`) rules where applicable: CAP001–011,
@@ -211,7 +212,7 @@ Re-audit native files after each phase; verify secure storage + deep-links on re
 - **Launch gates** — run with `plan-mobile-readiness` before store submit.
 - **`plan-secrets-audit`** — bundle secrets cross-hand.
 - **`plan-input-validation`** — deep-link / WebView input validation cross-hand.
-- **Execution:** `mobile-capacitor-platform`, `backend-patterns`, `mobile-emulator-test`; UI-layer edge-to-edge and chrome → `enhance-mobile-native-feel`.
+- **Execution:** `mobile-capacitor-platform`, `backend-patterns`, `mobile-emulator-test`; native-feel chrome and design → `enhance-mobile-native-feel`.
 - **Verify:** real-device secure storage + deep-link test; no dev config in release build.
 
 > Plan at high effort. Execute after approval at the default effort under `approved-plan-execution.mdc` (no reward hacking, no feature deletion).

@@ -1,6 +1,6 @@
 # Every skill, in plain English
 
-_Generated from each skill's `SKILL.md` by `npm run gen:skill-index`. Do not edit by hand. **172 skills.**_
+_Generated from each skill's `SKILL.md` by `npm run gen:skill-index`. Do not edit by hand. **173 skills.**_
 
 You do not memorize names. Describe the job in chat and the matching skill runs. Exact trigger phrases are in [CATALOG.md](CATALOG.md); the prefix and stage table is in [CATALOG.md — Skill Taxonomy](CATALOG.md#skill-taxonomy).
 
@@ -19,7 +19,7 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 | [Data — charts & pipelines](#data-charts-pipelines-2) | **2** | Charts, dashboards, ETL / cron jobs |
 | [Docs — write it down clearly](#docs-write-it-down-clearly-6) | **6** | READMEs, PRDs, RFCs with a reader-first voice |
 | [Housekeeping — consolidate or clear one drifted register](#housekeeping-consolidate-or-clear-one-drifted-register-5) | **5** | Consolidate one drifted register (gates, backlog, design tokens, dead code) |
-| [Workflows — multi-step recipes](#workflows-multi-step-recipes-21) | **21** | End-to-end recipes (build, fix, ship, green the repo) |
+| [Workflows — multi-step recipes](#workflows-multi-step-recipes-22) | **22** | End-to-end recipes (build, fix, ship, green the repo) |
 | [Test & QA — prove it works](#test-qa-prove-it-works-8) | **8** | Unit, Playwright, visual regression, load, red-team |
 | [Deploy — ship & verify](#deploy-ship-verify-2) | **2** | npm release + post-deploy smoke tests |
 | [Debug — find & fix what's broken](#debug-find-fix-whats-broken-3) | **3** | Errors, Sentry, frontend-backend mismatches |
@@ -30,13 +30,13 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 | [Third-party (upstream-maintained)](#third-party-upstream-maintained-3) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
 | [Core & cross-cutting](#core-cross-cutting-4) | **4** | Close everything, burndown, research, handoff |
 | [Cursor IDE skills](#cursor-ide-skills-12) | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **172** |  |
+| **Total** | **173** |  |
 
 ### Audit — inspect; some then fix (32)
 
 | Skill | What it does |
 |:------|:-------------|
-| `audit-accessibility` | WCAG 2.2 audit via playwright-cli: crawl every page, inject axe-core, test keyboard nav, contrast, ARIA labels, heading order |
+| `audit-accessibility` | WCAG 2.2 AA audit via playwright-cli: axe-core, keyboard, contrast, target size, focus, ARIA |
 | `audit-agent-speed` | Measure and fix a slow coding-agent setup: status line, hooks, instruction bloat, effort, worktree pile-up, antivirus and indexer scans |
 | `audit-analytics` | Read-only audit of product-analytics events (PostHog, Amplitude, Mixpanel, GA4): taxonomy, funnels, consent-gated firing, dead or duplicate… |
 | `audit-auth-flows` | Read-only audit of app-layer auth: route×gate matrix, session lifecycle, OAuth, provider traps (getSession vs getUser, middleware-only… |
@@ -61,7 +61,7 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 | `audit-realworld` | Read-only conformance audit of a full-stack app against RealWorld ("Conduit"): API spec, shared E2E suite, closest-stack reference |
 | `audit-registry-listing` | Read-only audit of where a repo is found: README first screen, npm/PyPI metadata and tarball, GitHub topics, social preview, plugin… |
 | `audit-resilience` | Read-only production-resilience audit: timeouts, bounded retries, circuit breakers, idempotency, rate limits, graceful degradation, PII in… |
-| `audit-responsive` | Audit and fix layouts at every breakpoint — desktop is not a wide phone |
+| `audit-responsive` | Audit and fix layouts at every breakpoint; desktop is not a wide phone |
 | `audit-security` | Audit and fix app code against OWASP (injection, headers, dependencies) |
 | `audit-skill-conflicts` | Read-only audit of a skill pack for contradictory directives, overlapping triggers, stale cross-refs, and context bloat |
 | `audit-ui-states` | Read-only audit of unhappy-path UI states — empty, loading, error, offline, zero-results, permission, overflow — then a fix plan |
@@ -77,7 +77,7 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 | `plan-antislop` | Plan-only authenticity / AI-slop audit across prose, UI, code, and IA |
 | `plan-aso` | Plan-only ASO audit of App Store and Google Play listings: keywords, localized metadata, screenshots, ratings prompts |
 | `plan-backup-dr` | Plan-only audit of whether a project can actually recover from data loss, not just whether backups exist |
-| `plan-capacitor-hardening` | Plan-only Capacitor/Ionic native-layer security audit: WebView, token storage, deep links, OAuth, cleartext, exported activities |
+| `plan-capacitor-hardening` | Plan-only Capacitor native-layer security audit: WebView, token storage, deep links, OAuth, cleartext, exported activities |
 | `plan-data-integrity` | Plan-only audit of destructive-operation and migration safety |
 | `plan-dead-code` | Plan-only dead-code audit: Knip baseline for unused files, exports, and deps, plus duplication, debug residue, suppressions, orphan assets,… |
 | `plan-dependency-provenance` | Plan-only audit of dependencies for hallucinated or slopsquatted packages, supply-chain risk, and license gaps |
@@ -86,7 +86,7 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 | `plan-gtm` | Plan-only GTM audit: monetization, positioning, activation funnel, SEO/AEO, distribution, and a founder interview |
 | `plan-input-validation` | Plan-only trust-boundary audit for missing validation, injection, XSS, and forged requests across forms, APIs, and webhooks |
 | `plan-llm-cost-guardrails` | Plan-only audit of an LLM app's runaway-cost and quota-abuse exposure |
-| `plan-mobile-readiness` | Plan-only App Store / Google Play submission audit for Capacitor and React Native: manifests, permissions, privacy, signing |
+| `plan-mobile-readiness` | Plan-only App Store / Google Play submission audit for Capacitor and RN: privacy, permissions, signing, target SDK |
 | `plan-perf-audit` | Plan-only performance audit across web, mobile, backend, and data; measures first, fixes nothing |
 | `plan-pricing` | Plan-only pricing audit: value metric, tiers, price points, free-tier boundary, annual and enterprise anchors, and a willingness-to-pay… |
 | `plan-privacy-compliance` | Plan-only audit mapping real personal-data flows to the privacy policy, GDPR, Japan APPI, and store labels |
@@ -107,7 +107,7 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 | `enhance-email-deliverability` | Audit and fix email deliverability: SPF, DKIM, DMARC, reputation, bounces and complaints, list hygiene, unsubscribe compliance |
 | `enhance-growth-loops` | Add growth loops to a live product: a "powered by" badge, shareable artifacts, invites and referral credit, each with K-factor events |
 | `enhance-lifecycle-email` | Lifecycle email from product events: activation nudges, trial expiry by activated vs stalled, limit-reached upgrades, win-back, with exits… |
-| `enhance-mobile-native-feel` | Make an existing Expo/RN or Capacitor app feel native, not web: system tabs and sheets, edge-to-edge, haptics, spring motion, virtualized… |
+| `enhance-mobile-native-feel` | Make an existing Expo/RN or Capacitor app feel native: system tabs, sheets, edge-to-edge, back, haptics, springs, lists |
 | `enhance-motion` | Audit an existing web app's motion, then apply one coherent, reduced-motion-safe pass |
 | `enhance-onboarding` | Activation pass: define the activation event, cut steps to first value, add templates, sample data, a short checklist, and signup →… |
 | `enhance-pwa` | Add or upgrade PWA features: manifest, service worker, offline mode, install prompt, push, background sync |
@@ -154,9 +154,9 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 
 | Skill | What it does |
 |:------|:-------------|
-| `mobile-capacitor-platform` | Capacitor work beyond UI: plugins, OTA, deep links, push, offline, native CI/CD, store submission, Cordova migration |
+| `mobile-capacitor-platform` | Capacitor native layer: system bars, keyboard, back, plugins, push, deep links, OTA, native CI |
 | `mobile-emulator-start` | Boot the Android emulator and Metro (Expo or bare RN) in order: check terminals, kill stale ports, pick an AVD |
-| `mobile-emulator-test` | QA a native Android or Expo dev-client build end to end on the emulator: UI, Supabase, Sentry per CRUD step |
+| `mobile-emulator-test` | QA a native Android or Expo dev-client build on the emulator: UI, Supabase, Sentry per CRUD step |
 | `mobile-rn-performance` | Fix React Native / Expo performance, build, and upgrade issues: jank, slow startup, large bundles, memory leaks, Hermes, FlashList,… |
 | `mobile-rn-screen` | Polish one existing React Native screen so it feels native |
 
@@ -188,7 +188,7 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 | `housekeep-files` | Copy-not-move organizer for document trees: hash inventory, dry run, labeled copies, search catalog, verify every source survived |
 | `housekeep-gates` | Consolidate accreted CI gates, ratchets, and hooks into one required aggregator check |
 
-### Workflows — multi-step recipes (21)
+### Workflows — multi-step recipes (22)
 
 | Skill | What it does |
 |:------|:-------------|
@@ -205,6 +205,7 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 | `workflow-housekeep` | Repository maintenance: sync the README, remove confirmed dead artifacts, update dependencies safely |
 | `workflow-launch-ready` | Launch-preparation sweep for a new app or major release |
 | `workflow-merge-conflicts` | Resolve an in-progress merge or rebase conflict by tracing each side back to its intent |
+| `workflow-mobile-native-uiux` | Run the whole native UI/UX pass on an existing Capacitor, Expo, or RN app: plumbing, native feel, a11y, layout, device QA, PR |
 | `workflow-onboard` | First-contact orientation for an unfamiliar codebase |
 | `workflow-parallel-agents` | Run multiple agents in parallel via git worktrees, cloud agents, or multi-model comparison |
 | `workflow-pr` | Manage an existing PR lifecycle — review, bot feedback, conflicts, merge |

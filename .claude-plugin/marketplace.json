@@ -12,7 +12,7 @@
     {
       "name": "kenji",
       "source": ".",
-      "description": "160 agent skills, 63 slash commands, 6 subagents for Claude Code, effort-routed for Opus 5.5. Install: /plugin install kenji@kenji",
+      "description": "161 agent skills, 63 slash commands, 6 subagents for Claude Code, effort-routed for Opus 5.5. Install: /plugin install kenji@kenji",
       "homepage": "https://github.com/kensaurus/skills#readme",
       "repository": "https://github.com/kensaurus/skills",
       "license": "MIT",

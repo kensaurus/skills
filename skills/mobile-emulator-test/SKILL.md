@@ -1,9 +1,9 @@
 ---
 name: mobile-emulator-test
 description: >
-  QA a native Android or Expo dev-client build end to end on the emulator: UI,
-  Supabase, Sentry per CRUD step. Use for "test on emulator", "QA Android
-  build", "white screen", or "adb reverse".
+  QA a native Android or Expo dev-client build on the emulator: UI, Supabase,
+  Sentry per CRUD step. Use for "test on emulator", "QA Android build", "white
+  screen", or "adb reverse".
 license: MIT
 ---
 
@@ -73,12 +73,10 @@ refetch loops, and silent error swallows.
 > Diagnose, don't restart blindly.
 
 > **Score native feel while you walk.**
-> On every tab screenshot note: tab bar visible and drawn by the system,
-> content under the status bar with correct insets, press response on the
-> tap you just made, no blank cells after a fast fling, body text legible
-> at the largest accessibility size. A fail is a finding routed to
-> `enhance-mobile-native-feel`; emulators may not vibrate, so haptics are a
-> device check.
+> System tab bar, insets, press response, fling, plus the back / font-scale /
+> reduce-motion / large-screen adb probes in
+> [references/details.md § Native-feel probes](references/details.md#native-feel-probes).
+> Fails route to `enhance-mobile-native-feel`; haptics are a device check.
 
 > **Clean up server state.**
 > Anything you POST during the walk gets deleted before you finish, via the

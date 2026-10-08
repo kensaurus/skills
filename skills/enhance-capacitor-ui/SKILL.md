@@ -28,15 +28,20 @@ one source of truth, mode tokens, container-query primitives, and a
 chrome allow-list — so per-form-factor / per-platform polish is a
 predictable, reviewable change instead of a regression.
 
-> **Vague-but-visceral cross-surface feedback ("looks great on web,
-> atrocious on iPhone", "the iPad version is just a stretched phone",
-> "Android dock feels wrong", "everything wraps on tablet") almost always
-> points to **axis conflation** — one boolean (`isMobile`) is being asked
-> to answer three different questions. Start at the architecture, not at
-> the broken page.**
+> **Cross-surface feedback ("great on web, atrocious on iPhone", "the iPad is
+> a stretched phone", "everything wraps on tablet") almost always means
+> **axis conflation**: one `isMobile` boolean answers three questions.
+> Start at the architecture, not at the broken page.**
 
 > If browser/native automation is used, first follow the
 > `protocol-browser-anti-stall` skill when present.
+
+| Skill | Owns |
+|---|---|
+| **enhance-capacitor-ui** (this) | One codebase on web + iOS + Android: form factor vs platform vs pointer |
+| `mobile-capacitor-platform` | Native shell plumbing: SystemBars, insets, keyboard, splash, back |
+| `enhance-mobile-native-feel` | Making the compact native surface feel native, after the axes are separated |
+| `audit-responsive` | Layout reflow at 375 / 768 / 1440 |
 
 ## How to reason
 
@@ -57,7 +62,7 @@ predictable, reviewable change instead of a regression.
 - **Three axes** — no leftover `useIsMobile` answering platform or hover
 - **SSR** — chrome visibility is CSS-gated; no JS-only first paint
 - **Six cells** — compact/medium/expanded × web/iOS/Android viewed
-- **Right owner** — one-surface polish → `enhance-web-ui`; native SwiftUI/Compose is out of scope
+- **Right owner** — one-surface polish → `enhance-web-ui`; bars/insets/keyboard → `mobile-capacitor-platform`; native SwiftUI/Compose is out of scope
 
 ---
 
@@ -128,16 +133,10 @@ predictable, reviewable change instead of a regression.
 > A future enhancer (human or AI) will reach for `lg:grid-cols-2` in a
 > primitive within a week unless the rule warns them.
 
-> **Edge-to-edge is the platform default (2026).** Android 16 enforces it
-> and Capacitor 8.3.2+ handles insets in core: set `viewport-fit=cover`,
-> pad chrome with `var(--safe-area-inset-*, env(safe-area-inset-*, 0px))`,
-> style bars with `SystemBars` (`@capacitor/core`). The legacy
-> `StatusBar.setBackgroundColor()` / `overlaysWebView: false` are no-ops
-> on Android 16; color the bar area with an element instead.
-> `tailwindcss-safe-area` reads `env()` only, so hand-roll the `var()`
-> fallback on critical chrome while Android WebView < 140 is in the fleet.
-> Capacitor 7 keeps the `@capawesome/capacitor-android-edge-to-edge-support`
-> plugin only as an opt-out.
+> **Safe-area math is a platform token, not this skill's plumbing.** Insets,
+> `SystemBars`, keyboard resize, and back handling are owned by
+> `mobile-capacitor-platform` § Native shell plumbing. Here, only the chrome
+> allow-list files read `var(--safe-area-inset-*, env(safe-area-inset-*, 0px))`.
 
 > **Patch the axis primitive, not the consumer.** Same rule as
 > `enhance-web-ui` *Primitive-First Patch Rule*, scoped to axes: if

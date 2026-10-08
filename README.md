@@ -6,7 +6,7 @@
 
 **You say the job. The playbook runs.** Agent skills, slash commands, and subagents for **Claude Code, Cursor, Codex CLI, and Gemini CLI**.
 
-160 agent skills · 63 slash commands · 15 MCP servers · 12 Cursor skills · 6 subagents — for React / Next.js / Supabase, usable on almost any stack.
+161 agent skills · 63 slash commands · 15 MCP servers · 12 Cursor skills · 6 subagents — for React / Next.js / Supabase, usable on almost any stack.
 
 <p>
   <a href="https://www.npmjs.com/package/@kensaurus/skills"><img src="https://img.shields.io/npm/v/@kensaurus/skills?style=flat-square&color=cb3837&logo=npm" alt="npm version" /></a>
@@ -71,6 +71,7 @@ The 23 `plan-*` skills audit first and wait for your approval. See [docs/PLAN-LO
 | *"build this feature"* | `workflow-build-feature` | Spec → tests → code → smoke → PR |
 | *"fix this bug and ship it"* | `workflow-fix-and-ship` | Debug → fix → verify → PR → deploy |
 | *"this mobile app feels like a website"* | `enhance-mobile-native-feel` | Native chrome, haptics, motion, lists, in one pass |
+| *"fix our mobile UI/UX end to end"* | `workflow-mobile-native-uiux` | Native pass → accessibility → device QA → PR |
 | *"audit my security"* | `audit-security` | OWASP-style findings with file:line |
 | *"is this production-ready?"* | `audit-resilience` + `audit-realworld` | Timeouts, retries, parity checks |
 | *"complete everything"* | `complete-everything` | No parked leftovers; a judge verifies "done" |
@@ -128,7 +129,7 @@ Four examples. The rule is the same: you say the job, and a named playbook runs.
 
 Skills run from a plain request. Commands start with `/`. Subagents peel off one task. Rules are `.mdc` files the AI always obeys. MCP templates pin exact server versions. Details for each → [Commands, subagents, MCP, rules](#commands-subagents-mcp-rules).
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **172** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://labs.cloudsecurityalliance.org/research/csa-research-note-slopsquatting-ai-supply-chain-20260419-csa/).
+Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **173** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://labs.cloudsecurityalliance.org/research/csa-research-note-slopsquatting-ai-supply-chain-20260419-csa/).
 
 <!-- SKILL-INDEX:START -->
 
@@ -145,7 +146,7 @@ Everything follows the [Agent Skills spec](https://agentskills.io/specification)
 | [Data — charts & pipelines](docs/SKILLS.md#data-charts-pipelines-2) | **2** | Charts, dashboards, ETL / cron jobs |
 | [Docs — write it down clearly](docs/SKILLS.md#docs-write-it-down-clearly-6) | **6** | READMEs, PRDs, RFCs with a reader-first voice |
 | [Housekeeping — consolidate or clear one drifted register](docs/SKILLS.md#housekeeping-consolidate-or-clear-one-drifted-register-5) | **5** | Consolidate one drifted register (gates, backlog, design tokens, dead code) |
-| [Workflows — multi-step recipes](docs/SKILLS.md#workflows-multi-step-recipes-21) | **21** | End-to-end recipes (build, fix, ship, green the repo) |
+| [Workflows — multi-step recipes](docs/SKILLS.md#workflows-multi-step-recipes-22) | **22** | End-to-end recipes (build, fix, ship, green the repo) |
 | [Test & QA — prove it works](docs/SKILLS.md#test-qa-prove-it-works-8) | **8** | Unit, Playwright, visual regression, load, red-team |
 | [Deploy — ship & verify](docs/SKILLS.md#deploy-ship-verify-2) | **2** | npm release + post-deploy smoke tests |
 | [Debug — find & fix what's broken](docs/SKILLS.md#debug-find-fix-whats-broken-3) | **3** | Errors, Sentry, frontend-backend mismatches |
@@ -156,9 +157,9 @@ Everything follows the [Agent Skills spec](https://agentskills.io/specification)
 | [Third-party (upstream-maintained)](docs/SKILLS.md#third-party-upstream-maintained-3) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
 | [Core & cross-cutting](docs/SKILLS.md#core-cross-cutting-4) | **4** | Close everything, burndown, research, handoff |
 | [Cursor IDE skills](docs/SKILLS.md#cursor-ide-skills-12) | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **172** | [Every skill, one line each](docs/SKILLS.md) |
+| **Total** | **173** | [Every skill, one line each](docs/SKILLS.md) |
 
-_Generated from each skill's `SKILL.md` by `npm run gen:skill-index`. **172 skills.** The full list is [docs/SKILLS.md](docs/SKILLS.md); trigger phrases are in [docs/CATALOG.md](docs/CATALOG.md)._
+_Generated from each skill's `SKILL.md` by `npm run gen:skill-index`. **173 skills.** The full list is [docs/SKILLS.md](docs/SKILLS.md); trigger phrases are in [docs/CATALOG.md](docs/CATALOG.md)._
 
 <!-- SKILL-INDEX:END -->
 
@@ -318,7 +319,7 @@ source ~/skills/shell-aliases/cursor-helpers.sh
 
 ```
 skills/
-├── skills/           # 160 Agent Skills (SKILL.md each)
+├── skills/           # 161 Agent Skills (SKILL.md each)
 ├── skills-cursor/    # 12 Cursor-specific skills
 ├── commands/         # 63 slash commands
 ├── agents/           # 6 subagents
@@ -371,7 +372,7 @@ You talk normally. The tool matches your words to each skill's YAML `description
 <details>
 <summary><b>How many skills, and where do the counts come from?</b></summary>
 
-**160** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**172** total). Counts come from the filesystem via `npm run check:skills`. See the [family table](#skill-families-at-a-glance) and [docs/SKILLS.md](docs/SKILLS.md).
+**161** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**173** total). Counts come from the filesystem via `npm run check:skills`. See the [family table](#skill-families-at-a-glance) and [docs/SKILLS.md](docs/SKILLS.md).
 
 </details>
 

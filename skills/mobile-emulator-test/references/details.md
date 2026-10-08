@@ -38,7 +38,7 @@ adb shell "uiautomator dump /sdcard/ui.xml && cat /sdcard/ui.xml" \
 - Native build QA — <project> on Android emulator
 - Anti-pattern catalogue (ship-blockers I want the agent to spot fast)
 - Important rules
-
+- Native-feel probes (back, font scale, reduce motion, large screen)
 
 ### 2b. Walk every tab in order
 
@@ -491,3 +491,22 @@ fix that loop before blaming Metro / JS.
    louder than over-eager closures.
 10. **Clean up server state at the end** — leave the workspace exactly as
    you found it, minus the bugs you patched.
+
+## Native-feel probes
+
+Run once per walk on an Android 16 AVD (API 36). Screenshot each result; restore the
+settings at the end. On every tab screenshot also note: tab bar drawn by the system,
+content under the status bar with correct insets, press response on the tap you just
+made, no blank cells after a fast fling.
+
+| Probe | Command | Pass |
+|---|---|---|
+| Back | `adb shell input keyevent KEYCODE_BACK` on a nested route, with a sheet open, then on the root | route pops; sheet closes; root backgrounds the app (`adb shell dumpsys activity activities \| grep -i resumed` no longer shows it) |
+| Font scale | `adb shell settings put system font_scale 2.0`, relaunch | no clipped or overlapping text; primary action still reachable |
+| Reduce motion | `adb shell settings put global animator_duration_scale 0` (also `transition_animation_scale`, `window_animation_scale`) | no slide or zoom travel; state changes still visible. Capacitor: read `matchMedia('(prefers-reduced-motion: reduce)').matches` via `chrome://inspect` and record it |
+| Large screen | boot a tablet or foldable AVD, rotate to landscape | layout reflows; no stretched portrait phone (API 36 ignores orientation locks at ≥ 600dp) |
+| Gesture vs 3-button nav | `adb shell cmd overlay enable-exclusive --category com.android.internal.systemui.navbar.threebutton` (revert with `...navbar.gestural`) | tab bar and bottom sheet clear the nav bar in both modes |
+
+Restore: `adb shell settings put system font_scale 1.0`; set the three animation scales
+back to `1`. iOS (simulator on macOS only): Settings → Accessibility → Display & Text Size
+→ Larger Text, and Motion → Reduce Motion; report `not run` on hosts without macOS.
