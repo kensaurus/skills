@@ -26,6 +26,7 @@ purpose.
 | [0011](0011-routing-rule-keeps-only-name-disambiguation.md) | Routing rule keeps only name disambiguation | Accepted | `skill-workflows.mdc` lists only mappings a skill name gets wrong (3,246 → 1,614 bytes); descriptions carry the rest |
 | [0012](0012-completion-gate-one-registration-per-host.md) | Completion gate: one registration per host, per-conversation budget | Accepted | `--host=` on each entry; the Claude-config copy stands aside inside Cursor; three follow-ups per conversation while nothing closes; `blocked by:` items and day-old state files do not gate |
 | [0013](0013-rename-to-kensaurus-skills.md) | Rename cursor-kenji to kensaurus/skills, plugin `kenji` | Accepted | Repo `kensaurus/skills`, npm `@kensaurus/skills`, plugin `kenji@kenji` in 2.0.0; `renames` map plus installer migration; old package forwards, then is deprecated |
+| [0014](0014-workflow-chains-in-metadata.md) | Workflow skills declare their chain in `metadata.chain` | Accepted | One quoted string of space-separated `skills/` slugs in run order; Mushi pipelines read it; `validate-skills` checks every slug |
 
 ## Conventions
 

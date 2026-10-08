@@ -122,6 +122,7 @@ Every **first-party** (Kenji-authored) skill MUST have:
 - [ ] **Related Skills** section for cross-referencing
 - [ ] **Validation** section with post-implementation checks
 - [ ] **Effort declared** where the medium default is wrong: `effort: high` for judgment (audit, plan, judge, security, architecture, debug), `effort: low` for mechanical or read-only work (inventory, formatting, handoff). Claude Code reads it; Cursor ignores it. User-only rituals add `disable-model-invocation: true`; reference-only skills add `user-invocable: false`
+- [ ] **Chain declared** if the skill runs other skills as steps: `metadata:` → `chain: "a b c"`, the `skills/` slugs in the order the body runs them ([ADR-0014](adr/0014-workflow-chains-in-metadata.md)). Optional steps, routers, and "see also" mentions stay out
 - [ ] **Prompt enhancement (T1–T8)** — freedom declared, one classification contract (what counts as a finding, not how to think), one worked example labeled illustrative, an evidence rubric (not a generic self-check), effort declared, normal volume; see [PROMPT-ENHANCEMENT-PLAYBOOK.md](PROMPT-ENHANCEMENT-PLAYBOOK.md) / `enhance-skill-prompts` (existing skills) or `meta-skill-creator` (new)
 
 ### 4. Description Guidelines

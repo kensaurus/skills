@@ -23,6 +23,9 @@
  *     agents' `memory`/`isolation`/`color`/`maxTurns` in their sets, `effort`
  *     never nested under `metadata:`; (warn) `model` pinning a full `claude-*`
  *     ID; description + when_to_use <= 1536 chars. Cursor ignores these keys.
+ *   - `metadata.chain`, when present, is one double-quoted string of
+ *     space-separated slugs, each an existing skills/ directory, no repeats,
+ *     not the skill itself (ADR-0014)
  *   - every top-level commands/*.md is `disable-model-invocation: true` unless
  *     listed in MODEL_INVOCABLE_COMMANDS; commands-portable/ carries no
  *     Claude-only keys (install.mjs strips portable frontmatter)
@@ -129,6 +132,37 @@ function checkRoutingKeys(id, front, desc, { agent = false } = {}) {
   }
 }
 
+// `metadata.chain` (ADR-0014): the skills a workflow runs, in order, as one
+// quoted string of space-separated slugs. The spec allows only string values
+// under `metadata`, and Mushi's skill-sync reads it to build a pipeline, so a
+// stale slug silently drops a step there.
+const SKILL_DIRS = new Set(
+  readdirSync(join(repoRoot, "skills")).filter((d) => statSync(join(repoRoot, "skills", d)).isDirectory()),
+);
+function checkChain(id, dir, front) {
+  const lines = front.split("\n");
+  const start = lines.findIndex((l) => /^metadata:/.test(l));
+  if (start === -1) return;
+  for (let j = start + 1; j < lines.length && /^\s+\S/.test(lines[j]); j++) {
+    const m = lines[j].match(/^\s+chain:[ \t]*(.*)$/);
+    if (!m) continue;
+    const value = m[1].trim();
+    if (!/^"[^"]*"$/.test(value)) {
+      errors.push(`${id}: metadata.chain must be one double-quoted string of space-separated slugs (got ${value || "nothing"})`);
+      return;
+    }
+    const slugs = value.slice(1, -1).trim().split(/\s+/).filter(Boolean);
+    if (!slugs.length) errors.push(`${id}: metadata.chain is empty — remove it instead`);
+    const seen = new Set();
+    for (const slug of slugs) {
+      if (slug === dir) errors.push(`${id}: metadata.chain lists the skill itself`);
+      else if (!SKILL_DIRS.has(slug)) errors.push(`${id}: metadata.chain slug '${slug}' is not a directory under skills/`);
+      if (seen.has(slug)) errors.push(`${id}: metadata.chain repeats '${slug}'`);
+      seen.add(slug);
+    }
+  }
+}
+
 /** Extract the YAML frontmatter description value, folded to a single line. */
 function readDescription(front) {
   const lines = front.split("\n");
@@ -214,6 +248,7 @@ for (const group of groups) {
     }
 
     checkRoutingKeys(id, front, desc);
+    checkChain(id, dir, front);
     if (desc && fmScalar(front, "disable-model-invocation") !== "true") listing[group] += listingEntry(dir, desc, front);
 
     // body length (warning only)

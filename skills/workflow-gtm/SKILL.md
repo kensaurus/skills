@@ -6,6 +6,8 @@ description: >
   "go to market", "grow users", or "increase traffic and visibility". Strategy
   only → plan-gtm.
 license: MIT
+metadata:
+  chain: "plan-gtm audit-analytics enhance-web-conversion audit-registry-listing enhance-readme enhance-onboarding enhance-lifecycle-email enhance-web-seo docs-comparison-pages plan-aeo-readiness docs-launch-kit enhance-growth-loops iterate-gtm-weekly"
 ---
 
 # workflow-gtm — From shipped to found, used, and paid

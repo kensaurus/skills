@@ -6,6 +6,8 @@ description: >
   "prepare this for a PR" or "get my working tree merge-ready". Existing PR →
   workflow-pr.
 license: MIT
+metadata:
+  chain: "audit-code-review workflow-git-commit workflow-pr"
 effort: high
 ---
 

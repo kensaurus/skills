@@ -6,6 +6,23 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ## [Unreleased]
 
+### Added
+
+- **Workflow chains in frontmatter** ([ADR-0014](docs/adr/0014-workflow-chains-in-metadata.md)).
+  Mushi Mushi runs a workflow skill as a pipeline of the skills it calls, but
+  it found them by scanning the body for `skills/<slug>/SKILL.md` paths, which
+  the workflows no longer write, so every workflow ran as one step. Each
+  workflow that runs other skills now declares them as
+  `metadata.chain: "a b c"`, in run order, inside the Agent Skills spec (string
+  values only). Optional steps, routers and "see also" mentions stay out.
+  `validate-skills` fails on an unknown or repeated slug.
+  - `workflow-build-feature`: `workflow-spec-tdd test-unit test-playwright workflow-pr`
+  - `workflow-fix-and-ship`: `debug-error test-playwright workflow-pr`
+  - `workflow-quality-gate`: `test-red-team audit-security audit-bundle-size audit-performance test-unit`
+  - `workflow-launch-ready`: `enhance-web-seo enhance-pwa audit-bundle-size audit-i18n workflow-quality-gate deploy-verify iterate-post-launch`
+  - `workflow-gtm`: the seven-step sequence, `plan-gtm` through `iterate-gtm-weekly`
+  - `workflow-release-prep`: `audit-code-review workflow-git-commit workflow-pr`
+
 ## [2.5.0] — 2026-10-06
 
 A lighter package and a README that shows more than it tells.

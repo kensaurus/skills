@@ -5,6 +5,8 @@ description: >
   check, PR. Use when "build a feature" or "implement this end-to-end".
   Spec/TDD loop only → workflow-spec-tdd. One bug → workflow-fix-and-ship.
 license: MIT
+metadata:
+  chain: "workflow-spec-tdd test-unit test-playwright workflow-pr"
 ---
 
 # workflow-build-feature — End-to-End Feature Build
