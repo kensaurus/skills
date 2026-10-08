@@ -55,7 +55,7 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
   - `plan-mobile-readiness`: a thin web-view app is a Guideline **4.2**
     rejection and app-generator output is **4.2.6**, not 2.5.2 (downloaded
     code, now in `plan-capacitor-hardening`'s OTA pillar). The "25%" figure
-    is now cited (Apple's 2024 transparency report). Adds targetSdk 36 (Play,
+    is now cited (Apple Newsroom, May 2025: over 1.9 M of 7.7 M rejected in 2024). Adds targetSdk 36 (Play,
     2026-08-31), the Xcode 26 upload floor (2026-04-28), and age-rating answers.
   - "Capacitor 8.3.2+" was replaced everywhere: SystemBars exists since 8.0.0
     and its inset fixes continued through 8.5.2, so the skills now say "latest 8.x".

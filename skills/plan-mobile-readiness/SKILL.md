@@ -45,8 +45,8 @@ no manifest, Data Safety, or listing edits until approved.**
 > **Phase:** Phase 1 — Privacy (blocking).
 > **Store:** iOS 5.1.2 / Play Data Safety; demo account still required in Phase 2 if login-gated.
 
-Apple rejected **1.93 M of 7.77 M submissions in 2024 (about 25%)**, most for
-"Performance" (App Store Transparency Report 2024). Many causes are mechanical and
+Apple reviewed **over 7.7 M submissions in 2024 and rejected over 1.9 M (about 25%)**
+(Apple Newsroom, May 2025). Many causes are mechanical and
 pre-detectable: missing privacy manifests, Data Safety ↔ permission mismatches, no demo
 account, placeholder buttons, crashes on older devices, a stale SDK or target API.
 Three guidelines catch vibe-coded apps: **4.2** (the app must "elevate it beyond a
