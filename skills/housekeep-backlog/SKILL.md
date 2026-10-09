@@ -47,7 +47,7 @@ has one.
 4. **Status** — still-relevant / verify-done / stale-or-obsolete
 
 Skipping Interpret produces a register of context-free TODOs nobody can
-action.
+act on.
 
 ## Worked example
 

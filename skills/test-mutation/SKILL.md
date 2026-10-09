@@ -145,7 +145,7 @@ fifty in a formatting helper.
 
 1. **Scope was narrow** — whole-repo first run is a failure mode, not a flex
 2. **Every survivor classified** — no "look at the HTML later"
-3. **Floor measured** — `break` from the first score, not an aspiration
+3. **Floor measured** — set the `break` floor from the first measured score, not an aspiration
 4. **Right owner** — write the missing test → `test-unit`; delete dead code → `plan-dead-code` → `housekeep-dead-code`
 5. **Strengthen tests only on approval**
 

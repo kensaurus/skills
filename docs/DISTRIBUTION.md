@@ -13,7 +13,7 @@ Where kenji is published and how users find it.
 |---------|---------|
 | **npm** (full pack) | `npx @kensaurus/skills --all` |
 | **skills.sh** (skills only) | `npx skills add kensaurus/skills` |
-| **Clone (four tools)** | `git clone … && node bin/install.mjs --all` |
+| **Clone (four tools)** | `git clone https://github.com/kensaurus/skills.git && cd skills && node bin/install.mjs --all` |
 | **Clone (Cursor + Claude)** | `git clone https://github.com/kensaurus/skills.git && cd skills && ./install.sh` |
 | **Claude Code plugin** | `/plugin marketplace add kensaurus/skills` then `/plugin install kenji@kenji` |
 
