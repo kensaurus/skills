@@ -135,7 +135,7 @@ Success moment: [is completion confirmed clearly? what happens next?]
 Result: COMPLETED / COMPLETED-WITH-FRICTION / BLOCKED (blocker = finding, severity Blocker)
 ```
 
-Rules: screenshots to `.playwright-mcp/` per the artifact-hygiene rule; forms
+Rules: screenshots to `.playwright-mcp/` per `protocol-browser-anti-stall` §9 (Artifacts); forms
 judged only for flow-level friction (field-level → `enhance-web-forms`);
 per-page heuristic violations noticed along the way are *handed to* `audit-ux`,
 not re-audited here.

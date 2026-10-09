@@ -100,6 +100,7 @@ This step evaluates the *experience* of accessibility, not just technical compli
 
 ```bash
 PW="npx --yes @playwright/cli@latest"
+$PW -s=ux-audit open --headed "<app-url>/<page>"   # once; later pages: goto
 $PW -s=ux-audit snapshot            # check tab order
 $PW -s=ux-audit press Tab           # step through interactive elements
 $PW -s=ux-audit snapshot            # verify focus indicator visible

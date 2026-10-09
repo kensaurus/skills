@@ -110,8 +110,8 @@ PW="npx --yes @playwright/cli@latest"; S="-s=responsive-audit"
 $PW $S open --headed "<app-url>"
 for wh in "375 812" "768 1024" "1440 900"; do
   $PW $S resize $wh
-  $PW $S goto "<route>"
-  sleep 2 && $PW $S snapshot
+  $PW $S goto "<app-url>/<route>"
+  $PW $S snapshot                # blank → sleep 2 → snapshot again
   $PW $S screenshot --filename ".playwright-mcp/responsive-<route>-${wh// /x}.png"
 done
 ```

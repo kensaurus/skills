@@ -145,8 +145,8 @@ PW="npx --yes @playwright/cli@latest"; S="-s=ux-<route>"
 $PW $S open --headed "<app-url>"
 for wh in "1440 900" "1024 700" "800 700"; do
   $PW $S resize $wh
-  $PW $S goto "<route>"                     # navigate AFTER resize
-  sleep 2 && $PW $S snapshot
+  $PW $S goto "<app-url>/<route>"           # full URL; navigate AFTER resize
+  $PW $S snapshot                           # blank → sleep 2 → snapshot again
   $PW $S screenshot --filename ".playwright-mcp/ux-<route>-${wh// /x}.png"
   $PW $S console
 done

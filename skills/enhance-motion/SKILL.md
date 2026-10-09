@@ -158,7 +158,7 @@ handler or state to "simplify."
 - **Interruptibility:** enter/exit must not trap state if toggled rapidly.
 
 ```bash
-rg -n "animate\[.*(width|height|top|left|margin)" -g "*.{tsx,css}"   # flag layout-triggering
+rg -n "(transition|animate)-\[[^]]*(width|height|top|left|margin)" -g "*.{tsx,jsx,css}"   # flag layout-triggering
 rg -n "prefers-reduced-motion|useReducedMotion|motion-reduce" -g "*.{tsx,css}"  # confirm coverage
 ```
 

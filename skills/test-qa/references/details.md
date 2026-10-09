@@ -245,8 +245,8 @@ For each test step, follow this cycle:
 
 ```bash
 PW="npx --yes @playwright/cli@latest"; S="-s=qa-<app>"
-$PW $S goto "<url>"                                   # 1. if moving pages
-sleep 2 && $PW $S snapshot                            # 2. anti-stall: verify loaded + get refs
+$PW $S open --headed "<url>"                          # 0. once per run; later pages: $PW $S goto "<url>"
+$PW $S snapshot                                       # 1-2. anti-stall: verify loaded + get refs (blank → sleep 2 → snapshot again)
 $PW $S click <ref>                                    # 3. interact (click / fill / type / press)
 $PW $S snapshot                                       # 4. fresh refs after interaction
 $PW $S console                                        # 5. check for errors

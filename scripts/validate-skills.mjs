@@ -466,7 +466,7 @@ if (asJson) {
   for (const w of warnings) console.warn(`⚠ ${w}`);
   if (errors.length) {
     for (const e of errors) console.error(`✗ ${e}`);
-    console.error(`\n✗ ${errors.length} error(s) across ${total} skills.`);
+    console.error(`\n✗ ${errors.length} error(s) (validated ${total} skills, plus command and listing checks).`);
   } else {
     console.log(`✓ All ${total} skills valid against the Agent Skills spec` +
       (warnings.length ? ` (${warnings.length} warning(s)).` : ".") +

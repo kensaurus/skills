@@ -21,7 +21,7 @@ installed, follow `protocol-browser-anti-stall` for browser sessions.
 PW="npx --yes @playwright/cli@latest"; S="-s=ux-laws"
 $PW $S open "<app-url>"
 for wh in "390 844" "1440 900"; do
-  $PW $S resize $wh && $PW $S goto "<route>"
+  $PW $S resize $wh && $PW $S goto "<app-url>/<route>"
   $PW $S eval "$(cat ux-laws-probe.js)" --filename "before-${wh// /x}.json" > /dev/null
   $PW $S screenshot --filename "before-${wh// /x}.png" --full-page
 done

@@ -94,7 +94,7 @@ build the feature from those decisions
 /handoff finish the referral UI tomorrow
 ```
 
-You get a compact handoff document saved outside your repo. Tomorrow, paste its path into a fresh chat.
+You get a compact handoff document saved to your OS temp directory (never inside the repo), and the command prints its path. Tomorrow, paste that path into a fresh chat.
 
 **The rhythm: orient → grill → build → prove → hand off.**
 

@@ -109,7 +109,7 @@ Follow `/research`. Anchor to the **installed** SDK version and the provider's
 *current* API (e.g. Stripe **PaymentIntents**, not the legacy Charges API).
 Confirm the current-year shape of the controls before judging the code.
 
-**When the provider is Stripe, use the Stripe MCP as the authoritative source:**
+**When the provider is Stripe and the Stripe MCP is connected, use it as the authoritative source.** This pack does not bundle it (`mcp/` ships Firecrawl, Context7 and Supabase); connect Stripe's own MCP or plugin, or else follow `/research` against docs.stripe.com for the same checks:
 
 - Concepts / best practice (idempotency keys, webhook signature verification,
   PaymentIntents lifecycle, SCA/3DS2, Radar) — `search_stripe_documentation`
@@ -160,7 +160,7 @@ Report skeleton with example rows: [references/report-template.md](references/re
 timeouts/retries `audit-resilience` owns; assigning any severity below Critical to a double-charge,
 lost-money, or PAN-exposure finding; recommending a refund/payout saga without compensation logic;
 **writing exploit or payment-fraud PoCs**; **editing payment code** — this skill reports;
-remediation is human-reviewed, runs at high effort, and keeps the execution rule's STOP-and-ask on payment code.
+remediation is human-reviewed, runs at high effort, and keeps the `approved-plan-execution` rule's STOP-and-ask on payment code.
 
 ---
 

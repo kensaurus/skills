@@ -5,7 +5,8 @@
  *                   <!-- SKILL-INDEX:START --> / <!-- SKILL-INDEX:END -->
  *   docs/SKILLS.md — the full one-line-per-skill list (whole file)
  *
- * Source of truth: the `name` + `description` frontmatter of every
+ * Source of truth: the directory name (validate-skills requires it to equal the
+ * `name` frontmatter) + the `description` frontmatter of every
  * skills/<name>/SKILL.md and skills-cursor/<name>/SKILL.md. The one-liner is the
  * summary sentence of each description (the part before the "Use when…" triggers),
  * so this never drifts from the installed skills.
@@ -92,7 +93,8 @@ function summarize(desc) {
   // Cut at the trigger boilerplate that follows the summary.
   const cut = s.search(/\s(?:Use when|Use for|Use this|Use to|Use PROACTIVELY|Triggers?:|Auto-detects|Detects the user)/i);
   if (cut > 0) s = s.slice(0, cut);
-  // Prefer the first sentence if it ends early.
+  // Keep only the first sentence, unless it is too short (40 chars or less) to
+  // stand alone; then the following sentence stays too.
   const period = s.indexOf(". ");
   if (period > 40) s = s.slice(0, period);
   s = s.replace(/[.\s—-]+$/, "").trim();
