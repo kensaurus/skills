@@ -19,7 +19,7 @@ cp mcp/mcp.json.template ~/.cursor/mcp.json
 cp mcp/mcp-full.json.template ~/.cursor/mcp.json
 ```
 
-Then set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, and `SUPABASE_ACCESS_TOKEN` in the environment (Cursor interpolates `${env:NAME}`). Do not paste live keys into `mcp.json`. Prefer Cursor's `envFile` pointing at a chmod-restricted file such as `~/.cursor/mcp.env`.
+Then set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, `SUPABASE_ACCESS_TOKEN`, and `SUPABASE_PROJECT_REF` in the environment (Cursor interpolates `${env:NAME}`). Do not paste live keys into `mcp.json`. Prefer Cursor's `envFile` pointing at a chmod-restricted file such as `~/.cursor/mcp.env`.
 
 Claude Code live config (`~/.claude.json`) uses `${NAME}` (no `env:` prefix). Never put `${env:…}` inside Claude `settings.json` `env` — that block is real environment values. `claude mcp list` reads `~/.claude.json`, not an `mcpServers` block in `settings.json`.
 

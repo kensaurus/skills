@@ -9,7 +9,7 @@ license: MIT
 effort: high
 ---
 
-# audit-codemod-safety — Compiles and lints is not behaves the same
+# audit-codemod-safety — A clean compile and lint does not mean it behaves the same
 
 **Degree of freedom: MIXED** — Phases 0–2 `[HIGH freedom]`; Phase 3
 high-risk hand-trace `[LOW freedom — run exactly]`. Do not re-run the

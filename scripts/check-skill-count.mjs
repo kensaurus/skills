@@ -364,8 +364,8 @@ const llmsResult = applyFileRules(llmsPath, "llms.txt", [
   },
   {
     name: "llms plan count",
-    re: /\d+ `plan-\*` audit skills/g,
-    to: `${planCount} \`plan-*\` audit skills`,
+    re: /\d+ `plan-\*` skills/g,
+    to: `${planCount} \`plan-*\` skills`,
   },
 ]);
 

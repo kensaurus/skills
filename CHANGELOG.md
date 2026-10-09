@@ -64,6 +64,20 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
     gains adb probes for back, font scale, reduce motion, large screen, and nav
     mode.
 
+### Fixed
+
+- **`scripts/shorten-skill-descriptions.mjs` clipped mid-quote.** A clip inside
+  a quoted trigger or a parenthetical left it open (`"tidy.`), and trailing
+  `/` or `→` survived (`Motion /.`). It now drops the dangling opener and those
+  separators; `--self-test` runs in `validate.yml`.
+- `plan-rls-audit`'s description again carries the `service_role key` and
+  security-advisor triggers its body and the cheatsheet promise, at no listing
+  cost.
+- Review copy fixes: `.env.example` lost its orphaned fal.ai note, the
+  DISTRIBUTION clone one-liner is copy-pasteable, `mcp/README.md` names
+  `SUPABASE_PROJECT_REF`, the trigger cheatsheet lists each skill once, and
+  `llms.txt` calls `plan-*` planning skills, not audit skills.
+
 ## [2.5.0] — 2026-10-06
 
 A lighter package and a README that shows more than it tells.

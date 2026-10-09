@@ -90,7 +90,7 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 | `plan-perf-audit` | Plan-only performance audit across web, mobile, backend, and data; measures first, fixes nothing |
 | `plan-pricing` | Plan-only pricing audit: value metric, tiers, price points, free-tier boundary, annual and enterprise anchors, and a willingness-to-pay… |
 | `plan-privacy-compliance` | Plan-only audit mapping real personal-data flows to the privacy policy, GDPR, Japan APPI, and store labels |
-| `plan-rls-audit` | Plan-only audit of Supabase/Postgres Row-Level Security and access-control gaps |
+| `plan-rls-audit` | Plan-only Supabase/Postgres RLS and access-control audit |
 | `plan-secrets-audit` | Plan-only scan of the working tree and git history for exposed or mis-scoped keys, then a rotate-vs-relocate plan |
 | `plan-security-audit` | Plan-only OWASP Top 10 and Supabase-first hardening burndown |
 | `plan-stub-checker` | Plan-only sweep for stubs, dead buttons, fake components, unwired handlers, and dead links, then a wiring plan |

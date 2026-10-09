@@ -6,6 +6,8 @@
  * OLD_ALIASES, and prompt fossils (retired model names, thinking scaffolds,
  * update suppressors, retired MCP tool calls). Does not attempt a full unknown-name scan (session
  * names like `audit-ux-home` collide with that heuristic).
+ * SCOPE: skills/, skills-cursor/, commands/, agents/, rules/ and .cursor/rules
+ * only (SCAN_DIRS). README, docs/ and CHANGELOG are not scanned.
  *
  * USAGE:
  *   node scripts/check-skill-refs.mjs

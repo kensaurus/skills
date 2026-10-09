@@ -6,6 +6,7 @@
  *
  *   node scripts/shorten-skill-descriptions.mjs         # dry-run
  *   node scripts/shorten-skill-descriptions.mjs --write
+ *   node scripts/shorten-skill-descriptions.mjs --self-test  # clip() cases (CI)
  */
 import { readdirSync, existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -65,7 +66,17 @@ function clip(text, max) {
   let cut = text.slice(0, max);
   const sp = cut.lastIndexOf(" ");
   if (sp > Math.floor(max * 0.55)) cut = cut.slice(0, sp);
-  return cut.replace(/[,:;.\s—–-]+$/, "") + ".";
+  // A clip inside a quoted trigger or a parenthetical leaves it open
+  // ("tidy.  /  (add CI.): drop the opener and what follows it.
+  if ((cut.match(/"/g) ?? []).length % 2) cut = cut.slice(0, cut.lastIndexOf('"'));
+  if (cut.lastIndexOf("(") > cut.lastIndexOf(")")) cut = cut.slice(0, cut.lastIndexOf("("));
+  // Trailing separators ("Motion /.", "→.") and a dangling "or" / "and".
+  let prev;
+  do {
+    prev = cut;
+    cut = cut.replace(/[,:;.\s—–\-/→|&+]+$/, "").replace(/\s(?:or|and)$/i, "");
+  } while (cut !== prev);
+  return cut + ".";
 }
 
 function firstSentence(text, min = 24, max = 180) {
@@ -146,6 +157,26 @@ function setKey(entries, key, block) {
 
 function hasKey(entries, key) {
   return entries.some((e) => e.key === key);
+}
+
+if (process.argv.includes("--self-test")) {
+  const cases = [
+    ['Use when "housekeep", "clean up repo", or "tidy the repo".', 50, 'Use when "housekeep", "clean up repo".'],
+    ["Three.js/R3F, GSAP, or Motion / scroll choreography", 32, "Three.js/R3F, GSAP, or Motion."],
+    ["Fix the bug and ship → the deploy verifier", 26, "Fix the bug and ship."],
+    ["Install guardrails (secrets, injection, add CI checks) now", 40, "Install guardrails."],
+    ["Short enough already.", 80, "Short enough already."],
+  ];
+  let bad = 0;
+  for (const [input, max, want] of cases) {
+    const got = clip(input, max);
+    if (got !== want) {
+      bad++;
+      console.error(`clip(${JSON.stringify(input)}, ${max}) = ${JSON.stringify(got)}, want ${JSON.stringify(want)}`);
+    }
+  }
+  console.log(bad ? `self-test: ${bad} failure(s)` : `self-test: ${cases.length} clip cases pass`);
+  process.exit(bad ? 1 : 0);
 }
 
 let changed = 0;

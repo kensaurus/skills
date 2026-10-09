@@ -115,7 +115,6 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "design an API", "create endpoints", "REST API design", "GraphQL schema" | `design-api` |
 | "create a poster", "design an infographic", "make a banner", "social graphic" | `design-canvas` |
 | "build an email template", "transactional email", "welcome email", "email copy review" | `design-email` |
-| "emails go to spam", "set up SPF/DKIM", "check email deliverability", "handle bounces" | `enhance-email-deliverability` |
 | "build a component", "new UI page", "make this look good" | `design-frontend` |
 | "generative art", "creative coding", "flow fields", "particle system" | `design-generative-art` |
 | "mobile design", "touch UI", "small screen", "swipe", "safe area" | `design-mobile-first` |
@@ -210,7 +209,6 @@ Attribution and update policy → [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.m
 | "build an MCP server", "integrate external API into Cursor" | `meta-mcp-builder` |
 | "create a skill", "write a SKILL.md", "how do I make a skill" | `meta-skill-creator` |
 | "enhance this skill's prompts", "upgrade skill authoring", "apply the prompt playbook" | `enhance-skill-prompts` |
-| "audit my skills", "conflicting skills", "wrong skill triggered", "which skills overlap" | `audit-skill-conflicts` |
 
 ---
 
