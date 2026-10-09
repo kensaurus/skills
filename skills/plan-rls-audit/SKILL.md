@@ -1,9 +1,9 @@
 ---
 name: plan-rls-audit
 description: >
-  Plan-only audit of Supabase/Postgres Row-Level Security and access-control
-  gaps. Use when "RLS", "is my Supabase secure", "anyone can read my data", or
-  "lock down my tables". App-layer route gates → audit-auth-flows.
+  Plan-only Supabase/Postgres RLS and access-control audit. Use when "is my
+  Supabase secure", "anyone can read my data", "lock down my tables",
+  "service_role key", or "security advisor". Route gates → audit-auth-flows.
 license: MIT
 effort: high
 ---
