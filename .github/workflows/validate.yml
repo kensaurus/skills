@@ -50,6 +50,8 @@ jobs:
         run: node scripts/check-skill-refs.mjs --self-test && node scripts/check-skill-refs.mjs
       - name: Markdown fence check (no nested or unclosed code fences)
         run: node scripts/check-md-structure.mjs --self-test && node scripts/check-md-structure.mjs
+      - name: Description shortener self-test (no clipped quotes or trailing arrows)
+        run: node scripts/shorten-skill-descriptions.mjs --self-test
       - name: Completion-gate tests (Cursor + Claude Stop payloads)
         run: node scripts/test-completion-gate.mjs
       - name: Install smoke test (files preserved, --skill works)

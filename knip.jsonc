@@ -7,8 +7,7 @@
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": [
     "hooks/completion-gate.mjs",            // referenced from hooks/hooks.json and hooks/cursor-hooks.json (JSON, not parsed by Knip)
-    "skills/*/scripts/*.mjs",               // helper scripts shipped inside skills; consumers run them
-    "scripts/shorten-skill-descriptions.mjs" // description-budget rewriter (maintainer-run)
+    "skills/*/scripts/*.mjs"                // helper scripts shipped inside skills; consumers run them
   ],
   "project": ["bin/**/*.{js,mjs}", "hooks/**/*.mjs", "scripts/**/*.mjs", "skills/*/scripts/**/*.mjs"],
   // record-readme-tour.mjs runs inside the consumer's project; these are
