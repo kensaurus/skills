@@ -160,7 +160,7 @@ For each Phase 1 journey, live it. Per step (anti-stall throughout):
 ```bash
 S="-s=qa-<feature>"
 $PW $S goto "<url>"
-sleep 2 && $PW $S snapshot
+$PW $S snapshot             # navigation guard: blank → sleep 2 → snapshot again
 $PW $S screenshot --filename ".playwright-mcp/<step>.png"
 $PW $S click <ref>          # one action: click / type / fill / select / …
 $PW $S snapshot             # FRESH refs after every interaction

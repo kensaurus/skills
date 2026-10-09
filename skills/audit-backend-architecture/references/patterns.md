@@ -345,7 +345,7 @@ have timeouts + a breaker (see `audit-resilience`).
 EDA for a simple two-party call (needless complexity); async with no dead-letter queue (silent loss);
 "everything sync" (cascading failure) or "everything async" (eventual consistency + debugging pain
 everywhere).
-**Fix via** `backend-patterns` (see references/architecture-patterns.md → sync-vs-async).
+**Fix via** `backend-patterns` (see its `references/architecture-patterns.md` → "Communication style — sync request/response vs async event-driven").
 
 ---
 

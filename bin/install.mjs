@@ -248,6 +248,24 @@ function pruneRenamedRules(rulesDest, label, { renameMdc = false } = {}) {
     if (isDryRun) { console.log(`  [dry-run] prune renamed ${label} rule ${file} → ${newName}`); continue; }
     rmSync(stale, { force: true });
   }
+  // Per-project rule bundles that older installers copied into the global rules
+  // dir, where their always/glob rules fire in every project. Only files this
+  // pack ships are removed; a user's own file in the folder stays.
+  for (const bundle of PROJECT_RULE_BUNDLES) {
+    const src = resolve(__dir, 'rules', bundle);
+    const dest = join(rulesDest, bundle);
+    if (!existsSync(src) || !existsSync(dest) || !statSync(dest).isDirectory()) continue;
+    for (const f of readdirSync(src)) {
+      const names = renameMdc && f.endsWith('.mdc') ? [f, f.slice(0, -4) + '.md'] : [f];
+      for (const name of names) {
+        const p = join(dest, name);
+        if (!existsSync(p)) continue;
+        if (isDryRun) { console.log(`  [dry-run] prune per-project ${label} rule ${bundle}/${name}`); continue; }
+        rmSync(p, { force: true });
+      }
+    }
+    if (!isDryRun && readdirSync(dest).length === 0) rmSync(dest, { recursive: true, force: true });
+  }
 }
 
 /** Old command file → new name. A stale copy is pruned only while it still

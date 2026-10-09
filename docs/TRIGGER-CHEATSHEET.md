@@ -67,7 +67,6 @@ You don't have to type the skill name. Just describe the task in plain language.
 | "UX audit", "usability review", "heuristic evaluation", "UX quality" | `audit-ux` |
 | "audit user flows", "user story audit", "information architecture / IA audit", "can users find X", "users get lost", "navigation audit", "funnel drop-off", "task completion" | `audit-ux-journeys` |
 | "responsive audit", "desktop looks like a phone", "linearized layout", "no max-width", "stacked at 1440", "stretched buttons on desktop", "breakpoint gaps" | `audit-responsive` |
-| "set up guardrails", "stop vibe-coding regressions", "pre-commit security checks", "CI security gates", "governance for AI code" | `enhance-agent-guardrails` |
 
 ---
 
@@ -232,6 +231,7 @@ Attribution and update policy → [THIRD-PARTY-SKILLS.md](./THIRD-PARTY-SKILLS.m
 | "/research", "look up current docs", "what does the industry recommend", "research this before we implement" | `research` |
 | "browser automation", "Playwright", "page navigation" (as pre-session setup) | `protocol-browser-anti-stall` |
 | "parallel browser agents", "playwright session", "browser keeps stalling", "stay logged in for browser tests" | `protocol-browser-anti-stall` |
+| "set up guardrails", "stop vibe-coding regressions", "pre-commit security checks", "CI security gates", "governance for AI code" | `enhance-agent-guardrails` |
 
 ---
 

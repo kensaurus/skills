@@ -192,7 +192,7 @@ After running all steps, record results:
 | QA cron | ✅ / ❌ | Last run at? |
 
 If all ✅ → pipeline is healthy.  
-If any ❌ → run the mushi MCP `diagnose_setup` tool for targeted diagnosis.
+If any ❌ → run the mushi MCP `diagnose_setup` tool for targeted diagnosis when the Mushi MCP server is configured (the `@mushi-mushi/mcp` package; this pack does not bundle it). Without it, run `mushi doctor` and follow `debug-error` on the failing component.
 
 ---
 

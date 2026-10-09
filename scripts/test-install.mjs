@@ -448,6 +448,24 @@ try {
   expect(!existsSync(join(claudeCmds, "native-rn-monorepo", "rn-verify.md")), "Claude kept a leaked bundle command");
   expect(existsSync(join(claudeCmds, "native-rn-monorepo", "my-note.md")), "installer deleted a user file inside the bundle folder");
 
+  // Per-project rule bundles that older installers copied into the global rules
+  // dirs are pruned on upgrade; a user's own file in the folder stays.
+  const claudeRules = join(sandboxClaude, ".claude", "rules");
+  mkdirSync(join(cur, "rules", "project-starter"), { recursive: true });
+  writeFileSync(join(cur, "rules", "project-starter", "git.mdc"), marker);
+  mkdirSync(join(cur, "rules", "native-rn-monorepo"), { recursive: true });
+  writeFileSync(join(cur, "rules", "native-rn-monorepo", "native-ios.mdc"), marker);
+  writeFileSync(join(cur, "rules", "native-rn-monorepo", "my-rule.mdc"), marker);
+  mkdirSync(join(claudeRules, "project-starter"), { recursive: true });
+  writeFileSync(join(claudeRules, "project-starter", "git.md"), marker);
+  execFileSync(process.execPath, [installer], { env: { ...process.env, HOME: sandbox, USERPROFILE: sandbox }, stdio: "pipe" });
+  execFileSync(process.execPath, [installer, "--claude"], { env: { ...process.env, HOME: sandboxClaude, USERPROFILE: sandboxClaude }, stdio: "pipe" });
+  expect(!existsSync(join(cur, "rules", "project-starter")), "Cursor kept the leaked per-project rule bundle");
+  expect(!existsSync(join(cur, "rules", "native-rn-monorepo", "native-ios.mdc")), "Cursor kept a leaked bundle rule");
+  expect(existsSync(join(cur, "rules", "native-rn-monorepo", "my-rule.mdc")), "installer deleted a user rule inside the bundle folder");
+  expect(!existsSync(join(claudeRules, "project-starter")), "Claude kept the leaked per-project rule bundle");
+  rmSync(join(cur, "rules", "native-rn-monorepo"), { recursive: true, force: true });
+
   const sandboxDry = join(sandbox, "rename-dry");
   plantOld(join(sandboxDry, ".cursor", "skills"));
   execFileSync(process.execPath, [installer, "--dry-run"], {

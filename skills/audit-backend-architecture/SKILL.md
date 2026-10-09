@@ -83,7 +83,7 @@ rg -n "kafka|rabbitmq|amqp|nats|sqs|sns|pubsub|kinesis|redpanda|temporal|inngest
 # Inter-service transport
 rg -n "grpc|@grpc|protobuf|\.proto|graphql|apollo|federation|trpc" -l
 # Mesh / gateway infra
-rg -n "istio|linkerd|consul|envoy|kong|apisig|traefik|nginx-ingress|api-?gateway|ztunnel|waypoint" -l
+rg -n "istio|linkerd|consul|envoy|kong|apisix|traefik|nginx-ingress|api-?gateway|ztunnel|waypoint" -l
 ```
 
 Record a **topology profile** and pick the tier:
