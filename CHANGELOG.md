@@ -19,9 +19,10 @@ any agent.
   ([docs](https://developers.openai.com/codex/skills)), and the Gemini alias
   that takes precedence over `~/.gemini/skills`
   ([docs](https://geminicli.com/docs/cli/skills/)). Both pages were read
-  2026-10-11. The installer writes one shared copy there, the same set as the
-  Cursor mirror, and writes it once per run. When Cursor is also a target, the
-  mirror's copy is reused. `--dry-run` lists each skill, `--verify` hash-checks
+  2026-10-11. The installer writes one shared copy of this pack's skills there,
+  once per run. When Cursor is also a target, the Cursor mirror's copy is
+  reused. That mirror copies all of `~/.cursor/skills`, your own skills
+  included. `--dry-run` lists each skill, `--verify` hash-checks
   them, `--skill <name>` installs one, and `--only rules` skips them.
   `--no-agents-mirror` now means nothing goes to `~/.agents/skills`, with a
   warning that Codex and Gemini get no skills. `AGENTS.md`, `GEMINI.md`, the

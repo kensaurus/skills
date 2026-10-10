@@ -952,8 +952,10 @@ function verifyContextTool(spec) {
 // ---- shared ~/.agents/skills (Codex CLI + Gemini CLI) ------------------------
 // Codex and Gemini both read user skills from ~/.agents/skills, Cursor's
 // optional mirror writes there, and other installers (`npx skills add -g -a
-// codex`) do too. One copy serves every tool: this pack writes only the skill
-// folders it ships and never removes the folder itself.
+// codex`) do too. One copy serves every tool, and the folder itself is never
+// removed. The Codex/Gemini path below writes only the skill folders this pack
+// ships; the Cursor mirror copies all of ~/.cursor/skills, personal skills
+// included (skip it with --no-agents-mirror).
 const agentsSkillsDir = join(agentsBase, 'skills');
 const skillsSelected = !onlyGroups || onlyGroups.has('skills');
 // The Cursor mirror writes the same set (skills/ minus Cursor builtins) when it runs.

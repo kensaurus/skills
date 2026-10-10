@@ -47,7 +47,7 @@ Then restart your agent and describe a task in plain words, for example *"audit 
 | Agent | Install with | Skills | Slash commands | Subagents | Rules | Stop hook |
 |:------|:-------------|:-------|:---------------|:----------|:------|:----------|
 | **Claude Code** | `--claude` | `~/.claude/skills/` | `~/.claude/commands/` | `~/.claude/agents/` | `~/.claude/rules/` (`.md`) | yes, in `~/.claude/settings.json` |
-| **Cursor** | bare command or `--cursor` | `~/.cursor/skills/`, plus a copy in `~/.agents/skills/` | `~/.cursor/commands/` | `~/.cursor/agents/` | `~/.cursor/rules/` (`.mdc`) | yes, in `~/.cursor/hooks.json` |
+| **Cursor** | bare command or `--cursor` | `~/.cursor/skills/`, plus a copy in `~/.agents/skills/` | `~/.cursor/commands/` | `~/.cursor/agents/` | `~/.cursor/rules/` (`.mdc`; see below) | yes, in `~/.cursor/hooks.json` |
 | **Codex CLI** | `--codex` | `~/.agents/skills/` | portable prompts in `~/.codex/prompts/` (see below) | no | merged into `~/.codex/AGENTS.md` | no |
 | **Gemini CLI** | `--gemini` | `~/.agents/skills/` | portable commands in `~/.gemini/commands/` | no | merged into `~/.gemini/GEMINI.md` | no |
 | **Any agent that reads `SKILL.md`** | `npx skills add kensaurus/skills` | that agent's skills folder | no | no | no | no |
@@ -56,7 +56,11 @@ How each path was chosen:
 
 - **Codex CLI** reads user skills from `$HOME/.agents/skills` ([Codex skills docs](https://developers.openai.com/codex/skills), "Where Codex loads local skills"). It reads global instructions from `~/.codex/AGENTS.md` ([AGENTS.md docs](https://learn.chatgpt.com/docs/agent-configuration/agents-md)). Codex has deprecated custom prompts ([custom prompts page](https://learn.chatgpt.com/docs/custom-prompts)), and a Codex maintainer says they were removed in codex-cli 0.117.0 ([openai/codex#15941](https://github.com/openai/codex/issues/15941)). The installer still writes the portable prompts for older Codex releases. On current Codex, use the skills.
 - **Gemini CLI** reads user skills from `~/.gemini/skills/` or the `~/.agents/skills/` alias. Within the user tier, the alias takes precedence ([Gemini CLI skills docs](https://geminicli.com/docs/cli/skills/), "Discovery tiers"). It reads global context from `~/.gemini/GEMINI.md` ([GEMINI.md docs](https://geminicli.com/docs/cli/gemini-md)).
-- **Codex and Gemini share one copy in `~/.agents/skills/`.** It is written once per run. When Cursor is also a target, Cursor's mirror writes the same set and the installer reuses it. The installer writes only the skill folders it ships; other skills in that folder are left alone, including a `--clean` run.
+- **Codex and Gemini share one copy in `~/.agents/skills/`.** It is written once per run, and other skills already in that folder are left alone, even by `--clean`.
+  - With only `--codex` or `--gemini`, the installer writes just this pack's skill folders.
+  - When Cursor is also a target, Cursor's mirror fills the folder instead, and the installer reuses that copy. The mirror copies everything in `~/.cursor/skills/`, so your own Cursor skills also become visible to Codex and Gemini. To avoid that, install Cursor in a separate run with `--no-agents-mirror`.
+- **Cursor** reads skills from `~/.cursor/skills/`. Its [rules docs](https://cursor.com/docs/rules) describe project rules in a repo's `.cursor/rules/` and user rules in Customize → Rules. They do not mention `~/.cursor/rules/`, where the installer puts the global rules. If a rule does not seem to apply in Cursor, copy the `.mdc` file into your project's `.cursor/rules/`.
+- **Claude Code** loads every file in `~/.claude/rules/` in every project, except rules with a `paths:` field, which load only when matching files are open ([Claude Code memory docs](https://code.claude.com/docs/en/memory)).
 - **Other agents.** The [skills CLI](https://github.com/vercel-labs/skills) copies `SKILL.md` folders into the folder each agent reads, for example GitHub Copilot, OpenCode, or Antigravity CLI. Pass `-g` for your user folder and `-a <agent-id>` for the agent. The IDs are in the skills CLI README under "Supported Agents". Example: `npx skills add kensaurus/skills -g -a github-copilot`. You get the skills in `skills/` only, without commands, subagents, rules, or the hook.
 - **Claude Code plugin.** Instead of the installer, you can run `/plugin marketplace add kensaurus/skills` and then `/plugin install kenji@kenji`.
 
@@ -73,7 +77,7 @@ The installer is one Node script, [`bin/install.mjs`](bin/install.mjs). It has n
 | Path | What | When it exists already |
 |:-----|:-----|:-----------------------|
 | `~/.cursor/skills/<name>/`, `~/.claude/skills/<name>/` | One folder per skill | Same-named files are overwritten. Your other skills stay. |
-| `~/.agents/skills/<name>/` | Skills for Codex and Gemini, and Cursor's mirror | Same as above. Skip it with `--no-agents-mirror`, which also means Codex and Gemini get no skills. |
+| `~/.agents/skills/<name>/` | Skills for Codex and Gemini, and Cursor's mirror (which copies all of `~/.cursor/skills/`, yours included) | Same as above. Skip it with `--no-agents-mirror`, which also means Codex and Gemini get no skills. |
 | `~/.cursor/commands/`, `~/.claude/commands/` | Slash commands (`.md`) | Same-named files are overwritten. |
 | `~/.cursor/agents/`, `~/.claude/agents/` | Subagent definitions | Same-named files are overwritten. |
 | `~/.cursor/rules/`, `~/.claude/rules/` | Global rules (`.mdc` for Cursor, `.md` for Claude Code) | Same-named files are overwritten. |
@@ -83,7 +87,9 @@ The installer is one Node script, [`bin/install.mjs`](bin/install.mjs). It has n
 | `~/.claude/settings.json`, `~/.cursor/hooks.json` | One Stop hook entry | Merged. Your other settings and hooks are kept. A backup is written when the file changes. If the file is not valid JSON, the hook is skipped with a warning. |
 | `~/.cursor/mcp.json` | MCP server template | Written only if missing. Never overwritten. |
 
-A normal run **merges**: it adds or overwrites this pack's files and never deletes your own. It also removes leftovers that this pack itself renamed or stopped installing. `--clean` first wipes this pack's managed folders under `~/.cursor` (or `~/.claude` with `--claude`), saving a backup in `.kenji-backups/<timestamp>/`. After every write, the installer hash-checks each copied file.
+A normal run **merges**: it adds or overwrites this pack's files and never deletes your own. It also removes leftovers that this pack itself renamed or stopped installing. After every write, the installer hash-checks each copied file.
+
+**`--clean` is different.** It deletes the whole `skills/`, `commands/`, `agents/`, and `rules/` folders under each targeted `~/.cursor` and `~/.claude`, **your own files in them included**, and then installs fresh. It first copies those folders to `<base>/.kenji-backups/<timestamp>/`, unless you pass `--no-backup`. It does not touch `AGENTS.md`, `GEMINI.md`, or the Codex and Gemini command files. In `~/.agents/skills/` it removes only this pack's skill folders.
 
 <details>
 <summary><b>All installer flags</b></summary>
@@ -97,7 +103,7 @@ npx @kensaurus/skills --only skills,commands      # subset of: skills, commands,
 npx @kensaurus/skills --skill audit-ux  # one skill
 npx @kensaurus/skills --dry-run         # preview, no writes
 npx @kensaurus/skills --verify          # read-only hash check (add the same target flags)
-npx @kensaurus/skills --clean           # wipe managed folders first (backup taken; --no-backup skips it)
+npx @kensaurus/skills --clean           # delete skills/commands/agents/rules folders first, yours too (backed up)
 npx @kensaurus/skills --restore [stamp] # put a --clean backup back (latest if no stamp)
 npx @kensaurus/skills --link            # symlink instead of copy, for editing skills in a clone
 npx @kensaurus/skills --no-agents-mirror  # write nothing to ~/.agents/skills
@@ -121,8 +127,8 @@ These skills and rules were written on React, Next.js, and Supabase projects. He
 
 | Piece | What it assumes | Loads when |
 |:------|:----------------|:-----------|
-| `rules/senior-engineer.mdc` | Next.js + React + Supabase defaults: TanStack Query, Zustand, Zod, RLS on every table | Cursor and Claude Code: only for files under `app/`, `supabase/`, or `next.config.*`. Codex and Gemini: always, because it is merged into `AGENTS.md` / `GEMINI.md`. |
-| `rules/full-stack-ship-discipline.mdc` | Deploy schema with the feature; uses Supabase as the worked example | When the agent decides it applies (not always-on in Cursor) |
+| `rules/senior-engineer.mdc` | Next.js + React + Supabase defaults: TanStack Query, Zustand, Zod, RLS on every table | Claude Code: only with files under `app/`, `supabase/`, or `next.config.*` open (its `paths:` field). Cursor: when the agent judges its description relevant. Codex and Gemini: every session, because it is merged into `AGENTS.md` / `GEMINI.md`. |
+| `rules/full-stack-ship-discipline.mdc` | Deploy schema with the feature; uses Supabase as the worked example | Claude Code, Codex, Gemini: every session (no `paths:` field). Cursor: when the agent judges its description relevant. |
 | `rules/project-starter/`, `rules/native-rn-monorepo/` | Per-project rule sets for Next.js/Supabase and React Native | Never installed. Copy them into a project yourself. |
 | Skills such as `plan-rls-audit`, `backend-realtime`, `mushi-*` | The tool in their name or description | Only when your request matches |
 
@@ -159,7 +165,7 @@ Then remove what is left:
 - `~/.codex/AGENTS.md` and `~/.gemini/GEMINI.md` (or restore a `.bak-` copy);
 - the `plan-mode`, `research`, and `fix-issue` files in `~/.codex/prompts/` and `~/.gemini/commands/`.
 
-Leave `~/.cursor/mcp.json` alone if you have edited it. Skills from the Claude Code plugin are removed with `/plugin uninstall kenji@kenji`, and skills from the skills CLI with `npx skills remove`.
+Leave `~/.cursor/mcp.json` alone if you have edited it. To remove the Claude Code plugin, run `claude plugin uninstall kenji@kenji` ([docs](https://code.claude.com/docs/en/plugins/cli-reference#plugin-uninstall)). To remove skills installed by the skills CLI, run `npx skills remove`.
 
 ## Troubleshooting
 
@@ -187,7 +193,7 @@ A merge install keeps them. It only overwrites files with the same name as one o
 <details>
 <summary><b>Codex shows only some skills, or shortened descriptions</b></summary>
 
-Codex lists skills within a budget: 2% of the model's context window, or 8,000 characters when the window is unknown. With many skills installed, it shortens descriptions first and may leave some skills out with a warning ([Codex skills docs](https://developers.openai.com/codex/skills)). You can still call any skill by name with `$skill-name`. To install fewer skills, use `--codex --skill <name>` once per skill. To turn one off, add `[[skills.config]]` with `enabled = false` in `~/.codex/config.toml`. Claude Code has a similar listing budget; the installer prints its current size after a `--claude` install.
+Codex lists skills within a budget: 2% of the model's context window, or 8,000 characters when the window is unknown. With many skills installed, it shortens descriptions first and may leave some skills out with a warning ([Codex skills docs](https://developers.openai.com/codex/skills)). To install fewer skills, use `--codex --skill <name>` once per skill. To turn one off, add `[[skills.config]]` with `enabled = false` in `~/.codex/config.toml`. Claude Code has a similar listing budget; the installer prints its current size after a `--claude` install.
 
 </details>
 
