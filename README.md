@@ -4,14 +4,14 @@
 
 # kenji skills
 
-**You say the job. The playbook runs.** Agent skills, slash commands, and subagents for **Claude Code, Cursor, Codex CLI, and Gemini CLI**.
+**You say the job. The playbook runs.** Agent skills, slash commands, and subagents for Claude Code, Cursor, Codex CLI, Gemini CLI, and any agent that reads `SKILL.md`.
 
-161 agent skills · 63 slash commands · 15 MCP servers · 12 Cursor skills · 6 subagents — for React / Next.js / Supabase, usable on almost any stack.
+161 agent skills · 63 slash commands · 6 subagents · MCP templates. Written on React, Next.js, and Supabase projects; most of it works on any stack.
 
 <p>
   <a href="https://www.npmjs.com/package/@kensaurus/skills"><img src="https://img.shields.io/npm/v/@kensaurus/skills?style=flat-square&color=cb3837&logo=npm" alt="npm version" /></a>
-  <a href="https://www.skills.sh/kensaurus/skills"><img src="https://skills.sh/b/kensaurus/skills" alt="skills.sh installs" /></a>
-  <img src="https://img.shields.io/github/license/kensaurus/skills?style=flat-square&color=444" alt="License" />
+  <img src="https://img.shields.io/github/license/kensaurus/skills?style=flat-square&color=444" alt="License: MIT" />
+  <img src="https://img.shields.io/node/v/@kensaurus/skills?style=flat-square&color=444" alt="Node.js version" />
 </p>
 
 <a href="docs/GETTING-STARTED.md" title="First-time guide">
@@ -22,25 +22,202 @@
   </picture>
 </a>
 
-<sub>After install, say the job in chat. The matching playbook runs, proves the result, and opens the PR. The image follows your GitHub theme.</sub>
+<sub>After you install, describe the job in chat. The matching playbook runs, checks its own result, and opens the PR.</sub>
 
 </div>
 
-## <img src="docs/screenshots/icons/install.png" width="28" height="28" alt="" align="absmiddle"> Install (30 seconds)
+## <img src="docs/screenshots/icons/install.png" width="28" height="28" alt="" align="absmiddle"> Quickstart
+
+You need [Node.js](https://nodejs.org) 18 or newer. Run these three commands:
 
 ```bash
-npx @kensaurus/skills --all
+npx @kensaurus/skills --auto --dry-run   # 1. preview: lists every file it would write, changes nothing
+npx @kensaurus/skills --auto             # 2. install for each agent found on this machine
+npx @kensaurus/skills --auto --verify    # 3. check every installed file against the package
 ```
+
+`--auto` looks for `~/.cursor`, `~/.claude`, `~/.codex`, and `~/.gemini` and installs for each one it finds. If it finds none, it installs for Cursor. To pick the tools yourself, use `--claude`, `--cursor`, `--codex`, `--gemini` (combine freely) or `--all`.
+
+Then restart your agent and describe a task in plain words, for example *"audit this repo for security problems"*. The [plain-language guide](docs/GETTING-STARTED.md) walks through a first session.
+
+> **Note:** the default install also adds an opt-in **Stop hook** to Claude Code and Cursor. It does nothing until you start a `complete-everything` or `burndown-full` run. To skip it, add `--only skills,commands,agents,rules`. Details: [The Stop hook](#the-stop-hook).
+
+## <img src="docs/screenshots/icons/options.png" width="28" height="28" alt="" align="absmiddle"> Which agents are supported
+
+| Agent | Install with | Skills | Slash commands | Subagents | Rules | Stop hook |
+|:------|:-------------|:-------|:---------------|:----------|:------|:----------|
+| **Claude Code** | `--claude` | `~/.claude/skills/` | `~/.claude/commands/` | `~/.claude/agents/` | `~/.claude/rules/` (`.md`) | yes, in `~/.claude/settings.json` |
+| **Cursor** | bare command or `--cursor` | `~/.cursor/skills/`, plus a copy in `~/.agents/skills/` | `~/.cursor/commands/` | `~/.cursor/agents/` | `~/.cursor/rules/` (`.mdc`) | yes, in `~/.cursor/hooks.json` |
+| **Codex CLI** | `--codex` | `~/.agents/skills/` | portable prompts in `~/.codex/prompts/` (see below) | no | merged into `~/.codex/AGENTS.md` | no |
+| **Gemini CLI** | `--gemini` | `~/.agents/skills/` | portable commands in `~/.gemini/commands/` | no | merged into `~/.gemini/GEMINI.md` | no |
+| **Any agent that reads `SKILL.md`** | `npx skills add kensaurus/skills` | that agent's skills folder | no | no | no | no |
+
+How each path was chosen:
+
+- **Codex CLI** reads user skills from `$HOME/.agents/skills` ([Codex skills docs](https://developers.openai.com/codex/skills), "Where Codex loads local skills"). It reads global instructions from `~/.codex/AGENTS.md` ([AGENTS.md docs](https://learn.chatgpt.com/docs/agent-configuration/agents-md)). Codex has deprecated custom prompts ([custom prompts page](https://learn.chatgpt.com/docs/custom-prompts)), and a Codex maintainer says they were removed in codex-cli 0.117.0 ([openai/codex#15941](https://github.com/openai/codex/issues/15941)). The installer still writes the portable prompts for older Codex releases. On current Codex, use the skills.
+- **Gemini CLI** reads user skills from `~/.gemini/skills/` or the `~/.agents/skills/` alias. Within the user tier, the alias takes precedence ([Gemini CLI skills docs](https://geminicli.com/docs/cli/skills/), "Discovery tiers"). It reads global context from `~/.gemini/GEMINI.md` ([GEMINI.md docs](https://geminicli.com/docs/cli/gemini-md)).
+- **Codex and Gemini share one copy in `~/.agents/skills/`.** It is written once per run. When Cursor is also a target, Cursor's mirror writes the same set and the installer reuses it. The installer writes only the skill folders it ships; other skills in that folder are left alone, including a `--clean` run.
+- **Other agents.** The [skills CLI](https://github.com/vercel-labs/skills) copies `SKILL.md` folders into the folder each agent reads, for example GitHub Copilot, OpenCode, or Antigravity CLI. Pass `-g` for your user folder and `-a <agent-id>` for the agent. The IDs are in the skills CLI README under "Supported Agents". Example: `npx skills add kensaurus/skills -g -a github-copilot`. You get the skills in `skills/` only, without commands, subagents, rules, or the hook.
+- **Claude Code plugin.** Instead of the installer, you can run `/plugin marketplace add kensaurus/skills` and then `/plugin install kenji@kenji`.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/architecture-dark.png">
   <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/architecture-light.png">
-  <img alt="One command, four tools. 160 skills, 63 commands, 6 subagents, 13 rules, and 15 MCP templates flow through npx @kensaurus/skills --all into ~/.cursor, ~/.claude, ~/.codex, and ~/.gemini. No install scripts, no network, no shell." src="docs/screenshots/architecture-dark.png" width="100%">
+  <img alt="Diagram: skills, commands, subagents, rules, and MCP templates go through npx @kensaurus/skills --all into ~/.cursor and ~/.claude (skills, commands, agents, rules), ~/.codex (AGENTS.md and prompts, plus skills in ~/.agents) and ~/.gemini (GEMINI.md and commands, plus skills in ~/.agents)." src="docs/screenshots/architecture-dark.png" width="100%">
 </picture>
 
-One command merge-installs skills, slash commands, agents, and rules into every tool it finds, then hash-checks every copy. The installer has no install scripts, opens no network connection, and runs no shell. Restart Cursor. Done.
+## What the installer writes
 
-> Skills only? `npx skills add kensaurus/skills`. Claude Code plugin? `/plugin marketplace add kensaurus/skills` then `/plugin install kenji@kenji`. All flags → [Install options](#install-options). New to this? **[Plain-language guide →](docs/GETTING-STARTED.md)**. Renamed from `cursor-kenji` in 2.0.0 → [Upgrading](#upgrading-from-cursor-kenji).
+The installer is one Node script, [`bin/install.mjs`](bin/install.mjs). It has no dependencies or npm lifecycle scripts. It opens no network connection and starts no child processes; `npx` downloads the package before it runs. It writes only under your home directory:
+
+| Path | What | When it exists already |
+|:-----|:-----|:-----------------------|
+| `~/.cursor/skills/<name>/`, `~/.claude/skills/<name>/` | One folder per skill | Same-named files are overwritten. Your other skills stay. |
+| `~/.agents/skills/<name>/` | Skills for Codex and Gemini, and Cursor's mirror | Same as above. Skip it with `--no-agents-mirror`, which also means Codex and Gemini get no skills. |
+| `~/.cursor/commands/`, `~/.claude/commands/` | Slash commands (`.md`) | Same-named files are overwritten. |
+| `~/.cursor/agents/`, `~/.claude/agents/` | Subagent definitions | Same-named files are overwritten. |
+| `~/.cursor/rules/`, `~/.claude/rules/` | Global rules (`.mdc` for Cursor, `.md` for Claude Code) | Same-named files are overwritten. |
+| `~/.codex/AGENTS.md`, `~/.gemini/GEMINI.md` | Global rules merged into one file | The old file is copied to `<file>.bak-<timestamp>` first. An unchanged file is not rewritten. |
+| `~/.codex/prompts/*.md`, `~/.gemini/commands/*.toml` | `plan-mode`, `research`, `fix-issue` | Backed up like `AGENTS.md`. |
+| `~/.claude/kenji-hooks/`, `~/.cursor/kenji-hooks/` | `completion-gate.mjs`, the Stop hook script | Overwritten. |
+| `~/.claude/settings.json`, `~/.cursor/hooks.json` | One Stop hook entry | Merged. Your other settings and hooks are kept. A backup is written when the file changes. If the file is not valid JSON, the hook is skipped with a warning. |
+| `~/.cursor/mcp.json` | MCP server template | Written only if missing. Never overwritten. |
+
+A normal run **merges**: it adds or overwrites this pack's files and never deletes your own. It also removes leftovers that this pack itself renamed or stopped installing. `--clean` first wipes this pack's managed folders under `~/.cursor` (or `~/.claude` with `--claude`), saving a backup in `.kenji-backups/<timestamp>/`. After every write, the installer hash-checks each copied file.
+
+<details>
+<summary><b>All installer flags</b></summary>
+
+```bash
+npx @kensaurus/skills                   # Cursor only (the default)
+npx @kensaurus/skills --auto            # every tool found under ~ (falls back to Cursor)
+npx @kensaurus/skills --all             # Cursor + Claude Code + Codex CLI + Gemini CLI
+npx @kensaurus/skills --claude --codex  # pick targets; combine freely
+npx @kensaurus/skills --only skills,commands      # subset of: skills, commands, agents, rules, hooks
+npx @kensaurus/skills --skill audit-ux  # one skill
+npx @kensaurus/skills --dry-run         # preview, no writes
+npx @kensaurus/skills --verify          # read-only hash check (add the same target flags)
+npx @kensaurus/skills --clean           # wipe managed folders first (backup taken; --no-backup skips it)
+npx @kensaurus/skills --restore [stamp] # put a --clean backup back (latest if no stamp)
+npx @kensaurus/skills --link            # symlink instead of copy, for editing skills in a clone
+npx @kensaurus/skills --no-agents-mirror  # write nothing to ~/.agents/skills
+npx @kensaurus/skills --help            # full help
+```
+
+From a clone, `./install.sh` with no arguments installs for Cursor and Claude Code. With arguments, it passes them to `node bin/install.mjs`.
+
+</details>
+
+### The Stop hook
+
+The completion gate, [`hooks/completion-gate.mjs`](hooks/completion-gate.mjs), is registered as a Stop hook in Claude Code and Cursor. It reads the open workspace for `.cursor/complete-everything-state.md` or `.cursor/burndown-state.md`. Those files exist only during a `complete-everything` or `burndown-full` run. If neither file exists, or the checklist was last updated more than a day ago, the hook exits without doing anything. Otherwise it sends the agent back to the unfinished items instead of letting it stop. After three follow-ups with no item closed, it gives up. Each run has a 5-second timeout and does not block the agent if it fails.
+
+- **Skip it at install time:** `npx @kensaurus/skills --all --only skills,commands,agents,rules`. Any `--only` also skips the `mcp.json` template.
+- **Remove it later:** delete the entry whose command contains `kenji-hooks/completion-gate.mjs` from `hooks.Stop` in `~/.claude/settings.json` and from `hooks.stop` in `~/.cursor/hooks.json`. Then delete `~/.claude/kenji-hooks/` and `~/.cursor/kenji-hooks/`. A later install without `--only` adds it back.
+
+### The stack-specific parts, and how to skip them
+
+These skills and rules were written on React, Next.js, and Supabase projects. Here is what assumes that stack:
+
+| Piece | What it assumes | Loads when |
+|:------|:----------------|:-----------|
+| `rules/senior-engineer.mdc` | Next.js + React + Supabase defaults: TanStack Query, Zustand, Zod, RLS on every table | Cursor and Claude Code: only for files under `app/`, `supabase/`, or `next.config.*`. Codex and Gemini: always, because it is merged into `AGENTS.md` / `GEMINI.md`. |
+| `rules/full-stack-ship-discipline.mdc` | Deploy schema with the feature; uses Supabase as the worked example | When the agent decides it applies (not always-on in Cursor) |
+| `rules/project-starter/`, `rules/native-rn-monorepo/` | Per-project rule sets for Next.js/Supabase and React Native | Never installed. Copy them into a project yourself. |
+| Skills such as `plan-rls-audit`, `backend-realtime`, `mushi-*` | The tool in their name or description | Only when your request matches |
+
+The other global rules (`verification-before-completion`, `approved-plan-execution`, `shell-first-search`, `skill-workflows`) do not depend on a stack.
+
+To install without the global rules: `npx @kensaurus/skills --all --only skills,commands,agents`. This also skips the Stop hook and the MCP template. To drop a single rule, delete its file after installing. A later install without `--only` puts it back.
+
+## <img src="docs/screenshots/icons/upgrade.png" width="28" height="28" alt="" align="absmiddle"> Verify, update, uninstall
+
+**Verify.** `npx @kensaurus/skills --verify` plus the target flags you installed with (`--auto`, `--all`, `--codex`, …). It makes no changes. It fails if a packaged file is missing or differs from the package, and lists each one. Extra files of your own are allowed. Line endings are normalized before hashing, so CRLF copies on Windows still match.
+
+**Update.** Run the same install command again. Unchanged files are left as they are, and renamed skills from older releases are removed.
+
+**Roll back.**
+- `--clean` runs keep a backup. Restore it with `npx @kensaurus/skills --restore` (Cursor) or `--restore --claude`, plus a stamp from `.kenji-backups/` to pick an older one.
+- `AGENTS.md`, `GEMINI.md`, `settings.json`, `hooks.json`, and the Codex/Gemini command files keep `.bak-<timestamp>` copies next to them. Copy one back by hand.
+- A normal merge does **not** back up skill, command, agent, or rule files it overwrites. If you edited one of this pack's files in place, copy it somewhere first.
+
+**Uninstall.** There is no uninstall command. Remove the pieces by hand:
+
+```bash
+# Skills, commands and agents this pack ships (bash; uses a fresh clone for the names)
+git clone --depth 1 https://github.com/kensaurus/skills.git /tmp/kenji
+for d in /tmp/kenji/skills/*/ /tmp/kenji/skills-cursor/*/; do
+  n=$(basename "$d"); rm -rf ~/.cursor/skills/"$n" ~/.claude/skills/"$n" ~/.agents/skills/"$n"
+done
+for f in /tmp/kenji/commands/*.md; do rm -f ~/.cursor/commands/"$(basename "$f")" ~/.claude/commands/"$(basename "$f")"; done
+for f in /tmp/kenji/agents/*.md;   do rm -f ~/.cursor/agents/"$(basename "$f")"   ~/.claude/agents/"$(basename "$f")"; done
+```
+
+Then remove what is left:
+- the global rules listed in [Rules](#commands-subagents-mcp-rules), from `~/.cursor/rules/` and `~/.claude/rules/`;
+- the Stop hook, as described in [The Stop hook](#the-stop-hook);
+- `~/.codex/AGENTS.md` and `~/.gemini/GEMINI.md` (or restore a `.bak-` copy);
+- the `plan-mode`, `research`, and `fix-issue` files in `~/.codex/prompts/` and `~/.gemini/commands/`.
+
+Leave `~/.cursor/mcp.json` alone if you have edited it. Skills from the Claude Code plugin are removed with `/plugin uninstall kenji@kenji`, and skills from the skills CLI with `npx skills remove`.
+
+## Troubleshooting
+
+<details>
+<summary><b>Windows: <code>EPERM</code> or <code>EBUSY</code> during install</b></summary>
+
+Another program is holding a file, usually an open editor watching `~/.cursor` or `~/.claude`, or an antivirus scan. The installer retries each file for about 3 seconds, then stops and names the file. Close the editor and run the command again; a merge install is safe to repeat.
+
+</details>
+
+<details>
+<summary><b>Windows: line endings (CRLF)</b></summary>
+
+`--verify` normalizes CRLF to LF before hashing text files, so a checkout made with `core.autocrlf=true` verifies cleanly. The repo's `.gitattributes` checks text files out with LF. If `./install.sh` still fails with `$'\r': command not found`, the script was checked out with CRLF line endings: clone again, or run `node bin/install.mjs` with the same arguments. `install.sh` needs bash (Git Bash or WSL); the Node installer does not.
+
+</details>
+
+<details>
+<summary><b>"I already have skills, rules, or settings in those folders"</b></summary>
+
+A merge install keeps them. It only overwrites files with the same name as one of this pack's files. Run `--dry-run` first to see the exact list. Hook config files are merged entry by entry, and a backup is written when they change. To keep your own `AGENTS.md` / `GEMINI.md` instead of the merged one, install Codex or Gemini with `--only skills,commands` (or `--only skills`).
+
+</details>
+
+<details>
+<summary><b>Codex shows only some skills, or shortened descriptions</b></summary>
+
+Codex lists skills within a budget: 2% of the model's context window, or 8,000 characters when the window is unknown. With many skills installed, it shortens descriptions first and may leave some skills out with a warning ([Codex skills docs](https://developers.openai.com/codex/skills)). You can still call any skill by name with `$skill-name`. To install fewer skills, use `--codex --skill <name>` once per skill. To turn one off, add `[[skills.config]]` with `enabled = false` in `~/.codex/config.toml`. Claude Code has a similar listing budget; the installer prints its current size after a `--claude` install.
+
+</details>
+
+<details>
+<summary><b>Codex: the <code>/prompts:</code> commands are missing</b></summary>
+
+Current Codex releases no longer load `~/.codex/prompts/` (see the links in [Which agents are supported](#which-agents-are-supported)). Use the skills instead: type `$` or run `/skills`.
+
+</details>
+
+<details>
+<summary><b>Codex: I set <code>CODEX_HOME</code></b></summary>
+
+The installer always writes `~/.codex/AGENTS.md` and `~/.codex/prompts/`. Copy them into your `CODEX_HOME`. Codex reads `AGENTS.override.md` instead of `AGENTS.md` when that file exists, so check for one. Skills are not affected; Codex reads `$HOME/.agents/skills` either way.
+
+</details>
+
+<details>
+<summary><b>Gemini CLI asks before a skill runs</b></summary>
+
+That is how Gemini CLI works: activating a skill asks for consent and grants the skill's folder read access ([docs](https://geminicli.com/docs/cli/skills/)). In a running session, `/skills reload` picks up new skills and `/memory reload` re-reads `GEMINI.md`. The same page says Gemini CLI was replaced by Antigravity CLI for unpaid-tier and Google One users on June 18, 2026. This installer does not target Antigravity CLI. The skills CLI lists an `antigravity-cli` agent ID.
+
+</details>
+
+<details>
+<summary><b>A skill does not trigger</b></summary>
+
+Skills are matched against what you say. Name the skill to force it, for example *"use `audit-security` on this repo"*, or call it directly: `/audit-security` in Claude Code and Cursor, `$audit-security` in Codex. Trigger phrases for every skill: [docs/CATALOG.md](docs/CATALOG.md).
+
+</details>
 
 ## <img src="docs/screenshots/icons/ladder.png" width="28" height="28" alt="" align="absmiddle"> How one request lifts the repo
 
@@ -50,7 +227,7 @@ One command merge-installs skills, slash commands, agents, and rules into every 
   <img alt="Each step leaves the repo one rung higher. Orient: ask first, the repo gains a decision log. Assess: prove the gap, the repo gains a failing test. Change: smallest fix, the repo gains a readable diff. Prove: run the gates, the repo gains evidence. Ship: PR and watch, the repo gains a release that stayed up." src="docs/screenshots/ladder-dark.png" width="100%">
 </picture>
 
-Every playbook walks the same five rungs. Assess before you change. Prove before you ship.
+Every playbook follows the same five steps. It assesses before it changes anything, and proves the result before it ships.
 
 | Rung | What runs | What the repo gains |
 |:-----|:----------|:--------------------|
@@ -82,7 +259,7 @@ To force a skill: *"use `enhance-web-ux` on `/dashboard`"*. Every trigger phrase
 
 ## <img src="docs/screenshots/icons/tour.png" width="28" height="28" alt="" align="absmiddle"> Tour
 
-Four examples. The rule is the same: you say the job, and a named playbook runs.
+Four examples. Each time, you describe the job and a named playbook runs.
 
 <table>
   <tr>
@@ -107,7 +284,7 @@ Four examples. The rule is the same: you say the job, and a named playbook runs.
         <img alt="Every finding has a file and line. You say: audit this app for security problems. audit-security lists each finding with its file and line." src="docs/screenshots/audit-dark.png" width="100%">
       </a>
       <br>
-      <sub><b>Audit</b> · <code>audit-security</code> reports each finding with a file and line. No vibe checks.</sub>
+      <sub><b>Audit</b> · <code>audit-security</code> reports each finding with a file and line.</sub>
     </td>
     <td width="50%" align="center">
       <a href="docs/CATALOG.md#workflow-ship-and-observe">
@@ -124,12 +301,16 @@ Four examples. The rule is the same: you say the job, and a named playbook runs.
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/pieces-dark.png">
   <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/pieces-light.png">
-  <img alt="160 skills, a playbook for one job. 63 commands, type slash in chat. 6 subagents, one task peeled off. 13 rules, house rules always on. 15 MCP templates with pinned servers. 12 Cursor skills, IDE tools. 1 opt-in stop hook." src="docs/screenshots/pieces-dark.png" width="100%">
+  <img alt="The pieces, with their counts: skills, a playbook for one job; commands, type slash in chat; subagents, one task peeled off; rules, house rules always on; MCP templates with pinned servers; Cursor skills; one opt-in stop hook." src="docs/screenshots/pieces-dark.png" width="100%">
 </picture>
 
-Skills run from a plain request. Commands start with `/`. Subagents peel off one task. Rules are `.mdc` files the AI always obeys. MCP templates pin exact server versions. Details for each → [Commands, subagents, MCP, rules](#commands-subagents-mcp-rules).
+- **Skills** start from a plain request.
+- **Commands** start with `/`.
+- **Subagents** take one task in a separate context.
+- **Rules** are standing instructions the agent loads.
+- **MCP templates** pin exact server versions against [package-hallucination attacks](https://labs.cloudsecurityalliance.org/research/csa-research-note-slopsquatting-ai-supply-chain-20260419-csa/).
 
-Everything follows the [Agent Skills spec](https://agentskills.io/specification) and is checked on every commit (`npm test` covers all **173** installable skills). MCP templates pin exact versions against [package-hallucination attacks](https://labs.cloudsecurityalliance.org/research/csa-research-note-slopsquatting-ai-supply-chain-20260419-csa/).
+`skills-cursor/` holds Cursor's own built-in skills, ported so Claude Code can use them. The installer gives them to Claude Code only, because Cursor already ships them. Every skill follows the [Agent Skills spec](https://agentskills.io/specification), and `npm test` checks all of them on every change.
 
 <!-- SKILL-INDEX:START -->
 
@@ -163,71 +344,12 @@ _Generated from each skill's `SKILL.md` by `npm run gen:skill-index`. **173 skil
 
 <!-- SKILL-INDEX:END -->
 
-## <img src="docs/screenshots/icons/options.png" width="28" height="28" alt="" align="absmiddle"> Install options
-
-| Method | Command | What it installs |
-|:-------|:--------|:-----------------|
-| **npm installer** (full pack) | `npx @kensaurus/skills --all` | Skills + commands + agents + rules. `--all` = Cursor + Claude + Codex + Gemini |
-| **skills.sh** (skills only) | `npx skills add kensaurus/skills` | `SKILL.md` folders only. Project-local by default; `-g` for `~/.cursor/skills` |
-| **Claude Code plugin** | `/plugin marketplace add kensaurus/skills` then `/plugin install kenji@kenji` | This repo as a marketplace |
-| **Clone** | `git clone https://github.com/kensaurus/skills.git && cd skills && ./install.sh` | Same as the npm installer |
-
-<details>
-<summary><b>All installer flags</b></summary>
-
-```bash
-npx @kensaurus/skills            # merge: add or overwrite this repo's items (Cursor)
-npx @kensaurus/skills --auto     # detect installed tools and install to each
-npx @kensaurus/skills --claude   # Claude Code (~/.claude/)
-npx @kensaurus/skills --codex    # Codex CLI (~/.codex/AGENTS.md + prompts)
-npx @kensaurus/skills --gemini   # Gemini CLI (~/.gemini/GEMINI.md + commands)
-npx @kensaurus/skills --all      # all four tools in one run
-npx @kensaurus/skills --clean    # mirror ~/.cursor to match this repo (backup first)
-npx @kensaurus/skills --dry-run  # preview
-npx @kensaurus/skills --verify   # hash-check destinations against this package
-npx @kensaurus/skills --skill audit-ux   # one skill
-npx @kensaurus/skills --link     # dev: symlink for live skill authoring
-```
-
-More flags (`--restore`, `--only`, `--no-agents-mirror`): `npx @kensaurus/skills --help`. The bare command stays Cursor-only; `--auto` checks `~/.cursor`, `~/.claude`, `~/.codex`, and `~/.gemini` and installs to each one it finds.
-
-**After install:** restart Cursor; copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_REF`; then describe any task.
-
-**Keep fresh:** `npx @kensaurus/skills --all && npx @kensaurus/skills --verify --all`.
-
-</details>
-
-<details>
-<summary><b>Claude Code</b></summary>
-
-All skills, commands, agents, and rules install to `~/.claude/`, with `.mdc` rules installed as `.md`. Skills appear as `/slash-commands` (`/workflow-build-feature`, `/debug-error the login endpoint returns 401`, `/plan-security-audit`). Re-run the installer any time; Claude Code reads file changes at the start of each session.
-
-**Model and effort.** Claude Code 2.1.280+ defaults to Claude Opus 5.5. Its effort default is `medium`, and thinking cannot be switched off, so effort is the only thinking control. Set it with `/effort <low|medium|high|xhigh|max>`, per-model `modelSettings`, or a skill's `effort:` key. Pack convention: audit, plan, judge, debug, and security skills at `high`; implementation at the `medium` default; inventory and `/handoff` at `low`. Cursor ignores the `effort:` key. Full story → [docs/MODEL-AND-EFFORT.md](docs/MODEL-AND-EFFORT.md).
-
-</details>
-
-<details>
-<summary><b>Codex CLI and Gemini CLI</b></summary>
-
-Neither tool has a skills system yet. Each reads one global context file: `~/.codex/AGENTS.md` and `~/.gemini/GEMINI.md`. Your `rules/` merge into that file; three playbooks (`plan-mode`, `research`, `fix-issue`) ship as native prompts (`~/.codex/prompts/*.md`) or commands (`~/.gemini/commands/*.toml`). Skills and subagents are not written out because neither tool can load them. An existing `AGENTS.md` or `GEMINI.md` is backed up as `.bak-<stamp>` first. `install.sh --codex` and `--gemini` delegate to the Node installer (Node 18 or newer).
-
-</details>
-
-<details>
-<summary><b>Optional: Mushi Mushi bug-report triage</b></summary>
-
-```bash
-npx skills add kensaurus/mushi-mushi
-```
-
-Pairs with `mushi-health` and `test-playwright`. Repo: [kensaurus/mushi-mushi](https://github.com/kensaurus/mushi-mushi).
-
-</details>
-
 ## <img src="docs/screenshots/icons/commands.png" width="28" height="28" alt="" align="absmiddle"> Commands, subagents, MCP, rules
 
 <details>
-<summary><b>Commands (63)</b> — type <code>/</code> in chat to see them all</summary>
+<summary><b>Commands</b>: type <code>/</code> in chat to see them all</summary>
+
+There are 63 slash commands. Claude Code and Cursor get all of them. Codex and Gemini get the portable ones in `commands-portable/`.
 
 | Command | When | What |
 |:--------|:-----|:-----|
@@ -246,12 +368,14 @@ Pairs with `mushi-health` and `test-playwright`. Repo: [kensaurus/mushi-mushi](h
 | `/skill-conflicts` · `/mcp-guide` | Pack hygiene | Overlapping triggers · MCP tool reference |
 | `/*-plan` (23 aliases) | Audit before changing | Thin pointers to the `plan-*` skills; audit and plan only |
 
-RN monorepo bundle: copy `commands/native-rn-monorepo/` and `rules/native-rn-monorepo/` into your project (iOS builds on CI). Full command list → [docs/CATALOG.md](docs/CATALOG.md#commands-63).
+RN monorepo bundle: copy `commands/native-rn-monorepo/` and `rules/native-rn-monorepo/` into your project (iOS builds on CI). Full command list → [docs/CATALOG.md](docs/CATALOG.md).
 
 </details>
 
 <details>
-<summary><b>Subagents (6)</b></summary>
+<summary><b>Subagents</b>: Claude Code and Cursor</summary>
+
+There are 6 subagents:
 
 | Agent | Triggers on | Output |
 |:------|:------------|:-------|
@@ -262,19 +386,17 @@ RN monorepo bundle: copy `commands/native-rn-monorepo/` and `rules/native-rn-mon
 | `perf-monitor` | "slow", "optimize" | Perf audit |
 | `completion-judge` | A closure claim | PASS / CONTINUE / BLOCKED against plan, state, diff, and fresh evidence |
 
-`complete-everything` also installs an opt-in stop hook. On Claude Code 2.1.139+ the same run starts with `/goal`.
-
 </details>
 
 <details>
-<summary><b>MCP servers (15)</b></summary>
+<summary><b>MCP server templates</b></summary>
 
 ```bash
 cp ~/skills/mcp/mcp.json.template ~/.cursor/mcp.json      # essential 3
-cp ~/skills/mcp/mcp-full.json.template ~/.cursor/mcp.json  # all 15
+cp ~/skills/mcp/mcp-full.json.template ~/.cursor/mcp.json  # every server below
 ```
 
-Set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, `SUPABASE_ACCESS_TOKEN`, and `SUPABASE_PROJECT_REF` in the environment. Slack and Notion in the full template still use `YOUR_*`. Setup → [mcp/README.md](mcp/README.md).
+The installer writes the essential template to `~/.cursor/mcp.json` only when that file does not exist. Set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, `SUPABASE_ACCESS_TOKEN`, and `SUPABASE_PROJECT_REF` in your environment. The Slack and Notion entries in the full template still use `YOUR_*` placeholders. Never commit real keys ([SECURITY.md](SECURITY.md)). Setup → [mcp/README.md](mcp/README.md).
 
 | Tier | Servers | Keys? |
 |:-----|:--------|:------|
@@ -286,7 +408,11 @@ Set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, `SUPABASE_ACCESS_TOKEN`, and `SUPAB
 </details>
 
 <details>
-<summary><b>Project rules (7) and global rules</b></summary>
+<summary><b>Rules: global and per-project</b></summary>
+
+Global rules the installer writes: `verification-before-completion.mdc` (always on), `approved-plan-execution.mdc`, `full-stack-ship-discipline.mdc`, `senior-engineer.mdc`, `shell-first-search.mdc`, `skill-workflows.mdc`. Codex and Gemini get all of them merged into one file, except `skill-workflows`. Stack assumptions and how to skip them: [The stack-specific parts](#the-stack-specific-parts-and-how-to-skip-them). Model and effort routing: [docs/MODEL-AND-EFFORT.md](docs/MODEL-AND-EFFORT.md).
+
+Per-project rules for a Next.js + Supabase app are never installed globally. Copy them in yourself:
 
 ```bash
 cp ~/skills/rules/project-starter/*.mdc your-project/.cursor/rules/
@@ -302,9 +428,9 @@ cp ~/skills/rules/project-starter/*.mdc your-project/.cursor/rules/
 | `web-performance.mdc` | LCP priority, INP yield, bfcache, budgets |
 | `git.mdc` | Conventional commits, no secrets |
 
-Global rules the pack installs: `full-stack-ship-discipline.mdc`, `approved-plan-execution.mdc`, `skill-workflows.mdc`, `senior-engineer.mdc`, `verification-before-completion.mdc`, `shell-first-search.mdc`. Plan at high effort, execute at the medium default under `approved-plan-execution.mdc`, judge in a fresh context. **Project constitution:** copy [docs/AGENTS.template.md](docs/AGENTS.template.md) to your app repo as `AGENTS.md`.
+**Project constitution:** copy [docs/AGENTS.template.md](docs/AGENTS.template.md) into your app repo as `AGENTS.md`.
 
-Plan → apply pairs: `plan-uiux-unification` → `housekeep-design`; `plan-dead-code` → `housekeep-dead-code`; `plan-gtm` → `workflow-gtm`. The plan half audits and stops; the apply half changes the repo only against an approved list. Third-party skills are prefixed `thirdparty-*` with `ATTRIBUTION.md` → [docs/THIRD-PARTY-SKILLS.md](docs/THIRD-PARTY-SKILLS.md).
+Plan → apply pairs: `plan-uiux-unification` → `housekeep-design`; `plan-dead-code` → `housekeep-dead-code`; `plan-gtm` → `workflow-gtm`. The plan half audits and stops. The apply half changes the repo only against a list you approved. Third-party skills are prefixed `thirdparty-*` and carry an `ATTRIBUTION.md` → [docs/THIRD-PARTY-SKILLS.md](docs/THIRD-PARTY-SKILLS.md).
 
 </details>
 
@@ -319,23 +445,24 @@ source ~/skills/shell-aliases/cursor-helpers.sh
 
 ```
 skills/
-├── skills/           # 161 Agent Skills (SKILL.md each)
-├── skills-cursor/    # 12 Cursor-specific skills
-├── commands/         # 63 slash commands
-├── agents/           # 6 subagents
-├── hooks/            # opt-in completion stop gate
-├── rules/            # Global + project-starter rules
-├── mcp/              # MCP templates
-├── docs/             # SKILLS, CATALOG, PLAN-LOOPS, GETTING-STARTED, …
-├── notepads/         # Context templates (clone only)
-├── shell-aliases/    # Bash helpers (clone only)
-├── scripts/          # validate-skills, check-skill-count, render-brand-assets
-└── bin/install.mjs   # npm installer
+├── skills/             # 161 Agent Skills (SKILL.md each)
+├── skills-cursor/      # Cursor's built-in skills, ported for Claude Code
+├── commands/           # 63 slash commands
+├── commands-portable/  # commands ported to Codex and Gemini
+├── agents/             # 6 subagents
+├── hooks/              # opt-in completion Stop hook
+├── rules/              # global rules + per-project bundles
+├── mcp/                # MCP templates and pinned versions
+├── docs/               # SKILLS, CATALOG, PLAN-LOOPS, GETTING-STARTED, …
+├── notepads/           # context templates (clone only)
+├── shell-aliases/      # bash helpers (clone only)
+├── scripts/            # validators, count and index checks, install tests
+└── bin/install.mjs     # the installer
 ```
 
 </details>
 
-## <img src="docs/screenshots/icons/upgrade.png" width="28" height="28" alt="" align="absmiddle"> Upgrading from cursor-kenji
+## Upgrading from cursor-kenji
 
 2.0.0 renamed the pack: repo `kensaurus/cursor-kenji` → `kensaurus/skills`, npm `@kensaurus/cursor-kenji` → `@kensaurus/skills`, plugin `cursor-kenji@cursor-kenji` → `kenji@kenji`, slash namespace `/cursor-kenji:` → `/kenji:`. Old GitHub URLs redirect.
 
@@ -358,48 +485,55 @@ skills/
 <details>
 <summary><b>How do skills trigger? How do I force one?</b></summary>
 
-You talk normally. The tool matches your words to each skill's YAML `description`. To force one: *"use `audit-security` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).
+You talk normally. The agent matches your words against each skill's `description`. To force one, name it: *"use `audit-security` on this repo"*. Full trigger list: [docs/CATALOG.md](docs/CATALOG.md).
 
 </details>
 
 <details>
 <summary><b>What is the difference between <code>audit-*</code> and <code>plan-*</code>?</b></summary>
 
-`audit-*` reports findings and stops by default. Six audit-and-fix skills (`audit-responsive`, `audit-code-quality`, `audit-performance`, `audit-security`, `audit-i18n`, `audit-bundle-size`) fix what they find. `plan-*` only writes a `plan-{name}.md` burndown; you approve each phase before any code changes. See [docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md).
+`audit-*` skills report findings and stop, unless the skill says it fixes what it finds (`audit-responsive`, `audit-code-quality`, `audit-performance`, `audit-security`, `audit-i18n`, `audit-bundle-size`, `audit-agent-speed`). `plan-*` skills only write a `plan-{name}.md` burndown, and you approve each phase before any code changes. See [docs/PLAN-LOOPS.md](docs/PLAN-LOOPS.md).
 
 </details>
 
 <details>
 <summary><b>How many skills, and where do the counts come from?</b></summary>
 
-**161** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**173** total). Counts come from the filesystem via `npm run check:skills`. See the [family table](#skill-families-at-a-glance) and [docs/SKILLS.md](docs/SKILLS.md).
+**161** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**173** total). Cursor, Codex, Gemini, and the skills CLI get the first set. Claude Code gets both sets. Every count in this README comes from the filesystem: `npm run check:skills` fails CI when a number here drifts, and `npm run fix:skills` rewrites it. The family table is generated by `npm run gen:skill-index`.
+
+</details>
+
+<details>
+<summary><b>Do I need React, Next.js, or Supabase?</b></summary>
+
+No. See [The stack-specific parts](#the-stack-specific-parts-and-how-to-skip-them) for what assumes that stack and how to leave it out.
 
 </details>
 
 <details>
 <summary><b>Where do MCP API keys go? Is there an llms.txt?</b></summary>
 
-Copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and set the env vars; never commit real keys ([SECURITY.md](SECURITY.md), [mcp/README.md](mcp/README.md)). Machine-readable docs: [llms.txt](llms.txt).
+Copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and set the environment variables. Never commit real keys ([SECURITY.md](SECURITY.md), [mcp/README.md](mcp/README.md)). Machine-readable docs: [llms.txt](llms.txt).
 
 </details>
 
 ## <img src="docs/screenshots/icons/contrib.png" width="28" height="28" alt="" align="absmiddle"> Contributing
 
 ```bash
-mkdir -p skills/my-skill && vim skills/my-skill/SKILL.md
-npm test   # validate + count + index + install smoke
+mkdir -p skills/my-skill && $EDITOR skills/my-skill/SKILL.md
+npm test   # spec validation, counts, index, install tests, dead-code check
 ```
 
-Each skill passes [Agent Skills spec](https://agentskills.io/specification) validation (`npm run validate:skills`): `name` matches the directory, `description` ≤ 320 chars, body under 500 lines. See [CONTRIBUTING.md](CONTRIBUTING.md), [docs/README.md](docs/README.md), [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md), [docs/CATALOG.md](docs/CATALOG.md), [docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md).
+Each skill must pass [Agent Skills spec](https://agentskills.io/specification) validation (`npm run validate:skills`): `name` matches the folder, `description` is at most 320 characters, and the body is under 500 lines. See [CONTRIBUTING.md](CONTRIBUTING.md), [docs/README.md](docs/README.md), [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md), and [docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md). Releases: [docs/PUBLISHING.md](docs/PUBLISHING.md).
 
-## Alternatives
+## Related
 
+- [agentskills.io](https://agentskills.io): the Agent Skills spec these skills follow
+- [skills CLI](https://github.com/vercel-labs/skills) and [skills.sh](https://www.skills.sh/kensaurus/skills): install `SKILL.md` folders into many agents
 - [awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules): curated rules collections
-- [skills.sh](https://www.skills.sh/kensaurus/skills): this pack's live skills page
-- [SkillsMP](https://skillsmp.com/creators/kensaurus/cursor-kenji): aggregator crawl of this repo
-- [agentskills.io](https://agentskills.io): the Agent Skills spec
+- [SkillsMP](https://skillsmp.com/creators/kensaurus/cursor-kenji): aggregator listing of this repo
 
-kenji ships executable skills, MCP configs, commands, and subagents in one installable package, not static rules alone. Listed vs submitted → [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md).
+This pack ships skills, slash commands, subagents, rules, and MCP templates in one installable package. Where it is listed → [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md).
 
 ## More from KENSAURUS
 
@@ -455,6 +589,7 @@ kenji ships executable skills, MCP configs, commands, and subagents in one insta
 </table>
 
 All apps on Google Play: [kensaurus developer page](https://play.google.com/store/apps/developer?id=kensaurus). Everything else: [kensaur.us](https://kensaur.us/?view=portfolio&utm_source=github&utm_medium=readme).
+
 
 ---
 

@@ -141,7 +141,7 @@ try {
   expect(existsSync(join(sandbox2, ".cursor", "skills", "audit-ux")), "--skill did not install audit-ux");
   expect(countDir(join(sandbox2, ".cursor", "skills")) === 1, "--skill installed more than one skill");
 
-  // --- Codex + Gemini context-file tools (no skills system) ----------------
+  // --- Codex + Gemini: skills in ~/.agents/skills + context file + commands --
   // A fresh sandbox auto-detects nothing, so force both paths with explicit flags.
   const sandbox3 = join(sandbox, "context-tools");
   mkdirSync(sandbox3, { recursive: true });
@@ -185,6 +185,85 @@ try {
   });
   const codexBaks = readdirSync(join(sandbox3, ".codex")).filter((n) => n.includes(".bak-"));
   expect(codexBaks.length === 0, `idempotent re-run created backups: ${codexBaks.join(", ")}`);
+  const geminiBaks = readdirSync(join(sandbox3, ".gemini")).filter((n) => n.includes(".bak-"));
+  expect(geminiBaks.length === 0, `idempotent re-run created Gemini backups: ${geminiBaks.join(", ")}`);
+
+  // Skills land once in the shared user skills dir both tools document
+  // (~/.agents/skills), with the same set as the Cursor mirror.
+  const runAs = (home, args) => execFileSync(process.execPath, [installer, ...args], {
+    env: { ...process.env, HOME: home, USERPROFILE: home },
+    stdio: "pipe",
+  });
+  const spawnAs = (home, args) => spawnSync(process.execPath, [installer, ...args], {
+    env: { ...process.env, HOME: home, USERPROFILE: home },
+    stdio: "pipe",
+  });
+  const sharedSkills = join(sandbox3, ".agents", "skills");
+  expect(countDir(sharedSkills) === repoCursorSkills,
+    `~/.agents/skills for Codex/Gemini: expected ${repoCursorSkills}, got ${countDir(sharedSkills)}`);
+  expect(existsSync(join(sharedSkills, "research", "SKILL.md")), "~/.agents/skills missing research/SKILL.md");
+  expect(!existsSync(join(sharedSkills, "babysit")), "Cursor builtin babysit leaked into ~/.agents/skills");
+  expect(!existsSync(join(sandbox3, ".gemini", "skills")),
+    "--gemini wrote ~/.gemini/skills; ~/.agents/skills (the alias Gemini prefers) is the one copy");
+  expect(!codexText.includes("no skills loader"), "AGENTS.md header still claims the tool has no skills loader");
+
+  // --verify covers the shared skills: green after install, red after tampering.
+  expect(spawnAs(sandbox3, ["--verify", "--codex", "--gemini"]).status === 0,
+    "--verify --codex --gemini failed right after install");
+  const tampered = join(sharedSkills, "research", "SKILL.md");
+  const original = readFileSync(tampered);
+  writeFileSync(tampered, "tampered\n");
+  const tamperedVerify = spawnAs(sandbox3, ["--verify", "--codex"]);
+  expect(tamperedVerify.status !== 0, "--verify --codex passed with a tampered ~/.agents/skills file");
+  expect(String(tamperedVerify.stderr).includes("research"), "--verify did not name the tampered skill");
+  writeFileSync(tampered, original);
+
+  // A skill another tool or installer put in the shared dir must survive a
+  // re-run and a Cursor --clean (the old mirror wiped the whole folder).
+  const foreign = join(sharedSkills, "someone-elses-skill");
+  mkdirSync(foreign, { recursive: true });
+  writeFileSync(join(foreign, "SKILL.md"), "---\nname: someone-elses-skill\ndescription: not ours\n---\n");
+  runAs(sandbox3, ["--codex", "--gemini"]);
+  expect(existsSync(join(foreign, "SKILL.md")), "re-running --codex --gemini removed a foreign skill from ~/.agents/skills");
+  runAs(sandbox3, ["--clean", "--no-backup"]);
+  expect(existsSync(join(foreign, "SKILL.md")), "Cursor --clean removed a foreign skill from the shared ~/.agents/skills");
+  expect(existsSync(join(sharedSkills, "research", "SKILL.md")), "Cursor --clean left ~/.agents/skills without research");
+
+  // --gemini alone, --dry-run, --only, --skill and --no-agents-mirror.
+  const geminiOnly = join(sandbox, "gemini-only");
+  mkdirSync(geminiOnly, { recursive: true });
+  runAs(geminiOnly, ["--gemini"]);
+  expect(countDir(join(geminiOnly, ".agents", "skills")) === repoCursorSkills, "--gemini alone did not install skills");
+  expect(!existsSync(join(geminiOnly, ".gemini", "skills")), "--gemini alone wrote ~/.gemini/skills");
+
+  const dryHome = join(sandbox, "codex-dry");
+  mkdirSync(dryHome, { recursive: true });
+  const dryOut = String(runAs(dryHome, ["--codex", "--dry-run"]));
+  expect(readdirSync(dryHome).length === 0, `--codex --dry-run wrote files: ${readdirSync(dryHome).join(", ")}`);
+  expect(dryOut.includes(join(".agents", "skills")), "--codex --dry-run did not show the ~/.agents/skills plan");
+
+  const rulesOnly = join(sandbox, "codex-rules-only");
+  mkdirSync(rulesOnly, { recursive: true });
+  runAs(rulesOnly, ["--codex", "--only", "rules"]);
+  expect(existsSync(join(rulesOnly, ".codex", "AGENTS.md")), "--codex --only rules did not write AGENTS.md");
+  expect(!existsSync(join(rulesOnly, ".agents")), "--codex --only rules wrote skills");
+
+  const oneSkill = join(sandbox, "codex-one-skill");
+  mkdirSync(oneSkill, { recursive: true });
+  runAs(oneSkill, ["--codex", "--skill", "audit-ux"]);
+  expect(countDir(join(oneSkill, ".agents", "skills")) === 1, "--codex --skill audit-ux did not install exactly one skill");
+  expect(existsSync(join(oneSkill, ".agents", "skills", "audit-ux", "SKILL.md")), "--codex --skill audit-ux missing SKILL.md");
+  expect(!existsSync(join(oneSkill, ".codex", "AGENTS.md")), "--codex --skill also wrote AGENTS.md");
+  expect(spawnAs(oneSkill, ["--codex", "--skill", "no-such-skill"]).status === 1,
+    "--codex --skill <unknown> did not exit 1");
+
+  const noMirror = join(sandbox, "codex-no-mirror");
+  mkdirSync(noMirror, { recursive: true });
+  const noMirrorRun = spawnAs(noMirror, ["--codex", "--no-agents-mirror"]);
+  expect(noMirrorRun.status === 0, "--codex --no-agents-mirror failed");
+  expect(!existsSync(join(noMirror, ".agents")), "--codex --no-agents-mirror still wrote ~/.agents");
+  expect(existsSync(join(noMirror, ".codex", "AGENTS.md")), "--codex --no-agents-mirror skipped AGENTS.md");
+  expect(String(noMirrorRun.stderr).includes("no kenji skills"), "--codex --no-agents-mirror did not warn");
 
   // --auto must detect a pre-existing tool dir and install to it.
   const sandbox4 = join(sandbox, "auto");

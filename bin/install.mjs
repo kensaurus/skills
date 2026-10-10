@@ -6,8 +6,8 @@
  *   npx @kensaurus/skills                  Merge-install into ~/.cursor/ AND ~/.agents/skills/
  *   npx @kensaurus/skills --auto           Detect installed tools and install to each
  *   npx @kensaurus/skills --claude         Install for Claude Code (~/.claude/) instead
- *   npx @kensaurus/skills --codex          Install for Codex CLI (~/.codex/AGENTS.md + prompts)
- *   npx @kensaurus/skills --gemini         Install for Gemini CLI (~/.gemini/GEMINI.md + commands)
+ *   npx @kensaurus/skills --codex          Install for Codex CLI (~/.agents/skills + ~/.codex/AGENTS.md + prompts)
+ *   npx @kensaurus/skills --gemini         Install for Gemini CLI (~/.agents/skills + ~/.gemini/GEMINI.md + commands)
  *   npx @kensaurus/skills --all            Install for all four supported tools
  *   npx @kensaurus/skills --clean          Mirror: make target paths match this repo exactly
  *   npx @kensaurus/skills --only skills     Install only some groups (csv)
@@ -34,6 +34,16 @@
  *   ~/.claude/agents/    — subagent definitions
  *   ~/.claude/rules/     — rules (.mdc sources installed as .md)
  *   ~/.claude/settings.json — merged completion Stop hook (same script as Cursor)
+ *
+ * Codex CLI and Gemini CLI paths:
+ *   ~/.agents/skills/    — the USER skills directory both tools document
+ *                          (Codex: https://developers.openai.com/codex/skills;
+ *                          Gemini: https://geminicli.com/docs/cli/skills/, where
+ *                          it is the alias that wins over ~/.gemini/skills/).
+ *                          One shared copy, written once per run; the Cursor
+ *                          mirror already writes the same set when it runs.
+ *   ~/.codex/AGENTS.md, ~/.gemini/GEMINI.md — rules merged into one context file
+ *   ~/.codex/prompts/, ~/.gemini/commands/  — the portable commands
  */
 
 import {
@@ -102,8 +112,8 @@ Usage:
   npx @kensaurus/skills                   Merge-install into ~/.cursor/ + ~/.agents/skills/
   npx @kensaurus/skills --auto            Detect installed tools and install to each
   npx @kensaurus/skills --claude          Install for Claude Code (~/.claude/) instead
-  npx @kensaurus/skills --codex           Install for Codex CLI (~/.codex/AGENTS.md)
-  npx @kensaurus/skills --gemini          Install for Gemini CLI (~/.gemini/GEMINI.md)
+  npx @kensaurus/skills --codex           Install for Codex CLI (~/.agents/skills + ~/.codex/)
+  npx @kensaurus/skills --gemini          Install for Gemini CLI (~/.agents/skills + ~/.gemini/)
   npx @kensaurus/skills --all             Install for all four supported tools
   npx @kensaurus/skills --clean           Mirror: wipe and rebuild target paths from this repo
   npx @kensaurus/skills --only skills      Install only some groups (skills,commands,agents,rules,hooks)
@@ -118,8 +128,10 @@ Flags:
                       install to each; falls back to Cursor if none are found.
   --cursor            Target Cursor explicitly (same as the bare default).
   --claude            Target Claude Code (~/.claude/) instead of Cursor.
-  --codex             Target Codex CLI — merged rules → ~/.codex/AGENTS.md + prompt ports.
-  --gemini            Target Gemini CLI — merged rules → ~/.gemini/GEMINI.md + command ports.
+  --codex             Target Codex CLI — skills → ~/.agents/skills, merged rules →
+                      ~/.codex/AGENTS.md, prompt ports → ~/.codex/prompts.
+  --gemini            Target Gemini CLI — skills → ~/.agents/skills, merged rules →
+                      ~/.gemini/GEMINI.md, command ports → ~/.gemini/commands.
   --all               Target all four supported tools in one run.
   --clean, --mirror   Wipe managed dirs first so target paths exactly mirror this repo.
   --no-backup         Skip the timestamped backup taken before a --clean wipe.
@@ -136,7 +148,9 @@ Flags:
                       hash-mismatched at the destination (merge-compatible:
                       extra personal files are allowed).
   --quiet             Suppress install logs (errors still print).
-  --no-agents-mirror  Skip copying skills to ~/.agents/skills.
+  --no-agents-mirror  Write nothing to ~/.agents/skills. That is Cursor's optional
+                      mirror AND the Codex/Gemini skills directory, so with
+                      --codex or --gemini those tools get no kenji skills.
 
 What gets installed (Cursor):
   ~/.cursor/skills/       ← agent skills at runtime (skills/ + non-builtin skills-cursor/)
@@ -154,12 +168,16 @@ What gets installed (Claude Code, with --claude or --all):
   ~/.claude/rules/        ← rules (.mdc installed as .md)
   ~/.claude/settings.json ← merged completion Stop hook (preserves existing hooks)
 
-What gets installed (Codex CLI / Gemini CLI — no skills system):
+What gets installed (Codex CLI / Gemini CLI, with --codex, --gemini or --all):
+  ~/.agents/skills/       ← skills: the user skills directory both tools read
+                            (one shared copy; same set as the Cursor mirror)
   ~/.codex/AGENTS.md      ← rules merged into one context file (auto-loaded)
-  ~/.codex/prompts/       ← portable commands as custom prompts (plan, research, fix-issue)
+  ~/.codex/prompts/       ← portable commands as custom prompts (plan-mode, research,
+                            fix-issue). Codex deprecated custom prompts; newer
+                            releases ignore this folder and use the skills instead.
   ~/.gemini/GEMINI.md     ← rules merged into one context file (auto-loaded)
   ~/.gemini/commands/     ← portable commands as TOML commands
-  These tools have no skills loader, so skills/agents are not written there.
+  Subagents are not written for these tools.
   Existing AGENTS.md/GEMINI.md is backed up (.bak-<stamp>) before an update.
   `.trim());
   process.exit(0);
@@ -317,7 +335,7 @@ function pruneStaleCommands(commandsDest, label) {
 const codexBase = join(homedir(), '.codex');    // Codex CLI reads ~/.codex/AGENTS.md
 const geminiBase = join(homedir(), '.gemini');  // Gemini CLI reads ~/.gemini/GEMINI.md
 const cursorBase = join(homedir(), '.cursor');
-const agentsBase = join(homedir(), '.agents');   // Cursor Skills UI reads ~/.agents/skills/
+const agentsBase = join(homedir(), '.agents');   // ~/.agents/skills/: Codex + Gemini user skills, Cursor mirror
 const claudeBase = join(homedir(), '.claude');
 
 const explicitTargets = ['cursor', 'claude', 'codex', 'gemini'].filter((t) => has(t));
@@ -644,11 +662,14 @@ function installDirs(base, opts = {}) {
 }
 
 // ============================================================================
-// Codex CLI + Gemini CLI — tools with NO skills system.
-// They read a single global context/instructions file, so we map:
+// Codex CLI + Gemini CLI.
+// Both read SKILL.md skills from ~/.agents/skills (Codex's only user scope;
+// Gemini's user-tier alias, which wins over ~/.gemini/skills). Each also reads
+// one global context file. So we map:
+//   skills/            → ~/.agents/skills (one shared copy, installSharedAgentsSkills)
 //   rules/ (minus the skill-routing index) → one merged Markdown file
 //   commands-portable/ → per-tool custom prompt/command files
-// No SKILL.md dirs are written — nothing in these tools would load them.
+// Subagents are not written: neither tool loads this pack's agent format.
 // ============================================================================
 
 // Detect installed tools by their home-dir config footprint.
@@ -712,7 +733,7 @@ function buildMergedRules(toolLabel, loadPath) {
       return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || a.localeCompare(b);
     });
   const header = `<!-- Generated by kenji — https://github.com/kensaurus/skills
-     Merged from rules/. The skill-routing index is omitted (this tool has no skills loader).
+     Merged from rules/. The skill-routing index is omitted; skills install to ~/.agents/skills.
      Applies to: ${toolLabel} — loaded automatically from ${loadPath}.
      Regenerate: npx @kensaurus/skills --auto -->\n\n`;
   const body = files
@@ -882,15 +903,12 @@ function installClaudeCompletionHook() {
 // Install a context-file tool (Codex / Gemini). `spec` describes its layout.
 function installContextTool(spec) {
   const { label, base, rulesFile, rulesLoadPath, commandsDir, commandExt, render } = spec;
-  console.log(`\n${isDryRun ? '[dry-run] ' : ''}${label} → ${base}`);
-
-  // --skill / --only skills has no meaning here (no skills loader).
+  // Skills for these tools go to the shared ~/.agents/skills (see
+  // installSharedAgentsSkills); this writes the context file and commands.
   const doRules = !onlyGroups || onlyGroups.has('rules');
   const doCommands = (!onlyGroups || onlyGroups.has('commands')) && !skillName;
-  if (!doRules && !doCommands) {
-    console.log('  (no skills loader — nothing to install for the selected groups)');
-    return;
-  }
+  if (!doRules && !doCommands) return;
+  console.log(`\n${isDryRun ? '[dry-run] ' : ''}${label} → ${base}`);
 
   let rulesStatus = 'skipped';
   if (doRules) {
@@ -931,7 +949,57 @@ function verifyContextTool(spec) {
   }
 }
 
+// ---- shared ~/.agents/skills (Codex CLI + Gemini CLI) ------------------------
+// Codex and Gemini both read user skills from ~/.agents/skills, Cursor's
+// optional mirror writes there, and other installers (`npx skills add -g -a
+// codex`) do too. One copy serves every tool: this pack writes only the skill
+// folders it ships and never removes the folder itself.
+const agentsSkillsDir = join(agentsBase, 'skills');
+const skillsSelected = !onlyGroups || onlyGroups.has('skills');
+// The Cursor mirror writes the same set (skills/ minus Cursor builtins) when it runs.
+const cursorMirrorRuns = wantCursor && !noAgentsMirror && skillsSelected;
+const wantAgentsSkills = (wantCodex || wantGemini) && skillsSelected && !noAgentsMirror;
+const agentsSkillTools = [wantCodex && 'Codex CLI', wantGemini && 'Gemini CLI'].filter(Boolean).join(' + ');
+
+function agentsSkillItems() {
+  return listInstallItems({ skipCursorBuiltins: true }).filter((it) => it.dest === 'skills');
+}
+
+/** Folder names this pack ships as skills, for a --clean that must not touch
+ *  anything else in a shared skills directory. */
+function packSkillNames() {
+  const names = new Set();
+  for (const group of ['skills', 'skills-cursor']) {
+    const dir = resolve(__dir, group);
+    for (const name of existsSync(dir) ? readdirSync(dir) : []) names.add(name);
+  }
+  return names;
+}
+
+function installSharedAgentsSkills() {
+  const items = agentsSkillItems();
+  if (skillName && items.length === 0) {
+    console.error(`✗ Skill '${skillName}' not found in skills/.`);
+    process.exit(1);
+  }
+  console.log(`\n${isDryRun ? '[dry-run] ' : ''}Skills for ${agentsSkillTools} → ${agentsSkillsDir}`);
+  if (!isDryRun) mkdirSync(agentsSkillsDir, { recursive: true });
+  for (const it of items) place(it.itemSrc, join(agentsSkillsDir, it.outName), it.isDir);
+  pruneRenamedSkills(agentsSkillsDir, 'Agents');
+  const verbed = isDryRun ? `[dry-run] would ${useLink ? 'link' : 'copy'}` : `✓ ${useLink ? 'linked' : 'copied'}`;
+  console.log(`  ${verbed} ${items.length} skill(s); other folders in ${agentsSkillsDir} are left alone`);
+}
+
+if ((wantCodex || wantGemini) && skillsSelected && noAgentsMirror) {
+  console.warn(`  [!] --no-agents-mirror: nothing written to ${agentsSkillsDir}, so ${agentsSkillTools} get no kenji skills.`);
+}
+
 if (isVerifyOnly) {
+  if (wantAgentsSkills && !cursorMirrorRuns) {
+    for (const it of agentsSkillItems()) {
+      recordVerify(it.itemSrc, join(agentsSkillsDir, it.outName), `Agents ${it.outName}`);
+    }
+  }
   if (wantCursor) {
     verifyTarget(cursorBase, { skipCursorBuiltins: true }, 'Cursor');
     if (!noAgentsMirror && (!onlyGroups || onlyGroups.has('skills'))) {
@@ -1017,7 +1085,11 @@ if (wantCursor) {
     if (isDryRun) {
       console.log(`  [dry-run] sync ${cursorSkillsSrc} → ${agentsSkillsDest}`);
     } else if (existsSync(cursorSkillsSrc)) {
-      if (isClean) rmSync(agentsSkillsDest, { recursive: true, force: true });
+      // Shared with Codex, Gemini and other installers: a mirror run clears only
+      // the skill folders this pack ships, never the whole directory.
+      if (isClean) {
+        for (const name of packSkillNames()) rmSync(join(agentsSkillsDest, name), { recursive: true, force: true });
+      }
       mkdirSync(agentsSkillsDest, { recursive: true });
       for (const item of readdirSync(cursorSkillsSrc)) {
         if (skillName && item !== skillName) continue;
@@ -1133,6 +1205,15 @@ if (wantGemini) {
   });
 }
 
+// ---- Skills for Codex CLI + Gemini CLI (shared ~/.agents/skills) ------------
+if (wantAgentsSkills) {
+  if (cursorMirrorRuns) {
+    console.log(`\nSkills for ${agentsSkillTools}: shared with the Cursor mirror at ${agentsSkillsDir} (written above).`);
+  } else {
+    installSharedAgentsSkills();
+  }
+}
+
 // ---- summary ---------------------------------------------------------------
 const mode = `${isClean ? 'mirror' : 'merge'}${useLink ? '+link' : ''}${skillName ? `:skill=${skillName}` : ''}`;
 const verb = useLink ? 'linked' : 'copied';
@@ -1166,13 +1247,15 @@ if (isDryRun) {
     }
   }
   if (linkFallbacks) console.log(`  (note: ${linkFallbacks} file(s) copied instead of linked — symlinks need elevated rights on this OS)`);
-  const dual = dualSkillCommandNames();
+  // Only Cursor and Claude Code get both skills and commands under one / picker.
+  const dual = wantCursor || wantClaude ? dualSkillCommandNames() : [];
   if (dual.length) {
     console.log(`Note: these names exist as both a skill and a /command (the picker may show two /entries): ${dual.join(', ')}`);
   }
-  console.log('Re-check anytime with: npx @kensaurus/skills --verify');
+  const targetFlags = [...targets].sort().map((t) => ` --${t}`).join('');
+  console.log(`Re-check anytime with: npx @kensaurus/skills --verify${targetFlags === ' --cursor' ? '' : targetFlags}`);
   if (wantCursor) console.log('Restart Cursor to activate skills, commands, and agents.');
   if (wantClaude) console.log('Restart any active claude sessions — skills appear as /slash-commands.');
-  if (wantCodex) console.log('Codex CLI loads ~/.codex/AGENTS.md automatically; prompts appear via the / picker.');
-  if (wantGemini) console.log('Gemini CLI loads ~/.gemini/GEMINI.md automatically; run /memory refresh in an active session.');
+  if (wantCodex) console.log('Codex CLI loads ~/.codex/AGENTS.md and ~/.agents/skills on start; type $ or /skills to pick a skill.');
+  if (wantGemini) console.log('Gemini CLI loads ~/.gemini/GEMINI.md and ~/.agents/skills on start; in a running session use /memory reload and /skills reload.');
 }

@@ -8,7 +8,7 @@ How the pack runs on Claude Opus 5.5 and how to set effort per task. Facts here 
 |:-----|:------|:------|
 | Claude Code 2.1.280+ | Claude Opus 5.5 (`opus` alias, ID `claude-opus-5-5`) | Default on Pro, Max, Team, Enterprise, API, Bedrock, Vertex |
 | Cursor | Claude Opus 5.5 selectable as the agent model | All tools, 1M context at flat pricing; works as a coordinator for subagents |
-| Codex CLI, Gemini CLI | Their own models | Only rules and portable commands install there |
+| Codex CLI, Gemini CLI | Their own models | Skills (in `~/.agents/skills`), merged rules, and portable commands install there; the `effort:` key is ignored |
 
 Pricing: $4 / $20 per MTok; cache reads $0.20 (60% cheaper than Opus 5); fast mode $8 / $40. 1M context (native, no `[1m]` suffix), 128K max output.
 

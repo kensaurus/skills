@@ -6,8 +6,36 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ## [Unreleased]
 
+## [2.6.0] — 2026-10-11
+
+Codex CLI and Gemini CLI get the skills, and the README works for any stack and
+any agent.
+
 ### Added
 
+- **`--codex` and `--gemini` install the skills.** Both tools now read
+  `SKILL.md` skills, and both document `~/.agents/skills` as a user skills
+  folder: Codex's only user scope
+  ([docs](https://developers.openai.com/codex/skills)), and the Gemini alias
+  that takes precedence over `~/.gemini/skills`
+  ([docs](https://geminicli.com/docs/cli/skills/)). Both pages were read
+  2026-10-11. The installer writes one shared copy there, the same set as the
+  Cursor mirror, and writes it once per run. When Cursor is also a target, the
+  mirror's copy is reused. `--dry-run` lists each skill, `--verify` hash-checks
+  them, `--skill <name>` installs one, and `--only rules` skips them.
+  `--no-agents-mirror` now means nothing goes to `~/.agents/skills`, with a
+  warning that Codex and Gemini get no skills. `AGENTS.md`, `GEMINI.md`, the
+  portable commands, and their `.bak-<stamp>` backups are unchanged. The skill
+  routing index is still left out of the merged file.
+- `scripts/test-install.mjs` covers the change:
+  - the skill count in `~/.agents/skills`;
+  - no `~/.gemini/skills`;
+  - no Cursor builtins;
+  - an idempotent re-run with no backups;
+  - `--verify` passes, then fails on a tampered file;
+  - `--dry-run` writes nothing;
+  - `--only rules`, `--skill`, an unknown `--skill` (exit 1), and `--no-agents-mirror`;
+  - a foreign skill survives a re-run and a Cursor `--clean`.
 - **Workflow chains in frontmatter** ([ADR-0014](docs/adr/0014-workflow-chains-in-metadata.md)).
   Mushi Mushi runs a workflow skill as a pipeline of the skills it calls, but
   it found them by scanning the body for `skills/<slug>/SKILL.md` paths, which
@@ -32,6 +60,33 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ### Changed
 
+- **README rewritten for a coder on any stack and any agent.** It now has:
+  - a three-command quickstart: dry run, install, verify;
+  - a support matrix for Claude Code, Cursor, Codex CLI, Gemini CLI, and any
+    `SKILL.md` agent via the skills CLI, with a cited doc for every path;
+  - a table of every path the installer writes and what happens when a file
+    is already there;
+  - what the Stop hook does and how to skip or remove it;
+  - which rules assume React, Next.js, or Supabase, and how to leave them out;
+  - verify, update, rollback, and manual uninstall steps;
+  - troubleshooting for Windows locks and CRLF, existing files, Codex's skill
+    listing budget, Codex's removed custom prompts, `CODEX_HOME`, and Gemini's
+    consent prompt and Antigravity CLI notice.
+
+  Removed:
+  - the skills.sh install-count badge;
+  - unverified model and version claims;
+  - every unguarded count. The counts left are the phrases
+    `check-skill-count` rewrites.
+- Re-rendered the hero, OG, architecture, and pieces images. They said 160
+  skills, and the architecture image showed Codex and Gemini without skills.
+- Installer output:
+  - the `--verify` hint names the targets you installed;
+  - the skill/command name-clash note prints only for Cursor and Claude Code;
+  - Gemini's hint uses `/memory reload` and `/skills reload`, the commands its
+    docs name.
+- GETTING-STARTED, DISTRIBUTION, and MODEL-AND-EFFORT describe the Codex and
+  Gemini install as it is now.
 - **Mobile skills checked against 2026 primary sources** (Apple HIG, Android 15
   and 16 behavior changes, Google Play target-SDK policy, Capacitor 8 docs and
   changelog, WCAG 2.2, MDN compat data, Expo SDK 54–58 changelogs; read
@@ -66,6 +121,17 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ### Fixed
 
+- **`--clean` no longer wipes all of `~/.agents/skills`.** The Cursor mirror
+  deleted the whole folder, with no backup, before copying. That folder is
+  shared with Codex, Gemini, and other installers such as `npx skills add -g`.
+  A `--clean` now removes only the skill folders this pack ships.
+- **`--codex` and `--gemini` stamped "this tool has no skills loader" into the
+  generated `AGENTS.md` and `GEMINI.md`.** The header now points at
+  `~/.agents/skills`. Existing installs get one `.bak-<stamp>` copy on their
+  next run.
+- **`--skill <name> --codex` printed "no skills loader" and did nothing.** It
+  now installs that skill, and an unknown name exits 1, as it does for Cursor
+  and Claude Code.
 - **`scripts/shorten-skill-descriptions.mjs` clipped mid-quote.** A clip inside
   a quoted trigger or a parenthetical left it open (`"tidy.`), and trailing
   `/` or `→` survived (`Motion /.`). It now drops the dangling opener and those

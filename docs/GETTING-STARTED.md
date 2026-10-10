@@ -147,7 +147,7 @@ Yes — delete the folder from `~/.cursor/skills/`.
 Yes. See [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 **Does this work with Claude, Codex, or Gemini?**
-Yes. `npx @kensaurus/skills --all` installs the full pack for Cursor and Claude Code, and ports rules plus a few commands to Codex CLI and Gemini CLI. Skills-only: `npx skills add kensaurus/skills`. Claude Code plugin: `/plugin marketplace add kensaurus/skills`. Both hosts read the same skill text. On Claude Code the default model is Claude Opus 5.5 and each skill's `effort:` key sets how hard it thinks (audits and plans high, implementation medium); Cursor ignores that key and runs at the model you pick. See [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md).
+Yes. `npx @kensaurus/skills --all` installs the full pack for Cursor and Claude Code. Codex CLI and Gemini CLI get the skills (in `~/.agents/skills`, the user skills folder both read), the rules merged into `AGENTS.md` / `GEMINI.md`, and a few portable commands. Which agent gets what: [README](../README.md#which-agents-are-supported). Skills-only: `npx skills add kensaurus/skills`. Claude Code plugin: `/plugin marketplace add kensaurus/skills`. Both hosts read the same skill text. On Claude Code the default model is Claude Opus 5.5 and each skill's `effort:` key sets how hard it thinks (audits and plans high, implementation medium); Cursor ignores that key and runs at the model you pick. See [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md).
 
 **Is it free?**
 Yes, MIT licensed.
