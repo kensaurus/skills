@@ -72,7 +72,7 @@ Use one Claude Code channel for the completion hook: the plugin's Stop hook
 and the one `--claude` merges into `~/.claude/settings.json` run the same
 gate, so installing both blocks twice per stop and halves the loop cap.
 
-Re-check a kenji install without writing: `npx @kensaurus/skills --verify` (add `--all` to include Claude/Codex/Gemini dests). Extra personal files are allowed; missing or hash-mismatched packaged files fail.
+Re-check a kenji install without writing: `npx @kensaurus/skills --verify` (add `--all` to include the Claude, Codex, and Gemini destinations, including `~/.agents/skills`). Extra personal files are allowed; missing or hash-mismatched packaged files fail.
 
 The installer merges into:
 

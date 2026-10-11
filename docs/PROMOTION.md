@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/skills
 
-**Status:** Pending — `@kensaurus/skills@2.5.0` (tarball 9.8 MB → 1.2 MB; README with architecture and pieces diagrams, section icons, real store listings). Previous: `2.4.0`, `2.3.0`, `2.2.0`, all approved 2026-10-06.
+**Status:** Pending — `@kensaurus/skills@2.6.0` (Codex CLI and Gemini CLI get the skills in `~/.agents/skills`; README rewritten for any stack and agent). Not tagged or released yet. Previous: `2.5.0`, `2.4.0`, `2.3.0`, `2.2.0`, all approved and live 2026-10-06.
 
 ---
 
