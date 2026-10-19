@@ -13,6 +13,28 @@ license: MIT
 **Degree of freedom: MIXED.** What is dead vs still referenced `[HIGH freedom]`;
 delete-only-after-proof and dependency bump commands `[LOW freedom — run exactly]`.
 
+Copy this checklist and tick items as you go:
+
+```
+- [ ] Step 1: Auto-detect project configuration: stack, manager, paths
+- [ ] Step 2: README sync: cross-check every section against reality
+- [ ] Step 3: Dead file cleanup: validate before deleting; fix .gitignore
+- [ ] Step 4: Dependency updates: research the changelog before a major bump
+- [ ] Step 5: Verify build, lint, and tests after updates
+- [ ] Step 6: Research-driven general cleanup; commit each phase separately
+- [ ] Step 7: Summary report from the Housekeep Report template
+```
+
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **workflow-housekeep** (this) | README sync, confirmed dead artifacts removed, safe dependency updates |
+| `housekeep-dead-code` | Remove dead code by category, one commit each, then a Knip ratchet |
+| `plan-dead-code` | Plan-only Knip audit of unused files, exports, deps; deletes nothing |
+| `housekeep-backlog` | Inventory parked work into a living BACKLOG.md |
+| `housekeep-files` | Copy-not-move organizer for document trees, not repos |
+
 ## How to reason
 
 1. **Observe** — README drift, unused files, outdated deps

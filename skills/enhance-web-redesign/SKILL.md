@@ -14,6 +14,15 @@ license: MIT
 
 **Degree of freedom: MIXED.** Taste and audit judgment `[HIGH freedom]`; keep-the-stack, no-break-functionality `[LOW freedom — run exactly]`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **enhance-web-redesign** (this) | Upgrade an existing site or app to premium quality |
+| `enhance-web-ui` | One-page polish: hierarchy, spacing, type, visual personality |
+| `design-frontend` | New production-grade UI from scratch, not a polish pass |
+| `plan-antislop` | Plan-only AI-slop audit across prose, UI, code, IA |
+
 ## How to reason
 
 1. **Scan** — framework, styling, current patterns

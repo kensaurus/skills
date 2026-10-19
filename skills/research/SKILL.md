@@ -7,6 +7,7 @@ description: >
   unfamiliar.
 license: MIT
 effort: high
+argument-hint: "[library, topic or question]"
 ---
 
 # research — Production research protocol

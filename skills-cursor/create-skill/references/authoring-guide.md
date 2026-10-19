@@ -1,5 +1,21 @@
 # Skill Authoring Guide (reference)
 
+## Contents
+
+- [Common Patterns](#common-patterns)
+- [Report structure](#report-structure)
+- [Executive summary](#executive-summary)
+- [Key findings](#key-findings)
+- [Recommendations](#recommendations)
+- [Commit message format](#commit-message-format)
+- [Utility Scripts](#utility-scripts)
+- [Anti-Patterns to Avoid](#anti-patterns-to-avoid)
+- [Skill Creation Workflow](#skill-creation-workflow)
+- [Complete Example](#complete-example)
+- [What a review covers](#what-a-review-covers)
+- [Additional Resources](#additional-resources)
+- [Summary Checklist](#summary-checklist)
+
 Extended patterns, workflows, and checklists for `create-skill`. Read when drafting
 non-trivial skills.
 

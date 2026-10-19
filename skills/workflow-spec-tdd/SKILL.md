@@ -16,6 +16,14 @@ phase order, RED-before-GREEN, and Phase 5 checklist `[LOW freedom — run exact
 >
 > Adapted from [obra/superpowers](https://github.com/obra/superpowers) (MIT) and the Karpathy LLM-coding guardrails.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **workflow-spec-tdd** (this) | Spec, plan, TDD loop before writing a line |
+| `workflow-build-feature` | Feature end to end through unit tests, Playwright, PR |
+| `workflow-fix-and-ship` | One bug-fix lifecycle from triage to PR |
+
 ## How to reason
 
 1. **Restate** — one-sentence ask + surface

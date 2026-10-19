@@ -15,6 +15,15 @@ discovery `[LOW freedom — run exactly]`.
 
 > Discover design systems, respect existing patterns, create beautiful interfaces.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **design-frontend** (this) | New production-grade UI from scratch, not a polish pass |
+| `enhance-web-redesign` | Upgrading an existing site or app to premium quality |
+| `enhance-web-ui` | Polishing one existing page: hierarchy, spacing, type, visual personality |
+| `enhance-web-landing` | Landing pages, portfolios, and marketing sites with a point of view |
+
 ## How to reason
 
 1. **Discover** — tokens, `components/ui`, forbidden patterns

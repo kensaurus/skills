@@ -29,6 +29,13 @@ fallbacks and reduced-motion support from the first commit.
 > pure visual composition (no 3D) use `enhance-web-ui`; for anti-slop landing
 > pages use `enhance-web-landing`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **enhance-web-web3d** (this) | 3D/WebGL and scroll choreography added to an existing site |
+| `enhance-motion` | Motion audit and one reduced-motion-safe pass, without 3D |
+
 ## How to reason
 
 1. **Fit** — does 3D serve comprehension/brand, or is it decoration?

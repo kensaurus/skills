@@ -157,7 +157,7 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 | `mobile-capacitor-platform` | Capacitor native layer: system bars, keyboard, back, plugins, push, deep links, OTA, native CI |
 | `mobile-emulator-start` | Boot the Android emulator and Metro (Expo or bare RN) in order: check terminals, kill stale ports, pick an AVD |
 | `mobile-emulator-test` | QA a native Android or Expo dev-client build on the emulator: UI, Supabase, Sentry per CRUD step |
-| `mobile-rn-performance` | Fix React Native / Expo performance, build, and upgrade issues: jank, slow startup, large bundles, memory leaks, Hermes, FlashList,… |
+| `mobile-rn-performance` | Fix React Native / Expo speed, size, and upgrade issues: Hermes, FlashList, Reanimated, 16KB alignment, SDK upgrades |
 | `mobile-rn-screen` | Polish one existing React Native screen so it feels native |
 
 ### Data — charts & pipelines (2)
@@ -262,7 +262,7 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 
 | Skill | What it does |
 |:------|:-------------|
-| `protocol-browser-anti-stall` | Guardrail for Playwright CLI sessions: headed, named, isolated; prevents parallel collisions and recovers stalls without scripted shortcuts _(reference only)_ |
+| `protocol-browser-anti-stall` | playwright-cli guardrail: headed, named -s= sessions, one real action at a time, max 4 attempts, then a BLOCKER _(reference only)_ |
 
 ### Authoring — build skills & MCP (2)
 
@@ -285,7 +285,7 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 |:------|:-------------|
 | `burndown-full` | Drive a planned mechanical change to 100% repo coverage after a run stopped early |
 | `complete-everything` | Closure mode for one approved plan: finish every open item and connected deferral, verify each acceptance criterion, require… |
-| `handoff` | Compact the current conversation into a handoff document a fresh agent can pick up — `/handoff` only |
+| `handoff` | Compact the current conversation into a handoff document for a fresh agent: state, next steps, suggested skills, gotchas, saved to the OS… — `/handoff` only |
 | `research` | Research current practice with Context7, Firecrawl, and official docs before a non-trivial change: gap analysis and a file-mapped plan, no… |
 
 ### Cursor IDE skills (12)

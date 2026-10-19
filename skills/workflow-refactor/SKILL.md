@@ -13,6 +13,14 @@ license: MIT
 **Degree of freedom: MIXED.** Structure target `[HIGH freedom]`;
 behavior-preserving checks and affected tests `[LOW freedom — run exactly]`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **workflow-refactor** (this) | Scoped, behavior-preserving structure change with affected tests run |
+| `audit-code-quality` | Repo-wide anti-patterns and consistency drift, detected and fixed |
+| `plan-dead-code` | Plan-only dead-code audit with Knip; deletes nothing |
+
 ## How to reason
 
 1. **Observe** — current structure, callers, tests

@@ -24,6 +24,14 @@ a ranked, actionable improvement plan and then implements it.
 
 **Before ANY browser action, read `protocol-browser-anti-stall`.**
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **iterate-post-launch** (this) | Production signals ranked, fixed, and verified live in a loop |
+| `iterate-gtm-weekly` | Weekly growth review: funnel, drop-off, one experiment, one post |
+| `workflow-launch-ready` | Launch-preparation sweep before going live |
+
 ## How to reason
 
 1. **Observe** — Sentry, Supabase logs/advisors, and a headed walkthrough in parallel

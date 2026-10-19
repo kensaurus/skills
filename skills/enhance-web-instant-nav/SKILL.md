@@ -18,6 +18,13 @@ the exclusion list, `Sec-Purpose` handling, and re-measure `[LOW freedom — run
 > Applies to MPAs and Next.js App Router (server-rendered routes). Pure SPA
 > routing → use the framework's prefetch API; Speculation Rules are per-document.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **enhance-web-instant-nav** (this) | In-site navigation: Speculation Rules, View Transitions, bfcache, Early Hints |
+| `audit-performance` | First-load runtime performance: Core Web Vitals, load priority |
+
 ## How to reason
 
 1. **Observe** — quote 2nd-page LCP p75, bfcache test result, and the top 5 next-click paths

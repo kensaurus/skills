@@ -14,6 +14,13 @@ motion inventory and reduced-motion `[LOW freedom — run exactly]`.
 
 Create purposeful, performant animations that enhance UX without overwhelming users.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **design-motion** (this) | One new animation with Motion, CSS, or GSAP on a new surface |
+| `enhance-motion` | One coherent, reduced-motion-safe motion pass across an existing app |
+
 ## How to reason
 
 1. **Inventory** — existing motion library and `prefers-reduced-motion`

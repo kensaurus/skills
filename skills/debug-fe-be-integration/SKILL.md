@@ -17,6 +17,14 @@ trace-both-sides probes `[LOW freedom — run exactly]`.
 Systematic approach to debugging frontend-backend integration issues by analyzing backend
 logs, production errors, and source code to identify root causes and fix both sides.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **debug-fe-be-integration** (this) | Live FE and BE contract failures, traced on both sides |
+| `debug-error` | One bug in one layer, hypotheses and runtime evidence first |
+| `audit-fe-api` | Contract-alignment audit of frontend API calls against backend implementation |
+
 ## How to reason
 
 1. **Observe** — status, payload, validation error, both logs

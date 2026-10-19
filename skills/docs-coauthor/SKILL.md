@@ -17,6 +17,14 @@ the three-stage order, six-step section loop, and Reader Testing
 
 > **Guiding principle — orient the reader before the mechanism.** Even a spec, PRD, or RFC should *open* by answering what this is, why it exists, and who it's for — in plain language — before diving into detail. That's the same reader-first instinct this workflow's Reader Testing stage enforces at the end; apply it from the first sentence. See `docs-writer` for the full "write for the reader's mental model first" rule.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **docs-coauthor** (this) | Co-authoring specs, PRDs, RFCs, proposals: gather context, draft, reader-test |
+| `docs-writer` | Developer docs: README content, API references, code comments, changelog entries |
+| `docs-adr` | Architecture Decision Records: what was decided, why, what was rejected |
+
 ## How to reason
 
 1. **Observe** — doc type, audience, desired impact, template or existing draft

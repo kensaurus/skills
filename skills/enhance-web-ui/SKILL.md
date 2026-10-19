@@ -26,6 +26,17 @@ rearranges, subtracts, and stages information before adding decoration.
 > If browser automation is used, first follow the
 > `protocol-browser-anti-stall` skill when present.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **enhance-web-ui** (this) | Polish one existing page's hierarchy, spacing, type, visual personality |
+| `enhance-web-ux` | NN/g-grounded fix of one page's flows and information density |
+| `enhance-readability` | Line length, reading level, grouping, prose turned into tables |
+| `enhance-web-redesign` | Whole existing site or app upgraded to premium quality |
+| `design-frontend` | New production-grade UI from scratch, not a polish pass |
+| `plan-antislop` | Plan-only AI-slop audit across prose, UI, code, IA |
+
 ## How to reason
 
 1. **Recon** — primitives, tokens, real data contracts

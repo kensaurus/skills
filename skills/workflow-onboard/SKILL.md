@@ -16,6 +16,16 @@ to read and never printing env values `[LOW freedom — run exactly]`.
 
 Orient to any repo in under 5 minutes. Read first, explain second.
 
+Copy this checklist and tick items as you go:
+
+```
+- [ ] Step 1: Stack and entry points: manifest, README, root, routes
+- [ ] Step 2: Data and auth layer: schema, client init, env names only
+- [ ] Step 3: Recent context: git log and recent diff stat
+- [ ] Step 4: Orientation briefing: eight sections, scannable
+- [ ] Step 5: Guardrails: no env values; missing files said out loud
+```
+
 ## How to reason
 
 1. **Read** — manifests, routes, schema, auth — don't guess

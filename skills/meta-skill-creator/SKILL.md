@@ -2,8 +2,9 @@
 name: meta-skill-creator
 description: >
   Create or update a pack SKILL.md (frontmatter, house limits, T1–T8). Use
-  when authoring a kenji skill. Prompt-only upgrade →
-  enhance-skill-prompts. Cursor skill wizard → create-skill.
+  when "create a skill", "write a SKILL.md", or authoring a kenji skill.
+  Prompt-only upgrade → enhance-skill-prompts. Cursor skill wizard →
+  create-skill.
 license: Apache-2.0
 ---
 
@@ -14,6 +15,14 @@ house limits, frontmatter shape, and the T1–T8 checklist are
 `[LOW freedom — do not skip]`.
 
 Guidance for creating effective skills.
+
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **meta-skill-creator** (this) | Create or update a pack SKILL.md: frontmatter, house limits, T1–T8 |
+| `enhance-skill-prompts` | Upgrade how an existing SKILL.md instructs, not what it does |
+| `audit-skill-conflicts` | Read-only pack audit: contradictory directives, overlapping triggers, stale cross-refs, bloat |
 
 ## About Skills
 

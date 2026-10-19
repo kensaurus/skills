@@ -20,6 +20,15 @@ unit tests and CI bundle builds miss: white screens, prototype-stripped
 cache rehydration, missing migrations, sync-disabled empty states, infinite
 refetch loops, and silent error swallows.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **mobile-emulator-test** (this) | Native Android or Expo build QA: UI, Supabase, Sentry per CRUD step |
+| `mobile-emulator-start` | Booting the emulator and Metro in order, killing stale ports |
+| `test-qa` | Web-app CRUD and story QA, not native |
+| `workflow-mobile-native-uiux` | Full native UI/UX run: plumbing, native feel, a11y, device QA, PR |
+
 ## How to reason
 
 1. **Discover** — stack, tabs, MCP, signed-in test account

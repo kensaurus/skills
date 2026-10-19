@@ -21,6 +21,17 @@ code changes that make the page feel hand-crafted — not template-generated.
 > **Before any browser interaction, follow the rules in the
 > `protocol-browser-anti-stall` skill.**
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **enhance-web-ux** (this) | NN/g-grounded code changes to one existing page's flows |
+| `audit-ux` | Per-page diagnosis: NN/g heuristics, microcopy, HEART; no fixes |
+| `enhance-web-ui` | Hierarchy, spacing, type and visual personality of a page |
+| `enhance-readability` | Line length, reading level, grouping, density of content |
+| `enhance-ux-laws` | Measured fix pass on one screen against seven Laws of UX |
+| `plan-antislop` | Repo-wide slop audit and plan, no implementation |
+
 ## How to reason
 
 1. **Recon** — journey, primary task, unused data, primitives
@@ -168,3 +179,6 @@ Worked match table: [references/pain-catalogue.md](references/pain-catalogue.md)
 - [Extended rules, recon, live capture, DOM forensics (Steps 1–2.5)](references/forensics.md)
 - [Pain inventory, Silent-Pain Catalogue, heuristic map, primitive match (Steps 3–5)](references/pain-catalogue.md)
 - [5b primitive-first patch decision, Steps 6–9, cheat sheets, sanity checks](references/details.md)
+- [NN/g 10 + Laws of UX, condensed (the canonical list for Step 4)](HEURISTICS.md)
+- [Anti-patterns and their replacements](PATTERNS.md)
+- [Before/after enhancement examples and the report template](examples.md)

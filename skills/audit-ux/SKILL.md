@@ -14,6 +14,16 @@ effort: high
 research JSON and every playwright step `[LOW freedom — run exactly]`.
 Read `protocol-browser-anti-stall` before any browser interaction.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-ux** (this) | Per-page UX audit: NN/g heuristics, microcopy review, Google HEART |
+| `audit-ux-journeys` | Cross-page UX audit of user stories, task completion, and IA |
+| `enhance-web-ux` | NN/g-grounded fix of one existing page's flows |
+| `audit-uiux-design-system` | Visual-system coherence: tokens, variants, color, type, spacing, dark mode |
+| `thirdparty-ui-ux-pro-max` | Third-party style catalog: palettes, typography, UX guidelines via scripts |
+
 ## How to reason
 
 1. **Observe** — quote the screenshot, copy, or code line

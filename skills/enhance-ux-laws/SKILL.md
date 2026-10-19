@@ -31,6 +31,13 @@ the person using the screen:
 Fix by default. When the request is for a review only, stop after the
 findings table.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **enhance-ux-laws** (this) | Measured fix of one screen against seven Laws of UX |
+| `enhance-web-ux` | NN/g-grounded fix of one existing page's flows |
+
 ## How to reason
 
 1. **Scope** — one screen or flow, its primary task, who uses it (first-time or daily), pointer type per layout

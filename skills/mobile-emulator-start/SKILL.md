@@ -20,6 +20,13 @@ without burning time on duplicate Metros, stale caches, or racing the dev client
 
 > Pair with **`mobile-emulator-test`** for full QA; this skill focuses on **bring-up + terminal hygiene**.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **mobile-emulator-start** (this) | Emulator and Metro bring-up in order; port and terminal hygiene |
+| `mobile-emulator-test` | QA of the native build: UI, Supabase, Sentry per CRUD step |
+
 ## How to reason
 
 1. **Inspect** — existing terminals, `curl /status`, `adb devices`

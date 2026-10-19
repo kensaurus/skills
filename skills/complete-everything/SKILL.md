@@ -13,6 +13,13 @@ description: >
 state-file ticks, verification ladder, and completion-judge
 `[LOW freedom — run exactly]`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **complete-everything** (this) | Closure of one approved plan: every open item, deferral, acceptance criterion |
+| `burndown-full` | Driving a planned mechanical change to 100% repo coverage |
+
 ## How to reason
 
 1. **Observe** — plan items, parked quotes, git diff, baseline failures

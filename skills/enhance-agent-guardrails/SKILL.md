@@ -23,6 +23,13 @@ installs those gates so the next fast session can't quietly reintroduce old clas
 > (CI), plus policy files that steer the agent up front. Additive and reversible — never
 > weaken an existing check to make the setup "pass".
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **enhance-agent-guardrails** (this) | Installing guardrails as code against leaked secrets, injection, untested code |
+| `audit-gate-logic` | Read-only audit of CI gate logic: bypass, ratchet gaming, duplicate gates |
+
 ## How to reason
 
 1. **Detect** — hooks, CI, rules, scanners already present

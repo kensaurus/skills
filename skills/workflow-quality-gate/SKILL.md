@@ -19,6 +19,30 @@ order, Critical pause, and report table `[LOW freedom — run exactly]`.
 Run before any production release. Each skill contributes a specific defect
 class. The combined result is a single verdict.
 
+Copy this checklist and tick items as you go:
+
+```
+- [ ] Step 1: Gate 0, optional: explore live, guest vs logged-in
+- [ ] Step 2: Gate 1: red team; a Critical pauses: fix now or continue?
+- [ ] Step 3: Gate 2: security audit; plan-security-audit when plan-only
+- [ ] Step 4: Gate 3: bundle size against the 200 KB and 400 KB thresholds
+- [ ] Step 5: Gate 4: performance against the LCP, CLS, INP thresholds
+- [ ] Step 6: Gate 5: unit tests; suite passes, coverage gaps named
+- [ ] Step 7: Verdict: any Critical is NO-GO; 2+ High unmitigated is not GO
+```
+
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **workflow-quality-gate** (this) | One go/no-go verdict across red-team, security, bundle, performance, unit tests |
+| `workflow-launch-ready` | Launch-preparation sweep for a new app or major release |
+| `workflow-release-prep` | Local working tree to a merge-ready PR against main; never merge |
+| `audit-security` | Audit and fix app code against OWASP: injection, headers, dependencies |
+| `test-red-team` | Red-team a running web, React Native, or Capacitor app |
+| `audit-performance` | Audit and fix runtime performance: Core Web Vitals, load priority |
+| `audit-bundle-size` | Analyse and shrink a web app's JavaScript bundle |
+
 ## How to reason
 
 1. **Observe** — what did each gate actually return?

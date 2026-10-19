@@ -1,5 +1,12 @@
 # Enhancement Walkthroughs
 
+## Contents
+
+- [Example 1 — `/files` (file explorer)](#example-1-files-file-explorer)
+- [Example 2 — `/notifications` zip viewer (single notice)](#example-2-notifications-zip-viewer-single-notice)
+- [Template — Use This for Future Enhancements](#template-use-this-for-future-enhancements)
+- [Enhanced /<route>](#enhanced-route)
+
 Real-world before/after enhancements that follow the SKILL.md workflow. Each walkthrough is
 short and shows how RECON → LIVE → PAIN → HEURISTIC → PRIMITIVE → IMPLEMENT → VERIFY plays
 out on a concrete page.

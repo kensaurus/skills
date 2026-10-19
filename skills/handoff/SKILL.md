@@ -1,9 +1,11 @@
 ---
 name: handoff
 description: >-
-  Compact the current conversation into a handoff document a fresh agent can pick
-  up. User-invoked via /handoff; an optional argument describes what the next
-  session will focus on.
+  Compact the current conversation into a handoff document for a fresh agent:
+  state, next steps, suggested skills, gotchas, saved to the OS temp dir.
+  User-invoked via /handoff; an optional argument sets the next session focus.
+  Use when "write a handoff", "hand off to a new session", or before ending a
+  long session.
 disable-model-invocation: true
 license: MIT
 effort: low

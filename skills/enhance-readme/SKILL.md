@@ -16,6 +16,15 @@ license: MIT
 
 Add a theme-aware hero image and a tour grid to a project's README so the repo advertises itself visually instead of being a wall of text.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **enhance-readme** (this) | Theme-aware hero, feature tour, screenshots, accurate badges, synced content |
+| `docs-writer` | README prose, API references, code comments, changelog entries |
+| `audit-registry-listing` | Read-only audit of README first screen, npm/PyPI metadata, topics |
+| `workflow-gtm` | Taking a shipped repo to market: measure, message, launch, weekly loop |
+
 ## How to reason
 
 1. **Detect** — live URL vs local, theme toggle, login

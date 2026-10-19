@@ -14,6 +14,13 @@ disable-model-invocation: true
 git/gh/npm publish steps `[LOW freedom — run exactly]`. Never `pnpm publish`
 locally when the repo uses Trusted Publisher.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **deploy-npm** (this) | Releasing an npm package: version, CHANGELOG, publish, verify |
+| `workflow-ship-and-observe` | Taking merged, green app code to a verified, monitored production release |
+
 ## How to reason
 
 1. **Observe** — branch, dirty tree, open PRs, pending changesets, release.yml trigger

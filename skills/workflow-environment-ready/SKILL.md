@@ -21,6 +21,24 @@ dependencies **before** implementation starts.
 > **Verify the environment can run the task, don't assume it.** Every check is
 > an executed command with observed output, not an inference from a config file.
 
+Copy this checklist and tick items as you go:
+
+```
+- [ ] Step 1: Detect the stack and requirements; list gate commands
+- [ ] Step 2: Verify toolchain and dependencies with a frozen install
+- [ ] Step 3: Verify services and configuration; env names only
+- [ ] Step 4: Prove the verification commands execute (not green)
+- [ ] Step 5: Classify cannot-run (env) vs runs-and-fails (code)
+- [ ] Step 6: Readiness report: READY / READY WITH NOTES / BLOCKED
+```
+
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **workflow-environment-ready** (this) | Prove runtimes, installs, services, env names, and gate commands run |
+| `workflow-green-repo` | Drive typecheck, lint, tests, and build to green when fixing is authorized |
+
 ## How to reason
 
 1. **Detect** — required runtimes, services, env names, gate commands

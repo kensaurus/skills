@@ -23,6 +23,13 @@ scenarios, and writing the glossary and decisions down the moment they
 crystallize. Merely *reading* `CONTEXT.md` for vocabulary is a one-line habit any
 skill can do; this skill is for **changing** the model, not consuming it.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **docs-domain-modeling** (this) | A project's domain model: CONTEXT.md glossary and ubiquitous language |
+| `docs-adr` | Architecture Decision Records: what was decided, why, what was rejected |
+
 ## How to reason
 
 1. **Observe** — the word just used, and what CONTEXT.md already pins

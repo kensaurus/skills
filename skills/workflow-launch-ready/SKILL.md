@@ -20,6 +20,30 @@ performance, quality, and post-launch monitoring.
 
 Local dirty-tree → merge-ready PR is **`workflow-release-prep`**, not this.
 
+Copy this checklist and tick items as you go:
+
+```
+- [ ] Step 1: SEO: title, description, OG, canonical, JSON-LD, sitemap
+- [ ] Step 2: PWA: manifest, service worker, offline; or note the skip
+- [ ] Step 3: Bundle size: first-load JS 200 KB gzip or less
+- [ ] Step 4: i18n: no hardcoded strings; skip if single locale, noted
+- [ ] Step 5: Quality gate: a NO-GO verdict blocks launch
+- [ ] Step 6: Deploy and smoke right after the production deploy
+- [ ] Step 7: Day-1 iteration loop scheduled; launch checklist with verdict
+```
+
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **workflow-launch-ready** (this) | Pre-launch sweep: SEO, PWA, bundle, i18n, gate, deploy, day-1 loop |
+| `workflow-quality-gate` | Pre-release gate across red-team, security, bundle, performance, unit tests |
+| `workflow-release-prep` | Local working tree to a merge-ready PR against main; never merge |
+| `deploy-verify` | Post-deploy smoke test across browser, Sentry, Supabase, Langfuse, public web |
+| `iterate-post-launch` | Live app feedback loop: read signals, rank issues, fix, verify, repeat |
+| `enhance-web-seo` | Audit and fix SEO: meta tags, structured data, sitemap, canonicals |
+| `enhance-pwa` | Add or upgrade PWA features: manifest, service worker, offline, install prompt |
+
 ## How to reason
 
 1. **Scope** — new app / major release, not a dirty-tree PR

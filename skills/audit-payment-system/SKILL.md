@@ -30,6 +30,13 @@ is an untrusted "paid". Three pillars: **idempotency**, a **double-entry
 ledger** (when in scope), **reconciliation** — plus **PCI DSS v4.0.1** and
 **webhooks as source of truth** (never trust the sync API response alone).
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-payment-system** (this) | Read-only web payment and money-movement audit: Stripe Checkout to ledgers |
+| `audit-monetization-iap` | Read-only mobile IAP and subscriptions audit: receipts, restore, entitlements |
+
 ---
 
 ## Core principle — earn each control by scope; every gap is money or liability

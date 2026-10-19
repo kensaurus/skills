@@ -16,6 +16,14 @@ pre-documentation checks and the verification statement
 
 Create clear, useful documentation for developers.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **docs-writer** (this) | Developer docs: README content, API references, code comments, changelog entries |
+| `enhance-readme` | README visuals: theme-aware hero, feature tour, screenshots, accurate badges |
+| `docs-coauthor` | Co-authored specs, PRDs, RFCs, proposals in three stages |
+
 ## Core principle — write for the reader's mental model first
 
 Write in plain language. Follow [references/plain-language-ste.md](references/plain-language-ste.md): short active sentences, one instruction per sentence, one meaning per word, and no AI tells. It also has a Vale prose-lint recipe to keep the docs that way.

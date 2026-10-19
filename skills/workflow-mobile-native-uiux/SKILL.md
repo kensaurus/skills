@@ -31,6 +31,18 @@ with accessibility, layout, and device checks before one PR.
 | `plan-capacitor-hardening` | Native-layer security, plan-only |
 | `design-mobile-first` | A new touch-first UI, not an existing app |
 
+Copy this checklist and tick items as you go:
+
+```
+- [ ] Step 1: Baseline: versions, before-screenshots, scorecard, one branch
+- [ ] Step 2: Surfaces: skip when there is no web surface; name the skip
+- [ ] Step 3: Plumbing: Capacitor only; every plumbing row has a probe result
+- [ ] Step 4: Native feel: whole fix order; re-scored card and gates pass
+- [ ] Step 5: Accessibility and layout on the screens touched; list the rest
+- [ ] Step 6: Device QA probes with evidence; iOS is not run without a Mac
+- [ ] Step 7: PR with before/after, scorecard, probe table, store-build flag
+```
+
 ## How to reason
 
 1. **Baseline** — stack, versions, before-screenshots, scorecard

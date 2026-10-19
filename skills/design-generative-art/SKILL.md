@@ -15,6 +15,13 @@ pipeline inventory and seed reproducibility `[LOW freedom — run exactly]`.
 
 Create generative, procedural, and mathematical art using code. Transform algorithms into visual experiences.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **design-generative-art** (this) | Algorithmic visuals with p5.js, Canvas, or SVG; seeded randomness, controls |
+| `data-visualization` | Interactive, accessible charts and dashboards with Recharts, D3, or Victory |
+
 ## How to reason
 
 1. **Inventory** — existing p5 / canvas / noise utilities

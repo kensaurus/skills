@@ -18,6 +18,18 @@ reproduce-before-edit, regression test, and PR evidence
 
 Triage → fix → verify → ship. Every step leaves evidence.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **workflow-fix-and-ship** (this) | One bug from triage through regression test, fix, PR, deploy check |
+| `workflow-feedback-to-closure` | Many reports deduplicated into tickets, each driven to closure |
+| `debug-error` | Diagnosis of one bug with hypotheses and runtime evidence |
+| `workflow-build-feature` | A whole feature end to end, not a bug |
+| `debug-sentry-monitor` | Sentry triage, noise cuts, instrumentation, post-deploy monitoring |
+| `workflow-spec-tdd` | Spec, plan, TDD loop before writing a line |
+| `workflow-pr` | Existing PR lifecycle: review, bot feedback, conflicts, merge |
+
 ## How to reason
 
 1. **Reproduce** — exact local steps before any edit

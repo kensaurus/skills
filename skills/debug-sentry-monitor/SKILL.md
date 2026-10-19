@@ -16,6 +16,17 @@ resolve-only-after-verify `[LOW freedom — run exactly]`.
 
 Triage, fix, and audit Sentry on any project via the `sentry` MCP. Auto-detects config.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **debug-sentry-monitor** (this) | Operating Sentry: triage the backlog, cut noise, monitor after deploy |
+| `workflow-fix-and-ship` | One bug-fix lifecycle from triage to PR and deploy verify |
+| `debug-error` | Diagnosing one bug with hypotheses and runtime evidence |
+| `plan-error-handling` | Plan-only audit of silent failures and observability gaps |
+| `backend-error-handling` | Implementing error boundaries, toasts, and one API error shape |
+| `backend-observability` | Implementing correlated errors, traces, and structured logs with PII redaction |
+
 ## How to reason
 
 1. **Observe** — issue type, frames, users, first-seen, release

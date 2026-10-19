@@ -18,6 +18,24 @@ Create one clear, meaningful conventional commit. This skill owns
 deliberate staging + commit wording, not release preparation, pushing, or
 PR creation. The change must already be logically scoped.
 
+Copy this checklist and tick items as you go:
+
+```
+- [ ] Step 1: Analyze changes; stop if the scope is not already named
+- [ ] Step 2: Stage only the named paths or hunks; no git add . or -A
+- [ ] Step 3: Identify type and scope from the actual diff
+- [ ] Step 4: Write the subject line: imperative, 50 chars max, no period
+- [ ] Step 5: Write the body if needed; split multiple changes
+- [ ] Step 6: Commit; never push or open a PR from this skill
+```
+
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **workflow-git-commit** (this) | One conventional commit from an already-scoped change; never push |
+| `workflow-release-prep` | Local working tree to a merge-ready PR against main; never merge |
+
 ## How to reason
 
 1. **Scope** — named files/hunks already decided; else stop

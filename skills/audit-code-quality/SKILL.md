@@ -27,6 +27,14 @@ greps and Validation `[LOW freedom — run exactly]`.
 Repo-wide React/TypeScript anti-patterns plus naming, organisation, and
 pattern consistency. A named PR/diff → `audit-code-review`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-code-quality** (this) | Repo-wide anti-patterns and consistency drift, detected and fixed |
+| `audit-code-review` | Review one PR or diff for correctness, security, maintainability |
+| `workflow-refactor` | Scoped, behavior-preserving refactor with affected tests run |
+
 ## How to reason
 
 1. **Observe** — quote the smell (`file:line`) and whether `git blame` / CONTRIBUTING marks it intentional

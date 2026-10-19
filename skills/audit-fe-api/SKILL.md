@@ -16,6 +16,13 @@ Sentry queries and schema SQL `[LOW freedom — run exactly]`.
 Read-only. Present findings; the Phase 6 snippets are the fix shape to
 recommend, not edits to make in this pass.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-fe-api** (this) | Read-only audit of frontend API calls against the backend contract |
+| `debug-fe-be-integration` | Diagnose and fix live frontend-backend contract failures: 4xx/5xx, payloads |
+
 ## How to reason
 
 1. **Observe** — quote the FE call site, BE route, and response/error

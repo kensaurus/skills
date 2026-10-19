@@ -12,6 +12,14 @@ license: MIT
 **Degree of freedom: MIXED.** Which query/index/N+1 to fix `[HIGH freedom]`;
 existing-index probes and EXPLAIN ANALYZE `[LOW freedom — run exactly]`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **backend-db-performance** (this) | Optimize slow queries, indexes, and N+1s |
+| `audit-db-schema` | Schema consistency, constraints, naming, indexes, and migrations review |
+| `plan-rls-audit` | Plan-only Supabase/Postgres RLS and access-control audit |
+
 ## How to reason
 
 1. **Observe** — EXPLAIN ANALYZE / `pg_stat_statements` / existing `pg_indexes`

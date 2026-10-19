@@ -19,6 +19,14 @@ same blue, `text-[13px]` next to `text-sm`, Lucide and Heroicons side by side. T
 picks one canonical form for each conflict, migrates everything to it, and locks the door
 behind you.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **housekeep-design** (this) | Consolidate a drifted design system into one token and component SSOT |
+| `plan-uiux-unification` | Plan-only UI/UX audit that emits a unification burndown; no code |
+| `design-system` | Build a new design system: tokens, variants, theming |
+
 ## How to reason
 
 1. **Observe** — which tokens, components, or icon libraries compete?

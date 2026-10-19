@@ -15,6 +15,14 @@ effort: high
 CLI traces and playwright `[LOW freedom — run exactly]`. Read
 `protocol-browser-anti-stall` before any browser step. Phase 0 first: Phases 2–3 verify the feature map it produces.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-langfuse-llm** (this) | PDCA quality audit of LLM features: traces, prompts, costs, evals, grounding |
+| `audit-llm-security` | Read-only OWASP LLM Top 10 audit: prompt injection, leakage, unsafe agency |
+| `plan-llm-cost-guardrails` | Plan-only audit of runaway LLM cost and quota-abuse exposure |
+
 ## How to reason
 
 1. **Observe** — quote the trace, prompt version, token/cost, or live output

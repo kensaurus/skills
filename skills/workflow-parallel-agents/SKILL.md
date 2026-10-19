@@ -9,6 +9,17 @@ license: MIT
 **Degree of freedom: MIXED.** What to split, how to brief, and which model or effort `[HIGH freedom]`;
 isolated worktrees and no shared-file writes `[LOW freedom — run exactly]`.
 
+Copy this checklist and tick items as you go:
+
+```
+- [ ] Step 1: Classify each task: parallel-safe or must-serialize
+- [ ] Step 2: Pick the mode: git worktrees, cloud agents, or multiple models
+- [ ] Step 3: Brief each delegate once: goal, files, constraints, done-check
+- [ ] Step 4: Launch independent agents in one message; isolated worktrees
+- [ ] Step 5: Integrate results one at a time; best-of-N picks a winner
+- [ ] Step 6: Clean up finished worktrees
+```
+
 ## How to reason
 
 1. **Observe** — independent tasks vs one shared file

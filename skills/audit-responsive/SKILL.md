@@ -6,6 +6,7 @@ description: >
   1440 looks like a phone. Touch-first build → design-mobile-first.
 license: MIT
 effort: high
+argument-hint: "[path or route to scope the audit]"
 ---
 
 # audit-responsive — Layout & breakpoint IA

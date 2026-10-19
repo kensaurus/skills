@@ -17,6 +17,14 @@ in order of impact.
 
 Before browser work, read `protocol-browser-anti-stall` and apply it.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **enhance-web-seo** (this) | SEO audit and fixes: meta, structured data, sitemap, canonical, indexing |
+| `workflow-launch-ready` | Launch-preparation sweep for a new app or major release |
+| `workflow-gtm` | Taking a shipped repo to market: measure, message, get found, launch |
+
 ## How to reason
 
 1. **Detect** — metadata API, robots, sitemap, generator

@@ -1,6 +1,6 @@
 {
   "name": "@kensaurus/skills",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "You say the job; the playbook runs. 161 agent skills, 63 slash commands, 6 subagents, and MCP templates for Claude Code, Cursor, Codex CLI, and Gemini CLI. Each playbook asks first, tests first, and proves the result. Tuned for React, Next.js, and Supabase. Works on most stacks.",
   "type": "module",
   "bin": {
@@ -30,11 +30,13 @@
     "check:skill-refs": "node scripts/check-skill-refs.mjs --self-test && node scripts/check-skill-refs.mjs",
     "check:docs-facts": "node scripts/check-docs-facts.mjs",
     "check:md-structure": "node scripts/check-md-structure.mjs --self-test && node scripts/check-md-structure.mjs",
+    "check:reference-toc": "node scripts/check-reference-toc.mjs --self-test && node scripts/check-reference-toc.mjs",
+    "fix:reference-toc": "node scripts/check-reference-toc.mjs --fix",
     "check:dead-code": "npx -y knip@6.38.0 --max-issues 0 --treat-config-hints-as-errors",
     "check:dead-code:prod": "npx -y knip@6.38.0 --production --max-issues 0",
     "test:install": "node scripts/test-install.mjs",
     "test:completion-gate": "node scripts/test-completion-gate.mjs",
-    "test": "node scripts/validate-skills.mjs && node scripts/check-skill-count.mjs && node scripts/generate-skill-index.mjs --check && node scripts/scan-secrets.mjs --self-test && node scripts/check-mcp-pins.mjs && node scripts/check-docs-facts.mjs && node scripts/check-skill-refs.mjs --self-test && node scripts/check-skill-refs.mjs && node scripts/check-md-structure.mjs --self-test && node scripts/check-md-structure.mjs && node scripts/shorten-skill-descriptions.mjs --self-test && node scripts/test-completion-gate.mjs && node scripts/test-install.mjs && npm run -s check:dead-code && npm run -s check:dead-code:prod"
+    "test": "node scripts/validate-skills.mjs && node scripts/check-skill-count.mjs && node scripts/generate-skill-index.mjs --check && node scripts/scan-secrets.mjs --self-test && node scripts/check-mcp-pins.mjs && node scripts/check-docs-facts.mjs && node scripts/check-skill-refs.mjs --self-test && node scripts/check-skill-refs.mjs && node scripts/check-md-structure.mjs --self-test && node scripts/check-md-structure.mjs && node scripts/check-reference-toc.mjs --self-test && node scripts/check-reference-toc.mjs && node scripts/shorten-skill-descriptions.mjs --self-test && node scripts/test-completion-gate.mjs && node scripts/test-install.mjs && npm run -s check:dead-code && npm run -s check:dead-code:prod"
   },
   "keywords": [
     "agent-skills",

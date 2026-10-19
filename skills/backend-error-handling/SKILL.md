@@ -12,6 +12,14 @@ license: MIT
 **Degree of freedom: MIXED.** Which layer and message `[HIGH freedom]`;
 existing-type/boundary probes `[LOW freedom — run exactly]`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **backend-error-handling** (this) | Implement error boundaries, toasts, and one API error shape |
+| `plan-error-handling` | Plan-only audit of silent failures and observability gaps |
+| `debug-sentry-monitor` | Operate Sentry: triage and fix issues, cut noise, monitor after deploy |
+
 ## How to reason
 
 1. **Observe** — existing error types, boundaries, `ActionResult` / `ApiError`

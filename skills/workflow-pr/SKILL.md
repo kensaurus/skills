@@ -19,6 +19,16 @@ Uncommitted / staged / untracked working tree that still needs review,
 commit, and a merge-ready PR is **`workflow-release-prep`**. This skill
 does not own that sequence.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **workflow-pr** (this) | Existing PR lifecycle: review, bot feedback, conflicts, merge if asked |
+| `workflow-release-prep` | Uncommitted working tree to a merge-ready PR; never merges |
+| `workflow-build-feature` | Feature end to end: spec, TDD, tests, Playwright, then PR |
+| `workflow-fix-and-ship` | One bug-fix lifecycle: triage, debug, test, fix, then PR |
+| `workflow-mobile-native-uiux` | Full native UI/UX run on Capacitor, Expo, or RN to a PR |
+
 ## How to reason
 
 1. **Validate** — repo commands green; no secrets in the branch

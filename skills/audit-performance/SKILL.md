@@ -17,6 +17,18 @@ measure-first Sentry/vitals and `EXPLAIN` `[LOW freedom — run exactly]`.
 > **Audit-and-fix exception.** Measure, then optimize. JS payload → `audit-bundle-size`. Instant navigations → `enhance-web-instant-nav`. Breaking point → `test-load`. Timeouts/retries → `audit-resilience`.
 > When fixing: change only the measured bottleneck and re-measure it; log other slow paths you notice as follow-ups, not fixes. Edit the existing file in place rather than rewriting it. Add a perf test only where the repo already keeps them or the task asks; scratch measurements stay out of the repo.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-performance** (this) | Audit and fix runtime performance: Core Web Vitals, load priority |
+| `audit-bundle-size` | Analyse and shrink the JavaScript bundle: code splitting, initial load |
+| `enhance-web-instant-nav` | Instant in-site navigation: Speculation Rules, View Transitions, bfcache, Early Hints |
+| `plan-perf-audit` | Plan-only performance audit across web, mobile, backend, data; fixes nothing |
+| `test-load` | k6 or Artillery load profile: throughput, latency percentiles, breaking point |
+| `audit-agent-speed` | Measure and fix a slow coding-agent setup: hooks, status line, bloat |
+| `workflow-quality-gate` | Pre-release gate across red-team, security, bundle, performance, unit tests |
+
 ## How to reason
 
 1. **Observe** — quote LCP/INP/CLS, p95, or `EXPLAIN` / N+1 loop (`file:line`)

@@ -14,6 +14,16 @@ never `--abort` unasked, and run real checks `[LOW freedom — run exactly]`.
 
 > Adapted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT).
 
+Copy this checklist and tick items as you go:
+
+```
+- [ ] Step 1: See the current state: operation and conflicting files
+- [ ] Step 2: Find the primary sources for each conflict; read the intent
+- [ ] Step 3: Resolve each hunk; keep both intents; never --abort unasked
+- [ ] Step 4: Run the project's automated checks: typecheck, tests, lint
+- [ ] Step 5: Finish the operation; tree clean and checks green
+```
+
 ## How to reason
 
 1. **Identify** — operation (merge/rebase/cherry-pick) and conflicted files

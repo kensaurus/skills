@@ -24,6 +24,30 @@ Technical launch readiness (SEO meta, PWA, bundle, quality gate) is
 **`workflow-launch-ready`**, not this. Run it before Step 5 when the app has
 never shipped.
 
+Copy this checklist and tick items as you go:
+
+```
+- [ ] Step 1: Plan with plan-gtm; STOP and wait for founder phase approval
+- [ ] Step 2: Measure: every funnel cell measurable and consent-gated
+- [ ] Step 3: Message: hero positioning, one CTA, real proof
+- [ ] Step 4: Activate: onboarding, then lifecycle email on the same events
+- [ ] Step 5: Be found: SEO, comparison pages, AEO plan approved first
+- [ ] Step 6: Launch: one kit per release, UTMs on every link, one K per loop
+- [ ] Step 7: Loop weekly; fill the scorecard with every skip named
+```
+
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **workflow-gtm** (this) | Full GTM sequence: plan, approval, measure, message, activate, be found, launch, loop |
+| `plan-gtm` | Plan-only GTM audit: monetization, positioning, activation funnel, SEO/AEO, distribution, founder interview |
+| `iterate-gtm-weekly` | Weekly GTM review: funnel by source, one experiment, one post, scorecard row |
+| `docs-launch-kit` | Versioned launch kit: Show HN, Product Hunt, posts, release notes, UTM calendar |
+| `enhance-growth-loops` | Growth loops: powered-by badge, shareable artifacts, invites, referral credit, K-factor events |
+| `enhance-web-conversion` | Conversion pass for landing, pricing, and upgrade paths |
+| `enhance-onboarding` | Activation pass: activation event, fewer steps to first value, signup-to-activated events |
+
 ## How to reason
 
 1. **Scope** — shipped product, real users possible today; not a PRD

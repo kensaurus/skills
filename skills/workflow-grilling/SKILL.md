@@ -23,6 +23,17 @@ Interview the user relentlessly about every aspect of the plan, decision, or ide
 until you reach a shared understanding. Walk down each branch of the decision
 tree, resolving dependencies between decisions one by one.
 
+Copy this checklist and tick items as you go:
+
+```
+- [ ] Step 1: Read repo, docs, git history, tickets before the first question
+- [ ] Step 2: Resolve dependencies in order; upstream decision first
+- [ ] Step 3: Ask one question at a time, with a recommended answer and why
+- [ ] Step 4: Challenge vague terms; propose a precise one
+- [ ] Step 5: Do not act until the user confirms shared understanding
+- [ ] Step 6: Close with the decision log in the user's words; hand off
+```
+
 ## How to reason
 
 1. **Surface** — what decision or vague term is actually in play?

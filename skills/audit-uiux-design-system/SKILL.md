@@ -16,6 +16,14 @@ playwright captures `[LOW freedom — run exactly]`. Read
 `protocol-browser-anti-stall` before any browser step. Breakpoints-only →
 `audit-responsive`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-uiux-design-system** (this) | Visual-system coherence: tokens, variants, color, type, spacing, dark mode |
+| `audit-ux` | Per-page UX audit with NN/g heuristics, microcopy, Google HEART |
+| `plan-uiux-unification` | Plan-only UI/UX and design-system audit emitting a unification burndown |
+
 ## How to reason
 
 1. **Observe** — quote the token file, raw hex, or screenshot

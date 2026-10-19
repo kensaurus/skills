@@ -2,9 +2,8 @@
 name: workflow-ship-and-observe
 description: >
   Take merged, green code to a verified, monitored production release. Use
-  when "ship it", "deploy to production", "release this", "go live", "roll
-  this out", "promote to prod", or "cut a release" for a running app (npm
-  packages → deploy-npm).
+  when "ship it", "deploy to production", "go live", or "cut a release" for a
+  running app (npm packages → deploy-npm).
 license: MIT
 ---
 
@@ -22,6 +21,14 @@ rollback/hotfix has been executed.
 > that your code is live, and "it deployed" is not proof that it is healthy.
 
 **Before any browser action, read `protocol-browser-anti-stall`.**
+
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **workflow-ship-and-observe** (this) | Merged, green code to a verified, monitored production release |
+| `deploy-verify` | Post-deploy smoke test across browser, Sentry, Supabase, Langfuse, public web |
+| `deploy-npm` | Release an npm package: version, CHANGELOG, publish, verify |
 
 ## How to reason
 
