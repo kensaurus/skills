@@ -15,6 +15,14 @@ existing `ui/` / token inventory `[LOW freedom — run exactly]`.
 
 Build scalable, maintainable design systems with consistent tokens, variants, and documentation.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **design-system** (this) | New design system from scratch: tokens, variants, theming |
+| `housekeep-design` | Consolidating a drifted design system into one token and component source |
+| `plan-uiux-unification` | Plan-only UI/UX and design-system audit emitting a unification burndown |
+
 ## How to reason
 
 1. **Inventory** — `components/ui`, tokens, `cva`, shadcn/Radix

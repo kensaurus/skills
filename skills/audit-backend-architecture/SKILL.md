@@ -25,6 +25,14 @@ Two lenses:
 2. **Fit / decision** (Phase 3) — Adopt now / Adopt when [trigger] / Defer
    (premature). *"Don't build this yet"* is a first-class finding.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-backend-architecture** (this) | Read-only architecture audit and pattern advisor, gated by stack |
+| `enhance-arch-boundaries` | Enforce architecture boundaries in CI: layer direction, forbidden imports |
+| `backend-patterns` | Apply backend patterns: queues, caching, rate limits, serverless/edge |
+
 ---
 
 ## Core principle — start simple, earn every pattern

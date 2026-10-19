@@ -1,5 +1,12 @@
 # Heuristics & Laws of UX — Quick Reference
 
+## Contents
+
+- [NN/g 10 Usability Heuristics (Nielsen, 1994; updated 2024)](#nng-10-usability-heuristics-nielsen-1994-updated-2024)
+- [Laws of UX (supporting principles)](#laws-of-ux-supporting-principles)
+- [Mapping Heuristics to Common UI Symptoms](#mapping-heuristics-to-common-ui-symptoms)
+- [Sources](#sources)
+
 The canonical references the agent maps every pain point against. Source-of-truth links are
 at the bottom. Keep this lean — the goal is fast lookup, not a textbook.
 

@@ -24,6 +24,13 @@ Live reference after the exemplar was applied:
 `skills/audit-auth-flows/SKILL.md`. New skill from scratch →
 `meta-skill-creator`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **enhance-skill-prompts** (this) | Upgrade how an existing SKILL.md instructs, never what it does |
+| `meta-skill-creator` | Create or update a pack SKILL.md: frontmatter, house limits, T1–T8 |
+
 ## Phase 0 — Classify the skill  [HIGH freedom]
 
 Read the target SKILL.md and determine:

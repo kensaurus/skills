@@ -26,6 +26,14 @@ design with that). A consequence of CLT / information overload: showing
 a dense paragraph with one table or diagram is a comprehension win **only when
 the visual reduces total load** versus the text it replaces — never decoration.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **enhance-readability** (this) | How easily content is understood: CPL, reading level, grouping, deadspace |
+| `enhance-web-ui` | Polishing one existing page: hierarchy, spacing, type, visual personality |
+| `enhance-web-ux` | NN/g-grounded fix of one existing page's flows and information density |
+
 ## How to reason
 
 1. **Observe** — what makes this effortful? (dense text / no hierarchy / wall of prose / no whitespace / wrong register)

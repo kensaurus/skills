@@ -1,5 +1,19 @@
 # Tsumagoi Ranch Theme
 
+## Contents
+
+- [Design Philosophy](#design-philosophy)
+- [Color Palette](#color-palette)
+- [Typography](#typography)
+- [Neo-Brutal Shadow System](#neo-brutal-shadow-system)
+- [Border Configuration](#border-configuration)
+- [Motion Tokens](#motion-tokens)
+- [Cute-alism Accent Colors](#cute-alism-accent-colors)
+- [Retro Pixel Palette (8-bit)](#retro-pixel-palette-8-bit)
+- [Mobile Responsive Guidelines](#mobile-responsive-guidelines)
+- [Glassmorphism Presets](#glassmorphism-presets)
+- [Application Guide](#application-guide)
+
 Neo-Brutalist "Cute-alism" theme inspired by Japanese ranch and campground aesthetics.
 
 ## Design Philosophy

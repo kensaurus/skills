@@ -17,6 +17,13 @@ Build interfaces that work on mobile first, then enhance for larger screens.
 **Not this skill:** a desktop that is a linearized phone (no max-width, stacked
 at 1440, stretched buttons). That is `audit-responsive`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **design-mobile-first** (this) | New touch-first UI: targets, safe areas, gestures, then enhance up |
+| `audit-responsive` | Layout audit and fix at every breakpoint; desktop is not a phone |
+
 ## How to reason
 
 1. **Survey** — breakpoints, viewport, existing mobile hooks

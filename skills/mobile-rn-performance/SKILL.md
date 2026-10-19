@@ -1,9 +1,10 @@
 ---
 name: mobile-rn-performance
 description: >
-  Fix React Native / Expo performance, build, and upgrade issues: jank, slow
-  startup, large bundles, memory leaks, Hermes, FlashList, Reanimated, Turbo
-  Modules, 16KB alignment, SDK upgrades.
+  Fix React Native / Expo speed, size, and upgrade issues: Hermes, FlashList,
+  Reanimated, 16KB alignment, SDK upgrades. Use when "janky scroll", "slow
+  cold start", "app size too big", or "memory leak". Layout →
+  mobile-rn-screen.
 license: MIT
 paths:
   - "**/ios/**"

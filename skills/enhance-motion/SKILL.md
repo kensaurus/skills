@@ -26,6 +26,15 @@ existing system to respect), use `design-motion`. For pure animation-perf triage
 
 **Before any browser interaction, read `protocol-browser-anti-stall` and apply it.**
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **enhance-motion** (this) | One coherent, reduced-motion-safe motion pass across an existing app |
+| `design-motion` | One new animation with Motion, CSS, or GSAP on a new surface |
+| `enhance-web-web3d` | Purposeful 3D/WebGL and scroll choreography with Three.js/R3F, GSAP, Motion |
+| `thirdparty-emil-design-eng` | Emil Kowalski's design-engineering notes: animation craft, Sonner-style components |
+
 ## How to reason
 
 1. **Inventory** — libraries, easings, durations, reduced-motion coverage

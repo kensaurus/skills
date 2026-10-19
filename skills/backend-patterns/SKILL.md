@@ -13,6 +13,13 @@ license: MIT
 **Degree of freedom: MIXED.** Which pattern to apply `[HIGH freedom]`;
 existing-architecture probes and the validation list `[LOW freedom — run exactly]`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **backend-patterns** (this) | Apply queues, caching, rate limits, and serverless/edge patterns |
+| `audit-backend-architecture` | Read-only architecture audit and pattern advisor: which pattern to pick |
+
 ## How to reason
 
 1. **Observe** — existing server/api/actions, ORM, queues, cache

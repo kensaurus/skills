@@ -2,8 +2,8 @@
 name: design-api
 description: >
   Design REST and GraphQL APIs: naming, versioning, error shapes, auth. Use
-  when "design an API", "create endpoints", "structure my API responses",
-  "plan API architecture", "REST vs GraphQL", or "API contract".
+  when "design an API", "create endpoints", "REST vs GraphQL", or "API
+  contract".
 license: MIT
 effort: high
 ---

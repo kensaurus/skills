@@ -16,6 +16,15 @@ mandatory pre-review git/docs `[LOW freedom — run exactly]`.
 Review this PR or named diff. Repo-wide anti-patterns → `audit-code-quality`.
 Bulk transform semantics → `audit-codemod-safety`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-code-review** (this) | Review one PR or named diff: correctness, security, maintainability |
+| `audit-code-quality` | Repo-wide anti-patterns and consistency drift: naming, organisation, smells |
+| `audit-codemod-safety` | Read-only check that a codemod or bulk transform preserved behavior |
+| `workflow-release-prep` | Working tree to a merge-ready PR; drive CI green, never merge |
+
 ## How to reason
 
 1. **Observe** — quote the hunk and the surrounding file (not the line alone)

@@ -21,6 +21,13 @@ live-verified closure.
 > not when a PR merges.** No signal is dropped silently; each ends as done,
 > deduped, tracked, or explicitly won't-fix with a reason.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **workflow-feedback-to-closure** (this) | Raw feedback into deduplicated tickets, each driven to verified closure |
+| `workflow-fix-and-ship` | One bug-fix lifecycle: reproduce, regression test, fix, PR |
+
 ## How to reason
 
 1. **Normalize** — every signal into the common shape

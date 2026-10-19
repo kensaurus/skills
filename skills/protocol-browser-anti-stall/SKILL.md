@@ -1,9 +1,9 @@
 ---
 name: protocol-browser-anti-stall
 description: >
-  Guardrail for Playwright CLI sessions: headed, named, isolated; prevents
-  parallel collisions and recovers stalls without scripted shortcuts. Read
-  before browser work or when automation freezes.
+  playwright-cli guardrail: headed, named -s= sessions, one real action at a
+  time, max 4 attempts, then a BLOCKER. Read before browser work, or when
+  "the browser is stuck", "playwright hangs", or agents share a browser.
 license: MIT
 user-invocable: false
 ---

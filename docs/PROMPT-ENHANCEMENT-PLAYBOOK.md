@@ -147,7 +147,42 @@ may end.
 - **Trap:** restating the always-on contract in every skill (thirty copies
   to reconcile), or "fixing" emphasis by swapping in a stronger word.
 
+### T9 — Progressive-disclosure hygiene  *(Anthropic official; gated)*
+
+`SKILL.md` is the table of contents; depth lives in reference files that
+Claude reads only when needed. Three rules keep that cheap: a reference file
+over 100 lines opens with a `## Contents` list (Claude previews long files
+with `head -100`); every reference file is linked **from `SKILL.md`**, never
+only from another reference (one level deep); every relative Markdown link
+resolves. `scripts/check-reference-toc.mjs` enforces all three in `npm test`
+and `--fix` writes a missing Contents list from the H2 headings. Links inside
+fenced blocks are examples and are ignored. Decision record: ADR-0015.
+
+- **Applies to:** any skill with a `references/` folder or sibling `.md`.
+- **Trap:** a reference that says "see also X.md" where X is linked nowhere
+  else; Claude reads X partially or not at all.
+
+### T10 — Copyable checklist in workflow skills  *(Anthropic official)*
+
+A multi-phase workflow carries one fenced block of `- [ ] Step N: …` lines
+that index its own phases in its own words, placed before the first
+procedural H2. Claude copies it into the response and ticks it, so a
+verification or approval gate is not skipped. Four to eight lines; a gate is
+its own line. The pack's `workflow-*` family carries one throughout.
+
+- **Applies to:** `workflow-*`, and any skill with an ordered procedure of
+  four or more phases.
+- **Trap:** a checklist that introduces steps the body does not have, or
+  restates a three-step linear skill (padding).
+
 ### Explicitly NOT adopted (and why)
+
+- **`when_to_use` frontmatter**: Claude Code appends it to the description in
+  the skill listing, against the same budget; the listing ratchet
+  (ADR-0010) is at its ceiling, so trigger phrases go in the description.
+- **Dated reads inside skill bodies**: the guidance says to avoid
+  time-sensitive text; "read 2026-10-19" belongs in ADRs, commits and the
+  research skill's output, not in instructions meant to stay current.
 
 - **Tree-of-Thoughts / self-consistency** (sample many paths, vote): real
   gains but multiplies cost per run — wrong for expensive multi-turn coding

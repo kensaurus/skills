@@ -16,6 +16,15 @@ feedback loop and verify-green re-run `[LOW freedom — run exactly]`.
 
 Systematic approach to debugging errors and unexpected behavior. Works with any project.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **debug-error** (this) | Diagnose one bug with hypotheses and runtime evidence before fixing |
+| `debug-fe-be-integration` | Frontend-backend contract failures traced on both sides: 4xx/5xx, mismatched payloads |
+| `workflow-fix-and-ship` | One bug-fix lifecycle: triage, reproduce, debug, regression test, fix, PR |
+| `debug-sentry-monitor` | Operate Sentry: triage unresolved issues, cut noise, monitor after deploy |
+
 ## How to reason
 
 1. **Observe** — exact symptom, stack, environment, first-seen

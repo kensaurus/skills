@@ -17,6 +17,17 @@ phase order and "no implementation before RED" `[LOW freedom — run exactly]`.
 One command that runs the full feature loop. Don't skip phases — each gate
 catches a class of defects the next phase can't.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **workflow-build-feature** (this) | Whole feature loop: spec, build, unit tests, Playwright, PR |
+| `workflow-spec-tdd` | Spec, plan, TDD loop only, before writing a line |
+| `workflow-fix-and-ship` | One bug-fix lifecycle from triage to PR |
+| `test-unit` | Unit and integration tests for a named module or change |
+| `test-playwright` | Headed PDCA check of this session's diff, fix as you go |
+| `workflow-pr` | Existing PR lifecycle: review, bot feedback, conflicts, merge |
+
 ## How to reason
 
 1. **Contract** — what observable behavior is in / out of scope?

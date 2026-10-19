@@ -18,6 +18,14 @@ well-crafted transactional email — clear, warm, fast-loading, and readable on
 any device — builds trust. A corporate, jargon-heavy, broken email erodes it.
 This skill handles design and copy. Inbox placement / SPF DKIM DMARC is `enhance-email-deliverability`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **design-email** (this) | Design and build of transactional and marketing email templates |
+| `enhance-email-deliverability` | SPF, DKIM, DMARC, reputation, bounces, list hygiene, unsubscribe compliance |
+| `enhance-lifecycle-email` | Lifecycle sequences from product events: activation, trial expiry, win-back |
+
 ## How to reason
 
 1. **Detect** — React Email vs MJML vs none

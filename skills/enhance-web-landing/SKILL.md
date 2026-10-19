@@ -17,6 +17,14 @@ license: MIT
 > Landing pages, portfolios, and redesigns. Not dashboards, not data tables, not multi-step product UI.
 > Every rule below is **contextual**. None of it fires automatically. First read the brief, then pull only what fits.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **enhance-web-landing** (this) | Landing pages, portfolios, marketing sites with a point of view |
+| `design-frontend` | New production-grade UI from scratch, not a polish pass |
+| `enhance-web-conversion` | Conversion pass: positioned hero, one CTA, proof, anchored tiers |
+
 ## How to reason
 
 1. **Read** — page kind, vibe words, audience, existing brand, quiet constraints

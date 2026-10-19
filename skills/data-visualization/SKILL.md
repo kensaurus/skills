@@ -12,6 +12,13 @@ license: MIT
 **Degree of freedom: MIXED.** Chart type and encoding `[HIGH freedom]`;
 existing-library/token probes and a11y fallback `[LOW freedom — run exactly]`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **data-visualization** (this) | Interactive, accessible charts and dashboards with Recharts, D3, or Victory |
+| `design-generative-art` | Algorithmic visuals with seeded randomness and interactive controls |
+
 ## How to reason
 
 1. **Observe** — existing chart library, tokens, data shape

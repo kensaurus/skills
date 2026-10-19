@@ -6,8 +6,47 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ## [Unreleased]
 
+## [2.7.0] — 2026-10-19
+
+Claude Code sessions tell you when they need you, every skill keeps its
+description in the listing, and the skills read the way the 2026-10 authoring
+guidance asks ([ADR-0015](docs/adr/0015-skill-writing-follows-the-2026-10-authoring-guidance.md)).
+
 ### Added
 
+- **Skill writing pass against Anthropic's skill-authoring guidance** (read
+  2026-10-19; the guidance itself is linked from ADR-0015, no dates in skill
+  bodies):
+  - **71 skills gain a "This skill vs neighbors" table**, only where routing
+    overlaps (the description names another skill, or another skill's
+    description names it). Each "Owns" cell is taken from that neighbor's own
+    description. 22 isolated skills stay as they are. `enhance-capacitor-ui`'s
+    existing table gets the heading and its missing inbound neighbor.
+  - **Every `workflow-*` skill carries a copyable checklist** (the 11 that
+    lacked one: environment-ready, git-commit, grilling, gtm, housekeep,
+    launch-ready, merge-conflicts, mobile-native-uiux, onboard,
+    parallel-agents, quality-gate). Steps index the skill's own phases in its
+    own words; a gate is its own step.
+  - **Trigger clauses** for the four descriptions that had none (`handoff`,
+    `meta-skill-creator`, `mobile-rn-performance`,
+    `protocol-browser-anti-stall`), paid for inside the 39,000-char listing
+    ratchet by trimming `design-api` and `workflow-ship-and-observe` to four
+    triggers each. Listing: 38,994 chars.
+  - **`argument-hint`** on the two skills that read an argument: `research`
+    and `audit-responsive`.
+  - **`scripts/check-reference-toc.mjs`**, in `npm test`: a reference file
+    over 100 lines opens with a `## Contents` list; references stay one level
+    deep (a sibling file a reference links to is also linked from
+    `SKILL.md`); every relative Markdown link resolves. Links inside fenced
+    examples are ignored. `npm run fix:reference-toc` writes a missing
+    Contents list from the H2 headings. First run: Contents lists added to
+    six files, three broken links in `enhance-web-ux/references/details.md`
+    repaired (companion files are one directory up), and `enhance-web-ux`'s
+    three companion files linked from `SKILL.md`.
+  - Playbook techniques **T9 (progressive-disclosure hygiene)** and **T10
+    (copyable checklist)**, and the explicit decisions not to adopt
+    `when_to_use` (same listing budget, ratchet at ceiling) or dated reads in
+    skill bodies (time-sensitive text).
 - **Claude Code gets a desktop Notification hook, a status line, and a
   skill-listing budget.** `--claude` (and `--all`, `--auto`) now writes three
   scripts to `~/.claude/kenji-hooks/` and merges them into

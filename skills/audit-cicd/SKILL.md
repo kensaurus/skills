@@ -18,6 +18,15 @@ Systematic audit of GitHub Actions workflows to cut the Actions bill (minutes +
 storage) and speed up CI **without losing test coverage or deploy safety**.
 Uses the `gh` CLI for live billing, run history, and storage data.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-cicd** (this) | GitHub Actions CI/CD audit for cost, speed, and safety |
+| `audit-gate-logic` | Read-only CI gate logic: silent bypass, ratchet gaming, duplicate gates |
+| `housekeep-gates` | Consolidate accreted CI gates, ratchets, hooks into one aggregator check |
+| `audit-infra-cost` | Read-only hosting, database, storage, egress, and serverless spend audit |
+
 ## How to reason
 
 1. **Observe** — quote the trigger, `runs-on`, `concurrency`, or `gh` minute/storage number

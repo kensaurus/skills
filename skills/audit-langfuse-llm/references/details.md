@@ -1,3 +1,16 @@
+# audit-langfuse-llm: Phase 5 details
+
+## Contents
+
+- Iteration log entry template (the fenced block directly below)
+- [Phase 5: Prompt Improvement Cycle (PDCA)](#phase-5-prompt-improvement-cycle-pdca)
+  - 5a Capture baseline
+  - 5b DO: improve the prompt
+  - 5c CHECK: trigger and verify via Playwright
+  - 5d CHECK: score comparison
+  - 5e ACT: promote or rollback
+  - 5f Iteration log
+
 ```
 ### Improvement Details
 

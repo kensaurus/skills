@@ -13,6 +13,16 @@ effort: high
 **Degree of freedom: MIXED** — Steps 0, 1, 3 `[HIGH freedom]`; Steps 2 and 4
 MCP/SQL probes `[LOW freedom — run exactly]` (run the query; do not invent a schema).
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-db-schema** (this) | Schema consistency, constraints, naming, indexes, and migrations |
+| `backend-db-performance` | Optimize slow queries, indexes, and N+1s |
+| `plan-data-integrity` | Plan-only audit of destructive-operation and migration safety |
+| `plan-rls-audit` | Plan-only Supabase/Postgres RLS and access-control audit |
+| `plan-backup-dr` | Plan-only audit of whether the project can recover from data loss |
+
 ## How to reason
 
 1. **Observe** — quote the column, constraint, advisor row, or query result

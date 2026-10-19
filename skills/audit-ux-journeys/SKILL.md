@@ -32,6 +32,13 @@ its rules to every step.**
 > **`audit-performance`** · feature parity → **`audit-realworld`**. Owns the
 > *cross-page journey and IA* layer.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-ux-journeys** (this) | Cross-page UX audit: user stories, task completion, and IA |
+| `audit-ux` | Per-page UX audit with NN/g heuristics, microcopy, Google HEART |
+
 ---
 
 ## Core principle — stories over pages, data over taste

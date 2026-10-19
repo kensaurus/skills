@@ -12,6 +12,13 @@ description: >
 **Degree of freedom: MIXED.** Signature and batch sizing `[HIGH freedom]`;
 from-scratch re-search and the zero-hit gate `[LOW freedom — run exactly]`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **burndown-full** (this) | Drive a planned mechanical change to 100% repo coverage |
+| `complete-everything` | Closure mode for one approved plan: every open item and deferral |
+
 ## How to reason
 
 1. **Observe** — the old pattern's remaining hits from a fresh search

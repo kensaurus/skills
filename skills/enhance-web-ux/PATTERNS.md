@@ -1,5 +1,24 @@
 # Anti-Pattern → Replacement Library
 
+## Contents
+
+- [1. Generic Icon for Every Item Type](#1-generic-icon-for-every-item-type)
+- [2. Empty Cells in a Data Grid](#2-empty-cells-in-a-data-grid)
+- [3. Always-On Hint / Instruction Row](#3-always-on-hint-instruction-row)
+- [4. Toolbar Button Labels Wrap to 2 Lines](#4-toolbar-button-labels-wrap-to-2-lines)
+- [5. Status Badge Wraps Inside a Narrow Column](#5-status-badge-wraps-inside-a-narrow-column)
+- [6. No Indicator for Async / Computed Results (AI, Link, Sync)](#6-no-indicator-for-async-computed-results-ai-link-sync)
+- [7. Identical Visual Weight for Empty vs. Populated Rows](#7-identical-visual-weight-for-empty-vs-populated-rows)
+- [8. Generic 3-Column Card Grid Used as Default Layout](#8-generic-3-column-card-grid-used-as-default-layout)
+- [9. Date Shown in Two Places on the Same Row](#9-date-shown-in-two-places-on-the-same-row)
+- [10. Mixed Icon Libraries in the Same View](#10-mixed-icon-libraries-in-the-same-view)
+- [11. "Just an Empty State" — No Guidance, No Next Step](#11-just-an-empty-state-no-guidance-no-next-step)
+- [12. Destructive Action Adjacent to Common Action](#12-destructive-action-adjacent-to-common-action)
+- [13. Free-Text Field That Should Be an Enum / Picker](#13-free-text-field-that-should-be-an-enum-picker)
+- [14. No Keyboard Shortcuts on a Power-User Surface](#14-no-keyboard-shortcuts-on-a-power-user-surface)
+- [15. "Stacked" Status Indicators That Don't Compose](#15-stacked-status-indicators-that-dont-compose)
+- [How to Use This File](#how-to-use-this-file)
+
 A living catalogue of "smells" found on real pages and the design-system-respecting
 replacements. Each entry links the smell to its NN/g heuristic and gives a concrete code
 shape for the fix. Add entries every time the agent runs an enhancement and discovers a new

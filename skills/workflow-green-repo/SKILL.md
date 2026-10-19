@@ -21,6 +21,13 @@ creep.
 > failures you happened to see.** Enumerate first, externalize the worklist,
 > fix root causes in batches, and re-run until zero.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **workflow-green-repo** (this) | Whole repo to green: typecheck, lint, tests, build from clean checkout |
+| `workflow-environment-ready` | Proving tools, installs, services, and verify commands work first |
+
 ## How to reason
 
 1. **Authorize** — whole-repo green was explicitly asked

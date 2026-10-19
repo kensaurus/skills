@@ -30,6 +30,15 @@ before showing anything costs real users real time.** A large initial bundle is
 the #1 avoidable cause of slow LCP and poor Core Web Vitals. Find exactly what
 is bloating it and fix each item.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-bundle-size** (this) | Analyse and shrink the JavaScript bundle: code splitting, initial load |
+| `audit-performance` | Audit and fix runtime performance: Core Web Vitals, load priority |
+| `workflow-quality-gate` | Pre-release gate across red-team, security, bundle, performance, unit tests |
+| `workflow-launch-ready` | Launch-preparation sweep for a new app or major release |
+
 ## How to reason — Observe → Interpret → Classify → Severity
 
 1. **Observe** — quote First Load JS / chunk gzip and the treemap contributor (`file` + package)

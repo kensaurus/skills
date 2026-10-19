@@ -16,6 +16,14 @@ their home screen, it loads instantly from cache, and it keeps working when the
 network drops. This skill adds those capabilities to any existing web app without
 breaking what already works.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **enhance-pwa** (this) | PWA features: manifest, service worker, offline, install prompt, push, sync |
+| `mobile-capacitor-platform` | Capacitor native layer: system bars, keyboard, back, plugins, push, OTA |
+| `workflow-launch-ready` | Launch-preparation sweep before a new app or major release goes live |
+
 ## How to reason
 
 1. **Audit** — manifest, SW, framework plugin already present

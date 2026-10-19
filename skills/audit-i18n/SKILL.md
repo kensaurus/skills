@@ -30,6 +30,13 @@ worded string and rewrite it to sound like a real person in that locale.
 > **The goal**: every string should sound like it was written by a native speaker
 > who understands the user, not translated from English by a developer.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-i18n** (this) | Audit and fix i18n: translations, locales, hardcoded strings, copy quality |
+| `workflow-launch-ready` | Launch-preparation sweep for a new app or major release |
+
 ---
 
 ## Core principles for good copy

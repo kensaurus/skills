@@ -14,6 +14,14 @@ effort: high
 playwright/axe/Tab sequences `[LOW freedom — run exactly]`. Read
 `protocol-browser-anti-stall` before any browser step.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-accessibility** (this) | WCAG 2.2 AA audit: axe-core, keyboard, contrast, target size, focus, ARIA |
+| `thirdparty-web-interface-guidelines` | Vercel Web Interface Guidelines compliance: focus, forms, animation, copy |
+| `workflow-mobile-native-uiux` | Full native UI/UX run on Capacitor, Expo, or RN, through to PR |
+
 ## How to reason
 
 1. **Observe** — quote axe rule+selector, heading list, or Tab snapshot

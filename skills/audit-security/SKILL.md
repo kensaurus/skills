@@ -22,6 +22,17 @@ OWASP static review (injection, headers, deps). Session / route×gate /
 `getSession()` → `audit-auth-flows`. Next.js 16: grep `middleware.ts` **and**
 `proxy.ts` — a route gate can live in either file, and the proxy layer has its own bypass class.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-security** (this) | OWASP static review of app code; may fix the evidenced sink inline |
+| `audit-auth-flows` | Read-only app-layer auth: route gate matrix, session lifecycle, OAuth, provider traps |
+| `plan-security-audit` | Plan-only OWASP Top 10 and Supabase-first hardening burndown |
+| `plan-rls-audit` | Plan-only Supabase/Postgres RLS and access-control audit |
+| `audit-llm-security` | Read-only OWASP LLM Top 10 audit of app-facing AI |
+| `workflow-quality-gate` | Pre-release gate across red-team, security, bundle, performance, unit tests |
+
 ## How to reason
 
 1. **Observe** — quote the sink or missing check (`file:line`)

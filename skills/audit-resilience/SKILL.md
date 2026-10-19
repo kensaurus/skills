@@ -21,6 +21,13 @@ in plaintext logs. This audit finds those gaps before production does.
 > **Read-only.** This skill inventories resilience gaps and hands each to the right fix skill.
 > It does not change code.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **audit-resilience** (this) | Read-only code audit: timeouts, retries, breakers, idempotency, rate limits, PII logs |
+| `test-load` | Run a k6 or Artillery load profile to find the breaking point |
+
 ## How to reason
 
 1. **Observe** — quote the call/mutation and whether timeout, retry+jitter, or idempotency key exists

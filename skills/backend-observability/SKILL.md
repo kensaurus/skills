@@ -12,6 +12,14 @@ license: MIT
 **Degree of freedom: MIXED.** What to wrap and alert on `[HIGH freedom]`;
 correlation ids, PII redaction, and the DoD `[LOW freedom — run exactly]`.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **backend-observability** (this) | Implement correlated errors, traces, structured logs with PII redaction |
+| `plan-error-handling` | Plan-only audit of silent failures and observability gaps |
+| `debug-sentry-monitor` | Operate Sentry: triage and fix issues, cut noise, monitor after deploy |
+
 ## How to reason
 
 1. **Observe** — which ids, logs, spans, and PII already exist

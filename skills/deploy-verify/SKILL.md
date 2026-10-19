@@ -17,6 +17,14 @@ probe sequences and the report table `[LOW freedom — run exactly]`.
 Automated post-deploy health check across all services. Run after every deploy to catch
 regressions before users do. Works with **any project** — auto-detects configuration.
 
+## This skill vs neighbors
+
+| Skill | Owns |
+|---|---|
+| **deploy-verify** (this) | Post-deploy smoke test across browser, Sentry, Supabase, Langfuse, public web |
+| `workflow-ship-and-observe` | Taking merged, green code to a verified, monitored production release |
+| `workflow-launch-ready` | Launch-preparation sweep before a new app or major release goes live |
+
 ## How to reason
 
 1. **Observe** — what did each probe actually return (counts, logs, screenshots)?

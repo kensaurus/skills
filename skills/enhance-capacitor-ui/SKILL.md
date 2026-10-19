@@ -36,12 +36,15 @@ predictable, reviewable change instead of a regression.
 > If browser/native automation is used, first follow the
 > `protocol-browser-anti-stall` skill when present.
 
+## This skill vs neighbors
+
 | Skill | Owns |
 |---|---|
 | **enhance-capacitor-ui** (this) | One codebase on web + iOS + Android: form factor vs platform vs pointer |
 | `mobile-capacitor-platform` | Native shell plumbing: SystemBars, insets, keyboard, splash, back |
 | `enhance-mobile-native-feel` | Making the compact native surface feel native, after the axes are separated |
 | `audit-responsive` | Layout reflow at 375 / 768 / 1440 |
+| `workflow-mobile-native-uiux` | The full native run: plumbing, native feel, a11y, device QA, PR |
 
 ## How to reason
 
