@@ -33,7 +33,10 @@
  *   ~/.claude/commands/  — custom slash commands
  *   ~/.claude/agents/    — subagent definitions
  *   ~/.claude/rules/     — rules (.mdc sources installed as .md)
- *   ~/.claude/settings.json — merged completion Stop hook (same script as Cursor)
+ *   ~/.claude/kenji-hooks/  — completion-gate.mjs, notify.mjs, statusline.mjs
+ *   ~/.claude/settings.json — merged: completion Stop hook (same script as Cursor),
+ *                             desktop Notification hook, statusLine (only if unset),
+ *                             skillListingBudgetFraction (only if unset)
  *
  * Codex CLI and Gemini CLI paths:
  *   ~/.agents/skills/    — the USER skills directory both tools document
@@ -116,7 +119,7 @@ Usage:
   npx @kensaurus/skills --gemini          Install for Gemini CLI (~/.agents/skills + ~/.gemini/)
   npx @kensaurus/skills --all             Install for all four supported tools
   npx @kensaurus/skills --clean           Mirror: wipe and rebuild target paths from this repo
-  npx @kensaurus/skills --only skills      Install only some groups (skills,commands,agents,rules,hooks)
+  npx @kensaurus/skills --only skills      Install only some groups (skills,commands,agents,rules,hooks,statusline)
   npx @kensaurus/skills --skill <name>     Install one skill by name
   npx @kensaurus/skills --link            Dev mode: symlink repo into ~/.cursor (live edits)
   npx @kensaurus/skills --restore [stamp]  Restore a previous --clean backup (latest if omitted)
@@ -135,7 +138,8 @@ Flags:
   --all               Target all four supported tools in one run.
   --clean, --mirror   Wipe managed dirs first so target paths exactly mirror this repo.
   --no-backup         Skip the timestamped backup taken before a --clean wipe.
-  --only <csv>        Limit to a subset of: skills, commands, agents, rules, hooks.
+  --only <csv>        Limit to a subset of: skills, commands, agents, rules, hooks,
+                      statusline (Claude Code only).
   --skill <name>      Install a single skill (implies --only skills).
   --link              Symlink (junction on Windows) instead of copying — for repo dev.
   --restore [stamp]   Copy a backup under <target>/.kenji-backups/ back into place.
@@ -163,10 +167,15 @@ What gets installed (Cursor):
 
 What gets installed (Claude Code, with --claude or --all):
   ~/.claude/skills/       ← global skills (appear as /slash-commands)
-  ~/.claude/commands/     ← custom slash commands
+  ~/.claude/commands/     ← custom slash commands (a name that is also a skill is
+                            skipped: Claude Code lets the skill win)
   ~/.claude/agents/       ← subagent definitions
   ~/.claude/rules/        ← rules (.mdc installed as .md)
-  ~/.claude/settings.json ← merged completion Stop hook (preserves existing hooks)
+  ~/.claude/kenji-hooks/  ← completion-gate.mjs, notify.mjs, statusline.mjs
+  ~/.claude/settings.json ← merged: completion Stop hook, desktop Notification hook,
+                            statusLine (only if you have none), and
+                            skillListingBudgetFraction (only if unset). Your other
+                            settings and hooks are kept.
 
 What gets installed (Codex CLI / Gemini CLI, with --codex, --gemini or --all):
   ~/.agents/skills/       ← skills: the user skills directory both tools read
@@ -324,6 +333,20 @@ function pruneStaleCommands(commandsDest, label) {
     }
     if (!isDryRun && readdirSync(dest).length === 0) rmSync(dest, { recursive: true, force: true });
   }
+  // Claude Code gives a skill precedence over a same-name commands/*.md, so
+  // the command copy is unreachable there and only pads the skill listing.
+  // Remove this pack's own copies; a user's edited copy is left alone.
+  if (label === 'Claude') {
+    for (const name of dualSkillCommandNames()) {
+      const dest = join(commandsDest, `${name}.md`);
+      const src = resolve(__dir, 'commands', `${name}.md`);
+      if (!existsSync(dest) || !existsSync(src)) continue;
+      const same = readFileSync(dest, 'utf8').replace(/\r\n/g, '\n') === readFileSync(src, 'utf8').replace(/\r\n/g, '\n');
+      if (!same) continue;
+      if (isDryRun) { console.log(`  [dry-run] prune ${label} command ${name}.md (shadowed by the skill)`); continue; }
+      rmSync(dest, { force: true });
+    }
+  }
 }
 
 // ---- target resolution -----------------------------------------------------
@@ -381,6 +404,17 @@ const BACKUPS_DIR = '.kenji-backups';
 const LEGACY_BACKUPS_DIR = '.cursor-kenji-backups';
 // Matches the managed completion-gate entry under either folder name.
 const MANAGED_GATE = /(?:cursor-)?kenji-hooks[\\/]completion-gate\.mjs/;
+const MANAGED_NOTIFY = /kenji-hooks[\\/]notify\.mjs/;
+const MANAGED_STATUSLINE = /kenji-hooks[\\/]statusline\.mjs/;
+// Notification types worth a desktop alert: a tool call waiting for approval,
+// Claude idle for a minute, a background session waiting or finished
+// (https://code.claude.com/docs/en/hooks, read 2026-10-19).
+const NOTIFY_MATCHER = 'permission_prompt|idle_prompt|agent_needs_input|agent_completed';
+// Claude Code shows the skill listing against 1% of the context window by
+// default and drops descriptions from the least-used skills when over budget
+// (https://code.claude.com/docs/en/skills, read 2026-10-19). 3% keeps every
+// description of this pack on a 1M-context session with built-ins alongside.
+const CLAUDE_SKILL_BUDGET = 0.03;
 
 // ---- typecheck-hook mode: per-repo background typecheck (audit-agent-speed) --
 // Writes into the current repo only, never a global config: a global Stop hook
@@ -527,7 +561,12 @@ function treesMatch(src, dest) {
   return { ok: true };
 }
 
-function listInstallItems({ renameMdc = false, skipCursorBuiltins = false } = {}) {
+// Command names that are also skills. Claude Code lets the skill win, so the
+// command file is skipped there (install and --verify) and pruned if present.
+let shadowedCommandCache = null;
+const shadowedCommandNames = () => (shadowedCommandCache ??= new Set(dualSkillCommandNames()));
+
+function listInstallItems({ renameMdc = false, skipCursorBuiltins = false, skipShadowedCommands = false } = {}) {
   const items = [];
   for (const { src, dest } of DIRS) {
     const srcPath = resolve(__dir, src);
@@ -546,6 +585,7 @@ function listInstallItems({ renameMdc = false, skipCursorBuiltins = false } = {}
       const itemSrc = join(srcPath, item);
       const isDir = statSync(itemSrc).isDirectory();
       if (isDir && PROJECT_RULE_BUNDLES.has(item) && (dest === 'rules' || dest === 'commands')) continue;
+      if (skipShadowedCommands && dest === 'commands' && !isDir && item.endsWith('.md') && shadowedCommandNames().has(item.slice(0, -3))) continue;
       if (!renameMdc && dest === 'rules' && !isDir && item.endsWith('.md')) continue;
       let outName = item;
       if (renameMdc && dest === 'rules' && !isDir && item.endsWith('.mdc')) {
@@ -851,53 +891,98 @@ function installCursorCompletionHook() {
   return status;
 }
 
-// Claude Code reads Stop hooks from ~/.claude/settings.json. Same script,
-// Claude schema; the managed entry is replaced idempotently and user hooks
-// in other groups are preserved. Cursor loads this file too (Third-Party
-// Imports), so `--host=claude` lets the script stand aside there when the
-// native Cursor entry exists.
-function installClaudeCompletionHook() {
-  const sourceScript = resolve(__dir, 'hooks', 'completion-gate.mjs');
-  const hookDir = join(claudeBase, HOOK_DIR);
-  const destScript = join(hookDir, 'completion-gate.mjs');
-  const settingsPath = join(claudeBase, 'settings.json');
-  if (!existsSync(sourceScript)) return 'source-missing';
+// Claude Code keeps hooks and the status line in ~/.claude/settings.json.
+// One read, every managed entry merged, one write, so at most one backup:
+//   hooks       Stop         → completion gate (same script as Cursor; Cursor
+//                              loads this file too, so --host=claude lets the
+//                              script stand aside when the native entry exists)
+//               Notification → desktop alert (notify.mjs)
+//   statusline  statusLine   → statusline.mjs, only when none is set or the
+//                              one set is ours
+//   skills      skillListingBudgetFraction → CLAUDE_SKILL_BUDGET, only when unset
+// Managed entries are replaced idempotently on upgrades. User hooks in other
+// groups, a user's own status line and a budget the user chose are kept.
+function installClaudeSettings() {
+  const doHooks = !onlyGroups || onlyGroups.has('hooks');
+  const doStatusLine = !onlyGroups || onlyGroups.has('statusline');
+  const doBudget = !skillName && (!onlyGroups || onlyGroups.has('skills'));
+  const out = { status: 'skipped', gate: 'skipped', notify: 'skipped', statusLine: 'skipped', budget: 'skipped' };
+  if (!doHooks && !doStatusLine && !doBudget) return out;
 
-  if (isDryRun) {
-    console.log(`  [dry-run] ${sourceScript} → ${destScript}`);
-  } else {
-    mkdirSync(hookDir, { recursive: true });
-    place(sourceScript, destScript, false);
+  const hookDir = join(claudeBase, HOOK_DIR);
+  const settingsPath = join(claudeBase, 'settings.json');
+  const scripts = [];
+  if (doHooks) scripts.push('completion-gate.mjs', 'notify.mjs');
+  if (doStatusLine) scripts.push('statusline.mjs');
+  for (const name of scripts) {
+    const src = resolve(__dir, 'hooks', name);
+    if (!existsSync(src)) { out.status = 'source-missing'; return out; }
+    const dest = join(hookDir, name);
+    if (isDryRun) {
+      console.log(`  [dry-run] ${src} → ${dest}`);
+    } else {
+      mkdirSync(hookDir, { recursive: true });
+      place(src, dest, false);
+    }
   }
+  const cmd = (name) => `node "${join(hookDir, name).replace(/\\/g, '/')}"`;
 
   let settings = {};
   if (existsSync(settingsPath)) {
     try {
       settings = JSON.parse(readFileSync(settingsPath, 'utf8'));
     } catch {
-      console.warn(`  [!] Skipped completion hook: ${settingsPath} is not valid JSON.`);
-      return 'skipped-invalid-config';
+      console.warn(`  [!] Skipped settings.json merge: ${settingsPath} is not valid JSON.`);
+      out.status = 'skipped-invalid-config';
+      return out;
     }
   }
   if (!settings || typeof settings !== 'object' || Array.isArray(settings)) settings = {};
-  if (!settings.hooks || typeof settings.hooks !== 'object' || Array.isArray(settings.hooks)) settings.hooks = {};
 
-  const existing = Array.isArray(settings.hooks.Stop) ? settings.hooks.Stop : [];
-  const preserved = existing
-    .map((group) => ({
-      ...group,
-      hooks: (Array.isArray(group?.hooks) ? group.hooks : []).filter(
-        (h) => !MANAGED_GATE.test(String(h?.command ?? '')),
-      ),
-    }))
-    .filter((group) => group.hooks.length > 0);
-  settings.hooks.Stop = [
-    ...preserved,
-    { hooks: [{ type: 'command', command: `node "${destScript.replace(/\\/g, '/')}" --host=claude`, timeout: 5 }] },
-  ];
-  const status = writeManagedFile(settingsPath, JSON.stringify(settings, null, 2) + '\n');
+  const withoutManaged = (groups, managed) =>
+    (Array.isArray(groups) ? groups : [])
+      .map((group) => ({
+        ...group,
+        hooks: (Array.isArray(group?.hooks) ? group.hooks : []).filter(
+          (h) => !managed.test(String(h?.command ?? '')),
+        ),
+      }))
+      .filter((group) => group.hooks.length > 0);
+
+  if (doHooks) {
+    if (!settings.hooks || typeof settings.hooks !== 'object' || Array.isArray(settings.hooks)) settings.hooks = {};
+    settings.hooks.Stop = [
+      ...withoutManaged(settings.hooks.Stop, MANAGED_GATE),
+      { hooks: [{ type: 'command', command: `${cmd('completion-gate.mjs')} --host=claude`, timeout: 5 }] },
+    ];
+    settings.hooks.Notification = [
+      ...withoutManaged(settings.hooks.Notification, MANAGED_NOTIFY),
+      { matcher: NOTIFY_MATCHER, hooks: [{ type: 'command', command: cmd('notify.mjs'), timeout: 5 }] },
+    ];
+    out.gate = 'installed';
+    out.notify = 'installed';
+  }
+  if (doStatusLine) {
+    const current = settings.statusLine;
+    const ours = current && typeof current === 'object' && MANAGED_STATUSLINE.test(String(current.command ?? ''));
+    if (!current || ours) {
+      settings.statusLine = { type: 'command', command: cmd('statusline.mjs') };
+      out.statusLine = 'installed';
+    } else {
+      out.statusLine = 'kept-user';
+    }
+  }
+  if (doBudget) {
+    if (settings.skillListingBudgetFraction === undefined) {
+      settings.skillListingBudgetFraction = CLAUDE_SKILL_BUDGET;
+      out.budget = 'installed';
+    } else {
+      out.budget = 'kept-user';
+    }
+  }
+  out.status = writeManagedFile(settingsPath, JSON.stringify(settings, null, 2) + '\n');
   removeLegacyHookDir(claudeBase);
-  return status;
+  return out;
 }
 
 // Install a context-file tool (Codex / Gemini). `spec` describes its layout.
@@ -1019,11 +1104,14 @@ if (isVerifyOnly) {
     }
   }
   if (wantClaude) {
-    verifyTarget(claudeBase, { renameMdc: true }, 'Claude');
-    if (!onlyGroups || onlyGroups.has('hooks')) {
-      const hookSrc = resolve(__dir, 'hooks', 'completion-gate.mjs');
-      const hookDest = join(claudeBase, HOOK_DIR, 'completion-gate.mjs');
-      if (existsSync(hookSrc)) recordVerify(hookSrc, hookDest, 'Claude completion-gate.mjs');
+    verifyTarget(claudeBase, { renameMdc: true, skipShadowedCommands: true }, 'Claude');
+    const hookScripts = [];
+    if (!onlyGroups || onlyGroups.has('hooks')) hookScripts.push('completion-gate.mjs', 'notify.mjs');
+    if (!onlyGroups || onlyGroups.has('statusline')) hookScripts.push('statusline.mjs');
+    for (const name of hookScripts) {
+      const hookSrc = resolve(__dir, 'hooks', name);
+      const hookDest = join(claudeBase, HOOK_DIR, name);
+      if (existsSync(hookSrc)) recordVerify(hookSrc, hookDest, `Claude ${name}`);
     }
   }
   if (wantCodex) {
@@ -1127,11 +1215,12 @@ if (wantCursor) {
 // ---- Claude Code -----------------------------------------------------------
 if (wantClaude) {
   const clean = isClean ? backupAndWipe(claudeBase) : null;
-  const counts = installDirs(claudeBase, { renameMdc: true });
+  const counts = installDirs(claudeBase, { renameMdc: true, skipShadowedCommands: true });
   pruneRenamedSkills(join(claudeBase, 'skills'), 'Claude');
   pruneRenamedRules(join(claudeBase, 'rules'), 'Claude', { renameMdc: true });
   pruneStaleCommands(join(claudeBase, 'commands'), 'Claude');
-  const hookStatus = !onlyGroups || onlyGroups.has('hooks') ? installClaudeCompletionHook() : 'skipped';
+  const claudeSettings = installClaudeSettings();
+  const hookStatus = claudeSettings.status;
 
   if (skillName && counts.copiedDirs + counts.copiedFiles === 0) {
     console.error(`✗ Skill '${skillName}' not found in skills/ or skills-cursor/.`);
@@ -1173,12 +1262,17 @@ if (wantClaude) {
       const p = join(cmdDir, f);
       if (f.endsWith('.md') && statSync(p).isFile()) addEntry(f.slice(0, -3), p);
     }
-    console.log(`  Claude Code skill listing from ~/.claude (all packs): ${entries} entries, ${listingChars} chars.`);
-    console.log('  The default budget is 1% of the context window (30,000 chars on a 1M Opus 5.5 session), shared with built-in skills;');
-    console.log('  over budget the least-used skills show by name only. To keep every description, set "skillListingBudgetFraction": 0.02 in ~/.claude/settings.json.');
+    let budget = 0.01;
+    try {
+      budget = JSON.parse(readFileSync(join(claudeBase, 'settings.json'), 'utf8')).skillListingBudgetFraction ?? 0.01;
+    } catch { /* no settings file yet: the default budget applies */ }
+    const budgetChars = Math.round(budget * 1_000_000 * 3);
+    console.log(`  Claude Code skill listing from ~/.claude (all packs): ${entries} entries, ${listingChars.toLocaleString('en-US')} chars.`);
+    console.log(`  Budget: skillListingBudgetFraction ${budget} = ${+(budget * 100).toFixed(2)}% of the context window (about ${budgetChars.toLocaleString('en-US')} chars on a 1M session), shared with built-in skills;`);
+    console.log(`  over budget the least-used skills show by name only.${listingChars > budgetChars ? ' This listing is over budget: raise the fraction in ~/.claude/settings.json or turn off skills you do not use.' : ''}`);
   }
 
-  results.push({ target: 'Claude Code', base: claudeBase, ...counts, clean, mcpInstalled: false, hookStatus });
+  results.push({ target: 'Claude Code', base: claudeBase, ...counts, clean, mcpInstalled: false, hookStatus, claudeSettings });
 }
 
 // ---- Codex CLI (context file + prompt ports) -------------------------------
@@ -1243,14 +1337,23 @@ if (isDryRun) {
       console.log(`✓ Skills synced to ${join(agentsBase, 'skills')} (${agentsCount} skills — Cursor UI path)`);
     }
     if (r.mcpInstalled) console.log(`✓ MCP template written to ${join(r.base, 'mcp.json')} — edit it to add your API keys.`);
-    if (r.hookStatus && !r.hookStatus.startsWith('skip')) {
+    if (r.hookStatus && !r.hookStatus.startsWith('skip') && (!r.claudeSettings || r.claudeSettings.gate === 'installed')) {
       const where = r.target === 'Cursor' ? 'hooks.json' : 'settings.json';
       console.log(`✓ Opt-in completion gate ${r.hookStatus} in ${join(r.base, where)}.`);
     }
+    if (r.claudeSettings) {
+      const s = r.claudeSettings;
+      const settingsPath = join(r.base, 'settings.json');
+      if (s.notify === 'installed') console.log(`✓ Desktop notification hook (${HOOK_DIR}/notify.mjs) registered in ${settingsPath}: permission prompts, idle, background sessions.`);
+      if (s.statusLine === 'installed') console.log(`✓ Status line set to ${HOOK_DIR}/statusline.mjs: model, folder, branch, context, cost, usage.`);
+      else if (s.statusLine === 'kept-user') console.log(`  Your own statusLine was kept. Ours is at ${join(r.base, HOOK_DIR, 'statusline.mjs')} if you want to switch.`);
+      if (s.budget === 'installed') console.log(`✓ skillListingBudgetFraction set to ${CLAUDE_SKILL_BUDGET} in ${settingsPath} so every skill keeps its description.`);
+    }
   }
   if (linkFallbacks) console.log(`  (note: ${linkFallbacks} file(s) copied instead of linked — symlinks need elevated rights on this OS)`);
-  // Only Cursor and Claude Code get both skills and commands under one / picker.
-  const dual = wantCursor || wantClaude ? dualSkillCommandNames() : [];
+  // Only Cursor shows both a skill and a same-name command; Claude Code lets
+  // the skill win, so the installer skips those command files there.
+  const dual = wantCursor ? dualSkillCommandNames() : [];
   if (dual.length) {
     console.log(`Note: these names exist as both a skill and a /command (the picker may show two /entries): ${dual.join(', ')}`);
   }

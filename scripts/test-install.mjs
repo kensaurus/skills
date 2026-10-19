@@ -303,6 +303,22 @@ try {
   expect(gateEntries(stopGroups)[0].command.endsWith("--host=claude"),
     "Claude completion hook does not declare --host=claude, so Cursor would run it as a second gate");
   stopGroups.unshift({ hooks: [{ type: "command", command: "node user-owned-stop.mjs" }] });
+  // Claude Code lets a skill shadow a same-name commands/*.md, so those command
+  // copies are not installed, and an older copy is pruned on the next run.
+  const skillNames = new Set([
+    ...readdirSync(join(repoRoot, "skills")),
+    ...readdirSync(join(repoRoot, "skills-cursor")),
+  ]);
+  const shadowed = readdirSync(join(repoRoot, "commands"))
+    .filter((f) => f.endsWith(".md") && skillNames.has(f.slice(0, -3)));
+  expect(shadowed.length > 0, "fixture: expected at least one command shadowed by a skill");
+  const claudeCommands = join(sandbox5, ".claude", "commands");
+  for (const f of shadowed) expect(!existsSync(join(claudeCommands, f)), `Claude received shadowed command ${f}`);
+  expect(existsSync(join(claudeCommands, "commit.md")), "Claude missing commands/commit.md");
+  expect(countDir(claudeCommands) === repoCommands - shadowed.length,
+    `claude commands: expected ${repoCommands - shadowed.length}, got ${countDir(claudeCommands)}`);
+  writeFileSync(join(claudeCommands, shadowed[0]), readFileSync(join(repoRoot, "commands", shadowed[0])));
+  writeFileSync(join(claudeCommands, "my-own-research.md"), "---\ndescription: mine\n---\n");
   claudeSettings.permissions = { allow: ["Bash(npm test)"] };
   writeFileSync(claudeSettingsPath, JSON.stringify(claudeSettings, null, 2) + "\n");
   execFileSync(process.execPath, [installer, "--claude"], {
@@ -314,6 +330,56 @@ try {
   expect((reinstalled.hooks.Stop ?? []).some((g) => (g.hooks ?? []).some((h) => h.command === "node user-owned-stop.mjs")),
     "installer removed a user-owned Claude Stop hook");
   expect(gateEntries(reinstalled.hooks.Stop).length === 1, "installer duplicated the Claude completion hook");
+  expect(!existsSync(join(claudeCommands, shadowed[0])), `reinstall did not prune the stale shadowed command ${shadowed[0]}`);
+  expect(existsSync(join(claudeCommands, "my-own-research.md")), "reinstall removed a user-owned command");
+
+  // Desktop notification hook, status line and skill-listing budget: each
+  // registered once, written in the same settings.json pass as the Stop hook.
+  const notifyEntries = (groups) => (groups ?? []).flatMap((g) => g.hooks ?? []).filter((h) => /kenji-hooks[\\/]notify\.mjs/.test(h.command ?? ""));
+  expect(notifyEntries(reinstalled.hooks.Notification).length === 1, "Claude Notification hook was not registered exactly once");
+  expect((reinstalled.hooks.Notification ?? []).some((g) => notifyEntries([g]).length && /idle_prompt/.test(g.matcher ?? "")),
+    "Claude Notification hook does not match idle_prompt");
+  expect(existsSync(join(sandbox5, ".claude", "kenji-hooks", "notify.mjs")), "missing Claude notify.mjs");
+  expect(existsSync(join(sandbox5, ".claude", "kenji-hooks", "statusline.mjs")), "missing Claude statusline.mjs");
+  expect(reinstalled.statusLine?.type === "command" && /statusline\.mjs/.test(reinstalled.statusLine.command),
+    "installer did not set statusLine to statusline.mjs");
+  expect(reinstalled.skillListingBudgetFraction === 0.03,
+    `installer did not set skillListingBudgetFraction (got ${reinstalled.skillListingBudgetFraction})`);
+  const settingsBackups = readdirSync(join(sandbox5, ".claude")).filter((f) => f.startsWith("settings.json.bak-"));
+  expect(settingsBackups.length <= 1, `settings.json was written more than once per run (${settingsBackups.length} backups)`);
+
+  // A user's own status line, budget and Notification hooks survive a run.
+  const sandbox7 = join(sandbox, "claude-user-settings");
+  mkdirSync(join(sandbox7, ".claude"), { recursive: true });
+  writeFileSync(join(sandbox7, ".claude", "settings.json"), JSON.stringify({
+    statusLine: { type: "command", command: "my-statusline.sh" },
+    skillListingBudgetFraction: 0.05,
+    hooks: { Notification: [{ matcher: "idle_prompt", hooks: [{ type: "command", command: "node my-notify.mjs" }] }] },
+  }, null, 2));
+  execFileSync(process.execPath, [installer, "--claude"], {
+    env: { ...process.env, HOME: sandbox7, USERPROFILE: sandbox7 },
+    stdio: "pipe",
+  });
+  const userKept = JSON.parse(readFileSync(join(sandbox7, ".claude", "settings.json"), "utf8"));
+  expect(userKept.statusLine?.command === "my-statusline.sh", "installer replaced the user's statusLine");
+  expect(userKept.skillListingBudgetFraction === 0.05, "installer replaced the user's skillListingBudgetFraction");
+  expect((userKept.hooks.Notification ?? []).some((g) => (g.hooks ?? []).some((h) => h.command === "node my-notify.mjs")),
+    "installer removed a user-owned Notification hook");
+  expect(notifyEntries(userKept.hooks.Notification).length === 1, "installer did not add its Notification hook beside the user's");
+
+  // --only without hooks/statusline leaves hooks and statusLine alone; the
+  // budget rides with the skills group because that is what fills the listing.
+  const sandbox8 = join(sandbox, "claude-no-hooks");
+  mkdirSync(sandbox8, { recursive: true });
+  execFileSync(process.execPath, [installer, "--claude", "--only", "skills,commands,agents,rules"], {
+    env: { ...process.env, HOME: sandbox8, USERPROFILE: sandbox8 },
+    stdio: "pipe",
+  });
+  const noHooks = JSON.parse(readFileSync(join(sandbox8, ".claude", "settings.json"), "utf8"));
+  expect(!noHooks.hooks && !noHooks.statusLine, "--only without hooks/statusline still wrote hooks or statusLine");
+  expect(noHooks.skillListingBudgetFraction === 0.03, "--only skills did not set skillListingBudgetFraction");
+  expect(!existsSync(join(sandbox8, ".claude", "kenji-hooks", "notify.mjs")), "--only without hooks copied notify.mjs");
+  expect(!existsSync(join(sandbox8, ".claude", "kenji-hooks", "statusline.mjs")), "--only without statusline copied statusline.mjs");
 
   // Upgrading a pre-2.0.0 (cursor-kenji) install: the legacy managed entries are
   // replaced, user hooks and settings survive, and the orphaned folders go.
