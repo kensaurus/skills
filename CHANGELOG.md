@@ -6,6 +6,53 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ## [Unreleased]
 
+### Added
+
+- **Claude Code gets a desktop Notification hook, a status line, and a
+  skill-listing budget.** `--claude` (and `--all`, `--auto`) now writes three
+  scripts to `~/.claude/kenji-hooks/` and merges them into
+  `~/.claude/settings.json` in one pass with the Stop hook, so the file is
+  written once and backed up at most once per run:
+  - `notify.mjs` is registered as a `Notification` hook for
+    `permission_prompt`, `idle_prompt`, `agent_needs_input` and
+    `agent_completed`, so a session that needs you raises a desktop alert
+    (`notify-send` on Linux, `osascript` on macOS, a WinRT toast on Windows).
+    It spawns no shell and always exits 0; Claude Code ignores its exit code
+    anyway ([hooks reference](https://code.claude.com/docs/en/hooks), read
+    2026-10-19).
+  - `statusline.mjs` becomes `statusLine` **only when none is set** (or the
+    one set is ours). It shows model, folder, branch, context used, session
+    cost, five-hour usage and session name, and spawns nothing: the branch
+    comes from `.git/HEAD`, through the gitdir file in a worktree
+    ([status line docs](https://code.claude.com/docs/en/statusline), read
+    2026-10-19). `--only statusline` installs just this; leaving `statusline`
+    out of `--only` skips it.
+  - `skillListingBudgetFraction` is set to `0.03` **only when unset**. Claude
+    Code shows the skill listing against 1% of the context window by default
+    and drops descriptions from the least-used skills when over budget, which
+    made most of this pack invisible to the model on a full install
+    ([skills docs](https://code.claude.com/docs/en/skills), read 2026-10-19).
+    The installer now prints the listing size against the budget in force.
+  - The plugin manifest `hooks/hooks.json` registers the same Notification
+    hook for `claude plugin install` users.
+- `scripts/test-install.mjs` covers each piece: registered once, idempotent on
+  a re-run, a user's own `statusLine`, budget and Notification hooks survive,
+  `--only skills,commands,agents,rules` writes no hooks or status line, and
+  `settings.json` has at most one backup per run.
+
+### Changed
+
+- **Claude Code no longer receives a `commands/*.md` whose name is also a
+  skill.** Claude Code gives the skill precedence over a same-name command
+  file ([skills docs](https://code.claude.com/docs/en/skills), read
+  2026-10-19), so the command copy was unreachable and only padded the skill
+  listing. The nine affected names (`burndown-full`, `complete-everything`,
+  `handoff`, `housekeep-backlog`, `housekeep-files`, `housekeep-gates`,
+  `research`, `test-mutation`, `thirdparty-web-interface-guidelines`) are
+  skipped on install, `--verify` expects them absent, and an unmodified older
+  copy is pruned on the next run. Cursor still gets both. A command file you
+  edited yourself is left alone.
+
 ## [2.6.0] — 2026-10-11
 
 Codex CLI and Gemini CLI get the skills, and the README works for any stack and

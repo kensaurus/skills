@@ -10,6 +10,18 @@
           }
         ]
       }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt|idle_prompt|agent_needs_input|agent_completed",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/notify.mjs\"",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   }
 }

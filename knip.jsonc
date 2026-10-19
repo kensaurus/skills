@@ -7,6 +7,8 @@
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": [
     "hooks/completion-gate.mjs",            // referenced from hooks/hooks.json and hooks/cursor-hooks.json (JSON, not parsed by Knip)
+    "hooks/notify.mjs",                     // Claude Code Notification hook; registered by bin/install.mjs and hooks/hooks.json
+    "hooks/statusline.mjs",                 // Claude Code status line; registered by bin/install.mjs
     "skills/*/scripts/*.mjs"                // helper scripts shipped inside skills; consumers run them
   ],
   "project": ["bin/**/*.{js,mjs}", "hooks/**/*.mjs", "scripts/**/*.mjs", "skills/*/scripts/**/*.mjs"],

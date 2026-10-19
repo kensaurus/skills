@@ -40,13 +40,13 @@ npx @kensaurus/skills --auto --verify    # 3. check every installed file against
 
 Then restart your agent and describe a task in plain words, for example *"audit this repo for security problems"*. The [plain-language guide](docs/GETTING-STARTED.md) walks through a first session.
 
-> **Note:** the default install also adds an opt-in **Stop hook** to Claude Code and Cursor. It does nothing until you start a `complete-everything` or `burndown-full` run. To skip it, add `--only skills,commands,agents,rules`. Details: [The Stop hook](#the-stop-hook).
+> **Note:** the default install also adds an opt-in **Stop hook** to Claude Code and Cursor. It does nothing until you start a `complete-everything` or `burndown-full` run. For Claude Code it also adds a desktop **Notification hook**, a **status line** (only if you have none) and a skill-listing budget. To skip the hooks and the status line, add `--only skills,commands,agents,rules`. Details: [The Stop hook](#the-stop-hook) and [Notifications and the status line](#notifications-and-the-status-line).
 
 ## <img src="docs/screenshots/icons/options.png" width="28" height="28" alt="" align="absmiddle"> Which agents are supported
 
 | Agent | Install with | Skills | Slash commands | Subagents | Rules | Stop hook |
 |:------|:-------------|:-------|:---------------|:----------|:------|:----------|
-| **Claude Code** | `--claude` | `~/.claude/skills/` | `~/.claude/commands/` | `~/.claude/agents/` | `~/.claude/rules/` (`.md`) | yes, in `~/.claude/settings.json` |
+| **Claude Code** | `--claude` | `~/.claude/skills/` | `~/.claude/commands/` | `~/.claude/agents/` | `~/.claude/rules/` (`.md`) | yes, plus a Notification hook and a status line, in `~/.claude/settings.json` |
 | **Cursor** | bare command or `--cursor` | `~/.cursor/skills/`, plus a copy in `~/.agents/skills/` | `~/.cursor/commands/` | `~/.cursor/agents/` | `~/.cursor/rules/` (`.mdc`; see below) | yes, in `~/.cursor/hooks.json` |
 | **Codex CLI** | `--codex` | `~/.agents/skills/` | portable prompts in `~/.codex/prompts/` (see below) | no | merged into `~/.codex/AGENTS.md` | no |
 | **Gemini CLI** | `--gemini` | `~/.agents/skills/` | portable commands in `~/.gemini/commands/` | no | merged into `~/.gemini/GEMINI.md` | no |
@@ -78,13 +78,13 @@ The installer is one Node script, [`bin/install.mjs`](bin/install.mjs). It has n
 |:-----|:-----|:-----------------------|
 | `~/.cursor/skills/<name>/`, `~/.claude/skills/<name>/` | One folder per skill | Same-named files are overwritten. Your other skills stay. |
 | `~/.agents/skills/<name>/` | Skills for Codex and Gemini, and Cursor's mirror (which copies all of `~/.cursor/skills/`, yours included) | Same as above. Skip it with `--no-agents-mirror`, which also means Codex and Gemini get no skills. |
-| `~/.cursor/commands/`, `~/.claude/commands/` | Slash commands (`.md`) | Same-named files are overwritten. |
+| `~/.cursor/commands/`, `~/.claude/commands/` | Slash commands (`.md`). Claude Code does not get a command whose name is also a skill, because the skill wins there. | Same-named files are overwritten. |
 | `~/.cursor/agents/`, `~/.claude/agents/` | Subagent definitions | Same-named files are overwritten. |
 | `~/.cursor/rules/`, `~/.claude/rules/` | Global rules (`.mdc` for Cursor, `.md` for Claude Code) | Same-named files are overwritten. |
 | `~/.codex/AGENTS.md`, `~/.gemini/GEMINI.md` | Global rules merged into one file | The old file is copied to `<file>.bak-<timestamp>` first. An unchanged file is not rewritten. |
 | `~/.codex/prompts/*.md`, `~/.gemini/commands/*.toml` | `plan-mode`, `research`, `fix-issue` | Backed up like `AGENTS.md`. |
-| `~/.claude/kenji-hooks/`, `~/.cursor/kenji-hooks/` | `completion-gate.mjs`, the Stop hook script | Overwritten. |
-| `~/.claude/settings.json`, `~/.cursor/hooks.json` | One Stop hook entry | Merged. Your other settings and hooks are kept. A backup is written when the file changes. If the file is not valid JSON, the hook is skipped with a warning. |
+| `~/.claude/kenji-hooks/`, `~/.cursor/kenji-hooks/` | `completion-gate.mjs`, the Stop hook script; for Claude Code also `notify.mjs` and `statusline.mjs` | Overwritten. |
+| `~/.claude/settings.json`, `~/.cursor/hooks.json` | One Stop hook entry. For Claude Code also one Notification hook entry, `statusLine` (only if you have none) and `skillListingBudgetFraction` (only if unset) | Merged in one write. Your other settings and hooks are kept. A backup is written when the file changes. If the file is not valid JSON, the merge is skipped with a warning. |
 | `~/.cursor/mcp.json` | MCP server template | Written only if missing. Never overwritten. |
 
 A normal run **merges**: it adds or overwrites this pack's files and never deletes your own. It also removes leftovers that this pack itself renamed or stopped installing. After every write, the installer hash-checks each copied file.
@@ -99,7 +99,7 @@ npx @kensaurus/skills                   # Cursor only (the default)
 npx @kensaurus/skills --auto            # every tool found under ~ (falls back to Cursor)
 npx @kensaurus/skills --all             # Cursor + Claude Code + Codex CLI + Gemini CLI
 npx @kensaurus/skills --claude --codex  # pick targets; combine freely
-npx @kensaurus/skills --only skills,commands      # subset of: skills, commands, agents, rules, hooks
+npx @kensaurus/skills --only skills,commands      # subset of: skills, commands, agents, rules, hooks, statusline
 npx @kensaurus/skills --skill audit-ux  # one skill
 npx @kensaurus/skills --dry-run         # preview, no writes
 npx @kensaurus/skills --verify          # read-only hash check (add the same target flags)
@@ -121,6 +121,16 @@ The completion gate, [`hooks/completion-gate.mjs`](hooks/completion-gate.mjs), i
 - **Skip it at install time:** `npx @kensaurus/skills --all --only skills,commands,agents,rules`. Any `--only` also skips the `mcp.json` template.
 - **Remove it later:** delete the entry whose command contains `kenji-hooks/completion-gate.mjs` from `hooks.Stop` in `~/.claude/settings.json` and from `hooks.stop` in `~/.cursor/hooks.json`. Then delete `~/.claude/kenji-hooks/` and `~/.cursor/kenji-hooks/`. A later install without `--only` adds it back.
 
+### Notifications and the status line
+
+Claude Code only. These are merged into `~/.claude/settings.json` in the same single write as the Stop hook.
+
+- **Desktop notifications.** [`hooks/notify.mjs`](hooks/notify.mjs) is registered as a `Notification` hook for `permission_prompt` (a tool call has waited about six seconds for approval), `idle_prompt` (Claude finished about a minute ago and you have not typed), `agent_needs_input` and `agent_completed` (background sessions). It calls `notify-send` on Linux, `osascript` on macOS and a WinRT toast on Windows, spawns no shell, and always exits 0. If the notifier is missing, nothing happens. Source: [hooks reference](https://code.claude.com/docs/en/hooks).
+- **Status line.** [`hooks/statusline.mjs`](hooks/statusline.mjs) shows model, folder, branch, context used, session cost, five-hour usage and session name. It is set only when you have no `statusLine`; your own is never replaced. It runs no commands: the branch is read from `.git/HEAD`, so large repos do not slow it down. Source: [status line docs](https://code.claude.com/docs/en/statusline).
+- **Skill-listing budget.** Claude Code shows the model a listing of your skills against 1% of the context window and, over budget, keeps only the names of the least-used ones. A full install of this pack goes over, so `skillListingBudgetFraction` is set to `0.03` when it is unset. A value you set is kept. The installer prints the listing size against the budget in force. Source: [skills docs](https://code.claude.com/docs/en/skills).
+- **Skip them:** `--only skills,commands,agents,rules` installs no hooks and no status line. `--only hooks` installs the Stop and Notification hooks without the status line; `--only statusline` installs only the status line. The budget rides with the `skills` group, because that is what fills the listing.
+- **Remove them later:** in `~/.claude/settings.json`, delete the `hooks.Notification` entry whose command contains `kenji-hooks/notify.mjs`, the `statusLine` key if its command contains `kenji-hooks/statusline.mjs`, and `skillListingBudgetFraction`. A later install without `--only` adds them back.
+
 ### The stack-specific parts, and how to skip them
 
 These skills and rules were written on React, Next.js, and Supabase projects. Here is what assumes that stack:
@@ -134,7 +144,7 @@ These skills and rules were written on React, Next.js, and Supabase projects. He
 
 The other global rules (`verification-before-completion`, `approved-plan-execution`, `shell-first-search`, `skill-workflows`) do not depend on a stack.
 
-To install without the global rules: `npx @kensaurus/skills --all --only skills,commands,agents`. This also skips the Stop hook and the MCP template. To drop a single rule, delete its file after installing. A later install without `--only` puts it back.
+To install without the global rules: `npx @kensaurus/skills --all --only skills,commands,agents`. This also skips the Stop hook, the Notification hook, the status line, and the MCP template. To drop a single rule, delete its file after installing. A later install without `--only` puts it back.
 
 ## <img src="docs/screenshots/icons/upgrade.png" width="28" height="28" alt="" align="absmiddle"> Verify, update, uninstall
 
@@ -161,7 +171,7 @@ for f in /tmp/kenji/agents/*.md;   do rm -f ~/.cursor/agents/"$(basename "$f")" 
 
 Then remove what is left:
 - the global rules listed in [Rules](#commands-subagents-mcp-rules), from `~/.cursor/rules/` and `~/.claude/rules/`;
-- the Stop hook, as described in [The Stop hook](#the-stop-hook);
+- the Stop hook, as described in [The Stop hook](#the-stop-hook), and the Claude Code Notification hook, `statusLine` and `skillListingBudgetFraction`, as described in [Notifications and the status line](#notifications-and-the-status-line);
 - `~/.codex/AGENTS.md` and `~/.gemini/GEMINI.md` (or restore a `.bak-` copy);
 - the `plan-mode`, `research`, and `fix-issue` files in `~/.codex/prompts/` and `~/.gemini/commands/`.
 
@@ -456,7 +466,7 @@ skills/
 ├── commands/           # 63 slash commands
 ├── commands-portable/  # commands ported to Codex and Gemini
 ├── agents/             # 6 subagents
-├── hooks/              # opt-in completion Stop hook
+├── hooks/              # Stop hook, Claude Code Notification hook and status line
 ├── rules/              # global rules + per-project bundles
 ├── mcp/                # MCP templates and pinned versions
 ├── docs/               # SKILLS, CATALOG, PLAN-LOOPS, GETTING-STARTED, …
