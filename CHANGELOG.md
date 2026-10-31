@@ -6,6 +6,13 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ## [Unreleased]
 
+### Changed
+
+- **More from KENSAURUS** (README) now follows `https://kensaur.us/apps.json`: current names and
+  taglines, Skin Analysis and Hear, Hear added, one deep link per app, campaign-tagged hub link.
+  `llms.txt` gains a "More from kensaurus" section, and the site page gets a "Made by kensaurus"
+  credit, three related apps, and a JSON-LD author that points at the shared `kensaur.us/#org` node.
+
 ## [2.7.0] — 2026-10-19
 
 Claude Code sessions tell you when they need you, every skill keeps its

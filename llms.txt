@@ -38,3 +38,11 @@ Runs on Claude Opus 5.5 — the Claude Code default since 2.1.280 and a Cursor a
 - [docs/examples/plan-audits/](https://github.com/kensaurus/skills/tree/main/docs/examples/plan-audits): Sample `plan-*.md` audit outputs
 - [CHANGELOG.md](https://github.com/kensaurus/skills/blob/main/CHANGELOG.md): Release history
 - [CONTRIBUTING.md](https://github.com/kensaurus/skills/blob/main/CONTRIBUTING.md): Adding skills, validation, PR workflow
+
+## More from kensaurus
+
+- [Mushi Mushi](https://kensaur.us/mushi-mushi/): A report-a-bug button for apps, with AI that sorts the reports
+- [Solo Boss](https://solo-boss.kensaur.us/): Bookkeeping through to tax filing, for one-person companies
+- [ProjectFlow](https://kensaur.us/project-flow/): Projects, estimates, invoices and delivery in one place
+- [All apps as JSON](https://kensaur.us/apps.json)
+- [kensaurus](https://kensaur.us/)
