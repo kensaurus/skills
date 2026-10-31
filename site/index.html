@@ -33,7 +33,34 @@
     "downloadUrl": "https://www.npmjs.com/package/@kensaurus/skills",
     "description": "Agent skills, slash commands, and subagents for Claude Code, Cursor, Codex CLI, and Gemini CLI. Each playbook asks first, tests first, and proves the result.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "author": { "@type": "Person", "name": "kensaurus", "url": "https://github.com/kensaurus" }
+    "author": {
+      "@type": "Organization",
+      "@id": "https://kensaur.us/#org",
+      "name": "kensaurus合同会社",
+      "alternateName": ["kensaurus LLC", "KENSAURUS"],
+      "url": "https://kensaur.us/",
+      "sameAs": [
+        "https://github.com/kensaurus",
+        "https://x.com/sakuramotokenji",
+        "https://note.com/kensaurus",
+        "https://zenn.dev/kensaurus",
+        "https://www.linkedin.com/company/142923144/",
+        "https://bsky.app/profile/kensaurus.bsky.social",
+        "https://kensaur.us/glot-it/",
+        "https://kensaur.us/yen-yen/",
+        "https://kensaur.us/the-wanting-mind/",
+        "https://kensaur.us/help-her-take-photo/",
+        "https://solo-boss.kensaur.us/",
+        "https://tsumagoi.kensaur.us/",
+        "https://talk.kensaur.us/",
+        "https://kensaur.us/mushi-mushi/",
+        "https://kensaur.us/mushi-mushi/docs/",
+        "https://kensaur.us/skin-analysis/",
+        "https://kensaur.us/hear-hear/",
+        "https://github.com/kensaurus/skills",
+        "https://www.youtube.com/@kenjisakuramoto"
+      ]
+    }
   }
   </script>
   <style>
@@ -63,6 +90,10 @@
     li { background: var(--tile); border: 3px solid var(--fg); padding: .7rem .9rem; }
     li code { font: 700 .95rem "JetBrains Mono", monospace; color: var(--lime); }
     footer { margin-top: 3rem; color: var(--muted); font-size: .9rem; }
+    footer a, .apps a { color: var(--fg); font-weight: 800; display: inline-flex; align-items: center; min-height: 44px; }
+    .apps a { color: var(--lime); }
+    .apps a:hover, .apps a:focus-visible, footer a:hover, footer a:focus-visible { text-decoration-thickness: 3px; }
+    .apps span { color: var(--muted); }
     @media (prefers-reduced-motion: reduce) { nav a:hover { transform: none; } }
   </style>
 </head>
@@ -89,7 +120,14 @@
       <li>Claude Code plugin: <code>/plugin marketplace add kensaurus/skills</code></li>
       <li>Check an install: <code>npx @kensaurus/skills --verify --all</code></li>
     </ul>
-    <footer>MIT license. Listing status lives in docs/DISTRIBUTION.md. This page does not claim a marketplace listing that does not exist.</footer>
+    <h2>MORE FROM KENSAURUS</h2>
+    <ul class="apps">
+      <li><a href="https://kensaur.us/mushi-mushi/?utm_source=kenji-skills&amp;utm_medium=referral&amp;utm_campaign=kensaurus-family">Mushi Mushi</a> <span>A report-a-bug button for apps, with AI that sorts the reports.</span> <a href="https://kensaur.us/mushi-mushi/docs/demo/diagnosis?utm_source=kenji-skills&amp;utm_medium=referral&amp;utm_campaign=kensaurus-family">See a sample diagnosis &rarr;</a></li>
+      <li><a href="https://solo-boss.kensaur.us/?utm_source=kenji-skills&amp;utm_medium=referral&amp;utm_campaign=kensaurus-family">Solo Boss</a> <span>Bookkeeping through to tax filing, for one-person companies.</span> <a href="https://solo-boss.kensaur.us/why?utm_source=kenji-skills&amp;utm_medium=referral&amp;utm_campaign=kensaurus-family">Why it exists &rarr;</a></li>
+      <li><a href="https://kensaur.us/project-flow/?utm_source=kenji-skills&amp;utm_medium=referral&amp;utm_campaign=kensaurus-family">ProjectFlow</a> <span>Projects, estimates, invoices and delivery in one place.</span></li>
+      <li><a href="https://kensaur.us/?utm_source=kenji-skills&amp;utm_medium=referral&amp;utm_campaign=kensaurus-family">All our apps &rarr;</a></li>
+    </ul>
+    <footer>MIT license. Listing status lives in docs/DISTRIBUTION.md. This page does not claim a marketplace listing that does not exist. <a href="https://kensaur.us/?utm_source=kenji-skills&amp;utm_medium=referral&amp;utm_campaign=kensaurus-family">Made by kensaurus</a></footer>
   </main>
 </body>
 </html>
