@@ -37,7 +37,8 @@
     "test:install": "node scripts/test-install.mjs",
     "test:completion-gate": "node scripts/test-completion-gate.mjs",
     "test": "node scripts/validate-skills.mjs && node scripts/check-skill-count.mjs && node scripts/generate-skill-index.mjs --check && node scripts/scan-secrets.mjs --self-test && node scripts/check-mcp-pins.mjs && node scripts/check-docs-facts.mjs && node scripts/check-skill-refs.mjs --self-test && node scripts/check-skill-refs.mjs && node scripts/check-md-structure.mjs --self-test && node scripts/check-md-structure.mjs && node scripts/check-reference-toc.mjs --self-test && node scripts/check-reference-toc.mjs && node scripts/shorten-skill-descriptions.mjs --self-test && node scripts/test-completion-gate.mjs && node scripts/test-install.mjs && npm run -s check:dead-code && npm run -s check:dead-code:prod",
-    "brand:walkthrough": "node scripts/render-walkthrough.mjs"
+    "brand:walkthrough": "node scripts/render-walkthrough.mjs",
+    "sync:family": "node scripts/sync-family.mjs"
   },
   "keywords": [
     "agent-skills",

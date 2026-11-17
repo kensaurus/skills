@@ -212,14 +212,14 @@ Yes, MIT licensed.
 
 Other apps and tools from the same studio. Full list → [README § More from KENSAURUS](../README.md#more-from-kensaurus).
 
-### Mushi Mushi — in-app bug reports your monitoring missed
+### Mushi Mushi: why your AI-built app broke, and the fix for your editor
 
 ```bash
 npx mushi-mushi
 npx skills add kensaurus/mushi-mushi
 ```
 
-`npx mushi-mushi` is the published CLI. `npx skills add` installs the Cursor/Claude skills. Shake-to-report widget → AI-classified bug reports → optional AI draft PR. MIT SDK.
+`npx mushi-mushi` is the published CLI. `npx skills add` installs its agent skills. Mushi Mushi finds what breaks and where people get stuck in your app, explains why, and hands your editor the fix. Open source. This pack's `mushi-health` and `mushi-integration` skills work with it.
 
-- [kensaur.us/mushi-mushi](https://kensaur.us/mushi-mushi)
+- [kensaur.us/mushi-mushi](https://kensaur.us/mushi-mushi/)
 - [github.com/kensaurus/mushi-mushi](https://github.com/kensaurus/mushi-mushi)

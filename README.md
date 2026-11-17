@@ -612,50 +612,38 @@ This pack ships skills, slash commands, subagents, rules, and MCP templates in o
 <table>
   <tr>
     <td width="50%" valign="top">
-      <img src="https://kensaur.us/glot-it/icon-512.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
-      <b>glot.it</b> · A Thai learning app with an AI tutor.<br>
-      <sub><a href="https://kensaur.us/glot-it/features/tone-ear/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">60-second tone test</a> · <a href="https://apps.apple.com/us/app/glot-it/id6761582648">App Store</a> · <a href="https://play.google.com/store/apps/details?id=com.glotit.app">Google Play</a> · <a href="https://kensaur.us/glot-it/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a></sub>
+      <img src="https://tsumagoi.kensaur.us/apple-touch-icon.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>Tsumagoi Work&amp;Camp</b> · A 24-hour mountain lounge, run by us.<br>
+      <sub><a href="https://tsumagoi.kensaur.us/reserve?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Book a stay</a> · <a href="https://tsumagoi.kensaur.us/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://kensaur.us/notes/doryoku-meter/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
     </td>
     <td width="50%" valign="top">
-      <img src="https://kensaur.us/yen-yen/icon.svg" width="56" height="56" alt="" align="left" style="margin-right:12px">
-      <b>yen-yen</b> · A shared household money book, no bank login.<br>
-      <sub><a href="https://kensaur.us/yen-yen/kakeibo?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">What kakeibo is</a> · <a href="https://apps.apple.com/app/id6764548441">App Store</a> · <a href="https://play.google.com/store/apps/details?id=app.yenyen">Google Play</a> · <a href="https://kensaur.us/yen-yen/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a></sub>
+      <img src="https://kensaur.us/mushi-mushi/favicon.svg" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>Mushi Mushi</b> · Tells you why your AI-built app broke, and hands the fix to your editor.<br>
+      <sub><a href="https://kensaur.us/mushi-mushi/docs/demo/diagnosis?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">See a sample diagnosis</a> · <a href="https://kensaur.us/mushi-mushi/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://github.com/kensaurus/mushi-mushi">GitHub</a> · <a href="https://kensaur.us/notes/mushi-mushi/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
     </td>
   </tr>
   <tr>
     <td valign="top">
-      <img src="https://kensaur.us/the-wanting-mind/pwa-512x512.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
-      <b>the wanting mind</b> · A book about why we want, free to read online.<br>
-      <sub><a href="https://kensaur.us/the-wanting-mind/en/preface?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Start with the preface</a> · <a href="https://apps.apple.com/us/app/the-wanting-mind/id6761361305">App Store</a> · <a href="https://play.google.com/store/apps/details?id=us.kensaur.thewantingmind">Google Play</a> · <a href="https://kensaur.us/the-wanting-mind/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a></sub>
-    </td>
-    <td valign="top">
-      <img src="https://kensaur.us/help-her-take-photo/assets/apple-touch-icon.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
-      <b>help her take photo</b> · Two phones, one camera: the person in the photo directs the shot.<br>
-      <sub><a href="https://kensaur.us/help-her-take-photo/guides/partner-photos?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Better photos of your partner</a> · <a href="https://apps.apple.com/app/help-her-take-photo/id6762513666">App Store</a> · <a href="https://play.google.com/store/apps/details?id=com.kensaurus.helphertakephoto">Google Play</a> · <a href="https://kensaur.us/help-her-take-photo/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a></sub>
-    </td>
-  </tr>
-  <tr>
-    <td valign="top">
-      <img src="https://talk.kensaur.us/pwa-192.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
-      <b>lets-talk</b> · Practise difficult conversations with an AI coach.<br>
-      <sub><a href="https://talk.kensaur.us/advise?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Try it as a guest</a> · <a href="https://apps.apple.com/app/id6799392790">App Store</a> · <a href="https://play.google.com/store/apps/details?id=us.kensaur.howtotalktogirls">Google Play</a> · <a href="https://talk.kensaur.us/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a></sub>
+      <img src="https://raw.githubusercontent.com/kensaurus/lazycow-studio/main/server/brand/icon-192.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>Lazycow Studio</b> · Turns your own footage into reels and books the posts; you only approve.<br>
+      <sub><a href="https://github.com/kensaurus/lazycow-studio/releases">Download</a> · <a href="https://github.com/kensaurus/lazycow-studio">GitHub</a> · <a href="https://kensaur.us/notes/lazycow-studio/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
     </td>
     <td valign="top">
       <img src="https://solo-boss.kensaur.us/apple-touch-icon.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
       <b>Solo Boss</b> · Bookkeeping through to tax filing, for one-person companies.<br>
-      <sub><a href="https://solo-boss.kensaur.us/why?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Why it exists</a> · <a href="https://solo-boss.kensaur.us/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a></sub>
+      <sub><a href="https://solo-boss.kensaur.us/why?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Why it exists</a> · <a href="https://solo-boss.kensaur.us/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://kensaur.us/notes/solo-boss/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
     </td>
   </tr>
   <tr>
     <td valign="top">
-      <img src="https://tsumagoi.kensaur.us/apple-touch-icon.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
-      <b>Tsumagoi Work&amp;Camp</b> · A 24-hour mountain lounge, run by us.<br>
-      <sub><a href="https://tsumagoi.kensaur.us/reserve?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Book a stay</a> · <a href="https://tsumagoi.kensaur.us/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://www.instagram.com/tsumagoicamp/">Instagram</a> · <a href="https://maps.app.goo.gl/JCNnTfsdQVHCS1FA7">Maps</a></sub>
+      <img src="https://kensaur.us/tsumagoi-plan/cabbage-icon.svg" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>Ranch Plan</b> · The business plan behind Tsumagoi Work&amp;Camp.<br>
+      <sub><a href="https://kensaur.us/tsumagoi-plan/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family#gallery">Before and after</a> · <a href="https://kensaur.us/tsumagoi-plan/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a></sub>
     </td>
     <td valign="top">
-      <img src="https://kensaur.us/mushi-mushi/favicon.svg" width="56" height="56" alt="" align="left" style="margin-right:12px">
-      <b>Mushi Mushi</b> · A report-a-bug button for apps, with AI that sorts the reports.<br>
-      <sub><a href="https://kensaur.us/mushi-mushi/docs/demo/diagnosis?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">See a sample diagnosis</a> · <a href="https://kensaur.us/mushi-mushi/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://www.npmjs.com/package/mushi-mushi">npm</a> · <a href="https://github.com/kensaurus/mushi-mushi">GitHub</a></sub>
+      <img src="https://kensaur.us/daily-reports/favicon.svg" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>Project Ledger</b> · A daily work log for a team’s projects.<br>
+      <sub><a href="https://kensaur.us/daily-reports/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a></sub>
     </td>
   </tr>
   <tr>
@@ -665,17 +653,60 @@ This pack ships skills, slash commands, subagents, rules, and MCP templates in o
       <sub><a href="https://kensaur.us/skin-analysis/capture/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Take the selfie</a> · <a href="https://kensaur.us/skin-analysis/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a></sub>
     </td>
     <td valign="top">
-      <img src="https://kensaur.us/hear-hear/favicon.svg" width="56" height="56" alt="" align="left" style="margin-right:12px">
-      <b>Hear, Hear</b> · Live transcription in your browser, no account.<br>
-      <sub><a href="https://kensaur.us/hear-hear/recording/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Start recording</a> · <a href="https://kensaur.us/hear-hear/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a></sub>
+      <img src="https://kensaur.us/project-flow/favicon.svg" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>ProjectFlow</b> · Projects, estimates, invoices and delivery in one place.<br>
+      <sub><a href="https://kensaur.us/project-flow/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a></sub>
     </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <img src="https://kensaur.us/glot-it/icon-512.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>glot.it</b> · A Thai learning app with an AI tutor.<br>
+      <sub><a href="https://kensaur.us/glot-it/features/tone-ear/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">60-second tone test</a> · <a href="https://apps.apple.com/us/app/glot-it/id6761582648">App Store</a> · <a href="https://play.google.com/store/apps/details?id=com.glotit.app">Google Play</a> · <a href="https://kensaur.us/glot-it/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://kensaur.us/notes/glot-it/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
+    </td>
+    <td valign="top">
+      <img src="https://kensaur.us/help-her-take-photo/assets/apple-touch-icon.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>help her take photo</b> · Two phones, one camera: the person in the photo directs the shot.<br>
+      <sub><a href="https://kensaur.us/help-her-take-photo/guides/partner-photos?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Better photos of your partner</a> · <a href="https://apps.apple.com/app/help-her-take-photo/id6762513666">App Store</a> · <a href="https://play.google.com/store/apps/details?id=com.kensaurus.helphertakephoto">Google Play</a> · <a href="https://kensaur.us/help-her-take-photo/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://kensaur.us/notes/help-her-take-photo/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <img src="https://kensaur.us/yen-yen/icon.svg" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>yen-yen</b> · A shared household money book, no bank login.<br>
+      <sub><a href="https://kensaur.us/yen-yen/kakeibo?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">What kakeibo is</a> · <a href="https://apps.apple.com/app/id6764548441">App Store</a> · <a href="https://play.google.com/store/apps/details?id=app.yenyen">Google Play</a> · <a href="https://kensaur.us/yen-yen/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://kensaur.us/notes/yen-yen/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
+    </td>
+    <td valign="top">
+      <img src="https://kensaur.us/konte/konte-favicon.svg" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>Konte</b> · Plan and make an 8-second AI video, step by step (prototype).<br>
+      <sub><a href="https://kensaur.us/konte/how-to?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">How it works</a> · <a href="https://kensaur.us/konte/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a></sub>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <img src="https://kensaur.us/the-wanting-mind/pwa-512x512.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>the wanting mind</b> · A book about why we want, free to read online.<br>
+      <sub><a href="https://kensaur.us/the-wanting-mind/en/preface?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Start with the preface</a> · <a href="https://apps.apple.com/us/app/the-wanting-mind/id6761361305">App Store</a> · <a href="https://play.google.com/store/apps/details?id=us.kensaur.thewantingmind">Google Play</a> · <a href="https://kensaur.us/the-wanting-mind/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://kensaur.us/notes/the-wanting-mind/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
+    </td>
+    <td valign="top">
+      <img src="https://talk.kensaur.us/pwa-192.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>lets-talk</b> · Practise difficult conversations with an AI coach.<br>
+      <sub><a href="https://talk.kensaur.us/advise?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Try it as a guest</a> · <a href="https://apps.apple.com/app/id6799392790">App Store</a> · <a href="https://play.google.com/store/apps/details?id=us.kensaur.howtotalktogirls">Google Play</a> · <a href="https://talk.kensaur.us/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://kensaur.us/notes/lets-talk/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <img src="https://kensaur.us/hear-hear/favicon.svg" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>Hear, Hear</b> · Live transcription in your browser, no account (prototype).<br>
+      <sub><a href="https://kensaur.us/hear-hear/recording/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Start recording</a> · <a href="https://kensaur.us/hear-hear/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://kensaur.us/notes/hear-hear/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
+    </td>
+    <td valign="top"></td>
   </tr>
 </table>
 
 All apps on Google Play: [kensaurus developer page](https://play.google.com/store/apps/developer?id=kensaurus). Everything else: [kensaur.us](https://kensaur.us/?utm_source=github&utm_medium=readme&utm_campaign=kensaurus-family).
 
-The list comes from https://kensaur.us/apps.json (kensaurus/kensaur.us `src/data/family.json`).
-
+The list comes from https://kensaur.us/apps.json. `npm run sync:family` rewrites it; do not edit it by hand.
 
 ---
 
