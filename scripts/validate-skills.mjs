@@ -253,6 +253,23 @@ for (const group of groups) {
     checkChain(id, dir, front);
     if (desc && fmScalar(front, "disable-model-invocation") !== "true") listing[group] += listingEntry(dir, desc, front);
 
+    // Two rules the Agent Plugins marketplaces lint for (vally: spec-compliance
+    // and valid-refs). The whole file, frontmatter included, stays within 500
+    // lines, and no link leaves the skill folder: a skill installed on its own
+    // has no sibling skills and no repo docs beside it.
+    if (group === "skills") {
+      const fileLines = raw.replace(/\n$/, "").split("\n").length;
+      if (fileLines > 500) errors.push(`${id}: SKILL.md is ${fileLines} lines; the limit is 500 including frontmatter — move a section to references/`);
+      let fenced = false;
+      raw.split("\n").forEach((line, i) => {
+        if (/^\s*```/.test(line)) fenced = !fenced;
+        if (fenced) return;
+        for (const link of line.matchAll(/\]\((\.\.\/[^)\s]+)\)/g)) {
+          errors.push(`${id}: SKILL.md line ${i + 1} links outside the skill folder (${link[1]}) — name the skill, or link a full URL`);
+        }
+      });
+    }
+
     // body length (warning only)
     const lines = body.split("\n").length;
     if (lines > BODY_WARN) {

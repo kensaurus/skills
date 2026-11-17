@@ -6,6 +6,37 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ## [Unreleased]
 
+## [2.8.1] — 2026-11-17
+
+Fixes found after 2.8.0, and what the Agent Plugins marketplaces lint for.
+
+### Fixed
+
+- **A core-only install can finish every core workflow.** `workflow-quality-gate`
+  chains to `test-red-team`, `audit-bundle-size` and `audit-performance`,
+  which were outside `core`. They are now in it (31 skills, a listing of about
+  7,200 characters), and `validate-skills` fails when a core skill chains
+  outside core.
+- **`--prune` also removes orphaned commands**: this pack's command files that
+  only name skills outside the profile. A command you edited is left alone;
+  removed ones are copied to `.kenji-pruned/` first.
+- **All 162 skills pass `vally lint`**, the check GitHub's Copilot plugin
+  marketplace runs. Two `SKILL.md` files were over 500 lines
+  (`debug-sentry-monitor`, `mobile-emulator-test`; one section of each moved
+  to `references/`), and three linked outside their own folder
+  (`enhance-skill-prompts`, `meta-skill-creator`, `mushi-integration`), which
+  breaks when a skill is installed on its own. `validate-skills` now enforces
+  both rules.
+- **`evals/README.md`** named the wrong results folder.
+
+### Added
+
+- **[docs/LAUNCH-KIT.md](docs/LAUNCH-KIT.md)**: measured reach, the rules of
+  each announcement channel, the objections to answer, and an order of work.
+- **A VS Code and Copilot install link** in the README.
+- **`check-docs-facts`** checks the README profile table against
+  `profiles.json`.
+
 ## [2.8.0] — 2026-11-17
 
 One command to remember, a smaller install when you want one, and skill text

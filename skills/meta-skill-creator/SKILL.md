@@ -101,7 +101,7 @@ Think of Claude as exploring a path: a narrow bridge with cliffs needs specific 
 ### Prompt techniques (T1–T8)
 
 New skills should be *born* with these, not retrofitted later. Full procedure:
-[docs/PROMPT-ENHANCEMENT-PLAYBOOK.md](../../docs/PROMPT-ENHANCEMENT-PLAYBOOK.md).
+[docs/PROMPT-ENHANCEMENT-PLAYBOOK.md](https://github.com/kensaurus/skills/blob/main/docs/PROMPT-ENHANCEMENT-PLAYBOOK.md).
 Upgrade an *existing* skill's prompt (not its behavior) with
 `enhance-skill-prompts`.
 

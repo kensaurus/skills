@@ -17,7 +17,7 @@ intent, scope, and family semantics exactly. If a change would alter
 behavior, scope, or read-only / plan-only / apply-now stance, stop and flag
 it instead.
 
-Grounded in [docs/PROMPT-ENHANCEMENT-PLAYBOOK.md](../../docs/PROMPT-ENHANCEMENT-PLAYBOOK.md)
+Grounded in [docs/PROMPT-ENHANCEMENT-PLAYBOOK.md](https://github.com/kensaurus/skills/blob/main/docs/PROMPT-ENHANCEMENT-PLAYBOOK.md)
 and the annotated exemplar
 [references/exemplar-audit-auth-flows.md](references/exemplar-audit-auth-flows.md).
 Live reference after the exemplar was applied:

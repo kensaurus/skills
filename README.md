@@ -101,6 +101,7 @@ How each path was chosen:
 - **Claude Code** loads every file in `~/.claude/rules/` in every project, except rules with a `paths:` field, which load only when matching files are open ([Claude Code memory docs](https://code.claude.com/docs/en/memory)).
 - **Other agents.** The [skills CLI](https://github.com/vercel-labs/skills) copies `SKILL.md` folders into the folder each agent reads, for example GitHub Copilot, OpenCode, or Antigravity CLI. Pass `-g` for your user folder and `-a <agent-id>` for the agent. The IDs are in the skills CLI README under "Supported Agents". Example: `npx skills add kensaurus/skills -g -a github-copilot`. You get the skills in `skills/` only, without commands, subagents, rules, or the hook.
 - **Claude Code plugin.** Instead of the installer, you can run `/plugin marketplace add kensaurus/skills` and then `/plugin install kenji@kenji`.
+- **VS Code and GitHub Copilot.** The root [`plugin.json`](plugin.json) follows Agent Plugins 1.0.0, so Copilot can add this repo as a plugin marketplace. In VS Code, open `vscode://chat-plugin/add-marketplace?ref=kensaurus%2Fskills`. You get the skills in `skills/`, without commands, subagents, rules, or the hook.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/architecture-dark.png">
