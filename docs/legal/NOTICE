@@ -1,10 +1,10 @@
 kenji
 Copyright (c) 2026 kensaurus LLC
-Licensed under the MIT License (see LICENSE).
+Licensed under the MIT License (see LICENSE at the repository root).
 
 The following skills are adapted from Anthropic's agent-skills repository
 (https://github.com/anthropics/skills), originally licensed under the Apache
-License, Version 2.0 (see LICENSE-APACHE):
+License, Version 2.0 (see LICENSE-APACHE at the repository root):
 
   - skills/meta-skill-creator/   (adapted from anthropics/skills/skills/skill-creator)
   - skills/design-generative-art/ (adapted from anthropics/skills/skills/algorithmic-art)

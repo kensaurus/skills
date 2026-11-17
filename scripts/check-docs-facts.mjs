@@ -26,7 +26,7 @@ const essential = JSON.parse(read("mcp/mcp.json.template"));
 const essentialServers = Object.keys(essential.mcpServers || {});
 
 const readme = read("README.md");
-const security = read("SECURITY.md");
+const security = read(".github/SECURITY.md");
 const promotion = read("docs/PROMOTION.md");
 const publishing = read("docs/PUBLISHING.md");
 const gettingStarted = read("docs/GETTING-STARTED.md");
@@ -61,7 +61,7 @@ if (profilesText) {
 }
 
 if (security.includes("npm run prepare")) {
-  errors.push("SECURITY.md: must not tell contributors to run `npm run prepare`");
+  errors.push(".github/SECURITY.md: must not tell contributors to run `npm run prepare`");
 }
 
 for (const forbidden of ["Sequential Thinking", "Playwright"]) {

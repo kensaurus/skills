@@ -6,9 +6,9 @@ Thanks for wanting to improve this toolkit. Every contribution — a better skil
 
 ## Quick Links
 
-- [Full contribution guide](docs/CONTRIBUTING.md) — detailed instructions for adding skills, commands, and rules
-- [Skill catalog](docs/CATALOG.md) — full reference with all trigger phrases
-- [AGENTS.template.md](docs/AGENTS.template.md) — copy to consumer projects as root `AGENTS.md`
+- [Full contribution guide](../docs/CONTRIBUTING.md) — detailed instructions for adding skills, commands, and rules
+- [Skill catalog](../docs/CATALOG.md) — full reference with all trigger phrases
+- [AGENTS.template.md](../docs/AGENTS.template.md) — copy to consumer projects as root `AGENTS.md`
 - [Open an issue](https://github.com/kensaurus/skills/issues) — report a bug or request a skill
 
 ---
@@ -99,9 +99,9 @@ Brief purpose statement.
 - `other-skill` — how it complements this one
 ```
 
-A skill whose name starts with a family prefix (`audit-`, `plan-`, `data-`, `workflow-`, …) fails `npm test` without the **Degree of freedom** line, `## Worked example`, and `## Self-critique`. Every skill's `description` also counts toward a fixed skill-listing budget ([ADR-0010](docs/adr/0010-measure-the-skill-listing-like-the-client.md)). If a new skill pushes it over, shorten descriptions or mark a user-only ritual `disable-model-invocation: true`; never raise the cap.
+A skill whose name starts with a family prefix (`audit-`, `plan-`, `data-`, `workflow-`, …) fails `npm test` without the **Degree of freedom** line, `## Worked example`, and `## Self-critique`. Every skill's `description` also counts toward a fixed skill-listing budget ([ADR-0010](../docs/adr/0010-measure-the-skill-listing-like-the-client.md)). If a new skill pushes it over, shorten descriptions or mark a user-only ritual `disable-model-invocation: true`; never raise the cap.
 
-See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for the full quality checklist.
+See [docs/CONTRIBUTING.md](../docs/CONTRIBUTING.md) for the full quality checklist.
 
 ---
 

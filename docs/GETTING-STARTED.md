@@ -186,7 +186,7 @@ Yes. `npx @kensaurus/skills --auto --profile core --prune` keeps the core set an
 Any current one. The playbooks do not depend on a model. In Claude Code the default (Opus 5.5 at medium effort) suits most work; pick a stronger model or `/effort high` only for the hardest jobs. [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md) has a table.
 
 **Can I add my own skills?**
-Yes. See [CONTRIBUTING.md](../CONTRIBUTING.md).
+Yes. See [CONTRIBUTING.md](../.github/CONTRIBUTING.md).
 
 **Does this work with Claude, Codex, or Gemini?**
 Yes. `npx @kensaurus/skills --all` installs the full pack for Cursor and Claude Code. Codex CLI and Gemini CLI get the skills (in `~/.agents/skills`, the user skills folder both read), and the rules merged into `AGENTS.md` / `GEMINI.md`. Gemini CLI also gets a few portable commands. Which agent gets what: [README](../README.md#which-agents-are-supported). Skills-only: `npx skills add kensaurus/skills`. Claude Code plugin: `/plugin marketplace add kensaurus/skills`. Both hosts read the same skill text. On Claude Code each skill's `effort:` key sets how hard it thinks (audits and plans high, implementation at the session default); other hosts ignore that key and run at the model you pick. See [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md).

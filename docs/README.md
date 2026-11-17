@@ -20,7 +20,7 @@ Quick map of `docs/` — start with [GETTING-STARTED.md](GETTING-STARTED.md) if 
 | [HOUSEKEEP-REPORT.md](HOUSEKEEP-REPORT.md) | Historical (1.4.2 / 2026-06-24) — not current install truth |
 | [PLAN-SKILL-PACK-ENHANCEMENT.md](PLAN-SKILL-PACK-ENHANCEMENT.md) | Historical executed plan (94-skill inventory) |
 
-Repo root also has [README.md](../README.md) (install + overview + capability cards), [llms.txt](../llms.txt) (AI/crawler index), [SECURITY.md](../SECURITY.md) (secrets + MCP hygiene), [CONTRIBUTING.md](../CONTRIBUTING.md) (short form), and [CHANGELOG.md](../CHANGELOG.md). Screenshot sources for the README hero/tour live in [screenshots/](screenshots/).
+Repo root also has [README.md](../README.md) (install + overview + capability cards), [llms.txt](../llms.txt) (AI/crawler index), and [CHANGELOG.md](../CHANGELOG.md). `.github/` holds [SECURITY.md](../.github/SECURITY.md) (secrets + MCP hygiene) and [CONTRIBUTING.md](../.github/CONTRIBUTING.md) (short form). Screenshot sources for the README hero/tour live in [screenshots/](screenshots/).
 
 **Skill count:** run `npm run check:skills` — the number in README, `package.json`, and this catalog is derived from `skills/*/SKILL.md`, not hand-edited.
 

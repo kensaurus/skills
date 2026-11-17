@@ -1,0 +1,3 @@
+# package.json#files ships docs/legal/NOTICE; npm would also pack this folder's README.md.
+# Keep the tarball to the files listed there.
+README.md
