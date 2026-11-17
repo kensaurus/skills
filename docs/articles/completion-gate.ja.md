@@ -253,8 +253,8 @@ npx @kensaurus/skills --auto --profile core
 - [Mushi Mushi](https://kensaur.us/mushi-mushi/): AIで作ったアプリが壊れた理由を説明し、直し方をエディタに渡す。[ソースは GitHub](https://github.com/kensaurus/mushi-mushi) にあります
 - [一人社長](https://solo-boss.kensaur.us/): 一人会社の帳簿づけから、決算・申告まで
 - [嬬恋牧場Work&Camp](https://tsumagoi.kensaur.us/): 自分たちで運営する、山の24時間ラウンジ
-- [help her take photo](https://kensaur.us/help-her-take-photo/): 2台のスマホで、撮られる人が写真を指示できる
-- [lets-talk](https://talk.kensaur.us/): 言いにくい会話を、AIコーチと練習
+- [help her take photo](https://kensaur.us/help-her-take-photo/): ゲスト全員に、使い捨てカメラを
+- [lets-talk](https://talk.kensaur.us/): 気まずい一文を送る前に採点
 
 React、Next.js、Supabase、React Native、Capacitor の案件が中心なので、スキルもその構成に寄っています。Mushi Mushi と組み合わせるための `mushi-*` スキルも2つ入っています。
 
