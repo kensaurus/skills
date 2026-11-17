@@ -42,7 +42,7 @@ Prose does not set thinking depth. "Think step by step", "think harder", and "an
 | Judgment: `audit-*`, `plan-*`, `debug-*`, `completion-judge`, `code-reviewer`, security and architecture review, verdict skills, `research`, grilling and PRDs | `high` | Recall and severity calls are where a lower level leaves findings behind |
 | Hardest planning only (a one-time whole-repo burndown) | `xhigh` | Costs many more tokens; use it for a measured gain |
 | Implementation: `enhance-*`, `backend-*`, `design-*`, `workflow-build-feature`, `workflow-fix-and-ship`, closure modes | the session's level (key omitted) | `medium` is Claude Code's default and the measured sweet spot for agentic coding |
-| Mechanical and read-only: `kenji`, `handoff`, `workflow-git-commit`, smoke checks, scripted bring-up, `deploy-checker` | `low` | Exact steps and pass/fail reads need no more |
+| Mechanical and read-only: `handoff`, `workflow-git-commit`, smoke checks, scripted bring-up, `deploy-checker` | `low` | Exact steps and pass/fail reads need no more |
 
 Each skill's frontmatter is the source of truth; this table is the convention it follows (ADR-0006).
 

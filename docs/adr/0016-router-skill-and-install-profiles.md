@@ -42,6 +42,13 @@ Measured here: the full listing is 38,994 characters at a 39,000 ratchet; the
    core route for `claude plugin eval`. They spend real tokens, so they are a
    maintainer step and not part of `npm test`.
 
+5. **New hosts get skills only, through their own documented paths.**
+   `--antigravity` writes `~/.gemini/config/skills` and is not part of
+   `--all` (ADR-0001 keeps `--all` at four tools). Root `plugin.json` (Agent
+   Plugins 1.0.0) and `gemini-extension.json` carry the skills only. Codex
+   prompt files are written only with `--codex-prompts`, because Codex CLI
+   removed custom prompts in 0.117.0.
+
 ## Consequences
 
 - The npm package is still one package (ADR-0005). Profiles are a filter in

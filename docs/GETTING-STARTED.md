@@ -1,6 +1,6 @@
 # Getting Started with kenji
 
-A short guide for people who have never used agent skills. It works the same in Claude Code, Cursor, Codex CLI, Gemini CLI, and Antigravity CLI.
+A short guide for people who have never used agent skills. The playbooks are the same in Claude Code, Cursor, Codex CLI, Gemini CLI, and Antigravity CLI; only how you start one differs a little (see Step 4).
 
 ---
 
@@ -80,6 +80,15 @@ Close and reopen it. The playbooks are now active.
 ```
 
 `/kenji` names the one playbook that fits, says in a line what you will get, and runs it. If two playbooks fit, it asks you one question first. With no job after it, `/kenji` shows a short menu.
+
+How to type it in each agent:
+
+| Agent | Type |
+|:------|:-----|
+| Claude Code, Cursor, Antigravity CLI | `/kenji` and the job |
+| Claude Code, installed as a plugin | `/kenji:kenji` and the job |
+| Codex CLI | `$kenji` and the job, or pick it from `/skills` |
+| Gemini CLI | Say "use the kenji skill" and the job |
 
 That is the whole product. The rest of this page shows what a longer session looks like.
 
@@ -171,7 +180,7 @@ No, for most skills. Skills that talk to Sentry, Supabase, or Langfuse tell you 
 A little, and you control it. A playbook's full text loads only when it runs. What rides in every request is a one-line description of each installed skill: about 39,000 characters for the full pack. A profile install (`--profile core`) is a small fraction of that. `/kenji` and `/handoff` are not in that listing at all. See [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md).
 
 **Can I remove skills I don't need?**
-Yes. `npx @kensaurus/skills --auto --profile core --prune` keeps the core set and removes the rest of this pack's skills. Your own skills are never touched.
+Yes. `npx @kensaurus/skills --auto --profile core --prune` keeps the core set and removes the rest of this pack's skills, after copying them to a `.kenji-pruned/` backup folder. It removes by folder name, so a skill of yours with a name this pack does not ship is never touched.
 
 **Which AI model should I use?**
 Any current one. The playbooks do not depend on a model. In Claude Code the default (Opus 5.5 at medium effort) suits most work; pick a stronger model or `/effort high` only for the hardest jobs. [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md) has a table.
@@ -180,7 +189,7 @@ Any current one. The playbooks do not depend on a model. In Claude Code the defa
 Yes. See [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 **Does this work with Claude, Codex, or Gemini?**
-Yes. `npx @kensaurus/skills --all` installs the full pack for Cursor and Claude Code. Codex CLI and Gemini CLI get the skills (in `~/.agents/skills`, the user skills folder both read), the rules merged into `AGENTS.md` / `GEMINI.md`, and a few portable commands. Which agent gets what: [README](../README.md#which-agents-are-supported). Skills-only: `npx skills add kensaurus/skills`. Claude Code plugin: `/plugin marketplace add kensaurus/skills`. Both hosts read the same skill text. On Claude Code each skill's `effort:` key sets how hard it thinks (audits and plans high, implementation at the session default); other hosts ignore that key and run at the model you pick. See [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md).
+Yes. `npx @kensaurus/skills --all` installs the full pack for Cursor and Claude Code. Codex CLI and Gemini CLI get the skills (in `~/.agents/skills`, the user skills folder both read), and the rules merged into `AGENTS.md` / `GEMINI.md`. Gemini CLI also gets a few portable commands. Which agent gets what: [README](../README.md#which-agents-are-supported). Skills-only: `npx skills add kensaurus/skills`. Claude Code plugin: `/plugin marketplace add kensaurus/skills`. Both hosts read the same skill text. On Claude Code each skill's `effort:` key sets how hard it thinks (audits and plans high, implementation at the session default); other hosts ignore that key and run at the model you pick. See [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md).
 
 **Is it free?**
 Yes, MIT licensed.

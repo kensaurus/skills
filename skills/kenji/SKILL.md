@@ -7,7 +7,6 @@ description: >-
 argument-hint: "[the job, in your own words]"
 disable-model-invocation: true
 license: MIT
-effort: low
 ---
 
 # kenji: say the job, get the playbook
@@ -31,6 +30,10 @@ job. You name the one playbook that fits, say why in one line, and run it.
    will do, and what the user gets at the end.
 5. **Run it.** Load that skill and carry out the job with it in this turn.
    Routing is not the result; the playbook's output is.
+
+A few playbooks are rituals only the user can start: `handoff`, `deploy-npm`,
+`iterate-gtm-weekly`, `mushi-health`, and `mushi-integration`. You cannot load
+those. Name the one that fits and tell the user to type `/<name>`.
 
 A playbook that changes code after an audit (`plan-*` and most `audit-*`)
 stops for approval on its own. Do not add a second approval step in front.
@@ -56,7 +59,7 @@ stops for approval on its own. Do not add a second approval step in front.
 | Turn the working tree into a PR | `workflow-release-prep` | A merge-ready PR; it does not merge |
 | Deploy and watch it | `workflow-ship-and-observe` | Live revision confirmed, rollback if it breaks |
 | Get users for a shipped product | `workflow-gtm` | A go-to-market plan, then the work |
-| Stop for today | `handoff` | A handoff file for the next session |
+| Stop for today | `handoff` (the user types `/handoff`) | A handoff file for the next session |
 
 ## When the playbook is not installed
 

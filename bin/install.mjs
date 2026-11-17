@@ -172,7 +172,10 @@ Flags:
                       that names only skills outside the profile is skipped. Also
                       applies to --verify. A merge: skills already installed stay.
   --prune             With --profile: remove the pack's skills outside the profile
-                      from each skills directory written. Your own skills are kept.
+                      from each skills directory written, by folder name. Each
+                      removed folder is first copied to .kenji-pruned/<stamp>/
+                      beside the skills directory (skip with --no-backup).
+                      Folders this pack does not ship are never touched.
   --list-profiles     Print each profile's name, title, skill count and description.
   --link              Symlink (junction on Windows) instead of copying — for repo dev.
   --restore [stamp]   Copy a backup under <target>/.kenji-backups/ back into place.
@@ -647,19 +650,33 @@ function commandOutsideProfile(file) {
 }
 
 /** --prune: remove the pack's skills/ folders outside the profile from one
- *  skills directory. Names this pack does not ship in skills/ are never touched. */
+ *  skills directory. Names this pack does not ship in skills/ are never touched.
+ *  It matches by folder name, so a folder the user edited in place goes too:
+ *  each one is copied to <parent>/.kenji-pruned/<stamp>/ first (skip with
+ *  --no-backup). That folder is separate from .kenji-backups so --restore,
+ *  which replaces whole directories, never restores a partial skills set. */
+const PRUNED_DIR = '.kenji-pruned';
+const pruneStamp = new Date().toISOString().replace(/[:.]/g, '-');
 function pruneOutsideProfile(skillsDest, label) {
   if (!doPrune || !skillsDest || !existsSync(skillsDest)) return;
   const shippedElsewhere = resolve(__dir, 'skills-cursor');
+  const backupDir = join(dirname(skillsDest), PRUNED_DIR, pruneStamp, label.toLowerCase());
   let removed = 0;
   for (const name of packSkillDirNames()) {
     if (profileSkills.has(name) || existsSync(join(shippedElsewhere, name))) continue;
     const stale = join(skillsDest, name);
     if (!existsSync(stale)) continue;
-    if (!isDryRun) rmSync(stale, { recursive: true, force: true });
+    if (!isDryRun) {
+      if (!noBackup) {
+        mkdirSync(backupDir, { recursive: true });
+        cpSync(stale, join(backupDir, name), { recursive: true });
+      }
+      rmSync(stale, { recursive: true, force: true });
+    }
     removed++;
   }
-  console.log(`  ${isDryRun ? '[dry-run] would prune' : '✓ pruned'} ${removed} ${label} skill(s) outside the profile from ${skillsDest}`);
+  const kept = removed && !isDryRun && !noBackup ? ` (copies kept in ${backupDir})` : '';
+  console.log(`  ${isDryRun ? '[dry-run] would prune' : '✓ pruned'} ${removed} ${label} skill(s) outside the profile from ${skillsDest}${kept}`);
 }
 const managedDests = [...new Set(DIRS.map((d) => d.dest))];
 
@@ -1464,8 +1481,11 @@ if (wantGemini) {
 // ---- Skills for Codex CLI + Gemini CLI (shared ~/.agents/skills) ------------
 if (wantAntigravity && skillsSelected) {
   const items = agentsSkillItems();
-  console.log(`
-${isDryRun ? '[dry-run] ' : ''}Skills for Antigravity CLI → ${antigravitySkillsDir}`);
+  if (skillName && items.length === 0) {
+    console.error(`✗ Skill '${skillName}' not found in skills/.`);
+    process.exit(1);
+  }
+  console.log(`\n${isDryRun ? '[dry-run] ' : ''}Skills for Antigravity CLI → ${antigravitySkillsDir}`);
   if (!isDryRun) mkdirSync(antigravitySkillsDir, { recursive: true });
   for (const it of items) place(it.itemSrc, join(antigravitySkillsDir, it.outName), it.isDir);
   pruneRenamedSkills(antigravitySkillsDir, 'Antigravity');

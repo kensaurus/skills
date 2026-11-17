@@ -6,13 +6,6 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ## [Unreleased]
 
-### Changed
-
-- **More from KENSAURUS** (README) now follows `https://kensaur.us/apps.json`: current names and
-  taglines, Skin Analysis and Hear, Hear added, one deep link per app, campaign-tagged hub link.
-  `llms.txt` gains a "More from kensaurus" section, and the site page gets a "Made by kensaurus"
-  credit, three related apps, and a JSON-LD author that points at the shared `kensaur.us/#org` node.
-
 ## [2.8.0] — 2026-11-17
 
 One command to remember, a smaller install when you want one, and skill text
@@ -31,7 +24,8 @@ that no longer assumes a model
   loop (a listing of about 6,500 characters against about 39,000 for the full
   pack). `web`, `backend`, `mobile`, `growth` and `maintain` add to it;
   combine with commas. `--prune` removes this pack's skills outside the
-  profile and never touches your own. `--list-profiles` prints them. The
+  profile by folder name, after copying each to `.kenji-pruned/`; folders the
+  pack does not ship are never touched. `--list-profiles` prints them. The
   lists live in `profiles.json`, and `validate-skills` fails when a skill is
   in no profile. `all` stays the default.
 - **Antigravity CLI target.** `--antigravity` writes the skills to
@@ -71,6 +65,10 @@ that no longer assumes a model
 - **Listing docs corrected**: the old npm package is fully deprecated (all 56
   versions); the Claude plugin directory is submitted at
   `claude.ai/directory/manage`; the VoltAgent rename PR merged.
+- **More from KENSAURUS** (README) now follows `https://kensaur.us/apps.json`: current names and
+  taglines, Skin Analysis and Hear, Hear added, one deep link per app, campaign-tagged hub link.
+  `llms.txt` gains a "More from kensaurus" section, and the site page gets a "Made by kensaurus"
+  credit, three related apps, and a JSON-LD author that points at the shared `kensaur.us/#org` node.
 
 ## [2.7.0] — 2026-10-19
 

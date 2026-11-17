@@ -808,6 +808,13 @@ try {
     expect(cursorExtraSkills.every((n) => existsSync(join(dir, n))), `--prune removed a skills-cursor skill from ${dir}`);
   }
   expect(pruneOut.includes(`pruned ${nonCore.length} `), "--prune did not log the removal count");
+  // Every pruned folder is copied aside first, so an in-place edit is not lost.
+  for (const dir of pruneDirs) {
+    const prunedRoot = join(dirname(dir), ".kenji-pruned");
+    const stamps = existsSync(prunedRoot) ? readdirSync(prunedRoot) : [];
+    const kept = stamps.flatMap((s) => readdirSync(join(prunedRoot, s)).flatMap((label) => readdirSync(join(prunedRoot, s, label))));
+    expect(nonCore.every((n) => kept.includes(n)), `--prune did not back up every removed skill beside ${dir}`);
+  }
   expect(spawnAs(pruneHome, ["--verify", "--all", "--profile", "core"]).status === 0, "--verify --all --profile core failed after --prune");
 
   // The shared ~/.agents/skills written for Codex alone is pruned too.

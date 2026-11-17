@@ -116,7 +116,7 @@ Cursor ignores keys it does not list; Claude Code honors all of these. Any other
 |-------|-------|-----|
 | `disable-model-invocation: true` | Cursor, Claude Code | User-initiated rituals. Also keeps the description out of the always-on skill roster that every request pays for. |
 | `user-invocable: false` | Claude Code | Reference-only skill; hides the `/` entry. |
-| `effort` | Claude Code | `low` / `medium` / `high` / `xhigh` / `max`. Opus 5.5 defaults to `medium`; declare `high` for audit, plan, judge, security, and architecture skills, `low` for mechanical, read-only, or handoff skills. Effort is the thinking control — prose cannot raise or lower it. |
+| `effort` | Claude Code | `low` / `medium` / `high` / `xhigh` / `max`. Omit it to use the session's level; declare `high` for audit, plan, judge, security, and architecture skills, `low` for mechanical, read-only, or handoff skills. Effort is the thinking control — prose cannot raise or lower it. |
 | `context: fork` + `agent: <name>` | Claude Code | Run in a forked context so the output stays out of the main conversation; `agent: Explore` for read-only inventory. |
 | `model`, `allowed-tools` | Claude Code | Pin a model; restrict tools. |
 | `paths` | Cursor, Claude Code | Globs; the skill applies when matching files are in play. |

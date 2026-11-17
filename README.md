@@ -74,7 +74,7 @@ npx @kensaurus/skills --auto --profile web,mobile   # core plus two more sets
 | `maintain` | 28 | CI gates, dead code, docs sync, agent setup, pack authoring |
 | `all` | 162 | Everything. The default. |
 
-A profile install is a merge: skills you installed earlier stay. Add `--prune` to remove this pack's skills that are outside the profile; your own skills are never touched. Commands that only point at skills outside the profile are skipped. The lists live in [`profiles.json`](profiles.json).
+A profile install is a merge: skills you installed earlier stay. Add `--prune` to remove this pack's skills that are outside the profile. It removes by folder name and first copies each removed folder to `.kenji-pruned/<timestamp>/` beside the skills folder, so an edit you made in place is not lost. Folders this pack does not ship are never touched. Commands that only point at skills outside the profile are skipped. The lists live in [`profiles.json`](profiles.json).
 
 > **Note:** the default install also adds an opt-in **Stop hook** to Claude Code and Cursor. It does nothing until you start a `complete-everything` or `burndown-full` run. For Claude Code it also adds a desktop **Notification hook**, a **status line** (only if you have none) and a skill-listing budget. To skip the hooks and the status line, add `--only skills,commands,agents,rules`. Details: [The Stop hook](#the-stop-hook) and [Notifications and the status line](#notifications-and-the-status-line).
 
@@ -105,7 +105,7 @@ How each path was chosen:
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/architecture-dark.png">
   <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/architecture-light.png">
-  <img alt="Diagram: skills, commands, subagents, rules, and MCP templates go through npx @kensaurus/skills --all into ~/.cursor and ~/.claude (skills, commands, agents, rules), ~/.codex (AGENTS.md and prompts, plus skills in ~/.agents) and ~/.gemini (GEMINI.md and commands, plus skills in ~/.agents)." src="docs/screenshots/architecture-dark.png" width="100%">
+  <img alt="Diagram: skills, commands, subagents, rules, and MCP templates go through npx @kensaurus/skills --all into ~/.cursor and ~/.claude (skills, commands, agents, rules), ~/.codex (AGENTS.md, plus skills in ~/.agents) and ~/.gemini (GEMINI.md and commands, plus skills in ~/.agents)." src="docs/screenshots/architecture-dark.png" width="100%">
 </picture>
 
 ## What the installer writes

@@ -60,7 +60,7 @@ Claude Code reads the same format from `.claude/agents/` and `~/.claude/agents/`
 
 | Field | Use |
 |-------|-----|
-| `effort` | `low` / `medium` / `high` / `xhigh` / `max`. Opus 5.5 defaults to `medium`; set `high` for reviewer, judge, security, and architecture agents, `low` for read-only inventory or handoff agents. Prose like "think carefully" does nothing — this is the control. |
+| `effort` | `low` / `medium` / `high` / `xhigh` / `max`. Omit it to use the session's level; set `high` for reviewer, judge, security, and architecture agents, `low` for read-only inventory or handoff agents. Prose like "think carefully" does nothing — this is the control. |
 | `model` | Pin a model alias (`opus`, `sonnet`, `haiku`); omit to inherit. |
 | `tools` | Restrict the tool set (read-only reviewers get no edit tools). |
 | `maxTurns` | Cap turns for bounded jobs. |
