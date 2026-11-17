@@ -34,7 +34,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **Issue opened:** https://github.com/vercel-labs/skills/issues/1499
 
-**Status:** **Live** — https://www.skills.sh/kensaurus/skills (new page, created by a fresh install 2026-10-01). The old https://www.skills.sh/kensaurus/cursor-kenji (3.4K installs) stays until [vercel-labs/skills#2352](https://github.com/vercel-labs/skills/issues/2352) merges the listings and drops the retired skill names. Stale #1499 closed.
+**Status:** **Live** — https://www.skills.sh/kensaurus/skills, 3.7K installs (checked 2026-11-17). The old `/kensaurus/cursor-kenji` URL now redirects there. The page still lists 33 retired skill names; a follow-up on [vercel-labs/skills#2352](https://github.com/vercel-labs/skills/issues/2352) (2026-11-17) asks for them to be dropped. New skills (`kenji`, `workflow-mobile-native-uiux`) appear on the page after their first install through `npx skills add`.
 
 ---
 
@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/skills
 
-**Status:** Pending — `@kensaurus/skills@2.8.0` (the `/kenji` router, install profiles, Antigravity target, model-neutral skill text, trigger evals, animated walkthroughs; ADR-0016 and ADR-0017). Not tagged or released yet. Previous: `2.7.0` live 2026-10-19 (Claude Code desktop Notification hook, status line and skill-listing budget from the installer; skill writing pass per the 2026-10 authoring guidance, ADR-0015). Not tagged or released yet. Previous: `2.6.0` live 2026-10-11; `2.5.0`, `2.4.0`, `2.3.0`, `2.2.0` live 2026-10-06.
+**Status:** **Live** — `@kensaurus/skills@2.8.1`, published 2026-11-17 (the `/kenji` router, install profiles, Antigravity target, model-neutral skill text, trigger evals, animated walkthroughs; ADR-0016 and ADR-0017). Previous: `2.7.0` live 2026-10-19 (Claude Code desktop Notification hook, status line and skill-listing budget from the installer; skill writing pass per the 2026-10 authoring guidance, ADR-0015). Not tagged or released yet. Previous: `2.6.0` live 2026-10-11; `2.5.0`, `2.4.0`, `2.3.0`, `2.2.0` live 2026-10-06.
 
 ---
 
@@ -176,7 +176,7 @@ Validate before any catalog submit:
 claude plugin validate .
 ```
 
-**Community catalog (separate):** https://claude.ai/directory/manage (needs a paid plan; run `claude plugin validate . --strict` first; the older https://platform.claude.com/plugins/submit form is superseded) — public GitHub URL. Review pins a SHA into `anthropics/claude-plugins-community`. **Not listed** until that catalog shows `kenji`. Do not treat local marketplace install as official listing.
+**Community catalog (separate):** https://claude.ai/directory/manage (parked: it needs a paid plan on a personal account; run `claude plugin validate . --strict` first; the older https://platform.claude.com/plugins/submit form is superseded) — public GitHub URL. Review pins a SHA into `anthropics/claude-plugins-community`. **Not listed** until that catalog shows `kenji`. Do not treat local marketplace install as official listing.
 
 ---
 
@@ -193,61 +193,21 @@ claude plugin validate .
 
 ---
 
-## Launch copy drafts
+## Launch posts
 
-### Show HN / technical post (preferred angle)
+No launch post has been made on any channel. The facts, the rules of each channel, the objections to answer, and an order of work are in [LAUNCH-KIT.md](LAUNCH-KIT.md). Write each post yourself: Hacker News requires text written by a person, and several subreddits remove AI-written posts.
 
-Do not lead with “143 skills”. Lead with the completion gate.
+---
 
-```
-Title: Show HN: a completion gate that refuses “done” while unchecked work remains
+## 17. Listings found 2026-11-17
 
-Coding agents call the work done when the diff compiles. This pack’s
-complete-everything loop writes a durable checklist, keeps going through
-phase checkpoints, and a second agent (completion-judge) reads the tree
-and the evidence — not the model’s confidence.
-
-Install: npx @kensaurus/skills --all
-skills.sh: https://www.skills.sh/kensaurus/skills
-```
-
-### Reddit (r/cursor, r/ClaudeAI) — short
-
-```
-Title: Playbooks that will not call a PR done
-
-I got tired of agents skipping the interview, the failing test, and the
-live check. kenji is installable playbooks: you say the job, a
-named skill runs, and “done” has to survive a judge.
-Skills declare effort for Opus 5.5: audits and plans at high, implementation
-at the medium default, handoff at low.
-
-npx @kensaurus/skills --all
-https://github.com/kensaurus/skills
-```
-
-### X / Twitter
-
-```
-You say the job. The playbook runs.
-
-Not a prompt paste-bin. A completion gate that keeps going until the
-checklist is empty.
-
-npx @kensaurus/skills --all
-```
-
-### Article outline (one piece, not a listicle)
-
-```
-Title: Agents lie about “done.” Make them prove it.
-
-1. The gap: 3.6k npm downloads, almost no stars — people install, they don’t bookmark
-2. What a completion gate actually checks (state file, not vibes)
-3. One session: grill → spec → failing test → PR → judge
-4. Install paths (npm / skills.sh / Claude plugin) and what each omits
-5. What this pack is not (hosted app, MCP server, Marketplace-listed)
-```
+| Channel | What it needs | Status |
+|:--------|:--------------|:-------|
+| [github/awesome-copilot external plugins](https://github.com/github/awesome-copilot/blob/main/CONTRIBUTING.md#adding-external-plugins) (the built-in marketplace in VS Code, Copilot CLI and the Copilot app) | The issue form, a root Agent Plugins `plugin.json`, a release tag and commit SHA, a clean `vally lint`. No star gate | Submitted after the v2.8.1 tag. Find the issue with `gh issue list -R github/awesome-copilot --author kensaurus --state all` |
+| [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) | The web issue form, filled in by a person; submissions through the `gh` tool or a PR are refused | Owner step |
+| claudemarketplaces.com, claudepluginhub.com | Sign in with GitHub and paste the repo URL; both also crawl `marketplace.json` repos | Owner step (a new sign-in on each site) |
+| [hashgraph-online/awesome-ai-plugins](https://github.com/hashgraph-online/awesome-ai-plugins), [BehiSecc/awesome-claude-skills](https://github.com/BehiSecc/awesome-claude-skills) | One line in the README by PR | See open PRs: `gh search prs --author kensaurus --state open kenji` |
+| OpenAI plugin directory, Antigravity plugin marketplace, ComposioHQ/awesome-claude-skills | n/a | Skip for now: limited to selected publishers, vendor-led, and 1,666 unmerged PRs respectively |
 
 ---
 

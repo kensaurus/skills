@@ -2,7 +2,7 @@
   "name": "kenji",
   "displayName": "kenji skills",
   "description": "You say the job; the playbook runs. 162 agent skills, 63 slash commands, 6 subagents, and MCP templates for Claude Code, Cursor, Codex CLI, and Gemini CLI. Each playbook asks first, tests first, and proves the result. Tuned for React, Next.js, and Supabase. Works on most stacks.",
-  "version": "2.8.0",
+  "version": "2.8.1",
   "author": {
     "name": "kensaurus",
     "email": "kensaurus@gmail.com"

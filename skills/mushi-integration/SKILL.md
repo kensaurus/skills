@@ -41,7 +41,7 @@ after a deploy, or any time you need proof that the whole loop works.
 
 ## Prerequisites  [LOW freedom — run exactly]
 
-- `mushi doctor` passes (all green) — run [`mushi-health`](../mushi-health/SKILL.md) first if unsure.
+- `mushi doctor` passes (all green) — run the `mushi-health` skill first if unsure.
 - At least one BYOK key for `anthropic` and `firecrawl` is active.
 - You have the app URL you want to map stories from.
 

@@ -175,6 +175,8 @@ Flags:
                       from each skills directory written, by folder name. Each
                       removed folder is first copied to .kenji-pruned/<stamp>/
                       beside the skills directory (skip with --no-backup).
+                      Commands that only name pruned skills go the same way,
+                      unless you edited them.
                       Folders this pack does not ship are never touched.
   --list-profiles     Print each profile's name, title, skill count and description.
   --link              Symlink (junction on Windows) instead of copying — for repo dev.
@@ -677,6 +679,32 @@ function pruneOutsideProfile(skillsDest, label) {
   }
   const kept = removed && !isDryRun && !noBackup ? ` (copies kept in ${backupDir})` : '';
   console.log(`  ${isDryRun ? '[dry-run] would prune' : '✓ pruned'} ${removed} ${label} skill(s) outside the profile from ${skillsDest}${kept}`);
+}
+/** --prune, commands half: remove this pack's command files that name only
+ *  skills outside the profile. A file the user edited (content differs from
+ *  the packaged one) is left alone; removed files are copied aside first. */
+function pruneCommandsOutsideProfile(commandsDest, label) {
+  if (!doPrune || (onlyGroups && !onlyGroups.has('commands')) || !commandsDest || !existsSync(commandsDest)) return;
+  const srcDir = resolve(__dir, 'commands');
+  if (!existsSync(srcDir)) return;
+  const backupDir = join(dirname(commandsDest), PRUNED_DIR, pruneStamp, `${label.toLowerCase()}-commands`);
+  const norm = (p) => readFileSync(p, 'utf8').replace(/\r\n/g, '\n');
+  let removed = 0;
+  for (const f of readdirSync(srcDir)) {
+    const src = join(srcDir, f);
+    if (!f.endsWith('.md') || !statSync(src).isFile() || !commandOutsideProfile(src)) continue;
+    const stale = join(commandsDest, f);
+    if (!existsSync(stale) || norm(stale) !== norm(src)) continue;
+    if (!isDryRun) {
+      if (!noBackup) {
+        mkdirSync(backupDir, { recursive: true });
+        cpSync(stale, join(backupDir, f));
+      }
+      rmSync(stale, { force: true });
+    }
+    removed++;
+  }
+  console.log(`  ${isDryRun ? '[dry-run] would prune' : '✓ pruned'} ${removed} ${label} command(s) that only name skills outside the profile`);
 }
 const managedDests = [...new Set(DIRS.map((d) => d.dest))];
 
@@ -1349,6 +1377,7 @@ if (wantCursor) {
   pruneOutsideProfile(join(cursorBase, 'skills'), 'Cursor');
   pruneRenamedRules(join(cursorBase, 'rules'), 'Cursor');
   pruneStaleCommands(join(cursorBase, 'commands'), 'Cursor');
+  pruneCommandsOutsideProfile(join(cursorBase, 'commands'), 'Cursor');
   const hookStatus =
     !onlyGroups || onlyGroups.has('hooks')
       ? installCursorCompletionHook()
@@ -1412,6 +1441,7 @@ if (wantClaude) {
   pruneOutsideProfile(join(claudeBase, 'skills'), 'Claude');
   pruneRenamedRules(join(claudeBase, 'rules'), 'Claude', { renameMdc: true });
   pruneStaleCommands(join(claudeBase, 'commands'), 'Claude');
+  pruneCommandsOutsideProfile(join(claudeBase, 'commands'), 'Claude');
   const claudeSettings = installClaudeSettings();
   const hookStatus = claudeSettings.status;
 

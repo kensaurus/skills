@@ -73,7 +73,7 @@ Skill descriptions ride in every request, so they are the pack's standing cost.
 
 - **Claude Code** lists each model-invocable skill as `- name: description` against 1% of the context window. Over budget, the least-used skills show by name only. The full pack's listing is about 39,000 characters, and `validate-skills` fails above that ratchet (ADR-0010). A full install sets `"skillListingBudgetFraction": 0.03` when you have not set it.
 - **Codex CLI** gives the skill list 2% of context and shortens descriptions before it drops skills. **Cursor** and **Zed** also truncate long listings. This is why every description states the job in its first clause.
-- **Install less to pay less.** `npx @kensaurus/skills --auto --profile core` installs the 28 skills of the daily loop, whose listing is about 6,500 characters. Add `web`, `backend`, `mobile`, `growth`, or `maintain` when you need them. See [Profiles](../README.md#install-a-profile).
+- **Install less to pay less.** `npx @kensaurus/skills --auto --profile core` installs the 31 skills of the daily loop, whose listing is about 7,200 characters. Add `web`, `backend`, `mobile`, `growth`, or `maintain` when you need them. See [Profiles](../README.md#install-a-profile).
 - **The router costs nothing until you use it.** `/kenji` is user-invoked, so it is not in the listing.
 - **Tokenizers differ.** The same text counts as about 30% more tokens on Fable 5.2, Opus 5.5, and Haiku 5.5 than on Sonnet 4.6 and older models. Budgets measured in characters hold; budgets remembered in tokens do not.
 

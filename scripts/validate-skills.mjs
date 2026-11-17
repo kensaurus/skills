@@ -253,6 +253,23 @@ for (const group of groups) {
     checkChain(id, dir, front);
     if (desc && fmScalar(front, "disable-model-invocation") !== "true") listing[group] += listingEntry(dir, desc, front);
 
+    // Two rules the Agent Plugins marketplaces lint for (vally: spec-compliance
+    // and valid-refs). The whole file, frontmatter included, stays within 500
+    // lines, and no link leaves the skill folder: a skill installed on its own
+    // has no sibling skills and no repo docs beside it.
+    if (group === "skills") {
+      const fileLines = raw.replace(/\n$/, "").split("\n").length;
+      if (fileLines > 500) errors.push(`${id}: SKILL.md is ${fileLines} lines; the limit is 500 including frontmatter — move a section to references/`);
+      let fenced = false;
+      raw.split("\n").forEach((line, i) => {
+        if (/^\s*```/.test(line)) fenced = !fenced;
+        if (fenced) return;
+        for (const link of line.matchAll(/\]\((\.\.\/[^)\s]+)\)/g)) {
+          errors.push(`${id}: SKILL.md line ${i + 1} links outside the skill folder (${link[1]}) — name the skill, or link a full URL`);
+        }
+      });
+    }
+
     // body length (warning only)
     const lines = body.split("\n").length;
     if (lines > BODY_WARN) {
@@ -487,6 +504,21 @@ function listCommandFiles(dir) {
       }
       if (!Array.isArray(profiles.core?.skills) || profiles.core.skills.length === 0) {
         errors.push("profiles.json: profile 'core' is empty — it is installed with every profile");
+      } else {
+        // A core-only install must be able to run each core workflow end to
+        // end, so core holds every pack skill its members chain to.
+        const coreSet = new Set(profiles.core.skills);
+        for (const skill of coreSet) {
+          const file = join(repoRoot, "skills", skill, "SKILL.md");
+          if (!existsSync(file)) continue;
+          const chain = readFileSync(file, "utf8").match(/^\s+chain:\s*["']?([^"'\n]+)/m);
+          if (!chain) continue;
+          for (const next of chain[1].trim().split(/\s+/)) {
+            if (existsSync(join(repoRoot, "skills", next, "SKILL.md")) && !coreSet.has(next)) {
+              errors.push(`profiles.json: core skill '${skill}' chains to '${next}', which is not in core — add it to core`);
+            }
+          }
+        }
       }
       for (const dir of readdirSync(skillsDir)) {
         if (!statSync(join(skillsDir, dir)).isDirectory() || inProfile.has(dir)) continue;
