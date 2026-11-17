@@ -276,7 +276,7 @@ Write the YAML frontmatter with `name` and `description`:
 
 Other fields, all optional and ignored by hosts that do not know them:
 
-- `effort:` — Opus 5.5 defaults to `medium` (earlier models defaulted to `high`), and effort is its only thinking control; prose like "think step by step" or "double-check" does nothing. Declare it by family:
+- `effort:` — effort is the thinking control on current Claude models; prose like "think step by step" or "double-check" does nothing. Write the skill for any model: a skill cannot read which model runs it, only the effort level (`${CLAUDE_EFFORT}`). Declare effort by family:
 
   | Family | `effort` |
   |---|---|

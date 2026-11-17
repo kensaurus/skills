@@ -116,9 +116,10 @@ Inventory every hook in `~/.claude/settings.json` and each repo's
 
 ## Phase 4 — Effort and models
 
-- Lower effort is faster and cheaper; Opus 5.5 defaults to `medium`. A global
-  `xhigh` slows every routine turn. Suggest `high` (or the default) with
-  `/effort xhigh` for hard tasks. On Opus 5.5, changing effort keeps the prompt cache.
+- Lower effort is faster and cheaper. Claude Code runs every current Claude
+  model at `medium` unless told otherwise, and a global `xhigh` slows every
+  routine turn. Suggest the default, with `/effort high` or `xhigh` for hard
+  tasks only. The status line shows the model and effort in force.
 - The built-in Explore agent inherits the main model. A user agent named
   `Explore` with `model: haiku` overrides it for fast, cheap searches.
 - Fast mode (`/fast`): up to 2.5× faster output at a higher per-token price,

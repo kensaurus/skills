@@ -4,6 +4,8 @@ Say any phrase in the left column → the skill in the right column fires.
 
 You don't have to type the skill name. Just describe the task in plain language.
 
+**Not sure which row fits?** Type `/kenji` and the job in your own words. It picks the playbook and runs it.
+
 > **First time here?** The [Getting Started guide](GETTING-STARTED.md) explains what skills, commands, and subagents are in plain language before you dive into this lookup table.
 
 ---

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 340" width="880" height="340" role="img" aria-label="Findings you can check. You say: is this app safe to launch?. The audit-security playbook runs. High: admin route has no auth check  api/admin/route.ts:14. Medium: user table readable by anyone  migrations/0007.sql:3. Low: stack trace shown to users  lib/errors.ts:41. Three findings, each with a file and line. Fix them now?. You say: yes. Fixed, re-tested, and listed in the report..">
+<title>Findings you can check</title>
+<style>
+text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:17px;white-space:pre}
+.t{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;font-weight:600;fill:#a1a1aa}
+@keyframes l0{0%,3.36%{opacity:0}5.46%,97%{opacity:1}100%{opacity:0}}
+.l0{animation:l0 11.9s linear infinite}
+@keyframes l1{0%,16.81%{opacity:0}18.91%,97%{opacity:1}100%{opacity:0}}
+.l1{animation:l1 11.9s linear infinite}
+@keyframes l2{0%,25.21%{opacity:0}27.31%,97%{opacity:1}100%{opacity:0}}
+.l2{animation:l2 11.9s linear infinite}
+@keyframes l3{0%,34.45%{opacity:0}36.55%,97%{opacity:1}100%{opacity:0}}
+.l3{animation:l3 11.9s linear infinite}
+@keyframes l4{0%,43.70%{opacity:0}45.80%,97%{opacity:1}100%{opacity:0}}
+.l4{animation:l4 11.9s linear infinite}
+@keyframes l5{0%,52.94%{opacity:0}55.04%,97%{opacity:1}100%{opacity:0}}
+.l5{animation:l5 11.9s linear infinite}
+@keyframes l6{0%,64.71%{opacity:0}66.81%,97%{opacity:1}100%{opacity:0}}
+.l6{animation:l6 11.9s linear infinite}
+@keyframes l7{0%,71.43%{opacity:0}73.53%,97%{opacity:1}100%{opacity:0}}
+.l7{animation:l7 11.9s linear infinite}
+@media (prefers-reduced-motion:reduce){text{animation:none!important;opacity:1!important}}
+</style>
+<rect width="880" height="340" rx="14" fill="#18181b"/>
+<rect width="880" height="44" rx="14" fill="#27272a"/>
+<rect y="30" width="880" height="14" fill="#27272a"/>
+<circle cx="24" cy="22" r="6" fill="#52525b"/><circle cx="44" cy="22" r="6" fill="#52525b"/><circle cx="64" cy="22" r="6" fill="#52525b"/>
+<text class="t" x="440" y="27" text-anchor="middle">Findings you can check</text>
+<text class="l0" x="28" y="78" font-weight="600"><tspan fill="#a3e635">you  </tspan><tspan fill="#f4f4f5">is this app safe to launch?</tspan></text>
+<text class="l1" x="28" y="108" font-weight="600"><tspan fill="#38bdf8">run  </tspan><tspan fill="#7dd3fc">audit-security</tspan></text>
+<text class="l2" x="28" y="138" font-weight="400"><tspan fill="#4ade80">  ✓  </tspan><tspan fill="#d4d4d8">High: admin route has no auth check  api/admin/route.ts:14</tspan></text>
+<text class="l3" x="28" y="168" font-weight="400"><tspan fill="#4ade80">  ✓  </tspan><tspan fill="#d4d4d8">Medium: user table readable by anyone  migrations/0007.sql:3</tspan></text>
+<text class="l4" x="28" y="198" font-weight="400"><tspan fill="#4ade80">  ✓  </tspan><tspan fill="#d4d4d8">Low: stack trace shown to users  lib/errors.ts:41</tspan></text>
+<text class="l5" x="28" y="228" font-weight="400"><tspan fill="#71717a">     </tspan><tspan fill="#d4d4d8">Three findings, each with a file and line. Fix them now?</tspan></text>
+<text class="l6" x="28" y="258" font-weight="600"><tspan fill="#a3e635">you  </tspan><tspan fill="#f4f4f5">yes</tspan></text>
+<text class="l7" x="28" y="288" font-weight="600"><tspan fill="#a3e635">done </tspan><tspan fill="#a3e635">Fixed, re-tested, and listed in the report.</tspan></text>
+</svg>

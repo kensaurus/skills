@@ -48,3 +48,6 @@ mcp.json
 
 # Agent worktrees
 .worktrees/
+
+# claude plugin eval output
+results/

@@ -46,7 +46,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **PR copy:**
 ```markdown
-- [kensaurus/skills](https://github.com/kensaurus/skills) — ready-made AI playbooks your editor auto-triggers: 161 agent skills,
+- [kensaurus/skills](https://github.com/kensaurus/skills) — ready-made AI playbooks your editor auto-triggers: 162 agent skills,
   63 slash commands, 6 subagents, and MCP configs for React/Next.js/Supabase development.
   `npx skills add kensaurus/skills`
 ```
@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/skills
 
-**Status:** Pending — `@kensaurus/skills@2.7.0` (Claude Code desktop Notification hook, status line and skill-listing budget from the installer; skill writing pass per the 2026-10 authoring guidance, ADR-0015). Not tagged or released yet. Previous: `2.6.0` live 2026-10-11; `2.5.0`, `2.4.0`, `2.3.0`, `2.2.0` live 2026-10-06.
+**Status:** Pending — `@kensaurus/skills@2.8.0` (the `/kenji` router, install profiles, Antigravity target, model-neutral skill text, trigger evals, animated walkthroughs; ADR-0016 and ADR-0017). Not tagged or released yet. Previous: `2.7.0` live 2026-10-19 (Claude Code desktop Notification hook, status line and skill-listing budget from the installer; skill writing pass per the 2026-10 authoring guidance, ADR-0015). Not tagged or released yet. Previous: `2.6.0` live 2026-10-11; `2.5.0`, `2.4.0`, `2.3.0`, `2.2.0` live 2026-10-06.
 
 ---
 
@@ -91,7 +91,7 @@ Submit the GitHub repo URL; Cursor reviews manually.
 - https://enterprisedna.co/directories/submit (alternative submission form)
 
 **One-liner description:**
-> 161 Cursor agent skills for React/Next.js/Supabase — installs in one command.
+> 162 Cursor agent skills for React/Next.js/Supabase — installs in one command.
 
 **Status:** Re-checked 2026-09-09. cursorlist.com is a **`.cursorrules` dump**, not a skill-pack catalog. “Submit Rule” goes to a Youform for individual rule files. **Not submitted** — listing a 155-skill pack there would be the wrong category. Do not treat as listed.
 
@@ -176,7 +176,7 @@ Validate before any catalog submit:
 claude plugin validate .
 ```
 
-**Community catalog (separate):** https://platform.claude.com/plugins/submit — public GitHub URL. Review pins a SHA into `anthropics/claude-plugins-community`. **Not listed** until that catalog shows `kenji`. Do not treat local marketplace install as official listing.
+**Community catalog (separate):** https://claude.ai/directory/manage (needs a paid plan; run `claude plugin validate . --strict` first; the older https://platform.claude.com/plugins/submit form is superseded) — public GitHub URL. Review pins a SHA into `anthropics/claude-plugins-community`. **Not listed** until that catalog shows `kenji`. Do not treat local marketplace install as official listing.
 
 ---
 

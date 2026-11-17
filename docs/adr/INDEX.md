@@ -28,6 +28,8 @@ purpose.
 | [0013](0013-rename-to-kensaurus-skills.md) | Rename cursor-kenji to kensaurus/skills, plugin `kenji` | Accepted | Repo `kensaurus/skills`, npm `@kensaurus/skills`, plugin `kenji@kenji` in 2.0.0; `renames` map plus installer migration; old package forwards, then is deprecated |
 | [0014](0014-workflow-chains-in-metadata.md) | Workflow skills declare their chain in `metadata.chain` | Accepted | One quoted string of space-separated `skills/` slugs in run order; Mushi pipelines read it; `validate-skills` checks every slug |
 | [0015](0015-skill-writing-follows-the-2026-10-authoring-guidance.md) | Skill writing follows the 2026-10 authoring guidance | Accepted | Trigger clause in every description; neighbors table only where routing overlaps; checklist in every `workflow-*`; `check-reference-toc` gates Contents lists, one-level-deep links and resolving paths; `argument-hint` where arguments are read; `when_to_use` and dated reads stay out |
+| [0016](0016-router-skill-and-install-profiles.md) | One command to remember, and install profiles inside the one package | Accepted | `/kenji` router skill (user-invoked, not in the listing); `--profile` with `core` plus five sets in `profiles.json`; auto-routing unchanged; trigger evals gate description changes |
+| [0017](0017-skills-are-model-neutral-branch-on-effort.md) | Skills are model-neutral; branch on effort, never on a model name | Accepted | No shipped text names a model; a skill cannot read the model, only `${CLAUDE_EFFORT}`; status line shows model and effort; effort levels are re-tuned from evals, not by guess |
 
 ## Conventions
 

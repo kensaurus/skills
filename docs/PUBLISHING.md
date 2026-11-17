@@ -14,7 +14,7 @@ No long-lived `NPM_TOKEN` is required when OIDC is configured.
 
 ## Pre-release checklist
 
-1. Bump `version` in `package.json`, `.cursor-plugin/plugin.json`, and `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json` `metadata.version` (keep in sync)
+1. Bump `version` in `package.json`, `plugin.json`, `gemini-extension.json`, `.cursor-plugin/plugin.json`, and `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json` `metadata.version` (keep in sync; `check-docs-facts` fails on a mismatch)
 2. Add a `[x.y.z]` section to [CHANGELOG.md](../CHANGELOG.md)
 3. Run the full gate:
 
@@ -25,6 +25,7 @@ npm test
 This runs skill spec validation, count sync, README skill-index sync, secret-scanner self-test, MCP pin check, docs-facts check, skill cross-ref check, markdown fence check, completion-gate tests, install smoke test, and the Knip dead-code ratchet (`knip.jsonc`, `--max-issues 0` in default and production mode).
 
 4. Update derived counts if needed: `npm run fix:skills`
+5. If any skill `description:` changed, run the trigger evals: `claude plugin eval . --case "route-*" --runs 1` (real model calls; see [evals/README.md](../evals/README.md))
 
 ## Ship
 
@@ -90,6 +91,6 @@ This repo is already a marketplace: `.claude-plugin/marketplace.json` + `.claude
 To apply to Anthropic’s **community** catalog (separate from this repo marketplace):
 
 1. `claude plugin validate .` (and `claude plugin validate . --strict`)
-2. Submit the public GitHub URL at https://platform.claude.com/plugins/submit
+2. Submit the plugin at https://claude.ai/directory/manage (needs a paid plan)
 
 Do not claim community-catalog listing until that page shows the plugin.

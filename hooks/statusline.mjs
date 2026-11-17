@@ -7,9 +7,9 @@
  * prompt (https://code.claude.com/docs/en/statusline, read 2026-10-19).
  * It prints:
  *
- *   Opus 5.5 │ tsumagoi (feat/kiosk) │ ctx 42% │ $1.23 │ 5h 31% │ release-b
+ *   Opus 5.5 medium │ tsumagoi (feat/kiosk) │ ctx 42% │ $1.23 │ 5h 31% │ release-b
  *
- * model · folder (git branch) · context used · session cost · five-hour
+ * model and effort level · folder (git branch) · context used · session cost · five-hour
  * usage · session name. Fields the payload does not carry are left out.
  *
  * It must stay fast, because a slow script blocks the status line until it
@@ -64,8 +64,12 @@ const heat = (n) => (n >= 85 ? c("31", pct(n)) : n >= 65 ? c("33", pct(n)) : c("
 const d = readStdin();
 const parts = [];
 
+// Model and effort together: a skill cannot read the model, and effort is what
+// sets cost and depth on every current Claude model, so the user should see
+// both at a glance and lower effort before switching model.
 const model = d.model?.display_name || d.model?.id;
-if (model) parts.push(c("1", model) + (d.fast_mode ? " ⚡" : ""));
+const effort = typeof d.effort?.level === "string" ? d.effort.level : "";
+if (model) parts.push(c("1", model) + (effort ? dim(` ${effort}`) : "") + (d.fast_mode ? " ⚡" : ""));
 
 const dir = d.workspace?.current_dir || d.cwd || process.cwd();
 const branch = d.worktree?.branch || gitBranch(dir);

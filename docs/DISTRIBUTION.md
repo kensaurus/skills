@@ -26,21 +26,23 @@ Current npm version: see [npm package page](https://www.npmjs.com/package/@kensa
 | Directory | URL | Status |
 |-----------|-----|--------|
 | **npm** | https://www.npmjs.com/package/@kensaurus/skills | **Live** — 2.0.0 published 2026-10-01 by the maintainer (no provenance for this release; configure the trusted publisher so CI publishes with provenance from 2.0.1) |
-| **npm (old name)** | https://www.npmjs.com/package/@kensaurus/cursor-kenji | Versions ≤1.40.1 **deprecated** 2026-10-01. Final 1.41.0 forwards the `cursor-kenji` command to `kenji` (verified from the registry); its own deprecation is pending an owner 2FA run (`npm deprecate @kensaurus/cursor-kenji@1.41.0 … --prefer-online`) |
+| **npm (old name)** | https://www.npmjs.com/package/@kensaurus/cursor-kenji | **Fully deprecated.** All 56 versions carry the deprecation message; the final 1.41.0 forwards the `cursor-kenji` command to `kenji`, and its README, `repository` and `homepage` point here (registry checked 2026-11-17). It still shows about 270 downloads a week, mostly two pinned old versions (1.31.0, 1.30.0); npm's own guide treats under 50 a day as noise. Nothing further is required |
 | **GitHub** | https://github.com/kensaurus/skills | Source of truth. Renamed from `cursor-kenji` on 2026-10-01; old URLs redirect |
 | **Cursor Marketplace** | https://cursor.com/marketplace | **Not listed.** Publisher application submitted 2026-09-09 (awaiting Cursor review) |
 | **Claude Code plugin (this repo)** | `/plugin marketplace add kensaurus/skills` | Installable from the public GitHub repo. Existing `cursor-kenji` installs migrate through the `renames` map. **Not** in Anthropic’s community catalog until they accept a submit |
-| **Claude community marketplace** | https://platform.claude.com/plugins/submit | **Not submitted until this commit is on `main`.** Validate locally with `claude plugin validate .` |
+| **Claude plugin directory** | https://claude.ai/directory/manage | **Not submitted.** Owner step: needs a paid plan; run `claude plugin validate . --strict` first. This is the second-largest install counter after skills.sh |
 | **cursor.directory** | https://cursor.directory/plugins/cursor-kenji | Page exists but **flagged / hidden** (`noindex`). Description updated 2026-09-09; full re-scan hit HTTP 413 |
 | **skills.sh** | https://www.skills.sh/kensaurus/skills | **Live** 2026-10-01 (first install from the new name). Listing merge requested: [vercel-labs/skills#2352](https://github.com/vercel-labs/skills/issues/2352) |
-| **skills.sh (old name)** | https://www.skills.sh/kensaurus/cursor-kenji | Old listing (3.4K installs on 2026-10-01) until #2352 merges it; stale [#1499](https://github.com/vercel-labs/skills/issues/1499) closed |
+| **skills.sh (old name)** | https://www.skills.sh/kensaurus/cursor-kenji | Redirects to the new page (checked 2026-11-17), which shows 3.7K installs. About 31 retired skill names still sit under "Other skills"; [vercel-labs/skills#2352](https://github.com/vercel-labs/skills/issues/2352) asks for a re-index and is open |
 | **SkillsMP** | https://skillsmp.com/creators/kensaurus/cursor-kenji | **Live crawl** under the old slug (the new `/creators/kensaurus/skills` 404s until SkillsMP re-crawls; checked 2026-10-01) — pack page (they report 153 skills; our ratchet is 155). No submit form |
 | **LobeHub** | https://lobehub.com/skills/kensaurus-cursor-kenji-backend-patterns | **Live crawl** of individual skills (no pack page) |
 | **AgenticSkills catalog** | https://agenticskills.io/submit | Form accepted 2026-09-09; **not listed** yet. Review issue URL is not publicly resolvable |
 | **awesome-cursorrules** | https://github.com/PatrickJS/awesome-cursorrules | [PR #320](https://github.com/PatrickJS/awesome-cursorrules/pull/320) **open**; entry updated to kensaurus/skills 2026-10-01 |
-| **VoltAgent awesome-agent-skills** | https://github.com/VoltAgent/awesome-agent-skills | Listed via merged [PR #1034](https://github.com/VoltAgent/awesome-agent-skills/pull/1034) (old name); rename update [PR #1133](https://github.com/VoltAgent/awesome-agent-skills/pull/1133) **open** |
+| **VoltAgent awesome-agent-skills** | https://github.com/VoltAgent/awesome-agent-skills | **Listed** under the new name: rename [PR #1133](https://github.com/VoltAgent/awesome-agent-skills/pull/1133) merged 2026-10-12 |
 | **awesome-cursor-skills** | https://github.com/spencerpauly/awesome-cursor-skills | [PR #72](https://github.com/spencerpauly/awesome-cursor-skills/pull/72) **open**; entry updated to kensaurus/skills 2026-10-01 |
 | **Agent Skills spec** | https://agentskills.io | Spec + client showcase only — **not a skill catalog**. [Issue #432](https://github.com/agentskills/agentskills/issues/432) closed with no listing |
+| **Agent Plugins (Codex, Copilot, Kiro, VS Code)** | https://agent-plugins.org/specification | Root [`plugin.json`](../plugin.json) follows Agent Plugins 1.0.0, which discovers skills from `skills/`. Commands, subagents, rules and hooks are outside that format, so those hosts get the skills only. Not submitted to any directory |
+| **Gemini CLI extensions gallery** | https://geminicli.com/docs/extensions/releasing/ | Root [`gemini-extension.json`](../gemini-extension.json) plus the repo topic `gemini-cli-extension`; the gallery crawls daily, no submission |
 | **Official MCP Registry** | https://registry.modelcontextprotocol.io/ | **Do not submit** — this pack ships MCP *templates*, not an MCP server ([registry about](https://modelcontextprotocol.io/registry/about)) |
 | **Skills Directory** | https://www.skillsdirectory.com/submit | Not listed; their GitHub OAuth (Supabase) returned HTTP 402 egress quota 2026-09-09 |
 | **explainx.ai** | https://explainx.ai/submit | Submitted 2026-09-09; **pending review** (not live) |
@@ -62,6 +64,7 @@ Track submission URLs and review status in [PROMOTION.md](PROMOTION.md).
 
 | Channel | Cursor skills | Claude Code | Commands | Agents | Rules | Completion hook | MCP config |
 |---------|:------:|:-----------:|:--------:|:------:|:-----:|:---------------:|:----------:|
+| `npx @kensaurus/skills --antigravity` | No (skills go to Antigravity CLI's `~/.gemini/config/skills`) | No | No | No | No | No | No |
 | `npx skills add kensaurus/skills` | Yes (project `.agents/skills` by default; `-g` → `~/.cursor/skills`) | only with `-a claude-code` | No | No | No | No | No |
 | `npx @kensaurus/skills` (`--claude` / `--all` / `--auto`) | Yes | Yes (`--claude` / `--all` / `--auto`) | Yes | Yes | Yes | Cursor + Claude Code | Template copy if missing |
 | `./install.sh` (clone) | Yes | Yes | Yes | Yes | Yes | Cursor + Claude Code | Template copy if missing |

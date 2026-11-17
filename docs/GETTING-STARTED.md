@@ -1,6 +1,6 @@
 # Getting Started with kenji
 
-A short guide for first-time Cursor users.
+A short guide for people who have never used agent skills. It works the same in Claude Code, Cursor, Codex CLI, Gemini CLI, and Antigravity CLI.
 
 ---
 
@@ -10,19 +10,35 @@ A short guide for first-time Cursor users.
 
 ---
 
-## Step 1: Install Cursor
+## The idea in one picture
 
-If you don't have Cursor yet: [download it at cursor.com](https://cursor.com).
+<img src="screenshots/walkthrough-kenji.svg" width="100%" alt="Animated session. You type: /kenji the login page is broken for some users. The agent replies that this is a bug to fix and ship, and runs the workflow-fix-and-ship playbook. It reproduces the bug, writes a failing test and then the fix, and checks it in a real browser. Result: tests green, PR opened, nothing merged without you.">
+
+Three things happen every time:
+
+1. **You say the job** in your own words.
+2. **A playbook runs.** A playbook (the files call it a *skill*) is a written procedure the agent follows: what to check first, what to test, what to prove.
+3. **You get a result you can check**: a test that passes, a finding with a file and line, a pull request.
+
+You only need to remember one command, `/kenji`. Everything else is optional.
+
+---
+
+## Step 1: Have an AI coding agent
+
+Any of these works: [Claude Code](https://code.claude.com), [Cursor](https://cursor.com), Codex CLI, Gemini CLI, or Antigravity CLI. You also need [Node.js](https://nodejs.org) 18 or newer for the install command.
 
 ---
 
 ## Step 2: Install kenji
 
 ```bash
-npx @kensaurus/skills --all
+npx @kensaurus/skills --auto
 ```
 
-That installs skills **and** slash commands (and agents/rules) for every tool the installer supports, then hash-checks the copies. Windows works too, including from a clone of this repo.
+That finds the agents on your machine and installs the playbooks for each one, then checks every copied file. Windows works too. To see what it would write first, add `--dry-run`.
+
+**Want less?** The full pack is 162 skills. `npx @kensaurus/skills --auto --profile core` installs the 28 that cover the daily loop. You can add `web`, `backend`, `mobile`, `growth`, or `maintain` later; `--list-profiles` shows them.
 
 **Skills only** (no `/commands` — Vercel skills CLI, current project by default):
 
@@ -51,9 +67,21 @@ From a clone you can also run `node bin/install.mjs --all`. Re-check anytime wit
 
 ---
 
-## Step 3: Restart Cursor
+## Step 3: Restart your agent
 
-Close and reopen Cursor. The skills are now active.
+Close and reopen it. The playbooks are now active.
+
+---
+
+## Step 4: Type `/kenji` and the job
+
+```
+/kenji I want to add a way for users to invite friends
+```
+
+`/kenji` names the one playbook that fits, says in a line what you will get, and runs it. If two playbooks fit, it asks you one question first. With no job after it, `/kenji` shows a short menu.
+
+That is the whole product. The rest of this page shows what a longer session looks like.
 
 ---
 
@@ -88,6 +116,8 @@ build the feature from those decisions
 
 `workflow-build-feature` takes over: spec → failing test → code → smoke test → PR.
 
+<img src="screenshots/walkthrough-build.svg" width="100%" alt="Animated session. You say: grill me before I build a referral program. The agent asks whether the reward fires on signup or on first payment and recommends first payment. You answer first payment. A decision log is saved and you approve it. You say: build it from those decisions. The workflow-build-feature playbook writes the spec and a failing test, then the smallest change that passes. Result: smoke test passed, PR opened.">
+
 ### 4. Hand off when you stop
 
 ```
@@ -100,9 +130,9 @@ You get a compact handoff document saved to your OS temp directory (never inside
 
 ---
 
-## Step 4: Say what you want
+## Phrases that work without `/kenji`
 
-You don't have to remember skill names. A few phrases that do a lot of work:
+You can also describe the task directly. A few phrases that do a lot of work:
 
 | Type this in chat… | What happens |
 |:-------------------|:-------------|
@@ -137,17 +167,20 @@ Skills-only refresh: `npx skills add kensaurus/skills` (does not update slash co
 **Do I need to configure anything?**
 No, for most skills. Skills that talk to Sentry, Supabase, or Langfuse tell you when they need API keys.
 
-**Will this slow down Cursor?**
-No. Skill bodies load only when a skill fires. What rides in every request is the one-line description of each skill — about 39k characters for the full pack — which is why user-only rituals like `/handoff` opt out of that listing. On Claude Code, `"skillListingBudgetFraction": 0.02` in `~/.claude/settings.json` keeps every description visible; see [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md). Deleting skills you never use trims it further.
+**Will this slow my agent down or cost more?**
+A little, and you control it. A playbook's full text loads only when it runs. What rides in every request is a one-line description of each installed skill: about 39,000 characters for the full pack. A profile install (`--profile core`) is a small fraction of that. `/kenji` and `/handoff` are not in that listing at all. See [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md).
 
-**Can I delete skills I don't need?**
-Yes — delete the folder from `~/.cursor/skills/`.
+**Can I remove skills I don't need?**
+Yes. `npx @kensaurus/skills --auto --profile core --prune` keeps the core set and removes the rest of this pack's skills. Your own skills are never touched.
+
+**Which AI model should I use?**
+Any current one. The playbooks do not depend on a model. In Claude Code the default (Opus 5.5 at medium effort) suits most work; pick a stronger model or `/effort high` only for the hardest jobs. [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md) has a table.
 
 **Can I add my own skills?**
 Yes. See [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 **Does this work with Claude, Codex, or Gemini?**
-Yes. `npx @kensaurus/skills --all` installs the full pack for Cursor and Claude Code. Codex CLI and Gemini CLI get the skills (in `~/.agents/skills`, the user skills folder both read), the rules merged into `AGENTS.md` / `GEMINI.md`, and a few portable commands. Which agent gets what: [README](../README.md#which-agents-are-supported). Skills-only: `npx skills add kensaurus/skills`. Claude Code plugin: `/plugin marketplace add kensaurus/skills`. Both hosts read the same skill text. On Claude Code the default model is Claude Opus 5.5 and each skill's `effort:` key sets how hard it thinks (audits and plans high, implementation medium); Cursor ignores that key and runs at the model you pick. See [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md).
+Yes. `npx @kensaurus/skills --all` installs the full pack for Cursor and Claude Code. Codex CLI and Gemini CLI get the skills (in `~/.agents/skills`, the user skills folder both read), the rules merged into `AGENTS.md` / `GEMINI.md`, and a few portable commands. Which agent gets what: [README](../README.md#which-agents-are-supported). Skills-only: `npx skills add kensaurus/skills`. Claude Code plugin: `/plugin marketplace add kensaurus/skills`. Both hosts read the same skill text. On Claude Code each skill's `effort:` key sets how hard it thinks (audits and plans high, implementation at the session default); other hosts ignore that key and run at the model you pick. See [MODEL-AND-EFFORT.md](MODEL-AND-EFFORT.md).
 
 **Is it free?**
 Yes, MIT licensed.

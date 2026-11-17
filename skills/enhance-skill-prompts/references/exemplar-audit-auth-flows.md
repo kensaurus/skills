@@ -263,7 +263,7 @@ the repo.
 
 ## Self-critique before reporting  [LOW freedom — do not skip]
 
-<!-- TECHNIQUE: T4 evidence check before output. Opus 5.5 self-verifies
+<!-- TECHNIQUE: T4 evidence check before output. Current models self-verify
 without being told, so this is not a "double-check your work" step — every
 item names a specific piece of evidence (quote, probe, layer) a finding must
 carry, and findings without it are dropped or downgraded. Add items that

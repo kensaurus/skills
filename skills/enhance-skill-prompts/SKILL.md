@@ -59,7 +59,7 @@ pass through (audits: Observe → Interpret → Classify → Severity; plans:
 Propose → Risk → Keep-working → Phase). Place it ONCE near the top and
 reference it. It defines what a finding must contain, not how to think:
 reasoning depth comes from `effort:` (T7), and generic "think step by
-step" or "double-check" prose is dead weight on Opus 5.5.
+step" or "double-check" prose is dead weight on models that always think.
 
 **T3 — Exactly one worked example.** The chain AND the output shape on a
 realistic case, labeled illustrative. Put it right after the T2 frame.
@@ -67,7 +67,7 @@ realistic case, labeled illustrative. Put it right after the T2 frame.
 **T4 — Self-critique rubric before output.** Explicit, answerable checks
 (evidenced-not-assumed, reproducible, severity-justified, right-owner,
 no-false-safety). Plan skills: run this before presenting the burndown.
-Opus 5.5 self-verifies unprompted, so each rubric line must name the
+Current models self-verify unprompted, so each rubric line must name the
 evidence it is checked against (a tool result, a rendered rect, a header,
 a CI run); a line that is a generic re-check ("verify your work",
 "double-check") is cut. Principle-based ("constitutional-style") checking
@@ -85,16 +85,17 @@ T2+T3.
 audit / plan / judge / security / architecture → `high` (`xhigh` only for
 the hardest planning, with a measured reason); mechanical, read-only,
 formatting, handoff, inventory → `low`; ordinary implementation → omit
-(Opus 5.5 defaults to `medium`, which matches Opus 5 at high). A read-only
+(the host's default applies; Claude Code runs it at `medium`). A read-only
 inventory skill may add `context: fork` + `agent: Explore` to keep the main
 context clean. Cursor ignores the key; `validate:skills` checks its value.
-Effort is the only thinking control on Opus 5.5 — never steer depth with
-prose ("think harder", "don't overthink", "double-check").
+Effort is the thinking control — never steer depth with prose ("think
+harder", "don't overthink", "double-check"). A skill cannot read which model
+runs it; where a step should differ by depth, branch on `${CLAUDE_EFFORT}`.
 
 **T8 — Volume, shape, and communication.** Each rule once, at normal
 volume, with its reason — drop MUST / NEVER / CRITICAL markers, "be
-thorough", and update suppressors ("no preamble", "don't narrate"): Opus
-5.5 follows instructions literally, so emphasis over-triggers and
+thorough", and update suppressors ("no preamble", "don't narrate"): current
+models follow instructions literally, so emphasis over-triggers and
 suppressors leave the user blind between tool calls. State the success
 condition instead of a prohibition list. Exception: frontend design
 direction works best as *named* default patterns to avoid (cream

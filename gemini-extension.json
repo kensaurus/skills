@@ -1,0 +1,5 @@
+{
+  "name": "kenji",
+  "version": "2.8.0",
+  "description": "You say the job; the playbook runs. Agent skills that ask first, test first, and prove the result: build, fix, audit, test, ship. Tuned for React, Next.js, and Supabase; most of it works on any stack."
+}

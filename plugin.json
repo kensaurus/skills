@@ -1,0 +1,24 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "kenji",
+  "version": "2.8.0",
+  "description": "You say the job; the playbook runs. Agent skills that ask first, test first, and prove the result: build, fix, audit, test, ship. Tuned for React, Next.js, and Supabase; most of it works on any stack.",
+  "author": {
+    "name": "kensaurus",
+    "email": "kensaurus@gmail.com",
+    "url": "https://github.com/kensaurus"
+  },
+  "homepage": "https://github.com/kensaurus/skills#readme",
+  "repository": "https://github.com/kensaurus/skills",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "coding-agent",
+    "playbooks",
+    "code-review",
+    "testing",
+    "nextjs",
+    "supabase",
+    "react"
+  ]
+}

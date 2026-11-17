@@ -159,11 +159,12 @@ try {
     .filter((f) => f.endsWith(".md")).map((f) => f.replace(/\.md$/, ""));
   expect(portableNames.length > 0, "commands-portable/ has no .md sources");
   for (const name of portableNames) {
-    expect(existsSync(join(sandbox3, ".codex", "prompts", `${name}.md`)),
-      `missing ~/.codex/prompts/${name}.md`);
     expect(existsSync(join(sandbox3, ".gemini", "commands", `${name}.toml`)),
       `missing ~/.gemini/commands/${name}.toml`);
   }
+  // Codex CLI removed custom prompts in 0.117.0: none are written by default.
+  expect(!existsSync(join(sandbox3, ".codex", "prompts")),
+    "--codex wrote ~/.codex/prompts without --codex-prompts");
 
   // Merged rules must include a real rule and exclude the skill-routing index.
   const codexText = readFileSync(codexRules, "utf8");
@@ -685,6 +686,172 @@ try {
     expect(stuck.stderr.includes("another program is holding"), `no lock hint on a stuck lock: ${stuck.stderr}`);
   }
 
+  // --codex-prompts brings the prompt ports back for Codex CLI before 0.117.0;
+  // --verify asks for them only with the flag, and a later plain --codex run
+  // leaves the files in place.
+  const codexPrompts = join(sandbox, "codex-prompts");
+  mkdirSync(codexPrompts, { recursive: true });
+  runAs(codexPrompts, ["--codex"]);
+  const promptsDir = join(codexPrompts, ".codex", "prompts");
+  expect(!existsSync(promptsDir), "--codex alone wrote ~/.codex/prompts");
+  expect(spawnAs(codexPrompts, ["--verify", "--codex"]).status === 0,
+    "--verify --codex required prompt files that --codex no longer writes");
+  expect(spawnAs(codexPrompts, ["--verify", "--codex", "--codex-prompts"]).status !== 0,
+    "--verify --codex --codex-prompts passed with no prompt files");
+  runAs(codexPrompts, ["--codex", "--codex-prompts"]);
+  for (const name of portableNames) {
+    expect(existsSync(join(promptsDir, `${name}.md`)), `--codex --codex-prompts: missing ~/.codex/prompts/${name}.md`);
+  }
+  expect(spawnAs(codexPrompts, ["--verify", "--codex", "--codex-prompts"]).status === 0,
+    "--verify --codex --codex-prompts failed right after install");
+  runAs(codexPrompts, ["--codex"]);
+  expect(countDir(promptsDir) === portableNames.length, "a plain --codex run removed existing prompt files");
+
+  // ---- profiles: --profile, --prune, --list-profiles -----------------------
+  // Expected sets come from profiles.json and the directory listing.
+  const profiles = JSON.parse(readFileSync(join(repoRoot, "profiles.json"), "utf8")).profiles;
+  const isSkillDir = (group) => (name) => statSync(join(repoRoot, group, name)).isDirectory();
+  const packSkillDirs = readdirSync(join(repoRoot, "skills")).filter(isSkillDir("skills"));
+  const coreNames = new Set(profiles.core.skills);
+  const coreOnDisk = packSkillDirs.filter((n) => coreNames.has(n));
+  const nonCore = packSkillDirs.filter((n) => !coreNames.has(n));
+  const cursorExtraSkills = readdirSync(join(repoRoot, "skills-cursor")).filter((n) => !cursorBuiltinDupes.has(n));
+  const sameSet = (dir, names) => JSON.stringify(readdirSync(dir).sort()) === JSON.stringify([...names].sort());
+  expect(coreOnDisk.length > 0 && nonCore.length > 0, "fixture: expected skills both inside and outside the core profile");
+
+  // A command is skipped when it names pack skills in backticks and none is in the profile.
+  const commandRefs = (file) => {
+    const body = readFileSync(join(repoRoot, "commands", file), "utf8").replace(/^---[\s\S]*?\n---/, "");
+    return [...new Set([...body.matchAll(/`([^`\n]+)`/g)].map((m) => m[1].trim()).filter((t) => packSkillDirs.includes(t)))];
+  };
+  const commandFiles = readdirSync(join(repoRoot, "commands")).filter((f) => f.endsWith(".md"));
+  const commandsOutsideCore = commandFiles.filter((f) => {
+    const refs = commandRefs(f);
+    return refs.length > 0 && !refs.some((r) => coreNames.has(r));
+  });
+  const commandsNamingCore = commandFiles.filter((f) => commandRefs(f).some((r) => coreNames.has(r)));
+  const commandsNamingNone = commandFiles.filter((f) => commandRefs(f).length === 0);
+  expect(commandsOutsideCore.length > 0 && commandsNamingCore.length > 0,
+    "fixture: expected commands both outside and inside the core profile");
+
+  const profileHome = join(sandbox, "profile-core");
+  mkdirSync(profileHome, { recursive: true });
+  const profileRun = spawnAs(profileHome, ["--profile", "core"]);
+  expect(profileRun.status === 0, `--profile core failed: ${profileRun.stderr}`);
+  const profileCursorSkills = join(profileHome, ".cursor", "skills");
+  expect(sameSet(profileCursorSkills, [...coreOnDisk, ...cursorExtraSkills]),
+    `--profile core: ~/.cursor/skills is not the core set plus skills-cursor (got ${countDir(profileCursorSkills)}, expected ${coreOnDisk.length + cursorExtraSkills.length})`);
+  expect(sameSet(join(profileHome, ".agents", "skills"), [...coreOnDisk, ...cursorExtraSkills]),
+    "--profile core: ~/.agents/skills is not the core set plus skills-cursor");
+  const profileCommands = join(profileHome, ".cursor", "commands");
+  for (const f of commandsOutsideCore) expect(!existsSync(join(profileCommands, f)), `--profile core installed ${f}, which names only skills outside core`);
+  for (const f of commandsNamingCore) expect(existsSync(join(profileCommands, f)), `--profile core skipped ${f}, which names a core skill`);
+  for (const f of commandsNamingNone) expect(existsSync(join(profileCommands, f)), `--profile core skipped ${f}, which names no pack skill`);
+  expect(countDir(profileCommands) === repoCommands - commandsOutsideCore.length,
+    `--profile core commands: expected ${repoCommands - commandsOutsideCore.length}, got ${countDir(profileCommands)}`);
+  expect(countDir(join(profileHome, ".cursor", "agents")) === repoAgents, "--profile core changed the agents group");
+  expect(countDir(join(profileHome, ".cursor", "rules")) === repoCursorRules, "--profile core changed the rules group");
+  expect(String(profileRun.stdout).includes("--prune"), "--profile core without --prune did not mention --prune");
+  expect(spawnAs(profileHome, ["--verify", "--profile", "core"]).status === 0, "--verify --profile core failed right after --profile core");
+  expect(spawnAs(profileHome, ["--verify"]).status !== 0, "--verify without --profile passed on a core-only install");
+
+  // Two profiles: the union plus core.
+  const firstOther = Object.keys(profiles).find((n) => n !== "core");
+  const unionNames = new Set([...coreNames, ...profiles[firstOther].skills]);
+  const unionHome = join(sandbox, "profile-union");
+  mkdirSync(unionHome, { recursive: true });
+  runAs(unionHome, ["--profile", `${firstOther}`, "--only", "skills"]);
+  expect(sameSet(join(unionHome, ".cursor", "skills"), [...packSkillDirs.filter((n) => unionNames.has(n)), ...cursorExtraSkills]),
+    `--profile ${firstOther}: skills are not ${firstOther} plus core plus skills-cursor`);
+
+  // Claude Code: same filter; skills-cursor still lands; the listing budget is
+  // not raised under a profile, and a value already set is kept.
+  const profileClaude = join(sandbox, "profile-claude");
+  mkdirSync(profileClaude, { recursive: true });
+  runAs(profileClaude, ["--claude", "--profile", "core"]);
+  expect(sameSet(join(profileClaude, ".claude", "skills"), [...coreOnDisk, ...readdirSync(join(repoRoot, "skills-cursor"))]),
+    "--claude --profile core: ~/.claude/skills is not the core set plus skills-cursor");
+  for (const f of commandsOutsideCore) expect(!existsSync(join(profileClaude, ".claude", "commands", f)), `--claude --profile core installed ${f}`);
+  const profileSettingsPath = join(profileClaude, ".claude", "settings.json");
+  const profileSettings = JSON.parse(readFileSync(profileSettingsPath, "utf8"));
+  expect(profileSettings.skillListingBudgetFraction === undefined, "--claude --profile core set skillListingBudgetFraction");
+  expect(gateEntries(profileSettings.hooks?.Stop ?? []).length === 1, "--claude --profile core did not register the Stop hook");
+  expect(spawnAs(profileClaude, ["--verify", "--claude", "--profile", "core"]).status === 0, "--verify --claude --profile core failed");
+  profileSettings.skillListingBudgetFraction = 0.05;
+  writeFileSync(profileSettingsPath, JSON.stringify(profileSettings, null, 2) + "\n");
+  runAs(profileClaude, ["--claude", "--profile", "core"]);
+  expect(JSON.parse(readFileSync(profileSettingsPath, "utf8")).skillListingBudgetFraction === 0.05,
+    "--claude --profile core changed an existing skillListingBudgetFraction");
+
+  // --prune after a full install: the pack's non-core skills go from every
+  // skills directory written; a personal skill and the core skills stay.
+  const pruneHome = join(sandbox, "profile-prune");
+  mkdirSync(pruneHome, { recursive: true });
+  runAs(pruneHome, ["--all"]);
+  const pruneDirs = [".cursor", ".claude", ".agents"].map((d) => join(pruneHome, d, "skills"));
+  const personal = "my-own-personal-skill";
+  for (const dir of pruneDirs) {
+    mkdirSync(join(dir, personal), { recursive: true });
+    writeFileSync(join(dir, personal, "SKILL.md"), `---\nname: ${personal}\ndescription: mine\n---\n`);
+  }
+  const leftIn = (dir) => nonCore.filter((n) => existsSync(join(dir, n))).length;
+  runAs(pruneHome, ["--all", "--profile", "core"]);
+  for (const dir of pruneDirs) expect(leftIn(dir) === nonCore.length, `--profile core without --prune removed skills from ${dir}`);
+  const pruneDry = String(runAs(pruneHome, ["--all", "--profile", "core", "--prune", "--dry-run"]));
+  for (const dir of pruneDirs) expect(leftIn(dir) === nonCore.length, `--prune --dry-run removed skills from ${dir}`);
+  expect(pruneDry.includes(`would prune ${nonCore.length} `), "--prune --dry-run did not log the removal count");
+  const pruneOut = String(runAs(pruneHome, ["--all", "--profile", "core", "--prune"]));
+  for (const dir of pruneDirs) {
+    expect(leftIn(dir) === 0, `--prune left ${leftIn(dir)} non-core pack skill(s) in ${dir}`);
+    expect(existsSync(join(dir, personal, "SKILL.md")), `--prune removed a personal skill from ${dir}`);
+    expect(coreOnDisk.every((n) => existsSync(join(dir, n, "SKILL.md"))), `--prune removed a core skill from ${dir}`);
+    expect(cursorExtraSkills.every((n) => existsSync(join(dir, n))), `--prune removed a skills-cursor skill from ${dir}`);
+  }
+  expect(pruneOut.includes(`pruned ${nonCore.length} `), "--prune did not log the removal count");
+  expect(spawnAs(pruneHome, ["--verify", "--all", "--profile", "core"]).status === 0, "--verify --all --profile core failed after --prune");
+
+  // The shared ~/.agents/skills written for Codex alone is pruned too.
+  const pruneCodex = join(sandbox, "profile-prune-codex");
+  mkdirSync(pruneCodex, { recursive: true });
+  runAs(pruneCodex, ["--codex"]);
+  runAs(pruneCodex, ["--codex", "--profile", "core", "--prune"]);
+  expect(sameSet(join(pruneCodex, ".agents", "skills"), [...coreOnDisk, ...cursorExtraSkills]),
+    "--codex --profile core --prune did not leave the core set in ~/.agents/skills");
+
+  // Unknown profile: exit 1, the valid names printed, nothing written.
+  const badProfile = join(sandbox, "profile-unknown");
+  mkdirSync(badProfile, { recursive: true });
+  const badRun = spawnAs(badProfile, ["--profile", "core,no-such-profile"]);
+  expect(badRun.status === 1, `unknown profile exited ${badRun.status}, expected 1`);
+  for (const name of [...Object.keys(profiles), "all"]) {
+    expect(String(badRun.stderr).includes(name), `unknown profile: valid name ${name} not printed`);
+  }
+  expect(readdirSync(badProfile).length === 0, "unknown profile still wrote files");
+
+  // --profile all is the bare install; --skill wins over --profile.
+  const allHome = join(sandbox, "profile-all");
+  mkdirSync(allHome, { recursive: true });
+  runAs(allHome, ["--profile", "all"]);
+  expect(countDir(join(allHome, ".cursor", "skills")) === repoCursorSkills, "--profile all did not install every skill");
+  expect(countDir(join(allHome, ".cursor", "commands")) === repoCommands, "--profile all did not install every command");
+  expect(spawnAs(allHome, ["--verify"]).status === 0, "--verify failed after --profile all");
+  const skillWins = join(sandbox, "profile-skill-wins");
+  mkdirSync(skillWins, { recursive: true });
+  runAs(skillWins, ["--skill", nonCore[0], "--profile", "core"]);
+  expect(sameSet(join(skillWins, ".cursor", "skills"), [nonCore[0]]), "--skill did not win over --profile");
+
+  // --list-profiles prints every profile and writes nothing.
+  const listHome = join(sandbox, "profile-list");
+  mkdirSync(listHome, { recursive: true });
+  const listRun = spawnAs(listHome, ["--list-profiles"]);
+  expect(listRun.status === 0, "--list-profiles did not exit 0");
+  for (const [name, profile] of Object.entries(profiles)) {
+    const line = String(listRun.stdout).split("\n").find((l) => l.trim().startsWith(`${name} `)) ?? "";
+    expect(line.includes(profile.title) && line.includes(`${profile.skills.length} skill`) && line.includes(profile.description),
+      `--list-profiles: no full line for ${name}`);
+  }
+  expect(readdirSync(listHome).length === 0, "--list-profiles wrote files");
+
   // Official npm bin is the .js wrapper (Windows cmd-shim friendly).
   expect(existsSync(join(repoRoot, "bin", "kenji.js")), "missing bin/kenji.js");
   const wrapperHelp = execFileSync(process.execPath, [join(repoRoot, "bin", "kenji.js"), "--help"], {
@@ -716,6 +883,23 @@ try {
     expect(cmdHelpExplicit.includes("kenji installer"), ".\\kenji.cmd --help did not run installer");
   }
 
+  // --antigravity writes the pack's skills to ~/.gemini/config/skills and
+  // nothing else; --verify with the same flag passes; the packed profiles file
+  // travels with the package.
+  const sandboxAgy = mkdtempSync(join(tmpdir(), "kenji-agy-"));
+  try {
+    const agyEnv = { ...process.env, HOME: sandboxAgy, USERPROFILE: sandboxAgy };
+    execFileSync(process.execPath, [installer, "--antigravity"], { env: agyEnv, stdio: "pipe" });
+    const agySkills = join(sandboxAgy, ".gemini", "config", "skills");
+    expect(countDir(agySkills) >= repoGeneralSkills,
+      `--antigravity: expected at least ${repoGeneralSkills} skills in ~/.gemini/config/skills, got ${countDir(agySkills)}`);
+    expect(!existsSync(join(sandboxAgy, ".cursor")), "--antigravity must not write ~/.cursor");
+    expect(!existsSync(join(sandboxAgy, ".agents")), "--antigravity must not write ~/.agents");
+    execFileSync(process.execPath, [installer, "--antigravity", "--verify"], { env: agyEnv, stdio: "pipe" });
+  } finally {
+    rmSync(sandboxAgy, { recursive: true, force: true });
+  }
+
   // Packed tarball (what npm publish ships) must expose a working bin.
   const packDir = mkdtempSync(join(tmpdir(), "kenji-pack-"));
   try {
@@ -736,6 +920,9 @@ try {
         { encoding: "utf8" },
       );
       expect(packedHelp.includes("kenji installer"), "packed bin/kenji.js --help failed");
+      for (const shipped of ["profiles.json", "plugin.json", "gemini-extension.json", "skills/kenji/SKILL.md", "skills/kenji/references/index.md"]) {
+        expect(existsSync(join(packDir, "package", shipped)), `packed tarball is missing ${shipped}`);
+      }
     }
   } finally {
     rmSync(packDir, { recursive: true, force: true });
