@@ -107,7 +107,7 @@
     <p class="lead">Installed workflows for <b>Claude Code, Cursor, Codex CLI, and Gemini CLI</b>. They ask first, test first, and stop only when the work is proven.</p>
     <pre><code>npx @kensaurus/skills --auto</code></pre>
     <p class="cap">Then remember one command: <code>/kenji</code> and the job in your own words. It picks the playbook and runs it.</p>
-    <img class="hero" src="./walkthrough-kenji.svg" width="880" height="310" alt="Animated session. You type: /kenji the login page is broken for some users. The agent runs the workflow-fix-and-ship playbook: it reproduces the bug, writes a failing test and then the fix, and checks it in a real browser. Result: tests green, PR opened, nothing merged without you.">
+    <img class="hero" src="./capture-kenji.svg" width="920" height="442" alt="Animated capture of real output. The command /kenji with no job prints: What do you want to do? Say the job in your own words and I will pick the playbook and run it. Then a table of jobs and the skill for each, such as fix a bug and ship the fix: workflow-fix-and-ship.">
     <nav>
       <a href="https://github.com/kensaurus/skills">GitHub</a>
       <a href="https://www.npmjs.com/package/@kensaurus/skills">npm</a>
@@ -116,9 +116,9 @@
     </nav>
     <img class="hero" src="https://raw.githubusercontent.com/kensaurus/skills/main/docs/screenshots/hero-dark.png" width="1600" height="900" alt="You say: fix this bug and ship it. workflow-fix-and-ship triages with evidence, fixes with a test, verifies in the browser. Tests green, PR open.">
     <p class="cap">What happens after install. You say the job in chat. The matching playbook runs, proves the result, and opens the PR.</p>
-    <h2>TWO MORE SESSIONS</h2>
-    <img class="hero" src="./walkthrough-build.svg" width="880" height="370" alt="Animated session. You say: grill me before I build a referral program. The agent asks one question, saves a decision log you approve, then the workflow-build-feature playbook writes the spec, a failing test, and the smallest change that passes. Result: smoke test passed, PR opened.">
-    <img class="hero" src="./walkthrough-audit.svg" width="880" height="340" alt="Animated session. You say: is this app safe to launch? The audit-security playbook lists three findings, each with a file and line, then fixes and re-tests them when you say yes.">
+    <h2>THE COMPLETION GATE</h2>
+    <img class="hero" src="./gate-diagram-en.png" width="1200" height="470" alt="Diagram of the completion gate. 1, the state file holds the checklist on disk. 2, the Stop hook runs when the agent tries to stop and sends it back while items are open, giving up after three tries with no progress. 3, when every item is checked, a judge in a fresh context compares the request, the diff, and test evidence, and returns PASS, CONTINUE, or BLOCKED.">
+    <img class="hero" src="./capture-gate.svg" width="920" height="550" alt="Animated capture of real output. The state file has two open items and the agent says it is done. The Stop hook returns decision: block and lists the two items. Once both are checked, the hook returns an empty object and the agent may stop.">
     <h2>OTHER WAYS TO INSTALL</h2>
     <ul>
       <li>A smaller install, the 31 skills of the daily loop: <code>npx @kensaurus/skills --auto --profile core</code></li>

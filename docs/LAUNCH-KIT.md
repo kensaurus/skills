@@ -2,7 +2,7 @@
 
 Facts, rules, and an order of work for announcing the pack. Researched 2026-11-17; sources are at the end. Listing status lives in [DISTRIBUTION.md](DISTRIBUTION.md) and [PROMOTION.md](PROMOTION.md).
 
-**Write every post yourself.** Hacker News requires launch text to be written by a person, not generated or edited by a model, and several subreddits remove AI-written posts. This page gives you verified facts and an outline. It does not give you copy to paste.
+**Write every post yourself.** Hacker News requires launch text to be written by a person, not generated or edited by a model, and several subreddits remove AI-written posts. This page gives you verified facts and an outline. For Zenn and note, which have no such rule, an article draft is in [articles/completion-gate.ja.md](articles/completion-gate.ja.md) with an English version in [articles/completion-gate.md](articles/completion-gate.md); read it through and change it into your own voice before you publish. Graphics for posts (a diagram and three GIF captures of real output) are in [screenshots/](screenshots/README.md#captures-and-the-gate-diagram).
 
 ## Where the pack stands
 

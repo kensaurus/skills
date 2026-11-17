@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 470" width="920" height="470" role="img" aria-label="Install only what you need. Command: npx @kensaurus/skills --list-profiles. Profiles for --profile &lt;name&gt;[,&lt;name&gt;]. core is part of every profile. core      Core — 31 skills. The daily loop: orient, grill, build, fix,           review, test, ship. web       Web UI — 44 skills. Design, polish, and audit web front ends. backend   Backend and data — 35 skills. APIs, databases, auth,           resilience, LLM features. mobile    Mobile — 16 skills. React Native, Capacitor, emulators. growth    Growth — 22 skills. Go to market, onboarding, SEO, pricing. maintain  Maintain — 28 skills. CI gates, dead code, docs sync. all       Everything in skills/. The default. Command: npx @kensaurus/skills --auto --profile core.">
+<title>Install only what you need</title>
+<style>
+text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:16px;white-space:pre}
+.t{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;font-weight:600;fill:#a1a1aa}
+@keyframes l0{0%,3.70%{opacity:0}5.56%,97%{opacity:1}100%{opacity:0}}
+.l0{animation:l0 10.8s linear infinite}
+@keyframes l1{0%,14.81%{opacity:0}16.67%,97%{opacity:1}100%{opacity:0}}
+.l1{animation:l1 10.8s linear infinite}
+@keyframes l2{0%,22.22%{opacity:0}24.07%,97%{opacity:1}100%{opacity:0}}
+.l2{animation:l2 10.8s linear infinite}
+@keyframes l3{0%,23.15%{opacity:0}25.00%,97%{opacity:1}100%{opacity:0}}
+.l3{animation:l3 10.8s linear infinite}
+@keyframes l4{0%,24.07%{opacity:0}25.93%,97%{opacity:1}100%{opacity:0}}
+.l4{animation:l4 10.8s linear infinite}
+@keyframes l5{0%,28.70%{opacity:0}30.56%,97%{opacity:1}100%{opacity:0}}
+.l5{animation:l5 10.8s linear infinite}
+@keyframes l6{0%,33.33%{opacity:0}35.19%,97%{opacity:1}100%{opacity:0}}
+.l6{animation:l6 10.8s linear infinite}
+@keyframes l7{0%,34.26%{opacity:0}36.11%,97%{opacity:1}100%{opacity:0}}
+.l7{animation:l7 10.8s linear infinite}
+@keyframes l8{0%,38.89%{opacity:0}40.74%,97%{opacity:1}100%{opacity:0}}
+.l8{animation:l8 10.8s linear infinite}
+@keyframes l9{0%,43.52%{opacity:0}45.37%,97%{opacity:1}100%{opacity:0}}
+.l9{animation:l9 10.8s linear infinite}
+@keyframes l10{0%,48.15%{opacity:0}50.00%,97%{opacity:1}100%{opacity:0}}
+.l10{animation:l10 10.8s linear infinite}
+@keyframes l11{0%,52.78%{opacity:0}54.63%,97%{opacity:1}100%{opacity:0}}
+.l11{animation:l11 10.8s linear infinite}
+@keyframes l12{0%,67.59%{opacity:0}69.44%,97%{opacity:1}100%{opacity:0}}
+.l12{animation:l12 10.8s linear infinite}
+@keyframes l13{0%,68.52%{opacity:0}70.37%,97%{opacity:1}100%{opacity:0}}
+.l13{animation:l13 10.8s linear infinite}
+@media (prefers-reduced-motion:reduce){text{animation:none!important;opacity:1!important}}
+</style>
+<rect width="920" height="470" rx="14" fill="#18181b"/>
+<rect width="920" height="44" rx="14" fill="#27272a"/>
+<rect y="30" width="920" height="14" fill="#27272a"/>
+<circle cx="24" cy="22" r="6" fill="#52525b"/><circle cx="44" cy="22" r="6" fill="#52525b"/><circle cx="64" cy="22" r="6" fill="#52525b"/>
+<text class="t" x="460" y="27" text-anchor="middle">Install only what you need</text>
+<text class="l0" x="28" y="76" font-weight="600"><tspan fill="#a3e635">$ </tspan><tspan fill="#f4f4f5">npx @kensaurus/skills --list-profiles</tspan></text>
+<text class="l1" x="28" y="103" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">Profiles for --profile &lt;name&gt;[,&lt;name&gt;]. core is part of every profile.</tspan></text>
+
+<text class="l3" x="28" y="157" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">core      Core — 31 skills. The daily loop: orient, grill, build, fix,</tspan></text>
+<text class="l4" x="28" y="184" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">          review, test, ship.</tspan></text>
+<text class="l5" x="28" y="211" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">web       Web UI — 44 skills. Design, polish, and audit web front ends.</tspan></text>
+<text class="l6" x="28" y="238" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">backend   Backend and data — 35 skills. APIs, databases, auth,</tspan></text>
+<text class="l7" x="28" y="265" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">          resilience, LLM features.</tspan></text>
+<text class="l8" x="28" y="292" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">mobile    Mobile — 16 skills. React Native, Capacitor, emulators.</tspan></text>
+<text class="l9" x="28" y="319" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">growth    Growth — 22 skills. Go to market, onboarding, SEO, pricing.</tspan></text>
+<text class="l10" x="28" y="346" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">maintain  Maintain — 28 skills. CI gates, dead code, docs sync.</tspan></text>
+<text class="l11" x="28" y="373" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">all       Everything in skills/. The default.</tspan></text>
+
+<text class="l13" x="28" y="427" font-weight="600"><tspan fill="#a3e635">$ </tspan><tspan fill="#f4f4f5">npx @kensaurus/skills --auto --profile core</tspan></text>
+</svg>

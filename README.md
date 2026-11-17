@@ -50,7 +50,7 @@ You do not need to learn the skill names. Remember one command:
 
 `/kenji` reads the job in your own words, names the one playbook that fits, and runs it. If two fit, it asks you one question first.
 
-<img src="docs/screenshots/walkthrough-kenji.svg" width="100%" alt="Animated session. You type: /kenji the login page is broken for some users. The agent replies that this is a bug to fix and ship, and runs the workflow-fix-and-ship playbook. It reproduces the bug, writes a failing test and then the fix, and checks it in a real browser. Result: tests green, PR opened, nothing merged without you.">
+<img src="docs/screenshots/capture-kenji.svg" width="100%" alt="Animated capture of real output. The command /kenji with no job prints: What do you want to do? Say the job in your own words and I will pick the playbook and run it. Then a table of jobs and the skill for each, such as fix a bug and ship the fix: workflow-fix-and-ship.">
 
 You can also skip `/kenji` and describe the task, for example *"audit this repo for security problems"*. The agent picks the playbook from your words. Phrases that work are in [What should I say?](#what-should-i-say), and the [plain-language guide](docs/GETTING-STARTED.md) walks through a full session.
 
@@ -73,6 +73,8 @@ npx @kensaurus/skills --auto --profile web,mobile   # core plus two more sets
 | `growth` | 22 | Go to market, onboarding, SEO, pricing, launch copy |
 | `maintain` | 28 | CI gates, dead code, docs sync, agent setup, pack authoring |
 | `all` | 162 | Everything. The default. |
+
+<img src="docs/screenshots/capture-profiles.svg" width="100%" alt="Animated capture of real output from npx @kensaurus/skills --list-profiles: core with 31 skills, web 44, backend 35, mobile 16, growth 22, maintain 28, and all.">
 
 A profile install is a merge: skills you installed earlier stay. Add `--prune` to remove this pack's skills that are outside the profile. It removes by folder name and first copies each removed folder to `.kenji-pruned/<timestamp>/` beside the skills folder, so an edit you made in place is not lost. Folders this pack does not ship are never touched. Commands that only point at skills outside the profile are skipped, and `--prune` removes the ones an earlier install left. The lists live in [`profiles.json`](profiles.json).
 
@@ -323,11 +325,11 @@ To force a skill: *"use `enhance-web-ux` on `/dashboard`"*. Every trigger phrase
 
 ## <img src="docs/screenshots/icons/tour.png" width="28" height="28" alt="" align="absmiddle"> Tour
 
-Each time, you describe the job and a named playbook runs. Two sessions, animated:
+Each time, you describe the job and a named playbook runs. The part that sets this pack apart is the completion gate: it checks the moment the agent tries to stop. The capture below is real output; only the `agent` line was added. More in [A gate that does not take the agent's word for "done"](docs/articles/completion-gate.md) ([日本語](docs/articles/completion-gate.ja.md)).
 
-<img src="docs/screenshots/walkthrough-build.svg" width="100%" alt="Animated session. You say: grill me before I build a referral program. The agent asks whether the reward fires on signup or on first payment and recommends first payment. You answer first payment. A decision log is saved and you approve it. You say: build it from those decisions. The workflow-build-feature playbook writes the spec and a failing test, then the smallest change that passes. Result: smoke test passed, PR opened.">
+<img src="docs/screenshots/gate-diagram-en.png" width="100%" alt="Diagram of the completion gate. 1, the state file holds the checklist on disk. 2, the Stop hook runs when the agent tries to stop and sends it back while items are open, giving up after three tries with no progress. 3, when every item is checked, a judge in a fresh context compares the request, the diff, and test evidence, and returns PASS, CONTINUE, or BLOCKED.">
 
-<img src="docs/screenshots/walkthrough-audit.svg" width="100%" alt="Animated session. You say: is this app safe to launch? The audit-security playbook runs and lists three findings, each with a file and line: an admin route with no auth check, a user table readable by anyone, and a stack trace shown to users. The agent asks whether to fix them now. You say yes. Result: fixed, re-tested, and listed in the report.">
+<img src="docs/screenshots/capture-gate.svg" width="100%" alt="Animated capture of real output. The state file has two open items and the agent says it is done. The Stop hook returns decision: block and lists the two items. Once both are checked, the hook returns an empty object and the agent may stop.">
 
 Four more, as stills:
 

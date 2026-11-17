@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 578" width="920" height="578" role="img" aria-label="The completion gate. Command: cat .cursor/complete-everything-state.md. - [x] Invite link API - [x] Failing test written first - [ ] Error message for an expired link - [ ] Re-run typecheck, lint and tests after the last edit The agent says: All done. The feature is complete. Command: node completion-gate.mjs --host=claude    (the Stop hook). decision: block Completion gate: 2 actionable checklist items remain (follow-up 1 of 3 while nothing closes). - Error message for an expired link - Re-run typecheck, lint and tests after the last edit Do not claim completion while actionable items remain. Command: node completion-gate.mjs --host=claude    (both items now checked). {}    nothing left, so the agent may stop">
+<title>The completion gate</title>
+<style>
+text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:16px;white-space:pre}
+.t{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;font-weight:600;fill:#a1a1aa}
+@keyframes l0{0%,2.50%{opacity:0}3.75%,97%{opacity:1}100%{opacity:0}}
+.l0{animation:l0 16.0s linear infinite}
+@keyframes l1{0%,10.00%{opacity:0}11.25%,97%{opacity:1}100%{opacity:0}}
+.l1{animation:l1 16.0s linear infinite}
+@keyframes l2{0%,11.88%{opacity:0}13.13%,97%{opacity:1}100%{opacity:0}}
+.l2{animation:l2 16.0s linear infinite}
+@keyframes l3{0%,13.75%{opacity:0}15.00%,97%{opacity:1}100%{opacity:0}}
+.l3{animation:l3 16.0s linear infinite}
+@keyframes l4{0%,15.63%{opacity:0}16.88%,97%{opacity:1}100%{opacity:0}}
+.l4{animation:l4 16.0s linear infinite}
+@keyframes l5{0%,24.38%{opacity:0}25.62%,97%{opacity:1}100%{opacity:0}}
+.l5{animation:l5 16.0s linear infinite}
+@keyframes l6{0%,25.62%{opacity:0}26.88%,97%{opacity:1}100%{opacity:0}}
+.l6{animation:l6 16.0s linear infinite}
+@keyframes l7{0%,35.62%{opacity:0}36.88%,97%{opacity:1}100%{opacity:0}}
+.l7{animation:l7 16.0s linear infinite}
+@keyframes l8{0%,36.88%{opacity:0}38.13%,97%{opacity:1}100%{opacity:0}}
+.l8{animation:l8 16.0s linear infinite}
+@keyframes l9{0%,43.13%{opacity:0}44.38%,97%{opacity:1}100%{opacity:0}}
+.l9{animation:l9 16.0s linear infinite}
+@keyframes l10{0%,46.87%{opacity:0}48.12%,97%{opacity:1}100%{opacity:0}}
+.l10{animation:l10 16.0s linear infinite}
+@keyframes l11{0%,48.75%{opacity:0}50.00%,97%{opacity:1}100%{opacity:0}}
+.l11{animation:l11 16.0s linear infinite}
+@keyframes l12{0%,52.50%{opacity:0}53.75%,97%{opacity:1}100%{opacity:0}}
+.l12{animation:l12 16.0s linear infinite}
+@keyframes l13{0%,54.37%{opacity:0}55.62%,97%{opacity:1}100%{opacity:0}}
+.l13{animation:l13 16.0s linear infinite}
+@keyframes l14{0%,56.25%{opacity:0}57.50%,97%{opacity:1}100%{opacity:0}}
+.l14{animation:l14 16.0s linear infinite}
+@keyframes l15{0%,70.00%{opacity:0}71.25%,97%{opacity:1}100%{opacity:0}}
+.l15{animation:l15 16.0s linear infinite}
+@keyframes l16{0%,71.25%{opacity:0}72.50%,97%{opacity:1}100%{opacity:0}}
+.l16{animation:l16 16.0s linear infinite}
+@keyframes l17{0%,77.50%{opacity:0}78.75%,97%{opacity:1}100%{opacity:0}}
+.l17{animation:l17 16.0s linear infinite}
+@media (prefers-reduced-motion:reduce){text{animation:none!important;opacity:1!important}}
+</style>
+<rect width="920" height="578" rx="14" fill="#18181b"/>
+<rect width="920" height="44" rx="14" fill="#27272a"/>
+<rect y="30" width="920" height="14" fill="#27272a"/>
+<circle cx="24" cy="22" r="6" fill="#52525b"/><circle cx="44" cy="22" r="6" fill="#52525b"/><circle cx="64" cy="22" r="6" fill="#52525b"/>
+<text class="t" x="460" y="27" text-anchor="middle">The completion gate</text>
+<text class="l0" x="28" y="76" font-weight="600"><tspan fill="#a3e635">$ </tspan><tspan fill="#f4f4f5">cat .cursor/complete-everything-state.md</tspan></text>
+<text class="l1" x="28" y="103" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">- [x] Invite link API</tspan></text>
+<text class="l2" x="28" y="130" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">- [x] Failing test written first</tspan></text>
+<text class="l3" x="28" y="157" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">- [ ] Error message for an expired link</tspan></text>
+<text class="l4" x="28" y="184" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">- [ ] Re-run typecheck, lint and tests after the last edit</tspan></text>
+
+<text class="l6" x="28" y="238" font-weight="400"><tspan fill="#38bdf8">agent  </tspan><tspan fill="#bae6fd">All done. The feature is complete.</tspan></text>
+
+<text class="l8" x="28" y="292" font-weight="600"><tspan fill="#a3e635">$ </tspan><tspan fill="#f4f4f5">node completion-gate.mjs --host=claude    (the Stop hook)</tspan></text>
+<text class="l9" x="28" y="319" font-weight="600"><tspan fill="#fbbf24">  </tspan><tspan fill="#fbbf24">decision: block</tspan></text>
+<text class="l10" x="28" y="346" font-weight="600"><tspan fill="#fbbf24">  </tspan><tspan fill="#fbbf24">Completion gate: 2 actionable checklist items remain</tspan></text>
+<text class="l11" x="28" y="373" font-weight="600"><tspan fill="#fbbf24">  </tspan><tspan fill="#fbbf24">(follow-up 1 of 3 while nothing closes).</tspan></text>
+<text class="l12" x="28" y="400" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">- Error message for an expired link</tspan></text>
+<text class="l13" x="28" y="427" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">- Re-run typecheck, lint and tests after the last edit</tspan></text>
+<text class="l14" x="28" y="454" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">Do not claim completion while actionable items remain.</tspan></text>
+
+<text class="l16" x="28" y="508" font-weight="600"><tspan fill="#a3e635">$ </tspan><tspan fill="#f4f4f5">node completion-gate.mjs --host=claude    (both items now checked)</tspan></text>
+<text class="l17" x="28" y="535" font-weight="600"><tspan fill="#4ade80">  </tspan><tspan fill="#4ade80">{}    nothing left, so the agent may stop</tspan></text>
+</svg>
