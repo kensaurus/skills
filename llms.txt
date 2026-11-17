@@ -44,7 +44,7 @@ The skills are written for any current Claude model (Fable 5.2, Opus 5.5, Sonnet
 ## More from kensaurus
 
 - [Tsumagoi Work&Camp](https://tsumagoi.kensaur.us/): A 24-hour mountain lounge, run by us
-- [Mushi Mushi](https://kensaur.us/mushi-mushi/): Tells you why your AI-built app broke, and hands the fix to your editor
+- [Mushi Mushi](https://kensaur.us/mushi-mushi/): One place to improve your AI-built app
 - [Lazycow Studio](https://github.com/kensaurus/lazycow-studio): Turns your own footage into reels and books the posts; you only approve
 - [Solo Boss](https://solo-boss.kensaur.us/): Bookkeeping through to tax filing, for one-person companies
 - [Ranch Plan](https://kensaur.us/tsumagoi-plan/): The business plan behind Tsumagoi Work&Camp
@@ -52,11 +52,11 @@ The skills are written for any current Claude model (Fable 5.2, Opus 5.5, Sonnet
 - [Skin Analysis](https://kensaur.us/skin-analysis/): Skin scores and care tips from one selfie
 - [ProjectFlow](https://kensaur.us/project-flow/): Projects, estimates, invoices and delivery in one place
 - [glot.it](https://kensaur.us/glot-it/): A Thai learning app with an AI tutor
-- [help her take photo](https://kensaur.us/help-her-take-photo/): Two phones, one camera: the person in the photo directs the shot
+- [help her take photo](https://kensaur.us/help-her-take-photo/): Every guest gets a disposable camera
 - [yen-yen](https://kensaur.us/yen-yen/): A shared household money book, no bank login
 - [Konte](https://kensaur.us/konte/): Plan and make an 8-second AI video, step by step (prototype)
 - [the wanting mind](https://kensaur.us/the-wanting-mind/): A book about why we want, free to read online
-- [lets-talk](https://talk.kensaur.us/): Practise difficult conversations with an AI coach
+- [lets-talk](https://talk.kensaur.us/): Score a tense text before you send
 - [Hear, Hear](https://kensaur.us/hear-hear/): Live transcription in your browser, no account (prototype)
 - [All apps as JSON](https://kensaur.us/apps.json)
 - [kensaurus](https://kensaur.us/)

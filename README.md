@@ -617,8 +617,8 @@ This pack ships skills, slash commands, subagents, rules, and MCP templates in o
       <sub><a href="https://tsumagoi.kensaur.us/reserve?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Book a stay</a> · <a href="https://tsumagoi.kensaur.us/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://kensaur.us/notes/doryoku-meter/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
     </td>
     <td width="50%" valign="top">
-      <img src="https://kensaur.us/mushi-mushi/favicon.svg" width="56" height="56" alt="" align="left" style="margin-right:12px">
-      <b>Mushi Mushi</b> · Tells you why your AI-built app broke, and hands the fix to your editor.<br>
+      <img src="https://kensaur.us/mushi-mushi/docs/apple-touch-icon.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <b>Mushi Mushi</b> · One place to improve your AI-built app.<br>
       <sub><a href="https://kensaur.us/mushi-mushi/docs/demo/diagnosis?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">See a sample diagnosis</a> · <a href="https://kensaur.us/mushi-mushi/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://github.com/kensaurus/mushi-mushi">GitHub</a> · <a href="https://kensaur.us/notes/mushi-mushi/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
     </td>
   </tr>
@@ -666,13 +666,13 @@ This pack ships skills, slash commands, subagents, rules, and MCP templates in o
     </td>
     <td valign="top">
       <img src="https://kensaur.us/help-her-take-photo/assets/apple-touch-icon.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
-      <b>help her take photo</b> · Two phones, one camera: the person in the photo directs the shot.<br>
+      <b>help her take photo</b> · Every guest gets a disposable camera.<br>
       <sub><a href="https://kensaur.us/help-her-take-photo/guides/partner-photos?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Better photos of your partner</a> · <a href="https://apps.apple.com/app/help-her-take-photo/id6762513666">App Store</a> · <a href="https://play.google.com/store/apps/details?id=com.kensaurus.helphertakephoto">Google Play</a> · <a href="https://kensaur.us/help-her-take-photo/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://kensaur.us/notes/help-her-take-photo/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
     </td>
   </tr>
   <tr>
     <td valign="top">
-      <img src="https://kensaur.us/yen-yen/icon.svg" width="56" height="56" alt="" align="left" style="margin-right:12px">
+      <img src="https://kensaur.us/yen-yen/apple-icon.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
       <b>yen-yen</b> · A shared household money book, no bank login.<br>
       <sub><a href="https://kensaur.us/yen-yen/kakeibo?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">What kakeibo is</a> · <a href="https://apps.apple.com/app/id6764548441">App Store</a> · <a href="https://play.google.com/store/apps/details?id=app.yenyen">Google Play</a> · <a href="https://kensaur.us/yen-yen/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://kensaur.us/notes/yen-yen/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
     </td>
@@ -690,7 +690,7 @@ This pack ships skills, slash commands, subagents, rules, and MCP templates in o
     </td>
     <td valign="top">
       <img src="https://talk.kensaur.us/pwa-192.png" width="56" height="56" alt="" align="left" style="margin-right:12px">
-      <b>lets-talk</b> · Practise difficult conversations with an AI coach.<br>
+      <b>lets-talk</b> · Score a tense text before you send.<br>
       <sub><a href="https://talk.kensaur.us/advise?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Try it as a guest</a> · <a href="https://apps.apple.com/app/id6799392790">App Store</a> · <a href="https://play.google.com/store/apps/details?id=us.kensaur.howtotalktogirls">Google Play</a> · <a href="https://talk.kensaur.us/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Web</a> · <a href="https://kensaur.us/notes/lets-talk/en/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=kensaurus-family">Story</a></sub>
     </td>
   </tr>
