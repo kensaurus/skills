@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 470" width="920" height="470" role="img" aria-label="/kenji with no job shows the menu. Command: /kenji. What do you want to do? Say the job in your own words and I'll pick the playbook and run it. Understand a repo you just opened     workflow-onboard Decide what to build before any code  workflow-grilling Build a feature                       workflow-build-feature Fix a bug and ship the fix            workflow-fix-and-ship Find out why something errors         debug-error Get a diff or PR reviewed             audit-code-review Check security                        audit-security Get every check green                 workflow-green-repo Finish a plan with nothing parked     complete-everything ...and 9 more">
+<title>/kenji with no job shows the menu</title>
+<style>
+text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:16px;white-space:pre}
+.t{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;font-weight:600;fill:#a1a1aa}
+@keyframes l0{0%,4.19%{opacity:0}6.28%,97%{opacity:1}100%{opacity:0}}
+.l0{animation:l0 9.5s linear infinite}
+@keyframes l1{0%,16.75%{opacity:0}18.85%,97%{opacity:1}100%{opacity:0}}
+.l1{animation:l1 9.5s linear infinite}
+@keyframes l2{0%,18.85%{opacity:0}20.94%,97%{opacity:1}100%{opacity:0}}
+.l2{animation:l2 9.5s linear infinite}
+@keyframes l3{0%,29.32%{opacity:0}31.41%,97%{opacity:1}100%{opacity:0}}
+.l3{animation:l3 9.5s linear infinite}
+@keyframes l4{0%,31.41%{opacity:0}33.51%,97%{opacity:1}100%{opacity:0}}
+.l4{animation:l4 9.5s linear infinite}
+@keyframes l5{0%,35.08%{opacity:0}37.17%,97%{opacity:1}100%{opacity:0}}
+.l5{animation:l5 9.5s linear infinite}
+@keyframes l6{0%,38.74%{opacity:0}40.84%,97%{opacity:1}100%{opacity:0}}
+.l6{animation:l6 9.5s linear infinite}
+@keyframes l7{0%,42.41%{opacity:0}44.50%,97%{opacity:1}100%{opacity:0}}
+.l7{animation:l7 9.5s linear infinite}
+@keyframes l8{0%,46.07%{opacity:0}48.17%,97%{opacity:1}100%{opacity:0}}
+.l8{animation:l8 9.5s linear infinite}
+@keyframes l9{0%,49.74%{opacity:0}51.83%,97%{opacity:1}100%{opacity:0}}
+.l9{animation:l9 9.5s linear infinite}
+@keyframes l10{0%,53.40%{opacity:0}55.50%,97%{opacity:1}100%{opacity:0}}
+.l10{animation:l10 9.5s linear infinite}
+@keyframes l11{0%,57.07%{opacity:0}59.16%,97%{opacity:1}100%{opacity:0}}
+.l11{animation:l11 9.5s linear infinite}
+@keyframes l12{0%,60.73%{opacity:0}62.83%,97%{opacity:1}100%{opacity:0}}
+.l12{animation:l12 9.5s linear infinite}
+@keyframes l13{0%,64.40%{opacity:0}66.49%,97%{opacity:1}100%{opacity:0}}
+.l13{animation:l13 9.5s linear infinite}
+@media (prefers-reduced-motion:reduce){text{animation:none!important;opacity:1!important}}
+</style>
+<rect width="920" height="470" rx="14" fill="#18181b"/>
+<rect width="920" height="44" rx="14" fill="#27272a"/>
+<rect y="30" width="920" height="14" fill="#27272a"/>
+<circle cx="24" cy="22" r="6" fill="#52525b"/><circle cx="44" cy="22" r="6" fill="#52525b"/><circle cx="64" cy="22" r="6" fill="#52525b"/>
+<text class="t" x="460" y="27" text-anchor="middle">/kenji with no job shows the menu</text>
+<text class="l0" x="28" y="76" font-weight="600"><tspan fill="#a3e635">$ </tspan><tspan fill="#f4f4f5">/kenji</tspan></text>
+<text class="l1" x="28" y="103" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">What do you want to do? Say the job in your own words and</tspan></text>
+<text class="l2" x="28" y="130" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">I'll pick the playbook and run it.</tspan></text>
+
+<text class="l4" x="28" y="184" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">Understand a repo you just opened     workflow-onboard</tspan></text>
+<text class="l5" x="28" y="211" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">Decide what to build before any code  workflow-grilling</tspan></text>
+<text class="l6" x="28" y="238" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">Build a feature                       workflow-build-feature</tspan></text>
+<text class="l7" x="28" y="265" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">Fix a bug and ship the fix            workflow-fix-and-ship</tspan></text>
+<text class="l8" x="28" y="292" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">Find out why something errors         debug-error</tspan></text>
+<text class="l9" x="28" y="319" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">Get a diff or PR reviewed             audit-code-review</tspan></text>
+<text class="l10" x="28" y="346" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">Check security                        audit-security</tspan></text>
+<text class="l11" x="28" y="373" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">Get every check green                 workflow-green-repo</tspan></text>
+<text class="l12" x="28" y="400" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">Finish a plan with nothing parked     complete-everything</tspan></text>
+<text class="l13" x="28" y="427" font-weight="400"><tspan fill="#71717a">  </tspan><tspan fill="#d4d4d8">...and 9 more</tspan></text>
+</svg>

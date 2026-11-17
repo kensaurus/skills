@@ -6,6 +6,19 @@ All notable additions and changes to kenji (`kensaurus/skills`, named `cursor-ke
 
 ## [Unreleased]
 
+### Changed
+
+- **The animations now replay real output.** The three mock session
+  animations are replaced by captures of actual command output (the
+  completion gate, `/kenji`, `--list-profiles`), with GIF copies for sites
+  that do not take SVG.
+
+### Added
+
+- **A diagram of the completion gate**, in English and Japanese.
+- **An article on the gate**, in English and Japanese
+  (`docs/articles/completion-gate.md`, `completion-gate.ja.md`).
+
 ## [2.8.1] — 2026-11-17
 
 Fixes found after 2.8.0, and what the Agent Plugins marketplaces lint for.

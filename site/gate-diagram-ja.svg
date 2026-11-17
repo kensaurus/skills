@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 470" width="1200" height="470" role="img" aria-label="完了ゲートが「終わった」と判断するまで. 1. 状態ファイル: チェックリストをディスクに書く。 文脈が圧縮されても残る。 2. Stop フック: エージェントが止まる瞬間に動く。 未完了があれば差し戻す。 3. 判定役: 別のエージェントが新しい文脈で、 依頼・差分・検証結果を照合する。 未完了が残っている: 作業を続ける(進展なしが3回続いたら諦める). PASS: 完了. CONTINUE: 作業に戻る. BLOCKED: 人の対応が必要.">
+<title>完了ゲートが「終わった」と判断するまで</title>
+<defs>
+<marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#18181b"/></marker>
+<marker id="b" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#b45309"/></marker>
+</defs>
+<style>text{font-family:"Hiragino Sans","Yu Gothic UI","Meiryo","Noto Sans JP",system-ui,sans-serif}</style>
+<rect width="1200" height="470" rx="18" fill="#fafaf9"/>
+<text x="600" y="66" text-anchor="middle" font-size="26" font-weight="700" fill="#18181b">完了ゲートが「終わった」と判断するまで</text>
+
+<rect x="40" y="120" width="300" height="150" rx="14" fill="#fff" stroke="#18181b" stroke-width="2"/>
+<circle cx="74" cy="158" r="16" fill="#a3e635" stroke="#18181b" stroke-width="2"/>
+<text x="74" y="164" text-anchor="middle" font-size="17" font-weight="700" fill="#18181b">1</text>
+<text x="102" y="165" font-size="22" font-weight="700" fill="#18181b">状態ファイル</text>
+<text x="62" y="208" font-size="16" fill="#3f3f46">チェックリストをディスクに書く。</text>
+<text x="62" y="234" font-size="16" fill="#3f3f46">文脈が圧縮されても残る。</text>
+<rect x="450" y="120" width="300" height="150" rx="14" fill="#fff" stroke="#18181b" stroke-width="2"/>
+<circle cx="484" cy="158" r="16" fill="#a3e635" stroke="#18181b" stroke-width="2"/>
+<text x="484" y="164" text-anchor="middle" font-size="17" font-weight="700" fill="#18181b">2</text>
+<text x="512" y="165" font-size="22" font-weight="700" fill="#18181b">Stop フック</text>
+<text x="472" y="208" font-size="16" fill="#3f3f46">エージェントが止まる瞬間に動く。</text>
+<text x="472" y="234" font-size="16" fill="#3f3f46">未完了があれば差し戻す。</text>
+<rect x="860" y="120" width="300" height="150" rx="14" fill="#fff" stroke="#18181b" stroke-width="2"/>
+<circle cx="894" cy="158" r="16" fill="#a3e635" stroke="#18181b" stroke-width="2"/>
+<text x="894" y="164" text-anchor="middle" font-size="17" font-weight="700" fill="#18181b">3</text>
+<text x="922" y="165" font-size="22" font-weight="700" fill="#18181b">判定役</text>
+<text x="882" y="208" font-size="16" fill="#3f3f46">別のエージェントが新しい文脈で、</text>
+<text x="882" y="234" font-size="16" fill="#3f3f46">依頼・差分・検証結果を照合する。</text>
+<line x1="348" y1="195" x2="432" y2="195" stroke="#18181b" stroke-width="2.5" marker-end="url(#a)"/>
+<text x="395" y="181" text-anchor="middle" font-size="14" fill="#3f3f46">止まろうとする</text>
+<line x1="758" y1="195" x2="842" y2="195" stroke="#18181b" stroke-width="2.5" marker-end="url(#a)"/>
+<text x="805" y="181" text-anchor="middle" font-size="14" fill="#3f3f46">全項目チェック済み</text>
+<path d="M 600 278 V 324 H 190 V 288" fill="none" stroke="#b45309" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#b)"/>
+<text x="395" y="350" text-anchor="middle" font-size="15" fill="#92400e">未完了が残っている: 作業を続ける(進展なしが3回続いたら諦める)</text>
+<text x="882" y="316" font-size="16" font-weight="600" fill="#15803d">PASS: 完了</text>
+<text x="882" y="344" font-size="16" font-weight="600" fill="#b45309">CONTINUE: 作業に戻る</text>
+<text x="882" y="372" font-size="16" font-weight="600" fill="#b91c1c">BLOCKED: 人の対応が必要</text>
+</svg>

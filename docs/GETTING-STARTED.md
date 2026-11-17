@@ -12,7 +12,7 @@ A short guide for people who have never used agent skills. The playbooks are the
 
 ## The idea in one picture
 
-<img src="screenshots/walkthrough-kenji.svg" width="100%" alt="Animated session. You type: /kenji the login page is broken for some users. The agent replies that this is a bug to fix and ship, and runs the workflow-fix-and-ship playbook. It reproduces the bug, writes a failing test and then the fix, and checks it in a real browser. Result: tests green, PR opened, nothing merged without you.">
+<img src="screenshots/capture-kenji.svg" width="100%" alt="Animated capture of real output. The command /kenji with no job prints: What do you want to do? Say the job in your own words and I will pick the playbook and run it. Then a table of jobs and the skill for each, such as fix a bug and ship the fix: workflow-fix-and-ship.">
 
 Three things happen every time:
 
@@ -125,7 +125,9 @@ build the feature from those decisions
 
 `workflow-build-feature` takes over: spec → failing test → code → smoke test → PR.
 
-<img src="screenshots/walkthrough-build.svg" width="100%" alt="Animated session. You say: grill me before I build a referral program. The agent asks whether the reward fires on signup or on first payment and recommends first payment. You answer first payment. A decision log is saved and you approve it. You say: build it from those decisions. The workflow-build-feature playbook writes the spec and a failing test, then the smallest change that passes. Result: smoke test passed, PR opened.">
+When you ask it to finish a whole plan (`complete everything`), a gate checks the moment the agent tries to stop. This is real output from that gate; only the `agent` line was added:
+
+<img src="screenshots/capture-gate.svg" width="100%" alt="Animated capture of real output. The state file has two open items and the agent says it is done. The Stop hook returns decision: block and lists the two items. Once both are checked, the hook returns an empty object and the agent may stop.">
 
 ### 4. Hand off when you stop
 
