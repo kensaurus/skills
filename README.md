@@ -466,7 +466,7 @@ cp ~/skills/mcp/mcp.json.template ~/.cursor/mcp.json      # essential 3
 cp ~/skills/mcp/mcp-full.json.template ~/.cursor/mcp.json  # every server below
 ```
 
-The installer writes the essential template to `~/.cursor/mcp.json` only when that file does not exist. Set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, `SUPABASE_ACCESS_TOKEN`, and `SUPABASE_PROJECT_REF` in your environment. The Slack and Notion entries in the full template still use `YOUR_*` placeholders. Never commit real keys ([SECURITY.md](SECURITY.md)). Setup → [mcp/README.md](mcp/README.md).
+The installer writes the essential template to `~/.cursor/mcp.json` only when that file does not exist. Set `FIRECRAWL_API_KEY`, `CONTEXT7_API_KEY`, `SUPABASE_ACCESS_TOKEN`, and `SUPABASE_PROJECT_REF` in your environment. The Slack and Notion entries in the full template still use `YOUR_*` placeholders. Never commit real keys ([SECURITY.md](.github/SECURITY.md)). Setup → [mcp/README.md](mcp/README.md).
 
 | Tier | Servers | Keys? |
 |:-----|:--------|:------|
@@ -583,7 +583,7 @@ No. See [The stack-specific parts](#the-stack-specific-parts-and-how-to-skip-the
 <details>
 <summary><b>Where do MCP API keys go? Is there an llms.txt?</b></summary>
 
-Copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and set the environment variables. Never commit real keys ([SECURITY.md](SECURITY.md), [mcp/README.md](mcp/README.md)). Machine-readable docs: [llms.txt](llms.txt).
+Copy `mcp/mcp.json.template` to `~/.cursor/mcp.json` and set the environment variables. Never commit real keys ([SECURITY.md](.github/SECURITY.md), [mcp/README.md](mcp/README.md)). Machine-readable docs: [llms.txt](llms.txt).
 
 </details>
 
@@ -594,7 +594,7 @@ mkdir -p skills/my-skill && $EDITOR skills/my-skill/SKILL.md
 npm test   # spec validation, counts, index, install tests, dead-code check
 ```
 
-Each skill must pass [Agent Skills spec](https://agentskills.io/specification) validation (`npm run validate:skills`): `name` matches the folder, `description` is at most 320 characters, and the body is under 500 lines. See [CONTRIBUTING.md](CONTRIBUTING.md), [docs/README.md](docs/README.md), [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md), and [docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md). Releases: [docs/PUBLISHING.md](docs/PUBLISHING.md).
+Each skill must pass [Agent Skills spec](https://agentskills.io/specification) validation (`npm run validate:skills`): `name` matches the folder, `description` is at most 320 characters, and the body is under 500 lines. See [CONTRIBUTING.md](.github/CONTRIBUTING.md), [docs/README.md](docs/README.md), [docs/DISTRIBUTION.md](docs/DISTRIBUTION.md), and [docs/TRIGGER-CHEATSHEET.md](docs/TRIGGER-CHEATSHEET.md). Releases: [docs/PUBLISHING.md](docs/PUBLISHING.md).
 
 ## Related
 
@@ -678,6 +678,6 @@ The list comes from https://kensaur.us/apps.json (kensaurus/kensaur.us `src/data
 ---
 
 <p align="center">
-  <strong>MIT License</strong> · Apache-2.0 portions noted in <a href="NOTICE">NOTICE</a><br/>
+  <strong>MIT License</strong> · Apache-2.0 portions noted in <a href="docs/legal/NOTICE">NOTICE</a><br/>
   <em><a href="https://github.com/kensaurus">@kensaurus</a> · <a href="CHANGELOG.md">Changelog</a> · <a href="https://github.com/kensaurus/skills/discussions">Discussions</a></em>
 </p>

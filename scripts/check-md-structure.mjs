@@ -19,7 +19,7 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DIRS = ["skills", "skills-cursor", "commands", "commands-portable", "agents", "rules", "docs", "hooks", "mcp", ".cursor/rules"];
-const FILES = ["README.md", "AGENTS.md", "CHANGELOG.md", "SECURITY.md", "CONTRIBUTING.md"];
+const FILES = ["README.md", "AGENTS.md", "CHANGELOG.md", ".github/SECURITY.md", ".github/CONTRIBUTING.md"];
 
 function walk(dir, out = []) {
   if (!existsSync(dir)) return out;

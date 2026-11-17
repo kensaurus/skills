@@ -27,7 +27,7 @@ The skills are written for any current Claude model (Fable 5.2, Opus 5.5, Sonnet
 ## MCP & security
 
 - [mcp/README.md](https://github.com/kensaurus/skills/blob/main/mcp/README.md): MCP server setup, pinned package versions
-- [SECURITY.md](https://github.com/kensaurus/skills/blob/main/SECURITY.md): Secrets hygiene, `.mcp.json` guidance, reporting vulnerabilities
+- [SECURITY.md](https://github.com/kensaurus/skills/blob/main/.github/SECURITY.md): Secrets hygiene, `.mcp.json` guidance, reporting vulnerabilities
 
 ## Distribution & publishing
 
@@ -39,7 +39,7 @@ The skills are written for any current Claude model (Fable 5.2, Opus 5.5, Sonnet
 - [Claude Code plugin](https://github.com/kensaurus/skills/blob/main/.claude-plugin/marketplace.json): `/plugin marketplace add kensaurus/skills` (community catalog is a separate submit)
 - [docs/examples/plan-audits/](https://github.com/kensaurus/skills/tree/main/docs/examples/plan-audits): Sample `plan-*.md` audit outputs
 - [CHANGELOG.md](https://github.com/kensaurus/skills/blob/main/CHANGELOG.md): Release history
-- [CONTRIBUTING.md](https://github.com/kensaurus/skills/blob/main/CONTRIBUTING.md): Adding skills, validation, PR workflow
+- [CONTRIBUTING.md](https://github.com/kensaurus/skills/blob/main/.github/CONTRIBUTING.md): Adding skills, validation, PR workflow
 
 ## More from kensaurus
 
