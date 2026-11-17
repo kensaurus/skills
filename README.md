@@ -60,13 +60,13 @@ The full pack is 162 skills. Your agent reads a one-line description of each ski
 
 ```bash
 npx @kensaurus/skills --list-profiles           # show the profiles
-npx @kensaurus/skills --auto --profile core     # the 28 skills of the daily loop
+npx @kensaurus/skills --auto --profile core     # the 31 skills of the daily loop
 npx @kensaurus/skills --auto --profile web,mobile   # core plus two more sets
 ```
 
 | Profile | Skills | What it covers |
 |:--------|-------:|:---------------|
-| `core` | 28 | Orient, grill, build, fix, review, test, ship. Part of every profile. |
+| `core` | 31 | Orient, grill, build, fix, review, test, ship. Part of every profile. |
 | `web` | 44 | Design, polish, and audit web front ends |
 | `backend` | 35 | APIs, databases, auth, resilience, LLM features |
 | `mobile` | 16 | React Native, Capacitor, emulators, store readiness |
@@ -74,7 +74,7 @@ npx @kensaurus/skills --auto --profile web,mobile   # core plus two more sets
 | `maintain` | 28 | CI gates, dead code, docs sync, agent setup, pack authoring |
 | `all` | 162 | Everything. The default. |
 
-A profile install is a merge: skills you installed earlier stay. Add `--prune` to remove this pack's skills that are outside the profile. It removes by folder name and first copies each removed folder to `.kenji-pruned/<timestamp>/` beside the skills folder, so an edit you made in place is not lost. Folders this pack does not ship are never touched. Commands that only point at skills outside the profile are skipped. The lists live in [`profiles.json`](profiles.json).
+A profile install is a merge: skills you installed earlier stay. Add `--prune` to remove this pack's skills that are outside the profile. It removes by folder name and first copies each removed folder to `.kenji-pruned/<timestamp>/` beside the skills folder, so an edit you made in place is not lost. Folders this pack does not ship are never touched. Commands that only point at skills outside the profile are skipped, and `--prune` removes the ones an earlier install left. The lists live in [`profiles.json`](profiles.json).
 
 > **Note:** the default install also adds an opt-in **Stop hook** to Claude Code and Cursor. It does nothing until you start a `complete-everything` or `burndown-full` run. For Claude Code it also adds a desktop **Notification hook**, a **status line** (only if you have none) and a skill-listing budget. To skip the hooks and the status line, add `--only skills,commands,agents,rules`. Details: [The Stop hook](#the-stop-hook) and [Notifications and the status line](#notifications-and-the-status-line).
 

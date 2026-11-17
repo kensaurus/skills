@@ -487,6 +487,21 @@ function listCommandFiles(dir) {
       }
       if (!Array.isArray(profiles.core?.skills) || profiles.core.skills.length === 0) {
         errors.push("profiles.json: profile 'core' is empty — it is installed with every profile");
+      } else {
+        // A core-only install must be able to run each core workflow end to
+        // end, so core holds every pack skill its members chain to.
+        const coreSet = new Set(profiles.core.skills);
+        for (const skill of coreSet) {
+          const file = join(repoRoot, "skills", skill, "SKILL.md");
+          if (!existsSync(file)) continue;
+          const chain = readFileSync(file, "utf8").match(/^\s+chain:\s*["']?([^"'\n]+)/m);
+          if (!chain) continue;
+          for (const next of chain[1].trim().split(/\s+/)) {
+            if (existsSync(join(repoRoot, "skills", next, "SKILL.md")) && !coreSet.has(next)) {
+              errors.push(`profiles.json: core skill '${skill}' chains to '${next}', which is not in core — add it to core`);
+            }
+          }
+        }
       }
       for (const dir of readdirSync(skillsDir)) {
         if (!statSync(join(skillsDir, dir)).isDirectory() || inProfile.has(dir)) continue;

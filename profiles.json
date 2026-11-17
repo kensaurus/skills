@@ -5,8 +5,10 @@
       "title": "Core",
       "description": "The daily loop: orient, grill, build, fix, review, test, ship.",
       "skills": [
+        "audit-bundle-size",
         "audit-code-quality",
         "audit-code-review",
+        "audit-performance",
         "audit-security",
         "burndown-full",
         "complete-everything",
@@ -18,6 +20,7 @@
         "kenji",
         "research",
         "test-playwright",
+        "test-red-team",
         "test-unit",
         "workflow-build-feature",
         "workflow-coding-discipline",

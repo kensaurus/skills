@@ -38,7 +38,7 @@ npx @kensaurus/skills --auto
 
 That finds the agents on your machine and installs the playbooks for each one, then checks every copied file. Windows works too. To see what it would write first, add `--dry-run`.
 
-**Want less?** The full pack is 162 skills. `npx @kensaurus/skills --auto --profile core` installs the 28 that cover the daily loop. You can add `web`, `backend`, `mobile`, `growth`, or `maintain` later; `--list-profiles` shows them.
+**Want less?** The full pack is 162 skills. `npx @kensaurus/skills --auto --profile core` installs the 31 that cover the daily loop. You can add `web`, `backend`, `mobile`, `growth`, or `maintain` later; `--list-profiles` shows them.
 
 **Skills only** (no `/commands` — Vercel skills CLI, current project by default):
 

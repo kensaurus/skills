@@ -808,6 +808,9 @@ try {
     expect(cursorExtraSkills.every((n) => existsSync(join(dir, n))), `--prune removed a skills-cursor skill from ${dir}`);
   }
   expect(pruneOut.includes(`pruned ${nonCore.length} `), "--prune did not log the removal count");
+  for (const f of commandsOutsideCore) {
+    expect(!existsSync(join(pruneHome, ".cursor", "commands", f)), `--prune left command ${f}, which names only non-core skills`);
+  }
   // Every pruned folder is copied aside first, so an in-place edit is not lost.
   for (const dir of pruneDirs) {
     const prunedRoot = join(dirname(dir), ".kenji-pruned");

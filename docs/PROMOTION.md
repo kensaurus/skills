@@ -34,7 +34,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **Issue opened:** https://github.com/vercel-labs/skills/issues/1499
 
-**Status:** **Live** — https://www.skills.sh/kensaurus/skills (new page, created by a fresh install 2026-10-01). The old https://www.skills.sh/kensaurus/cursor-kenji (3.4K installs) stays until [vercel-labs/skills#2352](https://github.com/vercel-labs/skills/issues/2352) merges the listings and drops the retired skill names. Stale #1499 closed.
+**Status:** **Live** — https://www.skills.sh/kensaurus/skills, 3.7K installs (checked 2026-11-17). The old `/kensaurus/cursor-kenji` URL now redirects there. The page still lists 33 retired skill names; a follow-up on [vercel-labs/skills#2352](https://github.com/vercel-labs/skills/issues/2352) (2026-11-17) asks for them to be dropped. New skills (`kenji`, `workflow-mobile-native-uiux`) appear on the page after their first install through `npx skills add`.
 
 ---
 
@@ -68,7 +68,7 @@ Full pack (skills + slash commands): `npx @kensaurus/skills --all`. That CLI's `
 
 **Verify at:** https://www.npmjs.com/package/@kensaurus/skills
 
-**Status:** Pending — `@kensaurus/skills@2.8.0` (the `/kenji` router, install profiles, Antigravity target, model-neutral skill text, trigger evals, animated walkthroughs; ADR-0016 and ADR-0017). Not tagged or released yet. Previous: `2.7.0` live 2026-10-19 (Claude Code desktop Notification hook, status line and skill-listing budget from the installer; skill writing pass per the 2026-10 authoring guidance, ADR-0015). Not tagged or released yet. Previous: `2.6.0` live 2026-10-11; `2.5.0`, `2.4.0`, `2.3.0`, `2.2.0` live 2026-10-06.
+**Status:** **Live** — `@kensaurus/skills@2.8.0`, published 2026-11-17 (the `/kenji` router, install profiles, Antigravity target, model-neutral skill text, trigger evals, animated walkthroughs; ADR-0016 and ADR-0017). Previous: `2.7.0` live 2026-10-19 (Claude Code desktop Notification hook, status line and skill-listing budget from the installer; skill writing pass per the 2026-10 authoring guidance, ADR-0015). Not tagged or released yet. Previous: `2.6.0` live 2026-10-11; `2.5.0`, `2.4.0`, `2.3.0`, `2.2.0` live 2026-10-06.
 
 ---
 
@@ -176,7 +176,7 @@ Validate before any catalog submit:
 claude plugin validate .
 ```
 
-**Community catalog (separate):** https://claude.ai/directory/manage (needs a paid plan; run `claude plugin validate . --strict` first; the older https://platform.claude.com/plugins/submit form is superseded) — public GitHub URL. Review pins a SHA into `anthropics/claude-plugins-community`. **Not listed** until that catalog shows `kenji`. Do not treat local marketplace install as official listing.
+**Community catalog (separate):** https://claude.ai/directory/manage (parked: it needs a paid plan on a personal account; run `claude plugin validate . --strict` first; the older https://platform.claude.com/plugins/submit form is superseded) — public GitHub URL. Review pins a SHA into `anthropics/claude-plugins-community`. **Not listed** until that catalog shows `kenji`. Do not treat local marketplace install as official listing.
 
 ---
 

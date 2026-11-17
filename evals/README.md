@@ -30,7 +30,7 @@ claude plugin eval . --case route-security       # one case, three runs
 Claude Code 2.1.269 or newer. Each run is a real model call on your account,
 and by default each case also runs once without the plugin as a baseline. So
 this is a maintainer step, not part of `npm test`. Results land in
-`results/<timestamp>/` (git-ignored) with a `report.html`.
+`evals/results/<timestamp>/` (git-ignored) with a `report.html`.
 
 ## When to run
 

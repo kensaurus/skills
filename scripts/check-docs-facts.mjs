@@ -47,6 +47,19 @@ for (const [rel, pick] of [
   if (found !== version) errors.push(`${rel}: version ${found} does not match package.json ${version}`);
 }
 
+// The README profile table states a skill count per profile; it must match
+// profiles.json, which is what the installer reads.
+const profilesText = read("profiles.json");
+if (profilesText) {
+  for (const [name, profile] of Object.entries(JSON.parse(profilesText).profiles ?? {})) {
+    const row = readme.match(new RegExp("^\\| `" + name + "` \\| (\\d+) \\|", "m"));
+    if (!row) errors.push(`README.md: profile table has no row for \`${name}\``);
+    else if (Number(row[1]) !== profile.skills.length) {
+      errors.push(`README.md: profile \`${name}\` says ${row[1]} skills; profiles.json has ${profile.skills.length}`);
+    }
+  }
+}
+
 if (security.includes("npm run prepare")) {
   errors.push("SECURITY.md: must not tell contributors to run `npm run prepare`");
 }
