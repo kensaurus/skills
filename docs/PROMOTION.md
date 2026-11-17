@@ -195,7 +195,7 @@ claude plugin validate .
 
 ## Launch posts
 
-Published 2026-11-17: [note](https://note.com/kensaurus/n/nef10cbeb3b1f) (3,948 characters) and [X](https://x.com/sakuramotokenji/status/2122553394279964837). The Zenn article ([source](articles/completion-gate.ja.md)) is a saved draft that waits on the author's own pre-publish confirmation. Hacker News and Reddit: none yet. The facts, the rules of each channel, the objections to answer, and an order of work are in [LAUNCH-KIT.md](LAUNCH-KIT.md). Write each post yourself: Hacker News requires text written by a person, and several subreddits remove AI-written posts.
+Published 2026-11-17: [note](https://note.com/kensaurus/n/nef10cbeb3b1f) (3,948 characters) and [X](https://x.com/sakuramotokenji/status/2122553394279964837). [Zenn](https://zenn.dev/kensaurus/articles/204fa193b93031) ([source](articles/completion-gate.ja.md)), published the same day. Hacker News and Reddit: none yet. The facts, the rules of each channel, the objections to answer, and an order of work are in [LAUNCH-KIT.md](LAUNCH-KIT.md). Write each post yourself: Hacker News requires text written by a person, and several subreddits remove AI-written posts.
 
 ---
 
