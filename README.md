@@ -6,7 +6,7 @@
 
 **You say the job. The playbook runs.** Agent skills, slash commands, and subagents for Claude Code, Cursor, Codex CLI, Gemini CLI, and any agent that reads `SKILL.md`.
 
-161 agent skills · 63 slash commands · 6 subagents · MCP templates. Written on React, Next.js, and Supabase projects; most of it works on any stack.
+162 agent skills · 63 slash commands · 6 subagents · MCP templates. Written on React, Next.js, and Supabase projects; most of it works on any stack.
 
 <p>
   <a href="https://www.npmjs.com/package/@kensaurus/skills"><img src="https://img.shields.io/npm/v/@kensaurus/skills?style=flat-square&color=cb3837&logo=npm" alt="npm version" /></a>
@@ -38,7 +38,43 @@ npx @kensaurus/skills --auto --verify    # 3. check every installed file against
 
 `--auto` looks for `~/.cursor`, `~/.claude`, `~/.codex`, and `~/.gemini` and installs for each one it finds. If it finds none, it installs for Cursor. To pick the tools yourself, use `--claude`, `--cursor`, `--codex`, `--gemini` (combine freely) or `--all`.
 
-Then restart your agent and describe a task in plain words, for example *"audit this repo for security problems"*. The [plain-language guide](docs/GETTING-STARTED.md) walks through a first session.
+Then restart your agent. Stop there; you are set up.
+
+### Your first session
+
+You do not need to learn the skill names. Remember one command:
+
+```
+/kenji the login page is broken for some users
+```
+
+`/kenji` reads the job in your own words, names the one playbook that fits, and runs it. If two fit, it asks you one question first.
+
+<img src="docs/screenshots/walkthrough-kenji.svg" width="100%" alt="Animated session. You type: /kenji the login page is broken for some users. The agent replies that this is a bug to fix and ship, and runs the workflow-fix-and-ship playbook. It reproduces the bug, writes a failing test and then the fix, and checks it in a real browser. Result: tests green, PR opened, nothing merged without you.">
+
+You can also skip `/kenji` and describe the task, for example *"audit this repo for security problems"*. The agent picks the playbook from your words. Phrases that work are in [What should I say?](#what-should-i-say), and the [plain-language guide](docs/GETTING-STARTED.md) walks through a full session.
+
+### Install a profile
+
+The full pack is 162 skills. Your agent reads a one-line description of each skill in every session, and a longer list makes it more likely to pick a near-miss. If you want less, install a profile:
+
+```bash
+npx @kensaurus/skills --list-profiles           # show the profiles
+npx @kensaurus/skills --auto --profile core     # the 28 skills of the daily loop
+npx @kensaurus/skills --auto --profile web,mobile   # core plus two more sets
+```
+
+| Profile | Skills | What it covers |
+|:--------|-------:|:---------------|
+| `core` | 28 | Orient, grill, build, fix, review, test, ship. Part of every profile. |
+| `web` | 44 | Design, polish, and audit web front ends |
+| `backend` | 35 | APIs, databases, auth, resilience, LLM features |
+| `mobile` | 16 | React Native, Capacitor, emulators, store readiness |
+| `growth` | 22 | Go to market, onboarding, SEO, pricing, launch copy |
+| `maintain` | 28 | CI gates, dead code, docs sync, agent setup, pack authoring |
+| `all` | 162 | Everything. The default. |
+
+A profile install is a merge: skills you installed earlier stay. Add `--prune` to remove this pack's skills that are outside the profile. It removes by folder name and first copies each removed folder to `.kenji-pruned/<timestamp>/` beside the skills folder, so an edit you made in place is not lost. Folders this pack does not ship are never touched. Commands that only point at skills outside the profile are skipped. The lists live in [`profiles.json`](profiles.json).
 
 > **Note:** the default install also adds an opt-in **Stop hook** to Claude Code and Cursor. It does nothing until you start a `complete-everything` or `burndown-full` run. For Claude Code it also adds a desktop **Notification hook**, a **status line** (only if you have none) and a skill-listing budget. To skip the hooks and the status line, add `--only skills,commands,agents,rules`. Details: [The Stop hook](#the-stop-hook) and [Notifications and the status line](#notifications-and-the-status-line).
 
@@ -48,13 +84,15 @@ Then restart your agent and describe a task in plain words, for example *"audit 
 |:------|:-------------|:-------|:---------------|:----------|:------|:----------|
 | **Claude Code** | `--claude` | `~/.claude/skills/` | `~/.claude/commands/` | `~/.claude/agents/` | `~/.claude/rules/` (`.md`) | yes, plus a Notification hook and a status line, in `~/.claude/settings.json` |
 | **Cursor** | bare command or `--cursor` | `~/.cursor/skills/`, plus a copy in `~/.agents/skills/` | `~/.cursor/commands/` | `~/.cursor/agents/` | `~/.cursor/rules/` (`.mdc`; see below) | yes, in `~/.cursor/hooks.json` |
-| **Codex CLI** | `--codex` | `~/.agents/skills/` | portable prompts in `~/.codex/prompts/` (see below) | no | merged into `~/.codex/AGENTS.md` | no |
+| **Codex CLI** | `--codex` | `~/.agents/skills/` | no; type `$` or `/skills` to pick a skill (see below) | no | merged into `~/.codex/AGENTS.md` | no |
+| **Antigravity CLI** | `--antigravity` | `~/.gemini/config/skills/` | each skill is a `/name` command | no | no | no |
 | **Gemini CLI** | `--gemini` | `~/.agents/skills/` | portable commands in `~/.gemini/commands/` | no | merged into `~/.gemini/GEMINI.md` | no |
 | **Any agent that reads `SKILL.md`** | `npx skills add kensaurus/skills` | that agent's skills folder | no | no | no | no |
 
 How each path was chosen:
 
-- **Codex CLI** reads user skills from `$HOME/.agents/skills` ([Codex skills docs](https://developers.openai.com/codex/skills), "Where Codex loads local skills"). It reads global instructions from `~/.codex/AGENTS.md` ([AGENTS.md docs](https://learn.chatgpt.com/docs/agent-configuration/agents-md)). Codex has deprecated custom prompts ([custom prompts page](https://learn.chatgpt.com/docs/custom-prompts)), and a Codex maintainer says they were removed in codex-cli 0.117.0 ([openai/codex#15941](https://github.com/openai/codex/issues/15941)). The installer still writes the portable prompts for older Codex releases. On current Codex, use the skills.
+- **Codex CLI** reads user skills from `$HOME/.agents/skills` ([Codex skills docs](https://developers.openai.com/codex/skills), "Where Codex loads local skills"). It reads global instructions from `~/.codex/AGENTS.md` ([AGENTS.md docs](https://learn.chatgpt.com/docs/agent-configuration/agents-md)). Codex has deprecated custom prompts ([custom prompts page](https://learn.chatgpt.com/docs/custom-prompts)), and a Codex maintainer says they were removed in codex-cli 0.117.0 ([openai/codex#15941](https://github.com/openai/codex/issues/15941)). So the installer no longer writes them. On current Codex, use the skills. For a Codex release older than 0.117.0, add `--codex-prompts`.
+- **Antigravity CLI** replaced Gemini CLI for most users in June 2026. It reads user skills from `~/.gemini/config/skills/` ([Antigravity skills docs](https://antigravity.google/docs/skills)) and turns each skill into a `/name` command. `--auto` installs for it when `~/.gemini/config` exists. It is not part of `--all`.
 - **Gemini CLI** reads user skills from `~/.gemini/skills/` or the `~/.agents/skills/` alias. Within the user tier, the alias takes precedence ([Gemini CLI skills docs](https://geminicli.com/docs/cli/skills/), "Discovery tiers"). It reads global context from `~/.gemini/GEMINI.md` ([GEMINI.md docs](https://geminicli.com/docs/cli/gemini-md)).
 - **Codex and Gemini share one copy in `~/.agents/skills/`.** It is written once per run, and other skills already in that folder are left alone, even by `--clean`.
   - With only `--codex` or `--gemini`, the installer writes just this pack's skill folders.
@@ -67,7 +105,7 @@ How each path was chosen:
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/architecture-dark.png">
   <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/architecture-light.png">
-  <img alt="Diagram: skills, commands, subagents, rules, and MCP templates go through npx @kensaurus/skills --all into ~/.cursor and ~/.claude (skills, commands, agents, rules), ~/.codex (AGENTS.md and prompts, plus skills in ~/.agents) and ~/.gemini (GEMINI.md and commands, plus skills in ~/.agents)." src="docs/screenshots/architecture-dark.png" width="100%">
+  <img alt="Diagram: skills, commands, subagents, rules, and MCP templates go through npx @kensaurus/skills --all into ~/.cursor and ~/.claude (skills, commands, agents, rules), ~/.codex (AGENTS.md, plus skills in ~/.agents) and ~/.gemini (GEMINI.md and commands, plus skills in ~/.agents)." src="docs/screenshots/architecture-dark.png" width="100%">
 </picture>
 
 ## What the installer writes
@@ -82,7 +120,9 @@ The installer is one Node script, [`bin/install.mjs`](bin/install.mjs). It has n
 | `~/.cursor/agents/`, `~/.claude/agents/` | Subagent definitions | Same-named files are overwritten. |
 | `~/.cursor/rules/`, `~/.claude/rules/` | Global rules (`.mdc` for Cursor, `.md` for Claude Code) | Same-named files are overwritten. |
 | `~/.codex/AGENTS.md`, `~/.gemini/GEMINI.md` | Global rules merged into one file | The old file is copied to `<file>.bak-<timestamp>` first. An unchanged file is not rewritten. |
-| `~/.codex/prompts/*.md`, `~/.gemini/commands/*.toml` | `plan-mode`, `research`, `fix-issue` | Backed up like `AGENTS.md`. |
+| `~/.gemini/commands/*.toml` | `plan-mode`, `research`, `fix-issue` | Backed up like `GEMINI.md`. |
+| `~/.codex/prompts/*.md` | The same three, only with `--codex-prompts` | Backed up like `AGENTS.md`. |
+| `~/.gemini/config/skills/<name>/` | Skills for Antigravity CLI, only with `--antigravity` or when `--auto` finds `~/.gemini/config` | Same-named files are overwritten. Your other skills stay. |
 | `~/.claude/kenji-hooks/`, `~/.cursor/kenji-hooks/` | `completion-gate.mjs`, the Stop hook script; for Claude Code also `notify.mjs` and `statusline.mjs` | Overwritten. |
 | `~/.claude/settings.json`, `~/.cursor/hooks.json` | One Stop hook entry. For Claude Code also one Notification hook entry, `statusLine` (only if you have none) and `skillListingBudgetFraction` (only if unset) | Merged in one write. Your other settings and hooks are kept. A backup is written when the file changes. If the file is not valid JSON, the merge is skipped with a warning. |
 | `~/.cursor/mcp.json` | MCP server template | Written only if missing. Never overwritten. |
@@ -101,6 +141,11 @@ npx @kensaurus/skills --all             # Cursor + Claude Code + Codex CLI + Gem
 npx @kensaurus/skills --claude --codex  # pick targets; combine freely
 npx @kensaurus/skills --only skills,commands      # subset of: skills, commands, agents, rules, hooks, statusline
 npx @kensaurus/skills --skill audit-ux  # one skill
+npx @kensaurus/skills --profile core    # only some profiles' skills (core is always included)
+npx @kensaurus/skills --profile core --prune   # also remove this pack's skills outside the profile
+npx @kensaurus/skills --list-profiles   # show the profiles and exit
+npx @kensaurus/skills --antigravity     # skills for Antigravity CLI (~/.gemini/config/skills)
+npx @kensaurus/skills --codex --codex-prompts  # also write prompts, for Codex CLI before 0.117.0
 npx @kensaurus/skills --dry-run         # preview, no writes
 npx @kensaurus/skills --verify          # read-only hash check (add the same target flags)
 npx @kensaurus/skills --clean           # delete skills/commands/agents/rules folders first, yours too (backed up)
@@ -126,8 +171,8 @@ The completion gate, [`hooks/completion-gate.mjs`](hooks/completion-gate.mjs), i
 Claude Code only. These are merged into `~/.claude/settings.json` in the same single write as the Stop hook.
 
 - **Desktop notifications.** [`hooks/notify.mjs`](hooks/notify.mjs) is registered as a `Notification` hook for `permission_prompt` (a tool call has waited about six seconds for approval), `idle_prompt` (Claude finished about a minute ago and you have not typed), `agent_needs_input` and `agent_completed` (background sessions). It calls `notify-send` on Linux, `osascript` on macOS and a WinRT toast on Windows, spawns no shell, and always exits 0. If the notifier is missing, nothing happens. Source: [hooks reference](https://code.claude.com/docs/en/hooks).
-- **Status line.** [`hooks/statusline.mjs`](hooks/statusline.mjs) shows model, folder, branch, context used, session cost, five-hour usage and session name. It is set only when you have no `statusLine`; your own is never replaced. It runs no commands: the branch is read from `.git/HEAD`, so large repos do not slow it down. Source: [status line docs](https://code.claude.com/docs/en/statusline).
-- **Skill-listing budget.** Claude Code shows the model a listing of your skills against 1% of the context window and, over budget, keeps only the names of the least-used ones. A full install of this pack goes over, so `skillListingBudgetFraction` is set to `0.03` when it is unset. A value you set is kept. The installer prints the listing size against the budget in force. Source: [skills docs](https://code.claude.com/docs/en/skills).
+- **Status line.** [`hooks/statusline.mjs`](hooks/statusline.mjs) shows model and effort level, folder, branch, context used, session cost, five-hour usage and session name. It is set only when you have no `statusLine`; your own is never replaced. It runs no commands: the branch is read from `.git/HEAD`, so large repos do not slow it down. Source: [status line docs](https://code.claude.com/docs/en/statusline).
+- **Skill-listing budget.** Claude Code shows the model a listing of your skills against 1% of the context window and, over budget, keeps only the names of the least-used ones. A full install of this pack goes over (a `--profile` install does not, and leaves the setting alone), so `skillListingBudgetFraction` is set to `0.03` when it is unset. A value you set is kept. The installer prints the listing size against the budget in force. Source: [skills docs](https://code.claude.com/docs/en/skills).
 - **Skip them:** `--only skills,commands,agents,rules` installs no hooks and no status line. `--only hooks` installs the Stop and Notification hooks without the status line; `--only statusline` installs only the status line. The budget rides with the `skills` group, because that is what fills the listing.
 - **Remove them later:** in `~/.claude/settings.json`, delete the `hooks.Notification` entry whose command contains `kenji-hooks/notify.mjs`, the `statusLine` key if its command contains `kenji-hooks/statusline.mjs`, and `skillListingBudgetFraction`. A later install without `--only` adds them back.
 
@@ -217,7 +262,7 @@ Current Codex releases no longer load `~/.codex/prompts/` (see the links in [Whi
 <details>
 <summary><b>Codex: I set <code>CODEX_HOME</code></b></summary>
 
-The installer always writes `~/.codex/AGENTS.md` and `~/.codex/prompts/`. Copy them into your `CODEX_HOME`. Codex reads `AGENTS.override.md` instead of `AGENTS.md` when that file exists, so check for one. Skills are not affected; Codex reads `$HOME/.agents/skills` either way.
+The installer always writes `~/.codex/AGENTS.md`. Copy them into your `CODEX_HOME`. Codex reads `AGENTS.override.md` instead of `AGENTS.md` when that file exists, so check for one. Skills are not affected; Codex reads `$HOME/.agents/skills` either way.
 
 </details>
 
@@ -271,11 +316,19 @@ The 23 `plan-*` skills audit first and wait for your approval. See [docs/PLAN-LO
 | *"ship it and watch it"* | `workflow-ship-and-observe` | Deploy → verify live → observe / rollback |
 | *"take this to market"* | `workflow-gtm` | GTM plan → approve → analytics, hero, onboarding, SEO, launch kit |
 
+Not sure which line fits? Type `/kenji` and the job in your own words. It picks the playbook and runs it.
+
 To force a skill: *"use `enhance-web-ux` on `/dashboard`"*. Every trigger phrase → [docs/CATALOG.md](docs/CATALOG.md).
 
 ## <img src="docs/screenshots/icons/tour.png" width="28" height="28" alt="" align="absmiddle"> Tour
 
-Four examples. Each time, you describe the job and a named playbook runs.
+Each time, you describe the job and a named playbook runs. Two sessions, animated:
+
+<img src="docs/screenshots/walkthrough-build.svg" width="100%" alt="Animated session. You say: grill me before I build a referral program. The agent asks whether the reward fires on signup or on first payment and recommends first payment. You answer first payment. A decision log is saved and you approve it. You say: build it from those decisions. The workflow-build-feature playbook writes the spec and a failing test, then the smallest change that passes. Result: smoke test passed, PR opened.">
+
+<img src="docs/screenshots/walkthrough-audit.svg" width="100%" alt="Animated session. You say: is this app safe to launch? The audit-security playbook runs and lists three findings, each with a file and line: an admin route with no auth check, a user table readable by anyone, and a stack trace shown to users. The agent asks whether to fix them now. You say yes. Result: fixed, re-tested, and listed in the report.">
+
+Four more, as stills:
 
 <table>
   <tr>
@@ -352,11 +405,11 @@ Four examples. Each time, you describe the job and a named playbook runs.
 | [Protocols — session guardrails](docs/SKILLS.md#protocols-session-guardrails-1) | **1** | Keep browser automation from freezing |
 | [Authoring — build skills & MCP](docs/SKILLS.md#authoring-build-skills-mcp-2) | **2** | Author new skills or MCP servers |
 | [Third-party (upstream-maintained)](docs/SKILLS.md#third-party-upstream-maintained-3) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
-| [Core & cross-cutting](docs/SKILLS.md#core-cross-cutting-4) | **4** | Close everything, burndown, research, handoff |
+| [Core & cross-cutting](docs/SKILLS.md#core-cross-cutting-5) | **5** | Close everything, burndown, research, handoff |
 | [Cursor IDE skills](docs/SKILLS.md#cursor-ide-skills-12) | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **173** | [Every skill, one line each](docs/SKILLS.md) |
+| **Total** | **174** | [Every skill, one line each](docs/SKILLS.md) |
 
-_Generated from each skill's `SKILL.md` by `npm run gen:skill-index`. **173 skills.** The full list is [docs/SKILLS.md](docs/SKILLS.md); trigger phrases are in [docs/CATALOG.md](docs/CATALOG.md)._
+_Generated from each skill's `SKILL.md` by `npm run gen:skill-index`. **174 skills.** The full list is [docs/SKILLS.md](docs/SKILLS.md); trigger phrases are in [docs/CATALOG.md](docs/CATALOG.md)._
 
 <!-- SKILL-INDEX:END -->
 
@@ -461,7 +514,7 @@ source ~/skills/shell-aliases/cursor-helpers.sh
 
 ```
 skills/
-├── skills/             # 161 Agent Skills (SKILL.md each)
+├── skills/             # 162 Agent Skills (SKILL.md each)
 ├── skills-cursor/      # Cursor's built-in skills, ported for Claude Code
 ├── commands/           # 63 slash commands
 ├── commands-portable/  # commands ported to Codex and Gemini
@@ -515,7 +568,7 @@ You talk normally. The agent matches your words against each skill's `descriptio
 <details>
 <summary><b>How many skills, and where do the counts come from?</b></summary>
 
-**161** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**173** total). Cursor, Codex, Gemini, and the skills CLI get the first set. Claude Code gets both sets. Every count in this README comes from the filesystem: `npm run check:skills` fails CI when a number here drifts, and `npm run fix:skills` rewrites it. The family table is generated by `npm run gen:skill-index`.
+**162** agent skills in `skills/` plus **12** Cursor-specific skills in `skills-cursor/` (**174** total). Cursor, Codex, Gemini, and the skills CLI get the first set. Claude Code gets both sets. Every count in this README comes from the filesystem: `npm run check:skills` fails CI when a number here drifts, and `npm run fix:skills` rewrites it. The family table is generated by `npm run gen:skill-index`.
 
 </details>
 

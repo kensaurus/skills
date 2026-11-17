@@ -6,12 +6,17 @@
  *   npx @kensaurus/skills                  Merge-install into ~/.cursor/ AND ~/.agents/skills/
  *   npx @kensaurus/skills --auto           Detect installed tools and install to each
  *   npx @kensaurus/skills --claude         Install for Claude Code (~/.claude/) instead
- *   npx @kensaurus/skills --codex          Install for Codex CLI (~/.agents/skills + ~/.codex/AGENTS.md + prompts)
+ *   npx @kensaurus/skills --codex          Install for Codex CLI (~/.agents/skills + ~/.codex/AGENTS.md)
  *   npx @kensaurus/skills --gemini         Install for Gemini CLI (~/.agents/skills + ~/.gemini/GEMINI.md + commands)
+ *   npx @kensaurus/skills --antigravity    Install skills for Antigravity CLI (~/.gemini/config/skills)
  *   npx @kensaurus/skills --all            Install for all four supported tools
  *   npx @kensaurus/skills --clean          Mirror: make target paths match this repo exactly
  *   npx @kensaurus/skills --only skills     Install only some groups (csv)
  *   npx @kensaurus/skills --skill audit-ux  Install a single skill
+ *   npx @kensaurus/skills --profile core    Install only some profiles' skills (csv; core always included)
+ *   npx @kensaurus/skills --profile core --prune  Also remove pack skills outside the profile
+ *   npx @kensaurus/skills --list-profiles   Show the profiles and exit
+ *   npx @kensaurus/skills --codex --codex-prompts  Also write ~/.codex/prompts (Codex before 0.117.0)
  *   npx @kensaurus/skills --link           Dev mode: symlink instead of copy
  *   npx @kensaurus/skills --restore [stamp] Restore a previous --clean backup
  *   npx @kensaurus/skills --dry-run        Preview without changing anything
@@ -46,7 +51,19 @@
  *                          One shared copy, written once per run; the Cursor
  *                          mirror already writes the same set when it runs.
  *   ~/.codex/AGENTS.md, ~/.gemini/GEMINI.md — rules merged into one context file
- *   ~/.codex/prompts/, ~/.gemini/commands/  — the portable commands
+ *   ~/.gemini/commands/  — the portable commands
+ *   ~/.codex/prompts/    — the portable commands, only with --codex-prompts.
+ *                          Codex CLI removed custom prompts in 0.117.0
+ *                          (openai/codex#15941), so they are no longer written
+ *                          by default. Existing prompt files are left alone.
+ *
+ * Profiles (profiles.json at the package root):
+ *   --profile <csv> installs the named profiles' skills from skills/, plus core.
+ *   all is the default and installs everything. skills-cursor/ is not filtered.
+ *   A command that names only skills outside the profile is skipped.
+ *   A profile install is a merge. --prune removes the pack's skills outside
+ *   the profile; it never removes a folder this pack does not ship.
+ *   --skill wins over --profile.
  */
 
 import {
@@ -117,10 +134,13 @@ Usage:
   npx @kensaurus/skills --claude          Install for Claude Code (~/.claude/) instead
   npx @kensaurus/skills --codex           Install for Codex CLI (~/.agents/skills + ~/.codex/)
   npx @kensaurus/skills --gemini          Install for Gemini CLI (~/.agents/skills + ~/.gemini/)
+  npx @kensaurus/skills --antigravity     Install skills for Antigravity CLI (~/.gemini/config/skills)
   npx @kensaurus/skills --all             Install for all four supported tools
   npx @kensaurus/skills --clean           Mirror: wipe and rebuild target paths from this repo
   npx @kensaurus/skills --only skills      Install only some groups (skills,commands,agents,rules,hooks,statusline)
   npx @kensaurus/skills --skill <name>     Install one skill by name
+  npx @kensaurus/skills --profile <csv>    Install only some profiles' skills (core always included)
+  npx @kensaurus/skills --list-profiles    Show the profiles and exit
   npx @kensaurus/skills --link            Dev mode: symlink repo into ~/.cursor (live edits)
   npx @kensaurus/skills --restore [stamp]  Restore a previous --clean backup (latest if omitted)
   npx @kensaurus/skills --dry-run         Preview without changing anything
@@ -132,7 +152,12 @@ Flags:
   --cursor            Target Cursor explicitly (same as the bare default).
   --claude            Target Claude Code (~/.claude/) instead of Cursor.
   --codex             Target Codex CLI — skills → ~/.agents/skills, merged rules →
-                      ~/.codex/AGENTS.md, prompt ports → ~/.codex/prompts.
+                      ~/.codex/AGENTS.md.
+  --codex-prompts     With --codex: also write prompt ports → ~/.codex/prompts.
+                      Only for Codex CLI before 0.117.0; newer releases removed
+                      custom prompts. Off by default.
+  --antigravity       Target Antigravity CLI — skills → ~/.gemini/config/skills. Found by
+                      --auto when ~/.gemini/config exists. Not part of --all.
   --gemini            Target Gemini CLI — skills → ~/.agents/skills, merged rules →
                       ~/.gemini/GEMINI.md, command ports → ~/.gemini/commands.
   --all               Target all four supported tools in one run.
@@ -140,7 +165,18 @@ Flags:
   --no-backup         Skip the timestamped backup taken before a --clean wipe.
   --only <csv>        Limit to a subset of: skills, commands, agents, rules, hooks,
                       statusline (Claude Code only).
-  --skill <name>      Install a single skill (implies --only skills).
+  --skill <name>      Install a single skill (implies --only skills). Wins over --profile.
+  --profile <csv>     Install only the named profiles' skills from skills/, plus core.
+                      Names come from profiles.json; all (the default) installs
+                      everything. skills-cursor/ skills install as before. A command
+                      that names only skills outside the profile is skipped. Also
+                      applies to --verify. A merge: skills already installed stay.
+  --prune             With --profile: remove the pack's skills outside the profile
+                      from each skills directory written, by folder name. Each
+                      removed folder is first copied to .kenji-pruned/<stamp>/
+                      beside the skills directory (skip with --no-backup).
+                      Folders this pack does not ship are never touched.
+  --list-profiles     Print each profile's name, title, skill count and description.
   --link              Symlink (junction on Windows) instead of copying — for repo dev.
   --restore [stamp]   Copy a backup under <target>/.kenji-backups/ back into place.
   --typecheck-hook [script]
@@ -174,21 +210,60 @@ What gets installed (Claude Code, with --claude or --all):
   ~/.claude/kenji-hooks/  ← completion-gate.mjs, notify.mjs, statusline.mjs
   ~/.claude/settings.json ← merged: completion Stop hook, desktop Notification hook,
                             statusLine (only if you have none), and
-                            skillListingBudgetFraction (only if unset). Your other
-                            settings and hooks are kept.
+                            skillListingBudgetFraction (only if unset, and not
+                            set with --profile: a smaller listing fits the
+                            default). Your other settings and hooks are kept.
 
 What gets installed (Codex CLI / Gemini CLI, with --codex, --gemini or --all):
   ~/.agents/skills/       ← skills: the user skills directory both tools read
                             (one shared copy; same set as the Cursor mirror)
   ~/.codex/AGENTS.md      ← rules merged into one context file (auto-loaded)
-  ~/.codex/prompts/       ← portable commands as custom prompts (plan-mode, research,
-                            fix-issue). Codex deprecated custom prompts; newer
-                            releases ignore this folder and use the skills instead.
+  ~/.codex/prompts/       ← only with --codex-prompts: portable commands as custom
+                            prompts. Codex CLI removed custom prompts in 0.117.0
+                            and uses the skills instead. Existing files are kept.
   ~/.gemini/GEMINI.md     ← rules merged into one context file (auto-loaded)
   ~/.gemini/commands/     ← portable commands as TOML commands
   Subagents are not written for these tools.
   Existing AGENTS.md/GEMINI.md is backed up (.bak-<stamp>) before an update.
   `.trim());
+  process.exit(0);
+}
+
+// ---- profiles (profiles.json at the package root) -------------------------
+// { profiles: { <name>: { title, description, skills: [folder names] } } }.
+// Returns null when the file is missing, so a plain install needs no profiles.
+function loadProfiles() {
+  const file = resolve(__dir, 'profiles.json');
+  if (!existsSync(file)) return null;
+  let parsed;
+  try {
+    parsed = JSON.parse(readFileSync(file, 'utf8'));
+  } catch {
+    console.error(`✗ ${file} is not valid JSON.`);
+    process.exit(1);
+  }
+  const profiles = parsed?.profiles;
+  if (!profiles || typeof profiles !== 'object' || Array.isArray(profiles)) {
+    console.error(`✗ ${file} has no "profiles" object.`);
+    process.exit(1);
+  }
+  return profiles;
+}
+const profileSkillList = (profile) => (Array.isArray(profile?.skills) ? profile.skills : []);
+
+if (has('list-profiles')) {
+  const profiles = loadProfiles();
+  if (!profiles) {
+    console.error('✗ --list-profiles: profiles.json is missing from this package.');
+    process.exit(1);
+  }
+  const width = Math.max(3, ...Object.keys(profiles).map((n) => n.length));
+  console.log('Profiles for --profile <name>[,<name>]. core is part of every profile.\n');
+  for (const [name, profile] of Object.entries(profiles)) {
+    const count = profileSkillList(profile).length;
+    console.log(`  ${name.padEnd(width)}  ${profile.title ?? name} — ${count} skill${count === 1 ? '' : 's'}. ${profile.description ?? ''}`.trimEnd());
+  }
+  console.log(`  ${'all'.padEnd(width)}  Everything in skills/. The default.`);
   process.exit(0);
 }
 
@@ -337,7 +412,7 @@ function pruneStaleCommands(commandsDest, label) {
   // the command copy is unreachable there and only pads the skill listing.
   // Remove this pack's own copies; a user's edited copy is left alone.
   if (label === 'Claude') {
-    for (const name of dualSkillCommandNames()) {
+    for (const name of shadowedCommandNames()) {
       const dest = join(commandsDest, `${name}.md`);
       const src = resolve(__dir, 'commands', `${name}.md`);
       if (!existsSync(dest) || !existsSync(src)) continue;
@@ -361,7 +436,12 @@ const cursorBase = join(homedir(), '.cursor');
 const agentsBase = join(homedir(), '.agents');   // ~/.agents/skills/: Codex + Gemini user skills, Cursor mirror
 const claudeBase = join(homedir(), '.claude');
 
-const explicitTargets = ['cursor', 'claude', 'codex', 'gemini'].filter((t) => has(t));
+// Antigravity CLI (Google's successor to Gemini CLI for most users) reads user
+// skills from ~/.gemini/config/skills (https://antigravity.google/docs/skills).
+// Its docs do not say it reads ~/.agents/skills at user level, so it gets its
+// own copy. It is opt-in or auto-detected, and not part of --all (ADR-0001).
+const antigravitySkillsDir = join(geminiBase, 'config', 'skills');
+const explicitTargets = ['cursor', 'claude', 'codex', 'gemini', 'antigravity'].filter((t) => has(t));
 let targets;
 if (has('all')) {
   targets = new Set(['cursor', 'claude', 'codex', 'gemini']);
@@ -377,6 +457,7 @@ const wantCursor = targets.has('cursor');
 const wantClaude = targets.has('claude');
 const wantCodex = targets.has('codex');
 const wantGemini = targets.has('gemini');
+const wantAntigravity = targets.has('antigravity');
 
 if (has('auto')) {
   console.log(`Auto-detected targets: ${[...targets].join(', ') || '(none — defaulting to Cursor)'}`);
@@ -510,6 +591,93 @@ if (typeof opts.only === 'string') onlyGroups = new Set(opts.only.split(',').map
 if (skillName) onlyGroups = new Set(['skills']);
 
 const DIRS = ALL_DIRS.filter((d) => !onlyGroups || onlyGroups.has(d.dest));
+
+// ---- selection (--profile / --prune) ---------------------------------------
+// profileSkills is null for `all` (no filtering) and under --skill, which wins.
+// Otherwise it is the union of the named profiles' skills plus core.
+let profileNames = null;
+let profileSkills = null;
+if (has('profile')) {
+  const asked = typeof opts.profile === 'string'
+    ? [...new Set(opts.profile.split(',').map((s) => s.trim()).filter(Boolean))]
+    : [];
+  const profiles = asked.length === 1 && asked[0] === 'all' ? {} : loadProfiles();
+  if (!profiles) {
+    console.error('✗ --profile: profiles.json is missing from this package, so only --profile all works.');
+    process.exit(1);
+  }
+  const valid = [...Object.keys(profiles).filter((n) => n !== 'all'), 'all'];
+  const unknown = asked.filter((n) => n !== 'all' && !(n in profiles));
+  if (!asked.length || unknown.length) {
+    console.error(asked.length ? `✗ Unknown profile: ${unknown.join(', ')}.` : '✗ --profile needs a name.');
+    console.error(`  Valid profiles: ${valid.join(', ')}. Combine with commas: --profile web,mobile.`);
+    process.exit(1);
+  }
+  if (!asked.includes('all') && !skillName) {
+    profileNames = asked;
+    profileSkills = new Set(profileSkillList(profiles.core));
+    for (const name of asked) for (const skill of profileSkillList(profiles[name])) profileSkills.add(skill);
+  }
+}
+const wantPrune = has('prune');
+const doPrune = wantPrune && profileSkills !== null && (!onlyGroups || onlyGroups.has('skills'));
+if (wantPrune && !doPrune && !isVerifyOnly) {
+  console.log('  --prune does nothing here: it needs --profile with a profile other than all, and the skills group.');
+}
+
+/** Directory names in skills/: the only skills a profile filters or prunes. */
+let packSkillDirCache = null;
+function packSkillDirNames() {
+  if (packSkillDirCache) return packSkillDirCache;
+  const dir = resolve(__dir, 'skills');
+  packSkillDirCache = new Set(
+    existsSync(dir) ? readdirSync(dir).filter((n) => statSync(join(dir, n)).isDirectory()) : [],
+  );
+  return packSkillDirCache;
+}
+
+/** True when a command names pack skills in backticks and none is selected. */
+function commandOutsideProfile(file) {
+  const body = stripFrontmatter(readFileSync(file, 'utf8'));
+  let named = false;
+  for (const m of body.matchAll(/`([^`\n]+)`/g)) {
+    const token = m[1].trim();
+    if (!packSkillDirNames().has(token)) continue;
+    if (profileSkills.has(token)) return false;
+    named = true;
+  }
+  return named;
+}
+
+/** --prune: remove the pack's skills/ folders outside the profile from one
+ *  skills directory. Names this pack does not ship in skills/ are never touched.
+ *  It matches by folder name, so a folder the user edited in place goes too:
+ *  each one is copied to <parent>/.kenji-pruned/<stamp>/ first (skip with
+ *  --no-backup). That folder is separate from .kenji-backups so --restore,
+ *  which replaces whole directories, never restores a partial skills set. */
+const PRUNED_DIR = '.kenji-pruned';
+const pruneStamp = new Date().toISOString().replace(/[:.]/g, '-');
+function pruneOutsideProfile(skillsDest, label) {
+  if (!doPrune || !skillsDest || !existsSync(skillsDest)) return;
+  const shippedElsewhere = resolve(__dir, 'skills-cursor');
+  const backupDir = join(dirname(skillsDest), PRUNED_DIR, pruneStamp, label.toLowerCase());
+  let removed = 0;
+  for (const name of packSkillDirNames()) {
+    if (profileSkills.has(name) || existsSync(join(shippedElsewhere, name))) continue;
+    const stale = join(skillsDest, name);
+    if (!existsSync(stale)) continue;
+    if (!isDryRun) {
+      if (!noBackup) {
+        mkdirSync(backupDir, { recursive: true });
+        cpSync(stale, join(backupDir, name), { recursive: true });
+      }
+      rmSync(stale, { recursive: true, force: true });
+    }
+    removed++;
+  }
+  const kept = removed && !isDryRun && !noBackup ? ` (copies kept in ${backupDir})` : '';
+  console.log(`  ${isDryRun ? '[dry-run] would prune' : '✓ pruned'} ${removed} ${label} skill(s) outside the profile from ${skillsDest}${kept}`);
+}
 const managedDests = [...new Set(DIRS.map((d) => d.dest))];
 
 // Text files are hashed with line endings normalized: a Windows checkout with
@@ -564,7 +732,9 @@ function treesMatch(src, dest) {
 // Command names that are also skills. Claude Code lets the skill win, so the
 // command file is skipped there (install and --verify) and pruned if present.
 let shadowedCommandCache = null;
-const shadowedCommandNames = () => (shadowedCommandCache ??= new Set(dualSkillCommandNames()));
+const shadowedCommandNames = () => (shadowedCommandCache ??= new Set(
+  dualSkillCommandNames().filter((n) => !profileSkills || !packSkillDirNames().has(n) || profileSkills.has(n)),
+));
 
 function listInstallItems({ renameMdc = false, skipCursorBuiltins = false, skipShadowedCommands = false } = {}) {
   const items = [];
@@ -584,6 +754,10 @@ function listInstallItems({ renameMdc = false, skipCursorBuiltins = false, skipS
       }
       const itemSrc = join(srcPath, item);
       const isDir = statSync(itemSrc).isDirectory();
+      if (profileSkills) {
+        if (src === 'skills' && isDir && !profileSkills.has(item)) continue;
+        if (dest === 'commands' && !isDir && item.endsWith('.md') && commandOutsideProfile(itemSrc)) continue;
+      }
       if (isDir && PROJECT_RULE_BUNDLES.has(item) && (dest === 'rules' || dest === 'commands')) continue;
       if (skipShadowedCommands && dest === 'commands' && !isDir && item.endsWith('.md') && shadowedCommandNames().has(item.slice(0, -3))) continue;
       if (!renameMdc && dest === 'rules' && !isDir && item.endsWith('.md')) continue;
@@ -719,6 +893,7 @@ function detectTools() {
   if (existsSync(claudeBase)) found.add('claude');
   if (existsSync(codexBase)) found.add('codex');
   if (existsSync(geminiBase)) found.add('gemini');
+  if (existsSync(join(geminiBase, 'config'))) found.add('antigravity');
   return found;
 }
 
@@ -900,12 +1075,14 @@ function installCursorCompletionHook() {
 //   statusline  statusLine   → statusline.mjs, only when none is set or the
 //                              one set is ours
 //   skills      skillListingBudgetFraction → CLAUDE_SKILL_BUDGET, only when unset
+//                              and no --profile is in use
 // Managed entries are replaced idempotently on upgrades. User hooks in other
 // groups, a user's own status line and a budget the user chose are kept.
 function installClaudeSettings() {
   const doHooks = !onlyGroups || onlyGroups.has('hooks');
   const doStatusLine = !onlyGroups || onlyGroups.has('statusline');
-  const doBudget = !skillName && (!onlyGroups || onlyGroups.has('skills'));
+  // A profile's smaller listing fits the default budget, so it is not raised.
+  const doBudget = !skillName && !profileSkills && (!onlyGroups || onlyGroups.has('skills'));
   const out = { status: 'skipped', gate: 'skipped', notify: 'skipped', statusLine: 'skipped', budget: 'skipped' };
   if (!doHooks && !doStatusLine && !doBudget) return out;
 
@@ -987,11 +1164,11 @@ function installClaudeSettings() {
 
 // Install a context-file tool (Codex / Gemini). `spec` describes its layout.
 function installContextTool(spec) {
-  const { label, base, rulesFile, rulesLoadPath, commandsDir, commandExt, render } = spec;
+  const { label, base, rulesFile, rulesLoadPath, commandsDir, commandExt, render, writeCommands = true } = spec;
   // Skills for these tools go to the shared ~/.agents/skills (see
   // installSharedAgentsSkills); this writes the context file and commands.
   const doRules = !onlyGroups || onlyGroups.has('rules');
-  const doCommands = (!onlyGroups || onlyGroups.has('commands')) && !skillName;
+  const doCommands = writeCommands && (!onlyGroups || onlyGroups.has('commands')) && !skillName;
   if (!doRules && !doCommands) return;
   console.log(`\n${isDryRun ? '[dry-run] ' : ''}${label} → ${base}`);
 
@@ -1015,9 +1192,9 @@ function installContextTool(spec) {
 }
 
 function verifyContextTool(spec) {
-  const { label, base, rulesFile, rulesLoadPath, commandsDir, commandExt, render } = spec;
+  const { label, base, rulesFile, rulesLoadPath, commandsDir, commandExt, render, writeCommands = true } = spec;
   const doRules = !onlyGroups || onlyGroups.has('rules');
-  const doCommands = (!onlyGroups || onlyGroups.has('commands')) && !skillName;
+  const doCommands = writeCommands && (!onlyGroups || onlyGroups.has('commands')) && !skillName;
   if (doRules) {
     const dest = join(base, rulesFile);
     const expected = buildMergedRules(label, rulesLoadPath);
@@ -1073,9 +1250,33 @@ function installSharedAgentsSkills() {
   if (!isDryRun) mkdirSync(agentsSkillsDir, { recursive: true });
   for (const it of items) place(it.itemSrc, join(agentsSkillsDir, it.outName), it.isDir);
   pruneRenamedSkills(agentsSkillsDir, 'Agents');
+  pruneOutsideProfile(agentsSkillsDir, 'Agents');
   const verbed = isDryRun ? `[dry-run] would ${useLink ? 'link' : 'copy'}` : `✓ ${useLink ? 'linked' : 'copied'}`;
   console.log(`  ${verbed} ${items.length} skill(s); other folders in ${agentsSkillsDir} are left alone`);
 }
+
+// Codex CLI removed custom prompts in 0.117.0 (openai/codex#15941), so the
+// prompt ports are written and verified only with --codex-prompts. Prompt
+// files already in ~/.codex/prompts are never deleted.
+const CODEX_SPEC = {
+  label: 'Codex CLI (OpenAI)',
+  base: codexBase,
+  rulesFile: 'AGENTS.md',
+  rulesLoadPath: '~/.codex/AGENTS.md',
+  commandsDir: 'prompts',
+  commandExt: '.md',
+  render: (cmd) => (cmd.body.endsWith('\n') ? cmd.body : cmd.body + '\n'),
+  writeCommands: has('codex-prompts'),
+};
+const GEMINI_SPEC = {
+  label: 'Gemini CLI',
+  base: geminiBase,
+  rulesFile: 'GEMINI.md',
+  rulesLoadPath: '~/.gemini/GEMINI.md',
+  commandsDir: 'commands',
+  commandExt: '.toml',
+  render: toGeminiToml,
+};
 
 if ((wantCodex || wantGemini) && skillsSelected && noAgentsMirror) {
   console.warn(`  [!] --no-agents-mirror: nothing written to ${agentsSkillsDir}, so ${agentsSkillTools} get no kenji skills.`);
@@ -1115,26 +1316,15 @@ if (isVerifyOnly) {
     }
   }
   if (wantCodex) {
-    verifyContextTool({
-      label: 'Codex CLI (OpenAI)',
-      base: codexBase,
-      rulesFile: 'AGENTS.md',
-      rulesLoadPath: '~/.codex/AGENTS.md',
-      commandsDir: 'prompts',
-      commandExt: '.md',
-      render: (cmd) => (cmd.body.endsWith('\n') ? cmd.body : cmd.body + '\n'),
-    });
+    verifyContextTool(CODEX_SPEC);
   }
   if (wantGemini) {
-    verifyContextTool({
-      label: 'Gemini CLI',
-      base: geminiBase,
-      rulesFile: 'GEMINI.md',
-      rulesLoadPath: '~/.gemini/GEMINI.md',
-      commandsDir: 'commands',
-      commandExt: '.toml',
-      render: toGeminiToml,
-    });
+    verifyContextTool(GEMINI_SPEC);
+  }
+  if (wantAntigravity && skillsSelected) {
+    for (const it of agentsSkillItems()) {
+      recordVerify(it.itemSrc, join(antigravitySkillsDir, it.outName), `Antigravity ${it.outName}`);
+    }
   }
   failIfUnverified('install verify');
   console.log('✓ install verify passed — every packaged file matches the destination.');
@@ -1156,6 +1346,7 @@ if (wantCursor) {
     assertNoCursorBuiltins(cursorSkills);
   }
   pruneRenamedSkills(join(cursorBase, 'skills'), 'Cursor');
+  pruneOutsideProfile(join(cursorBase, 'skills'), 'Cursor');
   pruneRenamedRules(join(cursorBase, 'rules'), 'Cursor');
   pruneStaleCommands(join(cursorBase, 'commands'), 'Cursor');
   const hookStatus =
@@ -1197,6 +1388,7 @@ if (wantCursor) {
       }
       pruneRenamedSkills(agentsSkillsDest, 'Agents');
     }
+    pruneOutsideProfile(agentsSkillsDest, 'Agents');
   }
 
   // MCP config template (only if missing; never overwritten).
@@ -1217,6 +1409,7 @@ if (wantClaude) {
   const clean = isClean ? backupAndWipe(claudeBase) : null;
   const counts = installDirs(claudeBase, { renameMdc: true, skipShadowedCommands: true });
   pruneRenamedSkills(join(claudeBase, 'skills'), 'Claude');
+  pruneOutsideProfile(join(claudeBase, 'skills'), 'Claude');
   pruneRenamedRules(join(claudeBase, 'rules'), 'Claude', { renameMdc: true });
   pruneStaleCommands(join(claudeBase, 'commands'), 'Claude');
   const claudeSettings = installClaudeSettings();
@@ -1275,33 +1468,32 @@ if (wantClaude) {
   results.push({ target: 'Claude Code', base: claudeBase, ...counts, clean, mcpInstalled: false, hookStatus, claudeSettings });
 }
 
-// ---- Codex CLI (context file + prompt ports) -------------------------------
+// ---- Codex CLI (context file; prompt ports only with --codex-prompts) -------
 if (wantCodex) {
-  installContextTool({
-    label: 'Codex CLI (OpenAI)',
-    base: codexBase,
-    rulesFile: 'AGENTS.md',
-    rulesLoadPath: '~/.codex/AGENTS.md',
-    commandsDir: 'prompts',
-    commandExt: '.md',
-    render: (cmd) => (cmd.body.endsWith('\n') ? cmd.body : cmd.body + '\n'),
-  });
+  installContextTool(CODEX_SPEC);
 }
 
 // ---- Gemini CLI (context file + TOML command ports) ------------------------
 if (wantGemini) {
-  installContextTool({
-    label: 'Gemini CLI',
-    base: geminiBase,
-    rulesFile: 'GEMINI.md',
-    rulesLoadPath: '~/.gemini/GEMINI.md',
-    commandsDir: 'commands',
-    commandExt: '.toml',
-    render: toGeminiToml,
-  });
+  installContextTool(GEMINI_SPEC);
 }
 
 // ---- Skills for Codex CLI + Gemini CLI (shared ~/.agents/skills) ------------
+if (wantAntigravity && skillsSelected) {
+  const items = agentsSkillItems();
+  if (skillName && items.length === 0) {
+    console.error(`✗ Skill '${skillName}' not found in skills/.`);
+    process.exit(1);
+  }
+  console.log(`\n${isDryRun ? '[dry-run] ' : ''}Skills for Antigravity CLI → ${antigravitySkillsDir}`);
+  if (!isDryRun) mkdirSync(antigravitySkillsDir, { recursive: true });
+  for (const it of items) place(it.itemSrc, join(antigravitySkillsDir, it.outName), it.isDir);
+  pruneRenamedSkills(antigravitySkillsDir, 'Antigravity');
+  pruneOutsideProfile(antigravitySkillsDir, 'Antigravity');
+  const verbed = isDryRun ? `[dry-run] would ${useLink ? 'link' : 'copy'}` : `✓ ${useLink ? 'linked' : 'copied'}`;
+  console.log(`  ${verbed} ${items.length} skill(s); other folders there are left alone`);
+}
+
 if (wantAgentsSkills) {
   if (cursorMirrorRuns) {
     console.log(`\nSkills for ${agentsSkillTools}: shared with the Cursor mirror at ${agentsSkillsDir} (written above).`);
@@ -1311,7 +1503,7 @@ if (wantAgentsSkills) {
 }
 
 // ---- summary ---------------------------------------------------------------
-const mode = `${isClean ? 'mirror' : 'merge'}${useLink ? '+link' : ''}${skillName ? `:skill=${skillName}` : ''}`;
+const mode = `${isClean ? 'mirror' : 'merge'}${useLink ? '+link' : ''}${skillName ? `:skill=${skillName}` : ''}${profileNames ? `:profile=${profileNames.join(',')}` : ''}`;
 const verb = useLink ? 'linked' : 'copied';
 
 if (!isDryRun) failIfUnverified('post-install verify');
@@ -1358,9 +1550,15 @@ if (isDryRun) {
     console.log(`Note: these names exist as both a skill and a /command (the picker may show two /entries): ${dual.join(', ')}`);
   }
   const targetFlags = [...targets].sort().map((t) => ` --${t}`).join('');
-  console.log(`Re-check anytime with: npx @kensaurus/skills --verify${targetFlags === ' --cursor' ? '' : targetFlags}`);
+  const extraFlags = (wantCodex && CODEX_SPEC.writeCommands ? ' --codex-prompts' : '')
+    + (profileNames ? ` --profile ${profileNames.join(',')}` : '');
+  console.log(`Re-check anytime with: npx @kensaurus/skills --verify${targetFlags === ' --cursor' ? '' : targetFlags}${extraFlags}`);
   if (wantCursor) console.log('Restart Cursor to activate skills, commands, and agents.');
   if (wantClaude) console.log('Restart any active claude sessions — skills appear as /slash-commands.');
   if (wantCodex) console.log('Codex CLI loads ~/.codex/AGENTS.md and ~/.agents/skills on start; type $ or /skills to pick a skill.');
+  if (wantAntigravity) console.log('Antigravity CLI loads ~/.gemini/config/skills on start; each skill is also a /name command there.');
   if (wantGemini) console.log('Gemini CLI loads ~/.gemini/GEMINI.md and ~/.agents/skills on start; in a running session use /memory reload and /skills reload.');
+}
+if (profileSkills && !doPrune && skillsSelected) {
+  console.log(`Profile ${profileNames.join(',')}: skills installed earlier that are outside the profile were left in place. Add --prune to remove them.`);
 }

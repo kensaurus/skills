@@ -1,6 +1,6 @@
 # Every skill, in plain English
 
-_Generated from each skill's `SKILL.md` by `npm run gen:skill-index`. Do not edit by hand. **173 skills.**_
+_Generated from each skill's `SKILL.md` by `npm run gen:skill-index`. Do not edit by hand. **174 skills.**_
 
 You do not memorize names. Describe the job in chat and the matching skill runs. Exact trigger phrases are in [CATALOG.md](CATALOG.md); the prefix and stage table is in [CATALOG.md — Skill Taxonomy](CATALOG.md#skill-taxonomy).
 
@@ -28,9 +28,9 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 | [Protocols — session guardrails](#protocols-session-guardrails-1) | **1** | Keep browser automation from freezing |
 | [Authoring — build skills & MCP](#authoring-build-skills-mcp-2) | **2** | Author new skills or MCP servers |
 | [Third-party (upstream-maintained)](#third-party-upstream-maintained-3) | **3** | Vendored upstream skills (Emil, UI/UX Pro Max, Vercel WIG) |
-| [Core & cross-cutting](#core-cross-cutting-4) | **4** | Close everything, burndown, research, handoff |
+| [Core & cross-cutting](#core-cross-cutting-5) | **5** | Close everything, burndown, research, handoff |
 | [Cursor IDE skills](#cursor-ide-skills-12) | **12** | Canvas, hooks, rules, PR splitter, CLI helpers |
-| **Total** | **173** |  |
+| **Total** | **174** |  |
 
 ### Audit — inspect; some then fix (32)
 
@@ -279,13 +279,14 @@ Skills marked `/name only` are user-invoked rituals; `reference only` skills are
 | `thirdparty-ui-ux-pro-max` | Third-party skill — searchable style catalog, palettes, typography, and UX guidelines via Python scripts |
 | `thirdparty-web-interface-guidelines` | Third-party skill — Vercel Web Interface Guidelines compliance (focus, forms, animation, copy) |
 
-### Core & cross-cutting (4)
+### Core & cross-cutting (5)
 
 | Skill | What it does |
 |:------|:-------------|
 | `burndown-full` | Drive a planned mechanical change to 100% repo coverage after a run stopped early |
 | `complete-everything` | Closure mode for one approved plan: finish every open item and connected deferral, verify each acceptance criterion, require… |
 | `handoff` | Compact the current conversation into a handoff document for a fresh agent: state, next steps, suggested skills, gotchas, saved to the OS… — `/handoff` only |
+| `kenji` | Pick and start the right kenji playbook from a plain request — `/kenji` only |
 | `research` | Research current practice with Context7, Firecrawl, and official docs before a non-trivial change: gap analysis and a file-mapped plan, no… |
 
 ### Cursor IDE skills (12)

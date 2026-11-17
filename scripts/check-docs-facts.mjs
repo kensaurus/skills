@@ -32,6 +32,21 @@ const publishing = read("docs/PUBLISHING.md");
 const gettingStarted = read("docs/GETTING-STARTED.md");
 const planLoops = read("docs/PLAN-LOOPS.md");
 
+// Every manifest that carries a version must match package.json: a stale one
+// pins plugin users to an old release.
+for (const [rel, pick] of [
+  ["plugin.json", (j) => j.version],
+  ["gemini-extension.json", (j) => j.version],
+  [".claude-plugin/plugin.json", (j) => j.version],
+  [".claude-plugin/marketplace.json", (j) => j.metadata?.version],
+  [".cursor-plugin/plugin.json", (j) => j.version],
+]) {
+  const text = read(rel);
+  if (!text) continue;
+  const found = pick(JSON.parse(text));
+  if (found !== version) errors.push(`${rel}: version ${found} does not match package.json ${version}`);
+}
+
 if (security.includes("npm run prepare")) {
   errors.push("SECURITY.md: must not tell contributors to run `npm run prepare`");
 }

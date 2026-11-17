@@ -6,13 +6,13 @@
   },
   "metadata": {
     "description": "Playbooks your coding agent runs from a plain request. They ask first, test first, and prove the result.",
-    "version": "2.7.0"
+    "version": "2.8.0"
   },
   "plugins": [
     {
       "name": "kenji",
       "source": ".",
-      "description": "161 agent skills, 63 slash commands, 6 subagents for Claude Code, effort-routed for Opus 5.5. Install: /plugin install kenji@kenji",
+      "description": "162 agent skills, 63 slash commands, 6 subagents for Claude Code. Install: /plugin install kenji@kenji",
       "homepage": "https://github.com/kensaurus/skills#readme",
       "repository": "https://github.com/kensaurus/skills",
       "license": "MIT",

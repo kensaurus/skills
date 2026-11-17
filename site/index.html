@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>kenji — You say the job. The playbook runs.</title>
-  <meta name="description" content="161 agent skills, 63 slash commands, 6 subagents for Claude Code, Cursor, Codex CLI, and Gemini CLI. Each playbook asks first, tests first, and proves the result. One install.">
-  <link rel="canonical" href="https://www.skills.sh/kensaurus/skills">
+  <meta name="description" content="162 agent skills, 63 slash commands, 6 subagents for Claude Code, Cursor, Codex CLI, and Gemini CLI. Each playbook asks first, tests first, and proves the result. One install.">
+  <link rel="canonical" href="https://kensaurus.github.io/skills/">
   <meta name="robots" content="index,follow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="kenji — You say the job. The playbook runs.">
   <meta property="og:description" content="Agent skills for Claude Code, Cursor, Codex CLI, and Gemini CLI. They ask first, test first, and prove the result.">
-  <meta property="og:url" content="https://www.skills.sh/kensaurus/skills">
+  <meta property="og:url" content="https://kensaurus.github.io/skills/">
   <meta property="og:image" content="https://raw.githubusercontent.com/kensaurus/skills/main/assets/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -29,7 +29,7 @@
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Windows, macOS, Linux",
     "license": "https://github.com/kensaurus/skills/blob/main/LICENSE",
-    "url": "https://www.skills.sh/kensaurus/skills",
+    "url": "https://kensaurus.github.io/skills/",
     "downloadUrl": "https://www.npmjs.com/package/@kensaurus/skills",
     "description": "Agent skills, slash commands, and subagents for Claude Code, Cursor, Codex CLI, and Gemini CLI. Each playbook asks first, tests first, and proves the result.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
@@ -101,11 +101,13 @@
   <main>
     <div class="top">
       <div class="wordmark"><img src="./logo.png" alt="kenji mark: a pixel kensaurus head on lime">kenji skills</div>
-      <div class="label">161 agent skills, 63 slash commands, 6 subagents</div>
+      <div class="label">162 agent skills, 63 slash commands, 6 subagents</div>
     </div>
     <h1>You say the job.<br>The <span class="hl">playbook</span> runs.</h1>
     <p class="lead">Installed workflows for <b>Claude Code, Cursor, Codex CLI, and Gemini CLI</b>. They ask first, test first, and stop only when the work is proven.</p>
-    <pre><code>npx @kensaurus/skills --all</code></pre>
+    <pre><code>npx @kensaurus/skills --auto</code></pre>
+    <p class="cap">Then remember one command: <code>/kenji</code> and the job in your own words. It picks the playbook and runs it.</p>
+    <img class="hero" src="./walkthrough-kenji.svg" width="880" height="310" alt="Animated session. You type: /kenji the login page is broken for some users. The agent runs the workflow-fix-and-ship playbook: it reproduces the bug, writes a failing test and then the fix, and checks it in a real browser. Result: tests green, PR opened, nothing merged without you.">
     <nav>
       <a href="https://github.com/kensaurus/skills">GitHub</a>
       <a href="https://www.npmjs.com/package/@kensaurus/skills">npm</a>
@@ -114,7 +116,13 @@
     </nav>
     <img class="hero" src="https://raw.githubusercontent.com/kensaurus/skills/main/docs/screenshots/hero-dark.png" width="1600" height="900" alt="You say: fix this bug and ship it. workflow-fix-and-ship triages with evidence, fixes with a test, verifies in the browser. Tests green, PR open.">
     <p class="cap">What happens after install. You say the job in chat. The matching playbook runs, proves the result, and opens the PR.</p>
+    <h2>TWO MORE SESSIONS</h2>
+    <img class="hero" src="./walkthrough-build.svg" width="880" height="370" alt="Animated session. You say: grill me before I build a referral program. The agent asks one question, saves a decision log you approve, then the workflow-build-feature playbook writes the spec, a failing test, and the smallest change that passes. Result: smoke test passed, PR opened.">
+    <img class="hero" src="./walkthrough-audit.svg" width="880" height="340" alt="Animated session. You say: is this app safe to launch? The audit-security playbook lists three findings, each with a file and line, then fixes and re-tests them when you say yes.">
     <h2>OTHER WAYS TO INSTALL</h2>
+    <ul>
+      <li>A smaller install, the 28 skills of the daily loop: <code>npx @kensaurus/skills --auto --profile core</code></li>
+    </ul>
     <ul>
       <li>Skills only: <code>npx skills add kensaurus/skills</code></li>
       <li>Claude Code plugin: <code>/plugin marketplace add kensaurus/skills</code></li>

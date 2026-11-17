@@ -31,6 +31,8 @@
  *     Claude-only keys (install.mjs strips portable frontmatter)
  *   - every shipped .ps1/.psm1/.psd1 is ASCII or starts with a UTF-8 BOM
  *     (Windows PowerShell 5.1 decodes BOM-less scripts with the ANSI code page)
+ *   - profiles.json: every named skill has skills/<name>/SKILL.md, every
+ *     skills/ folder is in at least one profile, and `core` is not empty
  *   - the pack's Claude Code skill listing (skills + skills-cursor + top-level
  *     model-invocable commands, measured as the client measures it) <=
  *     LISTING_MAX_CHARS, a ratchet (ADR-0010); agent descriptions are
@@ -449,6 +451,49 @@ function listCommandFiles(dir) {
         const line = bytes.subarray(0, at).toString("latin1").split("\n").length;
         errors.push(`${rel}:${line}: non-ASCII byte in a BOM-less PowerShell script — Windows PowerShell 5.1 reads it as the ANSI code page; write it as ASCII (regex \\uXXXX for CJK)`);
       }
+    }
+  }
+}
+
+// ---- Install profiles (profiles.json, read by bin/install.mjs --profile) ----
+// Every profile skill must exist, every skills/ folder must sit in a profile
+// (or `--profile` can never install it), and core, which rides with every
+// profile, must not be empty.
+{
+  const profilesPath = join(repoRoot, "profiles.json");
+  if (!existsSync(profilesPath)) {
+    errors.push("profiles.json: missing — bin/install.mjs --profile reads it");
+  } else {
+    let profiles = null;
+    try {
+      profiles = JSON.parse(readFileSync(profilesPath, "utf8")).profiles;
+    } catch (err) {
+      errors.push(`profiles.json: not valid JSON (${err.message})`);
+    }
+    if (profiles && typeof profiles === "object" && !Array.isArray(profiles)) {
+      const skillsDir = join(repoRoot, "skills");
+      const inProfile = new Set();
+      for (const [name, profile] of Object.entries(profiles)) {
+        if (!Array.isArray(profile?.skills)) {
+          errors.push(`profiles.json: profile '${name}' has no 'skills' array`);
+          continue;
+        }
+        for (const skill of profile.skills) {
+          inProfile.add(skill);
+          if (!existsSync(join(skillsDir, String(skill), "SKILL.md"))) {
+            errors.push(`profiles.json: profile '${name}' names '${skill}' but skills/${skill}/SKILL.md does not exist`);
+          }
+        }
+      }
+      if (!Array.isArray(profiles.core?.skills) || profiles.core.skills.length === 0) {
+        errors.push("profiles.json: profile 'core' is empty — it is installed with every profile");
+      }
+      for (const dir of readdirSync(skillsDir)) {
+        if (!statSync(join(skillsDir, dir)).isDirectory() || inProfile.has(dir)) continue;
+        errors.push(`skills/${dir}: in no profile in profiles.json — add it to one (maintain if nothing else fits)`);
+      }
+    } else if (profiles !== null) {
+      errors.push("profiles.json: no 'profiles' object");
     }
   }
 }
